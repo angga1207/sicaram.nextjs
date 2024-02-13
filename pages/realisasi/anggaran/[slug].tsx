@@ -1,0 +1,1594 @@
+import { useEffect, useState, Fragment, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../../store';
+import { setPageTitle } from '../../../store/themeConfigSlice';
+import dynamic from 'next/dynamic';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
+    ssr: false,
+});
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import MaskedInput from 'react-text-mask';
+
+import { useTranslation } from 'react-i18next';
+import { Dialog, Transition } from '@headlessui/react';
+import Dropdown from '../../../components/Dropdown';
+import Swal from 'sweetalert2';
+import Link from 'next/link';
+import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import AnimateHeight from 'react-animate-height';
+import LoadingSicaram from '../../../components/LoadingSicaram';
+import { BackgroundImage } from '@mantine/core';
+import IconSearch from '@/components/Icon/IconSearch';
+import IconArrowBackward from '@/components/Icon/IconArrowBackward';
+import IconFacebook from '@/components/Icon/IconFacebook';
+import IconTwitter from '@/components/Icon/IconTwitter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faGlobeAsia } from '@fortawesome/free-solid-svg-icons';
+import IconPencil from '@/components/Icon/IconPencil';
+import IconLaptop from '@/components/Icon/IconLaptop';
+import IconX from '@/components/Icon/IconX';
+import angkaTerbilang from '@develoka/angka-terbilang-js';
+
+import {
+    fetchDataInformasiSubKegiatan,
+    fetchDataRealisasi,
+    fetchKodeRekening,
+    saveDataSubKegiatan,
+    detailDataSubKegiatan,
+    updateDataSubKegiatan,
+    deleteDataRealisasiRincian
+} from '../../../apis/fetchRealisasi';
+import { fetchPeriodes, fetchSatuans } from '../../../apis/fetchdata';
+import IconDollarSignCircle from '@/components/Icon/IconDollarSignCircle';
+import IconInfoHexagon from '@/components/Icon/IconInfoHexagon';
+import IconPlus from '@/components/Icon/IconPlus';
+import IconSave from '@/components/Icon/IconSave';
+import IconTrash from '@/components/Icon/IconTrash';
+import IconTrashLines from '@/components/Icon/IconTrashLines';
+import IconCaretDown from '@/components/Icon/IconCaretDown';
+import IconPlusCircle from '@/components/Icon/IconPlusCircle';
+import IconEdit from '@/components/Icon/IconEdit';
+
+const showAlert = async (icon: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+    });
+    toast.fire({
+        icon: icon,
+        title: text,
+        padding: '10px 20px',
+    });
+};
+
+
+
+const Index = () => {
+    const dispatch = useDispatch();
+    const ref = useRef(null);
+
+    useEffect(() => {
+        dispatch(setPageTitle('Realisasi Kinerja'));
+    });
+
+    const route = useRouter();
+
+    const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
+    const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
+
+    const [isMounted, setIsMounted] = useState(false);
+    const [isClient, setIsClient] = useState(false);
+
+    const [CurrentUser, setCurrentUser] = useState<any>([]);
+    useEffect(() => {
+        if (window) {
+            if (localStorage.getItem('user')) {
+                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
+            }
+        }
+    }, []);
+
+    const { t, i18n } = useTranslation();
+
+    const closeWindow = () => {
+        if (history.length > 1) {
+            history.back();
+        }
+        else {
+            window.close();
+        }
+    }
+
+    const [periodes, setPeriodes] = useState([]);
+    const [periode, setPeriode] = useState(1);
+    const [rawKodeRekening, setRawKodeRekening] = useState<any>([]);
+
+    const [satuans, setSatuans] = useState<any>([]);
+    const [subKegiatan, setSubKegiatan] = useState<any>(null);
+    const [year, setYear] = useState<any>(null);
+    const [month, setMonth] = useState<any>(null);
+    const [rekeningOptions1, setRekeningOptions1] = useState<any>([]);
+    const [rekeningOptions2, setRekeningOptions2] = useState<any>([]);
+    const [rekeningOptions3, setRekeningOptions3] = useState<any>([]);
+    const [rekeningOptions4, setRekeningOptions4] = useState<any>([]);
+    const [rekeningOptions5, setRekeningOptions5] = useState<any>([]);
+    const [rekeningOptions6, setRekeningOptions6] = useState<any>([]);
+    const [view, setView] = useState('informasi');
+    const [showInput, setShowInput] = useState<any>(false)
+    const [modalInput, setModalInput] = useState(false);
+    const [inputDisabled, setInputDisabled] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetchPeriodes().then((data) => {
+            if (data.status == 'success') {
+                setPeriodes(data.data);
+            }
+        });
+        fetchKodeRekening(1).then((data) => {
+            if (data.status == 'success') {
+                setRawKodeRekening(data.data);
+                setRekeningOptions1(data.data.map((data) => {
+                    return {
+                        value: data.id,
+                        label: data.fullcode + ' - ' + data.name,
+                    };
+                }));
+            }
+        });
+        fetchSatuans().then((data) => {
+            if (data.status == 'success') {
+                setSatuans(data.data);
+            }
+        });
+    }, [CurrentUser, periode]);
+
+    const [datas, setDatas] = useState<any>(null);
+    const [dataRealisasi, setDataRealisasi] = useState<any>(null);
+
+    useEffect(() => {
+        setSubKegiatan({
+            id: route.query.slug,
+        });
+        setYear(route.query.year ?? new Date().getFullYear());
+        setMonth(route.query.month ?? new Date().getMonth());
+    }, [route.query.slug]);
+
+    useEffect(() => {
+        if (subKegiatan?.id && year && month) {
+            fetchDataInformasiSubKegiatan(subKegiatan?.id, periode, year, month).then((res) => {
+                if (res.status == 'success') {
+                    setDatas(res.data);
+                    // setInputDisabled(false);
+                }
+                if (res.status != 'success') {
+                    showAlert('error', res.message);
+                    setInputDisabled(true);
+                }
+            });
+
+            fetchDataRealisasi(subKegiatan?.id, periode, year, month).then((res) => {
+                if (res.status == 'success') {
+                    setDataRealisasi(res.data);
+                    // setInputDisabled(false);
+                }
+                if (res.status != 'success') {
+                    showAlert('error', res.message);
+                    setDataRealisasi([]);
+                    setInputDisabled(true);
+                }
+            });
+        }
+    }, [subKegiatan?.id]);
+
+    const [newInput, setNewInput] = useState<any>([
+        {
+            level: 1,
+            rek_id: 1,
+            kode_rek: rekeningOptions1.filter((data: any) => data.value == 1)[0]?.label,
+        },
+    ]);
+    const [inputDatas, setInputDatas] = useState<any>([]);
+    const [inputType, setInputType] = useState<any>('create');
+    const [dataEdit, setDataEdit] = useState<any>(null);
+    const [judulUraian, setJudulUraian] = useState<any>(null);
+    const [inputUraian, setInputUraian] = useState<any>([]);
+
+    const temporaryInsertRekening = (level: number, value: any) => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+
+        if (level == 1) {
+            setNewInput((prev: any) => {
+                const index = 0;
+                const updated = [...prev];
+                updated[index] = {
+                    level: level,
+                    rek_id: value,
+                    kode_rek: rekeningOptions1.filter((data: any) => data.value == value)[0]?.label,
+                };
+                return updated;
+            });
+
+            fetchKodeRekening(2, value).then((data) => {
+                if (data.status == 'success') {
+                    setRekeningOptions2(data.data.map((data) => {
+                        return {
+                            value: data.id,
+                            label: data.fullcode + ' - ' + data.name,
+                        };
+                    }));
+                }
+            });
+
+            if (newInput?.[1]?.rek_id) {
+                setNewInput(newInput.filter((data: any, index: number) => index < 1));
+            }
+        }
+
+        if (level == 2) {
+            setNewInput((prev: any) => {
+                const index = 1;
+                const updated = [...prev];
+                updated[index] = {
+                    level: level,
+                    rek_id: value,
+                    kode_rek: rekeningOptions2.filter((data: any) => data.value == value)[0]?.label,
+                };
+                return updated;
+            });
+
+            fetchKodeRekening(3, value).then((data) => {
+                if (data.status == 'success') {
+                    setRekeningOptions3(data.data.map((data) => {
+                        return {
+                            value: data.id,
+                            label: data.fullcode + ' - ' + data.name,
+                        };
+                    }));
+                }
+            });
+
+            if (newInput?.[2]?.rek_id) {
+                setNewInput(newInput.filter((data: any, index: number) => index < 2));
+            }
+        }
+
+        if (level == 3) {
+            setNewInput((prev: any) => {
+                const index = 2;
+                const updated = [...prev];
+                updated[index] = {
+                    level: level,
+                    rek_id: value,
+                    kode_rek: rekeningOptions3.filter((data: any) => data.value == value)[0]?.label,
+                };
+                return updated;
+            });
+
+            fetchKodeRekening(4, value).then((data) => {
+                if (data.status == 'success') {
+                    setRekeningOptions4(data.data.map((data) => {
+                        return {
+                            value: data.id,
+                            label: data.fullcode + ' - ' + data.name,
+                        };
+                    }));
+                }
+            });
+
+            if (newInput?.[3]?.rek_id) {
+                setNewInput(newInput.filter((data: any, index: number) => index < 3));
+            }
+        }
+
+        if (level == 4) {
+            setNewInput((prev: any) => {
+                const index = 3;
+                const updated = [...prev];
+                updated[index] = {
+                    level: level,
+                    rek_id: value,
+                    kode_rek: rekeningOptions4.filter((data: any) => data.value == value)[0]?.label,
+                };
+                return updated;
+            });
+
+            fetchKodeRekening(5, value).then((data) => {
+                if (data.status == 'success') {
+                    setRekeningOptions5(data.data.map((data) => {
+                        return {
+                            value: data.id,
+                            label: data.fullcode + ' - ' + data.name,
+                        };
+                    }));
+                }
+            });
+
+            if (newInput?.[4]?.rek_id) {
+                setNewInput(newInput.filter((data: any, index: number) => index < 4));
+            }
+        }
+
+        if (level == 5) {
+            setNewInput((prev: any) => {
+                const index = 4;
+                const updated = [...prev];
+                updated[index] = {
+                    level: level,
+                    rek_id: value,
+                    kode_rek: rekeningOptions5.filter((data: any) => data.value == value)[0]?.label,
+                };
+                return updated;
+            });
+
+            fetchKodeRekening(6, value).then((data) => {
+                if (data.status == 'success') {
+                    setRekeningOptions6(data.data.map((data) => {
+                        return {
+                            value: data.id,
+                            label: data.fullcode + ' - ' + data.name,
+                        };
+                    }));
+                }
+            });
+
+            if (newInput?.[5]?.rek_id) {
+                setNewInput(newInput.filter((data: any, index: number) => index < 5));
+            }
+        }
+
+        if (level == 6) {
+            setNewInput((prev: any) => {
+                const index = 5;
+                const updated = [...prev];
+                updated[index] = {
+                    level: level,
+                    rek_id: value,
+                    kode_rek: rekeningOptions6.filter((data: any) => data.value == value)[0]?.label,
+                };
+                return updated;
+            });
+
+            setJudulUraian(null);
+            const uraian = [
+                {
+                    uraian: null,
+                    koefisien: null,
+                    satuan: null,
+                    harga: null,
+                }
+            ];
+            setInputUraian(uraian);
+        }
+    }
+
+    const addNewRincian = () => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+        setInputUraian((prev: any) => {
+            const updated = [...prev];
+            updated.push({
+                uraian: null,
+                koefisien: null,
+                satuan: null,
+                harga: null,
+            });
+            return updated;
+        });
+    }
+
+    const confirmDeleteUraian = (index: number) => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+        Swal.fire({
+            title: 'Apakah Anda Yakin?',
+            text: 'Anda tidak akan dapat mengembalikan ini!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Tidak, Batalkan!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteUraian(index);
+            }
+        });
+    }
+
+    const deleteUraian = (index: number) => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+        setInputUraian(inputUraian.filter((data: any, i: number) => i !== index));
+    }
+
+    const editData = (id: any) => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+        setInputType('update');
+        detailDataSubKegiatan(id, periode, year, month).then((res) => {
+            const data = res.data;
+            setModalInput(true);
+            setDataEdit(data);
+        });
+    }
+
+    const saveData = () => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+        if (inputType == 'create') {
+
+            let FormData = {
+                sub_kegiatan_id: subKegiatan?.id,
+                periode: periode,
+                year: year,
+                month: month,
+                rekenings: newInput,
+                judul_uraian: judulUraian,
+                uraians: inputUraian,
+            };
+
+            saveDataSubKegiatan(FormData).then((res) => {
+                if (res.status == 'success') {
+                    showAlert('success', 'Data berhasil disimpan');
+                    // setNewInput([]);
+                    setInputUraian([]);
+                    setShowInput(false);
+
+                    fetchDataRealisasi(subKegiatan?.id, periode, year, month).then((res) => {
+                        setDataRealisasi(res.data);
+                    });
+                }
+                else {
+                    showAlert('error', 'Data gagal disimpan');
+                }
+            });
+        }
+
+        if (inputType == 'update') {
+            updateDataSubKegiatan(dataEdit?.id, dataEdit).then((res) => {
+                if (res.status == 'success') {
+                    showAlert('success', res.message);
+                    setDataEdit(null);
+                    setModalInput(false);
+
+                    fetchDataRealisasi(subKegiatan?.id, periode, year, month).then((res) => {
+                        setDataRealisasi(res.data);
+                    });
+                }
+                else {
+                    showAlert('error', 'Data gagal disimpan');
+                }
+            });
+        }
+    }
+
+
+    // click outside container to collapse all
+    // useEffect(() => {
+    //     const handleOutSideClick = (event) => {
+    //         if (!ref.current?.contains(event.target)) {
+    //             setShowInput(false);
+    //         }
+    //     };
+    //     window.addEventListener("mousedown", handleOutSideClick);
+    //     return () => {
+    //         window.removeEventListener("mousedown", handleOutSideClick);
+    //     };
+    // }, [ref]);
+
+
+    const confirmDelete = async (id) => {
+        if (inputDisabled) {
+            showAlert('error', 'Input dinonaktifkan');
+            return;
+        }
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                popup: 'sweet-alerts',
+            },
+            buttonsStyling: false,
+        });
+        swalWithBootstrapButtons
+            .fire({
+                title: 'Hapus Pengguna?',
+                text: "Apakah Anda yakin untuk menghapus Pengguna Ini!",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Tidak!',
+                reverseButtons: true,
+                padding: '2em',
+            })
+            .then((result) => {
+                if (result.value) {
+                    deleteDataRealisasiRincian(id, periode, year, month).then((data) => {
+                        if (data.status == 'success') {
+                            fetchDataRealisasi(subKegiatan?.id, periode, year, month).then((res) => {
+                                setDataRealisasi(res.data);
+                            });
+                            swalWithBootstrapButtons.fire('Terhapus!', data.message, 'success');
+                        }
+                        if (data.status == 'error') {
+                            showAlert('error', data.message);
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus pengguna', 'info');
+                }
+            });
+    }
+
+
+    return (
+        <>
+
+            <div className="lg:fixed lg:bottom-0 lg:left-0 w-full lg:bg-white lg:dark:bg-slate-800 lg:z-[49] lg:pl-24 lg:pr-16 lg:pt-2.5 lg:pb-5">
+                <div className="flex flex-wrap gap-y-2 items-center justify-between">
+                    <h2 className="text-[14px] leading-6 font-semibold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
+                        {datas?.sub_kegiatan_fullcode ?? '\u00A0'} {datas?.sub_kegiatan_name ?? '\u00A0'}
+                    </h2>
+                    <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
+                        {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
+                            <>
+                                {view == 'informasi' && (
+                                    <button
+                                        type="button"
+                                        className="btn btn-success whitespace-nowrap"
+                                        onClick={() => {
+                                            setView('anggaran');
+                                            setNewInput([]);
+                                        }} >
+                                        <IconDollarSignCircle className="w-4 h-4" />
+                                        <span className="ltr:ml-2 rtl:mr-2">
+                                            Input Anggaran
+                                        </span>
+                                    </button>
+                                )}
+                                {view == 'anggaran' && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="btn btn-info whitespace-nowrap"
+                                            onClick={() => {
+                                                setView('informasi');
+                                                setNewInput([]);
+                                            }} >
+                                            <IconInfoHexagon className="w-4 h-4" />
+                                            <span className="ltr:ml-2 rtl:mr-2">
+                                                Informasi
+                                            </span>
+                                        </button>
+
+                                        <button
+                                            onClick={() => saveData()}
+                                            type="button"
+                                            className={
+                                                showInput
+                                                    ? 'btn btn-outline-success font-normal gap-x-1 transition-all duration-500'
+                                                    : 'btn btn-outline-success font-normal gap-x-1 transition-all duration-100 opacity-0 pointer-events-none w-[0px] p-0 m-0 overflow-hidden'
+                                            }>
+                                            <IconSave className="w-4 h-4" />
+                                            {showInput && (
+                                                <>
+                                                    Tambahkan Data
+                                                </>
+                                            )}
+                                        </button>
+                                    </>
+                                )}
+                            </>
+                        )}
+
+                        {/* <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={() => closeWindow()} >
+                            <IconArrowBackward className="w-4 h-4" />
+                            <span className="ltr:ml-2 rtl:mr-2">
+                                Kembali
+                            </span>
+                        </button> */}
+
+                    </div>
+                </div>
+            </div>
+
+            {view == 'informasi' && (
+                <div className="panel p-2 text-xs">
+                    <table>
+                        <tbody>
+                            {/* Urusan Start */}
+                            <tr>
+                                <td className='w-[150px] !text-xs !px-2'>
+                                    Urusan Pemerintahan
+                                </td>
+                                <td className='w-[0px] !px-0 !text-xs'>:</td>
+                                <td className='!text-xs !px-2 font-semibold'>
+                                    {datas?.urusan_fullcode ?? '-'} &nbsp;
+                                    {datas?.urusan_name ?? '-'}
+                                </td>
+                            </tr>
+                            {/* Urusan End */}
+
+                            {/* Bidang Start */}
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Bidang
+                                </td>
+                                <td className='w-[0px] !px-0 !text-xs'>:</td>
+                                <td className='!text-xs !px-2 font-semibold'>
+                                    {datas?.bidang_fullcode ?? '-'} &nbsp;
+                                    {datas?.bidang_name ?? '-'}
+                                </td>
+                            </tr>
+                            {/* Bidang End */}
+
+                            {/* Program Start */}
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Program
+                                </td>
+                                <td className='w-[0px] !px-0 !text-xs'>:</td>
+                                <td className='!text-xs !px-2 font-semibold'>
+                                    {datas?.program_fullcode ?? '-'} &nbsp;
+                                    {datas?.program_name ?? '-'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Capaian Program
+                                </td>
+                                <td className='w-[0px] !px-0 !text-xs'>:</td>
+                                <td className='!text-xs !px-2'>
+                                    <table className='border'>
+                                        <thead>
+                                            <tr>
+                                                <td className='!text-xs !px-2 font-semibold !text-center'>
+                                                    Indikator
+                                                </td>
+                                                <td className='w-[150px] !text-xs !px-2 font-semibold !text-center'>
+                                                    Target
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {datas?.caps_program?.indikator?.map((item: any, index: number) => {
+                                                return (
+                                                    <>
+                                                        <tr>
+                                                            <td className='border !text-xs !px-2'>
+                                                                {item?.name}
+                                                            </td>
+                                                            <td className='border !text-xs !px-2'>
+                                                                {item?.value} &nbsp;
+                                                                {item?.satuan_name}
+                                                            </td>
+                                                        </tr>
+                                                    </>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Alokasi Tahun
+                                    {new Date().getFullYear() - 1}
+                                </td>
+                                <td className="w-[0px] !px-0 !text-xs">:</td>
+                                <td className='!text-xs !px-2'>
+                                    Rp. &nbsp;
+                                    {new Intl.NumberFormat('id-ID', {
+                                        style: 'decimal',
+                                    }).format(datas?.caps_program?.anggaran?.filter((item: any) => item.year == (new Date().getFullYear() - 1))[0]?.anggaran ?? 0) ?? 0}
+                                    &nbsp;
+                                    ({angkaTerbilang(datas?.caps_program?.anggaran?.filter((item: any) => item.year == (new Date().getFullYear() - 1))[0]?.anggaran ?? 0) ?? 0} rupiah)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Alokasi Tahun
+                                    {new Date().getFullYear()}
+                                </td>
+                                <td className="w-[0px] !px-0 !text-xs">:</td>
+                                <td className='!text-xs !px-2'>
+                                    Rp. &nbsp;
+                                    {new Intl.NumberFormat('id-ID', {
+                                        style: 'decimal',
+                                    }).format(datas?.caps_program?.anggaran?.filter((item: any) => item.year == (new Date().getFullYear()))[0]?.anggaran ?? 0) ?? 0}
+                                    &nbsp;
+                                    ({angkaTerbilang(datas?.caps_program?.anggaran?.filter((item: any) => item.year == (new Date().getFullYear()))[0]?.anggaran ?? 0) ?? 0} rupiah)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Alokasi Tahun
+                                    {new Date().getFullYear() + 1}
+                                </td>
+                                <td className="w-[0px] !px-0 !text-xs">:</td>
+                                <td className='!text-xs !px-2'>
+                                    Rp. &nbsp;
+                                    {new Intl.NumberFormat('id-ID', {
+                                        style: 'decimal',
+                                    }).format(datas?.caps_program?.anggaran?.filter((item: any) => item.year == (new Date().getFullYear() + 1))[0]?.anggaran ?? 0) ?? 0}
+                                    &nbsp;
+                                    ({angkaTerbilang(datas?.caps_program?.anggaran?.filter((item: any) => item.year == (new Date().getFullYear() + 1))[0]?.anggaran ?? 0) ?? 0} rupiah)
+                                </td>
+                            </tr>
+                            {/* Program End */}
+
+                            {/* Kegiatan Start */}
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Kegiatan
+                                </td>
+                                <td className='w-[0px] !px-0 !text-xs'>:</td>
+                                <td className='!text-xs !px-2 font-semibold'>
+                                    {datas?.kegiatan_fullcode ?? '-'} &nbsp;
+                                    {datas?.kegiatan_name ?? '-'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={100} className='!text-center !text-xs font-semibold'>
+                                    Indikator dan Tolak Ukur Kinerja Kegiatan
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={100}>
+                                    <table>
+                                        <thead className='!text-center !text-xs font-semibold'>
+                                            <tr>
+                                                <td className='!text-center !border'
+                                                    colSpan={2}>
+                                                    Renstra
+                                                </td>
+                                                <td className='!text-center !border'
+                                                    colSpan={2}>
+                                                    Renstra Perubahan
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className='!text-center !border min-w-[200px]'>
+                                                    Tolak Ukur Kinerja
+                                                </td>
+                                                <td className='!text-center !border w-[150px]'>
+                                                    Target Kinerja
+                                                </td>
+                                                <td className='!text-center !border min-w-[200px]'>
+                                                    Tolak Ukur Kinerja
+                                                </td>
+                                                <td className='!text-center !border w-[150px]'>
+                                                    Target Kinerja
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {datas?.caps_kegiatan?.indikator?.map((item: any, index: number) => {
+                                                return (
+                                                    <>
+                                                        <tr>
+                                                            <td className='!text-xs border'>
+                                                                {item?.name}
+                                                            </td>
+                                                            <td className='!text-xs border'>
+                                                                {item?.renstra_value} &nbsp;
+                                                                {item?.renstra_satuan_name}
+                                                            </td>
+                                                            <td className='!text-xs border'>
+                                                                {item?.name}
+                                                            </td>
+                                                            <td className='!text-xs border'>
+                                                                {item?.renja_value} &nbsp;
+                                                                {item?.renja_satuan_name}
+                                                            </td>
+                                                        </tr>
+                                                    </>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            {/* Kegiatan End */}
+
+                            {/* Sub Kegiatan Start */}
+                            <tr>
+                                <td className='!text-xs !px-2'>
+                                    Sub Kegiatan
+                                </td>
+                                <td className='w-[0px] !px-0 !text-xs'>:</td>
+                                <td className='!text-xs !px-2 font-semibold'>
+                                    {datas?.sub_kegiatan_fullcode ?? '-'} &nbsp;
+                                    {datas?.sub_kegiatan_name ?? '-'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={100} className='!text-center !text-xs font-semibold'>
+                                    Indikator dan Tolak Ukur Kinerja Sub Kegiatan
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan={100}>
+                                    <table>
+                                        <thead className='!text-center !text-xs font-semibold'>
+                                            <tr>
+                                                <td className='!text-center !border'
+                                                    colSpan={2}>
+                                                    Renstra
+                                                </td>
+                                                <td className='!text-center !border'
+                                                    colSpan={2}>
+                                                    Renstra Perubahan
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className='!text-center !border min-w-[200px]'>
+                                                    Tolak Ukur Kinerja
+                                                </td>
+                                                <td className='!text-center !border w-[150px]'>
+                                                    Target Kinerja
+                                                </td>
+                                                <td className='!text-center !border min-w-[200px]'>
+                                                    Tolak Ukur Kinerja
+                                                </td>
+                                                <td className='!text-center !border w-[150px]'>
+                                                    Target Kinerja
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {datas?.caps_sub_kegiatan?.indikator?.map((item: any, index: number) => {
+                                                return (
+                                                    <>
+                                                        <tr>
+                                                            <td className='!text-xs border'>
+                                                                {item?.name}
+                                                            </td>
+                                                            <td className='!text-xs border'>
+                                                                {item?.renstra_value} &nbsp;
+                                                                {item?.renstra_satuan_name}
+                                                            </td>
+                                                            <td className='!text-xs border'>
+                                                                {item?.name}
+                                                            </td>
+                                                            <td className='!text-xs border'>
+                                                                {item?.renja_value} &nbsp;
+                                                                {item?.renja_satuan_name}
+                                                            </td>
+                                                        </tr>
+                                                    </>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            {/* Sub Kegiatan End */}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {view == 'anggaran' && (
+                <div className={showInput ? 'panel p-0.5 text-xs relative pb-[520px]' : 'panel p-0.5 text-xs relative pb-[80px]'}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowSpan={2}
+                                    className='!text-xs !p-2 !text-center border w-[150px]'>
+                                    Kode Rekening
+                                </th>
+                                <th rowSpan={2}
+                                    className='!text-xs !p-2 !text-center border min-w-[250px]'>
+                                    Uraian
+                                </th>
+                                <th colSpan={4}
+                                    className='!text-xs !p-2 !text-center border'>
+                                    Rincian Perhitungan
+                                </th>
+                                <th className='!text-xs !p-2 !text-center border'>
+                                    Jumlah
+                                </th>
+                                <th rowSpan={2}
+                                    className='!text-xs !p-2 !text-center border w-[50px]'>
+                                    Opt
+                                </th>
+                            </tr>
+                            <tr>
+                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                    Koefisien
+                                </th>
+                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                    Satuan
+                                </th>
+                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                    Harga
+                                </th>
+                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                    PPN
+                                </th>
+                                <th className='!text-xs !p-2 !text-center border w-[200px]'>
+                                    (Rp)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {dataRealisasi?.map((data: any, index: number) => {
+                                return (
+                                    <tr>
+                                        <td className='!text-xs !p-2 font-semibold border'>
+                                            {data?.type == 'summary' && (
+                                                <div className="relative w-[300px]">
+                                                    {data?.rek_code}
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td
+                                            colSpan={data?.type != 'detail' ? 5 : 1}
+                                            className='!text-xs !p-2 !text-start border'>
+                                            {data?.type == 'summary' ? (
+                                                <>
+                                                    <span className='font-semibold'>
+                                                        {data?.rek_name}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {data?.type == 'title' ? (
+                                                        <span className='font-semibold whitespace-pre-line'>
+                                                            {data?.uraian}
+                                                        </span>
+                                                    ) : (
+                                                        <span className='font-normal whitespace-pre-line'>
+                                                            {data?.uraian}
+                                                        </span>
+                                                    )}
+                                                </>
+                                            )}
+                                        </td>
+                                        {data?.type == 'detail' && (
+                                            <>
+                                                <td className='!text-xs !p-2 !text-center border'>
+                                                    {data?.koefisien ?? 0}
+                                                </td>
+                                                <td className='!text-xs !p-2 !text-center border'>
+                                                    {data?.satuan_name ?? '-'}
+                                                </td>
+                                                <td className='!text-xs !p-2 !text-end border'>
+                                                    Rp. {new Intl.NumberFormat('id-ID', {
+                                                        style: 'decimal',
+                                                    }).format(data?.harga ?? 0) ?? 0
+                                                    }
+                                                </td>
+                                                <td className='!text-xs !p-2 !text-end border'>
+                                                    Rp. {new Intl.NumberFormat('id-ID', {
+                                                        style: 'decimal',
+                                                    }).format(data?.ppn ?? 0) ?? 0
+                                                    }
+                                                </td>
+                                            </>
+                                        )}
+                                        <td className='!text-xs !p-2 !text-end border'>
+                                            Rp. {new Intl.NumberFormat('id-ID', {
+                                                style: 'decimal',
+                                            }).format(data?.total ?? 0) ?? 0
+                                            }
+                                        </td>
+                                        <td className='!text-xs !p-2 !text-center border'>
+                                            {data?.type == 'detail' && (
+                                                <div className='flex justify-center items-center gap-1'>
+                                                    <Tippy content='Edit Data'>
+                                                        <button
+                                                            onClick={
+                                                                () => {
+                                                                    editData(data?.id);
+                                                                }
+                                                            }
+                                                            type="button">
+                                                            <IconEdit className="w-4 h-4 text-info hover:text-cyan-700" />
+                                                        </button>
+                                                    </Tippy>
+                                                    <Tippy content='Hapus Data'>
+                                                        <button
+                                                            onClick={
+                                                                () => {
+                                                                    confirmDelete(data?.id);
+                                                                }
+                                                            }
+                                                            type="button">
+                                                            <IconTrashLines className="w-4 h-4 text-danger hover:text-red-700" />
+                                                        </button>
+                                                    </Tippy>
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+
+                            {(inputDatas?.length == 0 && !showInput) && (
+                                <tr>
+                                    <td colSpan={1000}>
+                                        <div className="flex items-center justify-center">
+                                            <button
+                                                onClick={
+                                                    () => {
+                                                        if (inputDisabled) {
+                                                            showAlert('error', 'Input dinonaktifkan');
+                                                            return;
+                                                        }
+                                                        setShowInput(true);
+                                                        setInputType('create');
+                                                        setDataEdit(null);
+                                                        // setModalInput(true);
+                                                    }
+                                                }
+                                                className='btn btn-outline-primary text-xs px-3 py-2 gap-1'
+                                                type='button'>
+                                                <IconPlusCircle className='w-4 h-4' />
+                                                Tambah Data
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+
+                    <div className={showInput ? 'h-[490px] mt-2 fixed bottom-0 sm:bottom-[60px] w-[calc(100%-50px)] sm:w-[calc(100%-125px)]  overflow-x-auto panel pt-0 border border-slate-600 transition-all duration-500' : 'h-[52px] mt-2 fixed bottom-0 sm:bottom-[60px] w-[calc(100%-50px)] sm:w-[calc(100%-125px)]  overflow-x-auto panel pt-0 cursor-pointer border border-slate-200 transition-all duration-500'}
+                    >
+                        <div className="relative">
+                            <div
+                                onClick={
+                                    () => {
+                                        if (inputDisabled) {
+                                            showAlert('error', 'Input dinonaktifkan');
+                                            return;
+                                        }
+
+                                        setShowInput(!showInput);
+                                        setInputType('create');
+                                        setDataEdit(null);
+                                    }
+                                }
+                                className="py-2 flex justify-center items-center gap-1 text-xs text-slate-500 hover:text-blue-600 group cursor-pointer sticky z-[20] top-0 w-full bg-white dark:bg-slate-900">
+                                <IconCaretDown className={!showInput ? 'w-4 h-4 rotate-180 transition-all duration-500' : 'w-4 h-4 transition-all duration-500'} />
+                                <span className='font-semibold'>
+                                    {showInput ? 'Sembunyikan' : 'Tampilkan'} Input
+                                </span>
+                            </div>
+
+
+                            <div className={showInput ? 'mt-1 pt-2 border-t p-2' : 'hidden'}>
+                                <div className="flex flex-col sm:flex-row justify-start gap-4">
+                                    <div className="space-y-4 sm:w-1/3">
+
+                                        <div className='sm:col-span-2'>
+                                            <label htmlFor="rekening_akun">
+                                                Rekening Akun
+                                            </label>
+
+                                            <Select
+                                                id='rekening_akun'
+                                                placeholder="Pilih Rekening Akun"
+                                                autoFocus={true}
+                                                options={rekeningOptions1}
+                                                defaultValue={
+                                                    newInput?.[0]?.rek_id ?
+                                                        rekeningOptions1?.filter((data) => data.value == newInput?.rek_id)[0]
+                                                        : null
+                                                }
+                                                isSearchable={true}
+                                                onChange={
+                                                    (e) => {
+                                                        temporaryInsertRekening(1, e.value);
+                                                    }
+                                                }
+                                            />
+                                        </div>
+
+                                        {newInput?.[0]?.rek_id && (
+                                            <div className='sm:col-span-2'>
+                                                <label htmlFor="rekening">
+                                                    Rekening Kelompok
+                                                </label>
+
+                                                <Select
+                                                    id='rekening_kelompok'
+                                                    placeholder="Pilih Rekening Kelompok"
+                                                    autoFocus={true}
+                                                    options={rekeningOptions2}
+                                                    defaultValue={
+                                                        newInput?.[1]?.rek_id ?
+                                                            rekeningOptions2?.filter((data) => data.value == newInput?.rek_id)[1]
+                                                            : null
+                                                    }
+                                                    isSearchable={true}
+                                                    onChange={
+                                                        (e) => {
+                                                            temporaryInsertRekening(2, e.value);
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+
+                                        {newInput?.[1]?.rek_id && (
+                                            <div className='sm:col-span-2'>
+                                                <label htmlFor="rekening">
+                                                    Rekening Jenis
+                                                </label>
+
+                                                <Select
+                                                    id='rekening_jenis'
+                                                    placeholder="Pilih Rekening Jenis"
+                                                    autoFocus={true}
+                                                    options={rekeningOptions3}
+                                                    defaultValue={
+                                                        newInput?.[2]?.rek_id ?
+                                                            rekeningOptions3?.filter((data) => data.value == newInput?.rek_id)[2]
+                                                            : null
+                                                    }
+                                                    isSearchable={true}
+                                                    onChange={
+                                                        (e) => {
+                                                            temporaryInsertRekening(3, e.value);
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+
+                                        {newInput?.[2]?.rek_id && (
+                                            <div className='sm:col-span-2'>
+                                                <label htmlFor="rekening">
+                                                    Rekening Objek
+                                                </label>
+
+                                                <Select
+                                                    styles={
+                                                        {
+                                                            menu: (provided: any, state: any) => ({
+                                                                ...provided,
+                                                                top: 'auto',
+                                                                bottom: '100%',
+                                                            }),
+                                                        }
+                                                    }
+                                                    placeholder="Pilih Rekening Objek"
+                                                    autoFocus={true}
+                                                    options={rekeningOptions4}
+                                                    defaultValue={
+                                                        newInput?.[3]?.rek_id ?
+                                                            rekeningOptions4?.filter((data) => data.value == newInput?.rek_id)[3]
+                                                            : null
+                                                    }
+                                                    isSearchable={true}
+                                                    onChange={
+                                                        (e) => {
+                                                            temporaryInsertRekening(4, e.value);
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+
+                                        {newInput?.[3]?.rek_id && (
+                                            <div className='sm:col-span-2'>
+                                                <label htmlFor="rekening">
+                                                    Rekening Rincian Objek
+                                                </label>
+
+                                                <Select
+                                                    styles={
+                                                        {
+                                                            menu: (provided: any, state: any) => ({
+                                                                ...provided,
+                                                                top: 'auto',
+                                                                bottom: '100%',
+                                                            }),
+                                                        }
+                                                    }
+                                                    placeholder="Pilih Rekening Rincian Objek"
+                                                    autoFocus={true}
+                                                    options={rekeningOptions5}
+                                                    defaultValue={
+                                                        newInput?.[4]?.rek_id ?
+                                                            rekeningOptions5?.filter((data) => data.value == newInput?.rek_id)[4]
+                                                            : null
+                                                    }
+                                                    isSearchable={true}
+                                                    onChange={
+                                                        (e) => {
+                                                            temporaryInsertRekening(5, e.value);
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+
+                                        {newInput?.[4]?.rek_id && (
+                                            <div className='sm:col-span-2'>
+                                                <label htmlFor="rekening">
+                                                    Rekening Sub Rincian Objek
+                                                </label>
+
+                                                <Select
+                                                    className='relative top-0'
+                                                    styles={
+                                                        {
+                                                            menu: (provided: any, state: any) => ({
+                                                                ...provided,
+                                                                top: 'auto',
+                                                                bottom: '100%',
+                                                            }),
+
+                                                        }
+                                                    }
+                                                    placeholder="Pilih Rekening Sub Rincian Objek"
+                                                    autoFocus={true}
+                                                    options={rekeningOptions6}
+                                                    defaultValue={
+                                                        newInput?.[5]?.rek_id ?
+                                                            rekeningOptions6?.filter((data) => data.value == newInput?.rek_id)[5]
+                                                            : null
+                                                    }
+                                                    isSearchable={true}
+                                                    onChange={
+                                                        (e) => {
+                                                            temporaryInsertRekening(6, e.value);
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    <div className="sm:w-2/3 space-y-2 divide-y divide-slate-300">
+
+                                        {newInput?.[5]?.rek_id && (
+                                            <>
+                                                <div>
+                                                    <label htmlFor="ctnTextarea">
+                                                        Judul Uraian
+                                                    </label>
+                                                    <textarea
+                                                        id="ctnTextarea"
+                                                        rows={3}
+                                                        className="form-textarea text-xs font-normal resize-none !min-h-[30px] w-full px-2"
+                                                        value={judulUraian}
+                                                        onChange={
+                                                            (e) => {
+                                                                setJudulUraian(e.target.value);
+                                                            }
+                                                        }
+                                                        placeholder="Ketik Judul Uraian disini..."
+                                                        required></textarea>
+                                                </div>
+
+                                                {inputUraian?.map((data: any, index: number) => {
+                                                    return (
+                                                        <div className="flex flex-wrap items-start gap-2 w-full pt-2">
+
+                                                            <div className="grow self-end">
+                                                                <label className='text-[10px] !mb-0'>
+                                                                    Uraian
+                                                                </label>
+                                                                <textarea
+                                                                    value={data?.uraian}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            setInputUraian((prev: any) => {
+                                                                                const updated = [...prev];
+                                                                                updated[index] = {
+                                                                                    uraian: e.target.value,
+                                                                                    koefisien: data?.koefisien,
+                                                                                    satuan: data?.satuan,
+                                                                                    harga: data?.harga,
+                                                                                };
+                                                                                return updated;
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                    className="form-textarea text-xs font-normal resize-none !h-[38px] min-w-[250px] !m-0"
+                                                                    placeholder="Ketik Rincian Uraian disini..." required></textarea>
+                                                            </div>
+
+                                                            <div className="">
+                                                                <label className='text-[10px] !mb-0'>
+                                                                    Koefisien
+                                                                </label>
+                                                                <input
+                                                                    value={data?.koefisien}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            setInputUraian((prev: any) => {
+                                                                                const updated = [...prev];
+                                                                                updated[index] = {
+                                                                                    uraian: data?.uraian,
+                                                                                    koefisien: e.target.value,
+                                                                                    satuan: data?.satuan,
+                                                                                    harga: data?.harga,
+                                                                                };
+                                                                                return updated;
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                    type="number"
+                                                                    className="form-input text-xs font-normal px-2 !w-[150px] !h-[38px]"
+                                                                    placeholder="Koefisien" required />
+                                                            </div>
+
+                                                            <div className="">
+                                                                <label className='text-[10px] !mb-0'>
+                                                                    Satuan
+                                                                </label>
+                                                                <Select
+                                                                    id='satuan'
+                                                                    className='!text-xs !w-[200px]'
+                                                                    minMenuHeight={50}
+                                                                    placeholder="Pilih Satuan"
+                                                                    options={
+                                                                        satuans?.map((data: any) => {
+                                                                            return {
+                                                                                value: data.id,
+                                                                                label: data.name,
+                                                                            };
+                                                                        })
+                                                                    }
+                                                                    isSearchable={true}
+                                                                    value={
+                                                                        data?.satuan &&
+                                                                        satuans?.filter((satuan: any) => satuan.value == data?.satuan)[0]
+                                                                    }
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            setInputUraian((prev: any) => {
+                                                                                const updated = [...prev];
+                                                                                updated[index] = {
+                                                                                    uraian: data?.uraian,
+                                                                                    koefisien: data?.koefisien,
+                                                                                    satuan: e.value,
+                                                                                    harga: data?.harga,
+                                                                                };
+                                                                                return updated;
+                                                                            });
+                                                                            console.log(inputUraian)
+                                                                        }
+                                                                    } />
+                                                            </div>
+
+                                                            <div className="">
+                                                                <label className='text-[10px] !mb-0'>
+                                                                    Harga
+                                                                </label>
+                                                                <input
+                                                                    value={data?.harga}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            setInputUraian((prev: any) => {
+                                                                                const updated = [...prev];
+                                                                                updated[index] = {
+                                                                                    uraian: data?.uraian,
+                                                                                    koefisien: data?.koefisien,
+                                                                                    satuan: data?.satuan,
+                                                                                    harga: e.target.value,
+                                                                                };
+                                                                                return updated;
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                    type="number"
+                                                                    className="form-input text-xs font-normal px-2 !w-[150px] !h-[38px]"
+                                                                    placeholder="Harga Satuan" required />
+                                                            </div>
+
+                                                            <div className="flex items-center justify-center h-full self-center w-[25px]">
+                                                                <Tippy content="Delete">
+                                                                    <button type="button" onClick={() => confirmDeleteUraian(index)}>
+                                                                        <IconTrashLines className="m-auto text-red-400 hover:text-red-600" />
+                                                                    </button>
+                                                                </Tippy>
+                                                            </div>
+
+                                                        </div>
+                                                    )
+                                                })}
+
+                                                <div className="flex justify-center pt-2">
+                                                    <button
+                                                        onClick={() => addNewRincian()}
+                                                        type="button"
+                                                        className="btn btn-outline-info font-normal text-xs gap-x-1 px-2 py-1">
+                                                        <IconPlus className="w-4 h-4" />
+                                                        Rincian
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {view == 'anggaran' && (
+
+                <Transition appear show={modalInput} as={Fragment}>
+                    <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0" />
+                        </Transition.Child>
+                        <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen px-4">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                        <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                            <h5 className="font-semibold text-md">
+                                                Edit Data Realisasi
+                                            </h5>
+                                            <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalInput(false)}>
+                                                <IconX />
+                                            </button>
+                                        </div>
+                                        <div className="p-5 space-y-3">
+
+                                            <div>
+                                                <label className='text-[10px] !mb-0'>
+                                                    Kode Rekening
+                                                </label>
+                                                <div className="">
+                                                    {dataEdit?.kode_rek_6} - {dataEdit?.kode_rek_6_uraian}
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className='text-[10px] !mb-0'>
+                                                    Uraian
+                                                </label>
+                                                <textarea
+                                                    rows={3}
+                                                    value={dataEdit?.uraian}
+                                                    onChange={
+                                                        (e) => {
+                                                            setDataEdit((prev: any) => {
+                                                                return {
+                                                                    ...prev,
+                                                                    uraian: e.target.value,
+                                                                };
+                                                            });
+                                                        }
+                                                    }
+                                                    className="form-textarea p-2 text-xs font-normal resize-none w-full"
+                                                    placeholder="Ketik Rincian Uraian disini..."></textarea>
+                                            </div>
+
+                                            <div className="flex items-center gap-2 w-full">
+                                                <div className="grow">
+                                                    <label className='text-[10px] !mb-0'>
+                                                        Koefisien
+                                                    </label>
+                                                    <input
+                                                        value={dataEdit?.koefisien}
+                                                        onChange={
+                                                            (e) => {
+                                                                setDataEdit((prev: any) => {
+                                                                    return {
+                                                                        ...prev,
+                                                                        koefisien: e.target.value,
+                                                                    };
+                                                                });
+                                                            }
+                                                        }
+                                                        type="number"
+                                                        className="form-input text-xs font-normal px-2"
+                                                        placeholder="Koefisien" required />
+                                                </div>
+
+                                                <div className="grow">
+                                                    <label className='text-[10px] !mb-0'>
+                                                        Satuan
+                                                    </label>
+                                                    <select
+                                                        value={dataEdit?.satuan}
+                                                        className='form-select text-xs font-normal'>
+                                                        <option value="" hidden>
+                                                            Pilih Satuan
+                                                        </option>
+                                                        {satuans?.map((data: any, index: number) => {
+                                                            return (
+                                                                <option key={index} value={data.id}>
+                                                                    {data.name}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                    </select>
+                                                </div>
+
+                                                <div className="grow">
+                                                    <label className='text-[10px] !mb-0'>
+                                                        Harga
+                                                    </label>
+                                                    <input
+                                                        value={dataEdit?.harga}
+                                                        onChange={
+                                                            (e) => {
+                                                                setDataEdit((prev: any) => {
+                                                                    return {
+                                                                        ...prev,
+                                                                        harga: e.target.value,
+                                                                    };
+                                                                });
+                                                            }
+                                                        }
+                                                        type="number"
+                                                        className="form-input text-xs font-normal px-2"
+                                                        placeholder="Harga Satuan" required />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-end border-t pt-1">
+                                                <div className="">
+                                                    <button
+                                                        onClick={() => saveData()}
+                                                        type="button"
+                                                        className="btn btn-outline-success text-xs w-full">
+                                                        <IconSave className="w-4 h-4 mr-1" />
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
+                        </div>
+                    </Dialog>
+                </Transition>
+            )}
+
+        </>
+    );
+}
+
+export default Index;
