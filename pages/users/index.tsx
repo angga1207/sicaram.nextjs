@@ -116,7 +116,7 @@ const Index = () => {
     const [modalInput, setModalInput] = useState(false);
     const [expandPassword, setExpandPassword] = useState(false);
 
-    const [dataInput, setDataInput] = useState({
+    const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
         fullname: '',
@@ -216,12 +216,12 @@ const Index = () => {
                     showAlert('success', data.message);
                 }
                 if (data.status == 'error validation') {
-                    document.getElementById('error-fullname').innerHTML = data.message.fullname?.[0] ?? '';
-                    document.getElementById('error-username').innerHTML = data.message.username?.[0] ?? '';
-                    document.getElementById('error-email').innerHTML = data.message.email?.[0] ?? '';
-                    document.getElementById('error-role').innerHTML = data.message.role?.[0] ?? '';
-                    document.getElementById('error-password').innerHTML = data.message.password?.[0] ?? '';
-                    document.getElementById('error-password_confirmation').innerHTML = data.message.password_confirmation?.[0] ?? '';
+                    Object.keys(data.message).map((key: any, index: any) => {
+                        let element = document.getElementById('error-' + key);
+                        if (element) {
+                            element.innerHTML = data.message[key][0];
+                        }
+                    });
                 }
                 if (data.status == 'error') {
                     console.log(data.message)
@@ -342,7 +342,7 @@ const Index = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {datas.map((data: any, index: number) => {
+                            {datas?.map((data: any, index: number) => {
                                 return (
                                     <tr key={data?.id}>
                                         <td>
@@ -386,7 +386,7 @@ const Index = () => {
                                 );
                             })}
 
-                            {(datas.length == 0 && !search) && (
+                            {(datas?.length == 0 && !search) && (
                                 <>
                                     <tr>
                                         <td colSpan={5} className="text-center">
@@ -473,17 +473,12 @@ const Index = () => {
                                                         <div>
                                                             {(dataInput.inputType == 'edit' && dataInput.photo) ? (
                                                                 <>
-                                                                    <img className='w-full h-[200px] lg:w-[250px] object-contain rounded border bg-white shadow p-0.5' src={dataInput.photo} alt="" />
+                                                                    <img className='w-full h-[200px] lg:w-[250px] object-contain rounded border bg-white shadow p-0.5' src={dataInput.photo} />
                                                                 </>
                                                             ) : (
                                                                 <>
-                                                                    <div className='w-full h-[200px] lg:w-[250px] object-contain rounded border bg-white shadow p-0.5 flex items-center justify-center gap-2'>
-                                                                        <div>
-                                                                            <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-4 h-4 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                        </div>
-                                                                        <div>
-                                                                            Loading...
-                                                                        </div>
+                                                                    <div className='w-full h-[200px] lg:w-[250px] object-contain rounded border bg-white shadow p-0.5 flex items-center justify-center gap-2 text-slate-400'>
+                                                                        <div className="dots-loading">....</div>
                                                                     </div>
                                                                 </>
                                                             )}
@@ -499,13 +494,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.fullname == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -533,13 +523,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.username == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -570,13 +555,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.email == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -606,13 +586,8 @@ const Index = () => {
                                                 </label>
                                                 {(dataInput.inputType == 'edit' && dataInput.role == null) ? (
                                                     <>
-                                                        <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                            <div>
-                                                                <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                            </div>
-                                                            <div>
-                                                                Loading...
-                                                            </div>
+                                                        <div className="w-full form-input text-slate-400">
+                                                            <div className="dots-loading">....</div>
                                                         </div>
                                                     </>
                                                 ) : (
@@ -620,7 +595,7 @@ const Index = () => {
 
                                                         <select className="form-select text-white-dark" value={dataInput.role} onChange={(e) => setDataInput({ ...dataInput, role: e.target.value })}>
                                                             <option hidden value="">Pilih Jenis Pengguna</option>
-                                                            {roles.map((role) => {
+                                                            {roles.map((role: any) => {
                                                                 return (
                                                                     <option value={role.id}>
                                                                         {role.display_name}
@@ -642,20 +617,15 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.instance_id == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (
                                                             <>
                                                                 <select className="form-select text-white-dark" value={dataInput.instance_id} onChange={(e) => setDataInput({ ...dataInput, instance_id: e.target.value })}>
                                                                     <option hidden value="">Pilih Jenis Pengguna</option>
-                                                                    {instances.map((instance) => {
+                                                                    {instances.map((instance: any) => {
                                                                         return (
                                                                             <option value={instance.id}>
                                                                                 {instance.name}
@@ -679,13 +649,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.instance_type == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -738,13 +703,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.password == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -773,13 +733,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.password_confirmation == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
                                                                 </div>
                                                             </>
                                                         ) : (

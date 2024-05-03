@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../store';
+import { IRootState } from '@/store';
 import React, { useEffect, useState, FormEvent } from 'react';
-import { setPageTitle, toggleLocale, toggleRTL } from '../../store/themeConfigSlice';
-import BlankLayout from '../../components/Layouts/BlankLayout';
-import Dropdown from '../../components/Dropdown';
+import { setPageTitle, toggleLocale, toggleRTL } from '@/store/themeConfigSlice';
+import BlankLayout from '@/components/Layouts/BlankLayout';
+import Dropdown from '@/components/Dropdown';
 import { useTranslation } from 'react-i18next';
-import IconCaretDown from '../../components/Icon/IconCaretDown';
-import IconLockDots from '../../components/Icon/IconLockDots';
+import IconCaretDown from '@/components/Icon/IconCaretDown';
+import IconLockDots from '@/components/Icon/IconLockDots';
 import Link from 'next/link';
 
 import { setCookie, getCookie, hasCookie, deleteCookie } from 'cookies-next';

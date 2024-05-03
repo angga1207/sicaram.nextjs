@@ -1,39 +1,22 @@
 import { useEffect, useState, Fragment, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../../store';
-import { setPageTitle } from '../../../store/themeConfigSlice';
+import { IRootState } from '../../store';
+import { setPageTitle } from '../../store/themeConfigSlice';
 import dynamic from 'next/dynamic';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
     ssr: false,
 });
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import MaskedInput from 'react-text-mask';
 
 import { useTranslation } from 'react-i18next';
 import { Dialog, Transition } from '@headlessui/react';
-import Dropdown from '../../../components/Dropdown';
 import Swal from 'sweetalert2';
-import Link from 'next/link';
 import Select from 'react-select';
-import AsyncSelect from 'react-select/async';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import AnimateHeight from 'react-animate-height';
-import LoadingSicaram from '../../../components/LoadingSicaram';
-import { BackgroundImage } from '@mantine/core';
-import IconSearch from '@/components/Icon/IconSearch';
-import IconArrowBackward from '@/components/Icon/IconArrowBackward';
-import IconFacebook from '@/components/Icon/IconFacebook';
-import IconTwitter from '@/components/Icon/IconTwitter';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faGlobeAsia } from '@fortawesome/free-solid-svg-icons';
-import IconPencil from '@/components/Icon/IconPencil';
-import IconLaptop from '@/components/Icon/IconLaptop';
+import CreatableSelect from 'react-select/creatable';
 import IconX from '@/components/Icon/IconX';
-import angkaTerbilang from '@develoka/angka-terbilang-js';
-
+const angkaTerbilang = require('@develoka/angka-terbilang-js');
 import {
     fetchDataInformasiSubKegiatan,
     fetchDataRealisasi,
@@ -42,8 +25,8 @@ import {
     detailDataSubKegiatan,
     updateDataSubKegiatan,
     deleteDataRealisasiRincian
-} from '../../../apis/fetchRealisasi';
-import { fetchPeriodes, fetchSatuans } from '../../../apis/fetchdata';
+} from '../../apis/fetchRealisasi';
+import { fetchPeriodes, fetchSatuans } from '../../apis/fetchdata';
 import IconDollarSignCircle from '@/components/Icon/IconDollarSignCircle';
 import IconInfoHexagon from '@/components/Icon/IconInfoHexagon';
 import IconPlus from '@/components/Icon/IconPlus';
@@ -72,7 +55,7 @@ const showAlert = async (icon: any, text: any) => {
 
 const Index = () => {
     const dispatch = useDispatch();
-    const ref = useRef(null);
+    const ref = useRef<any>(null);
 
     useEffect(() => {
         dispatch(setPageTitle('Realisasi Kinerja'));
@@ -120,10 +103,13 @@ const Index = () => {
     const [rekeningOptions4, setRekeningOptions4] = useState<any>([]);
     const [rekeningOptions5, setRekeningOptions5] = useState<any>([]);
     const [rekeningOptions6, setRekeningOptions6] = useState<any>([]);
-    const [view, setView] = useState('informasi');
+    const [view, setView] = useState('anggaran');
     const [showInput, setShowInput] = useState<any>(false)
     const [modalInput, setModalInput] = useState(false);
     const [inputDisabled, setInputDisabled] = useState<boolean>(false);
+
+    const [datas, setDatas] = useState<any>(null);
+    const [dataRealisasi, setDataRealisasi] = useState<any>(null);
 
     useEffect(() => {
         fetchPeriodes().then((data) => {
@@ -134,7 +120,7 @@ const Index = () => {
         fetchKodeRekening(1).then((data) => {
             if (data.status == 'success') {
                 setRawKodeRekening(data.data);
-                setRekeningOptions1(data.data.map((data) => {
+                setRekeningOptions1(data.data.map((data: any) => {
                     return {
                         value: data.id,
                         label: data.fullcode + ' - ' + data.name,
@@ -148,9 +134,6 @@ const Index = () => {
             }
         });
     }, [CurrentUser, periode]);
-
-    const [datas, setDatas] = useState<any>(null);
-    const [dataRealisasi, setDataRealisasi] = useState<any>(null);
 
     useEffect(() => {
         setSubKegiatan({
@@ -176,7 +159,21 @@ const Index = () => {
             fetchDataRealisasi(subKegiatan?.id, periode, year, month).then((res) => {
                 if (res.status == 'success') {
                     setDataRealisasi(res.data);
-                    // setInputDisabled(false);
+                    if (dataRealisasi?.filter((data: any) => data.type == 'detail').length > 0) {
+                        if (res.data.length > 0) {
+                            let data = res.data;
+                            let dataLength = data.length;
+                            let dataLast = data[dataLength - 1];
+                            if (dataLength > 0 && dataLast.type != 'detail') {
+                                while (dataLast.type != 'detail') {
+                                    data.pop();
+                                    dataLength = data.length;
+                                    dataLast = data[dataLength - 1];
+                                }
+                            }
+                            setDataRealisasi(data);
+                        }
+                    }
                 }
                 if (res.status != 'success') {
                     showAlert('error', res.message);
@@ -220,7 +217,7 @@ const Index = () => {
 
             fetchKodeRekening(2, value).then((data) => {
                 if (data.status == 'success') {
-                    setRekeningOptions2(data.data.map((data) => {
+                    setRekeningOptions2(data.data.map((data: any) => {
                         return {
                             value: data.id,
                             label: data.fullcode + ' - ' + data.name,
@@ -248,7 +245,7 @@ const Index = () => {
 
             fetchKodeRekening(3, value).then((data) => {
                 if (data.status == 'success') {
-                    setRekeningOptions3(data.data.map((data) => {
+                    setRekeningOptions3(data.data.map((data: any) => {
                         return {
                             value: data.id,
                             label: data.fullcode + ' - ' + data.name,
@@ -276,7 +273,7 @@ const Index = () => {
 
             fetchKodeRekening(4, value).then((data) => {
                 if (data.status == 'success') {
-                    setRekeningOptions4(data.data.map((data) => {
+                    setRekeningOptions4(data.data.map((data: any) => {
                         return {
                             value: data.id,
                             label: data.fullcode + ' - ' + data.name,
@@ -304,7 +301,7 @@ const Index = () => {
 
             fetchKodeRekening(5, value).then((data) => {
                 if (data.status == 'success') {
-                    setRekeningOptions5(data.data.map((data) => {
+                    setRekeningOptions5(data.data.map((data: any) => {
                         return {
                             value: data.id,
                             label: data.fullcode + ' - ' + data.name,
@@ -332,7 +329,7 @@ const Index = () => {
 
             fetchKodeRekening(6, value).then((data) => {
                 if (data.status == 'success') {
-                    setRekeningOptions6(data.data.map((data) => {
+                    setRekeningOptions6(data.data.map((data: any) => {
                         return {
                             value: data.id,
                             label: data.fullcode + ' - ' + data.name,
@@ -425,7 +422,16 @@ const Index = () => {
         detailDataSubKegiatan(id, periode, year, month).then((res) => {
             const data = res.data;
             setModalInput(true);
-            setDataEdit(data);
+            setDataEdit({
+                id: data.id,
+                uraian: data.uraian,
+                kode_rek_6: data.kode_rek_6,
+                kode_rek_6_uraian: data.kode_rek_6_uraian,
+                koefisien: data.koefisien,
+                satuan: data.satuan,
+                harga: new Intl.NumberFormat('id-ID', { style: 'decimal' }).format(data?.harga),
+            });
+            console.log(data, dataEdit)
         });
     }
 
@@ -458,7 +464,8 @@ const Index = () => {
                     });
                 }
                 else {
-                    showAlert('error', 'Data gagal disimpan');
+                    // showAlert('error', 'Data gagal disimpan');
+                    showAlert('error', res.message);
                 }
             });
         }
@@ -474,29 +481,47 @@ const Index = () => {
                         setDataRealisasi(res.data);
                     });
                 }
+                else if (res.status == 'error validation') {
+                    if (res.message?.satuan) {
+                        // div error-edit-satuan innerHTML
+                        var errorSatuan = document.getElementById('error-edit-satuan');
+                        if (errorSatuan) {
+                            errorSatuan.innerHTML = res.message?.satuan;
+                        }
+                    }
+                    // showAlert('error', res.message);
+                }
                 else {
-                    showAlert('error', 'Data gagal disimpan');
+                    // showAlert('error', 'Data gagal disimpan');
+                    showAlert('error', res.message);
                 }
             });
         }
+
+
+        fetchSatuans().then((data) => {
+            if (data.status == 'success') {
+                setSatuans(data.data);
+            }
+        });
     }
 
 
     // click outside container to collapse all
-    // useEffect(() => {
-    //     const handleOutSideClick = (event) => {
-    //         if (!ref.current?.contains(event.target)) {
-    //             setShowInput(false);
-    //         }
-    //     };
-    //     window.addEventListener("mousedown", handleOutSideClick);
-    //     return () => {
-    //         window.removeEventListener("mousedown", handleOutSideClick);
-    //     };
-    // }, [ref]);
+    useEffect(() => {
+        const handleOutSideClick = (event: any) => {
+            if (!ref.current?.contains(event.target)) {
+                setShowInput(false);
+            }
+        };
+        window.addEventListener("mousedown", handleOutSideClick);
+        return () => {
+            window.removeEventListener("mousedown", handleOutSideClick);
+        };
+    }, [ref]);
 
 
-    const confirmDelete = async (id) => {
+    const confirmDelete = async (id: any) => {
         if (inputDisabled) {
             showAlert('error', 'Input dinonaktifkan');
             return;
@@ -544,73 +569,83 @@ const Index = () => {
     return (
         <>
 
-            <div className="lg:fixed lg:bottom-0 lg:left-0 w-full lg:bg-white lg:dark:bg-slate-800 lg:z-[49] lg:pl-24 lg:pr-16 lg:pt-2.5 lg:pb-5">
-                <div className="flex flex-wrap gap-y-2 items-center justify-between">
-                    <h2 className="text-[14px] leading-6 font-semibold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
-                        {datas?.sub_kegiatan_fullcode ?? '\u00A0'} {datas?.sub_kegiatan_name ?? '\u00A0'}
-                    </h2>
-                    <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
-                        {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
-                            <>
-                                {view == 'informasi' && (
-                                    <button
-                                        type="button"
-                                        className="btn btn-success whitespace-nowrap"
-                                        onClick={() => {
-                                            setView('anggaran');
-                                            setNewInput([]);
-                                        }} >
-                                        <IconDollarSignCircle className="w-4 h-4" />
-                                        <span className="ltr:ml-2 rtl:mr-2">
-                                            Input Anggaran
-                                        </span>
-                                    </button>
-                                )}
-                                {view == 'anggaran' && (
-                                    <>
+            {showInput == false && (
+                <div className="lg:fixed lg:bottom-0 lg:left-0 w-full lg:bg-white lg:dark:bg-slate-800 lg:z-[49] lg:pl-24 lg:pr-16 lg:pt-2.5 lg:pb-5">
+                    <div className="flex flex-wrap gap-y-2 items-center justify-between">
+                        <h2 className="text-[14px] leading-6 font-semibold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
+                            {datas?.sub_kegiatan_fullcode ?? '\u00A0'} {datas?.sub_kegiatan_name ?? '\u00A0'}
+                        </h2>
+                        <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
+
+                            {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8 || CurrentUser?.role_id == 9) && (
+                                <>
+                                    {view == 'informasi' && (
                                         <button
                                             type="button"
-                                            className="btn btn-info whitespace-nowrap"
+                                            className="btn btn-success whitespace-nowrap"
                                             onClick={() => {
-                                                setView('informasi');
+                                                setView('anggaran');
                                                 setNewInput([]);
                                             }} >
-                                            <IconInfoHexagon className="w-4 h-4" />
+                                            <IconDollarSignCircle className="w-4 h-4" />
                                             <span className="ltr:ml-2 rtl:mr-2">
-                                                Informasi
+                                                Input Anggaran
                                             </span>
                                         </button>
+                                    )}
+                                    {view == 'anggaran' && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                className={
+                                                    showInput
+                                                        ? 'btn btn-info whitespace-nowrap font-normal gap-x-1 transition-all duration-100 opacity-0 pointer-events-none w-[0px] p-0 m-0 overflow-hidden'
+                                                        : 'btn btn-info whitespace-nowrap font-normal gap-x-1 transition-all duration-500'
+                                                }
+                                                onClick={() => {
+                                                    setView('informasi');
+                                                    setNewInput([]);
+                                                }} >
+                                                <IconInfoHexagon className="w-4 h-4" />
+                                                <span className="ltr:ml-2 rtl:mr-2">
+                                                    Informasi
+                                                </span>
+                                            </button>
 
-                                        <button
-                                            onClick={() => saveData()}
-                                            type="button"
-                                            className={
-                                                showInput
-                                                    ? 'btn btn-outline-success font-normal gap-x-1 transition-all duration-500'
-                                                    : 'btn btn-outline-success font-normal gap-x-1 transition-all duration-100 opacity-0 pointer-events-none w-[0px] p-0 m-0 overflow-hidden'
-                                            }>
-                                            <IconSave className="w-4 h-4" />
-                                            {showInput && (
-                                                <>
-                                                    Tambahkan Data
-                                                </>
-                                            )}
-                                        </button>
-                                    </>
-                                )}
-                            </>
-                        )}
+                                            <button
+                                                onClick={
+                                                    () => {
+                                                        if (inputDisabled) {
+                                                            showAlert('error', 'Input dinonaktifkan');
+                                                            return;
+                                                        }
+                                                        setShowInput(true);
+                                                        setInputType('create');
+                                                        setDataEdit(null);
+                                                        // setModalInput(true);
+                                                    }
+                                                }
+                                                className='btn btn-outline-primary px-3 py-2 gap-1'
+                                                type='button'>
+                                                <IconPlusCircle className='w-4 h-4' />
+                                                Tambah Data
+                                            </button>
+                                        </>
+                                    )}
+                                </>
+                            )}
 
-                        {/* <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={() => closeWindow()} >
+                            {/* <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={() => closeWindow()} >
                             <IconArrowBackward className="w-4 h-4" />
                             <span className="ltr:ml-2 rtl:mr-2">
                                 Kembali
                             </span>
                         </button> */}
 
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {view == 'informasi' && (
                 <div className="panel p-2 text-xs">
@@ -692,7 +727,7 @@ const Index = () => {
                             </tr>
                             <tr>
                                 <td className='!text-xs !px-2'>
-                                    Alokasi Tahun
+                                    Alokasi Tahun &nbsp;
                                     {new Date().getFullYear() - 1}
                                 </td>
                                 <td className="w-[0px] !px-0 !text-xs">:</td>
@@ -707,7 +742,7 @@ const Index = () => {
                             </tr>
                             <tr>
                                 <td className='!text-xs !px-2'>
-                                    Alokasi Tahun
+                                    Alokasi Tahun &nbsp;
                                     {new Date().getFullYear()}
                                 </td>
                                 <td className="w-[0px] !px-0 !text-xs">:</td>
@@ -722,7 +757,7 @@ const Index = () => {
                             </tr>
                             <tr>
                                 <td className='!text-xs !px-2'>
-                                    Alokasi Tahun
+                                    Alokasi Tahun &nbsp;
                                     {new Date().getFullYear() + 1}
                                 </td>
                                 <td className="w-[0px] !px-0 !text-xs">:</td>
@@ -890,174 +925,184 @@ const Index = () => {
             )}
 
             {view == 'anggaran' && (
-                <div className={showInput ? 'panel p-0.5 text-xs relative pb-[520px]' : 'panel p-0.5 text-xs relative pb-[80px]'}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th rowSpan={2}
-                                    className='!text-xs !p-2 !text-center border w-[150px]'>
-                                    Kode Rekening
-                                </th>
-                                <th rowSpan={2}
-                                    className='!text-xs !p-2 !text-center border min-w-[250px]'>
-                                    Uraian
-                                </th>
-                                <th colSpan={4}
-                                    className='!text-xs !p-2 !text-center border'>
-                                    Rincian Perhitungan
-                                </th>
-                                <th className='!text-xs !p-2 !text-center border'>
-                                    Jumlah
-                                </th>
-                                <th rowSpan={2}
-                                    className='!text-xs !p-2 !text-center border w-[50px]'>
-                                    Opt
-                                </th>
-                            </tr>
-                            <tr>
-                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
-                                    Koefisien
-                                </th>
-                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
-                                    Satuan
-                                </th>
-                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
-                                    Harga
-                                </th>
-                                <th className='!text-xs !p-2 !text-center border w-[150px]'>
-                                    PPN
-                                </th>
-                                <th className='!text-xs !p-2 !text-center border w-[200px]'>
-                                    (Rp)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {dataRealisasi?.map((data: any, index: number) => {
-                                return (
-                                    <tr>
-                                        <td className='!text-xs !p-2 font-semibold border'>
-                                            {data?.type == 'summary' && (
-                                                <div className="relative w-[300px]">
-                                                    {data?.rek_code}
-                                                </div>
-                                            )}
-                                        </td>
-                                        <td
-                                            colSpan={data?.type != 'detail' ? 5 : 1}
-                                            className='!text-xs !p-2 !text-start border'>
-                                            {data?.type == 'summary' ? (
-                                                <>
-                                                    <span className='font-semibold'>
-                                                        {data?.rek_name}
-                                                    </span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {data?.type == 'title' ? (
-                                                        <span className='font-semibold whitespace-pre-line'>
-                                                            {data?.uraian}
+                <div className={showInput ? 'panel p-0.5 text-xs relative pb-[80px]' : 'panel p-0.5 text-xs relative pb-[80px]'}>
+                    <div className="table-responsive">
+                        <table className=''>
+                            <thead>
+                                <tr>
+                                    <th rowSpan={2}
+                                        className='!text-xs !p-2 !text-center border !w-[150px]'>
+                                        Kode Rekening
+                                    </th>
+                                    <th rowSpan={2}
+                                        className='!text-xs !p-2 !text-center border min-w-[400px]'>
+                                        Uraian
+                                    </th>
+                                    <th colSpan={4}
+                                        className='!text-xs !p-2 !text-center border w-[600px]'>
+                                        Rincian Perhitungan
+                                    </th>
+                                    <th className='!text-xs !p-2 !text-center border w-[200px]'>
+                                        Jumlah
+                                    </th>
+                                    <th rowSpan={2}
+                                        className='!text-xs !p-2 !text-center border w-[100px]'>
+                                        Opt
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                        Koefisien
+                                    </th>
+                                    <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                        Satuan
+                                    </th>
+                                    <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                        Harga
+                                    </th>
+                                    <th className='!text-xs !p-2 !text-center border w-[150px]'>
+                                        PPN
+                                    </th>
+                                    <th className='!text-xs !p-2 !text-center border w-[200px]'>
+                                        (Rp)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {dataRealisasi?.map((data: any, index: number) => {
+                                    return (
+                                        <tr>
+                                            <td className='!text-xs !p-2 font-semibold border'>
+                                                {data?.type == 'summary' && (
+                                                    <div className="relative">
+                                                        {data?.rek_code}
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td
+                                                colSpan={data?.type != 'detail' ? 5 : 1}
+                                                className='!text-xs !p-2 !text-start border'>
+                                                {data?.type == 'summary' ? (
+                                                    <>
+                                                        <span className='font-semibold'>
+                                                            {data?.rek_name}
                                                         </span>
-                                                    ) : (
-                                                        <span className='font-normal whitespace-pre-line'>
-                                                            {data?.uraian}
-                                                        </span>
-                                                    )}
-                                                </>
-                                            )}
-                                        </td>
-                                        {data?.type == 'detail' && (
-                                            <>
-                                                <td className='!text-xs !p-2 !text-center border'>
-                                                    {data?.koefisien ?? 0}
-                                                </td>
-                                                <td className='!text-xs !p-2 !text-center border'>
-                                                    {data?.satuan_name ?? '-'}
-                                                </td>
-                                                <td className='!text-xs !p-2 !text-end border'>
-                                                    Rp. {new Intl.NumberFormat('id-ID', {
-                                                        style: 'decimal',
-                                                    }).format(data?.harga ?? 0) ?? 0
-                                                    }
-                                                </td>
-                                                <td className='!text-xs !p-2 !text-end border'>
-                                                    Rp. {new Intl.NumberFormat('id-ID', {
-                                                        style: 'decimal',
-                                                    }).format(data?.ppn ?? 0) ?? 0
-                                                    }
-                                                </td>
-                                            </>
-                                        )}
-                                        <td className='!text-xs !p-2 !text-end border'>
-                                            Rp. {new Intl.NumberFormat('id-ID', {
-                                                style: 'decimal',
-                                            }).format(data?.total ?? 0) ?? 0
-                                            }
-                                        </td>
-                                        <td className='!text-xs !p-2 !text-center border'>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {data?.type == 'title' ? (
+                                                            <span className='font-semibold whitespace-pre-line'>
+                                                                {data?.uraian}
+                                                            </span>
+                                                        ) : (
+                                                            <span className='font-normal whitespace-pre-line'>
+                                                                {data?.uraian}
+                                                            </span>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </td>
                                             {data?.type == 'detail' && (
-                                                <div className='flex justify-center items-center gap-1'>
-                                                    <Tippy content='Edit Data'>
-                                                        <button
-                                                            onClick={
-                                                                () => {
-                                                                    editData(data?.id);
-                                                                }
-                                                            }
-                                                            type="button">
-                                                            <IconEdit className="w-4 h-4 text-info hover:text-cyan-700" />
-                                                        </button>
-                                                    </Tippy>
-                                                    <Tippy content='Hapus Data'>
-                                                        <button
-                                                            onClick={
-                                                                () => {
-                                                                    confirmDelete(data?.id);
-                                                                }
-                                                            }
-                                                            type="button">
-                                                            <IconTrashLines className="w-4 h-4 text-danger hover:text-red-700" />
-                                                        </button>
-                                                    </Tippy>
-                                                </div>
+                                                <>
+                                                    <td className='!text-xs !p-2 !text-center border'>
+                                                        {data?.koefisien ?? 0}
+                                                    </td>
+                                                    <td className='!text-xs !p-2 !text-center border'>
+                                                        {data?.satuan_name ?? '-'}
+                                                    </td>
+                                                    <td className='!text-xs !p-2 !text-end border'>
+                                                        Rp. {new Intl.NumberFormat('id-ID', {
+                                                            style: 'decimal',
+                                                        }).format(data?.harga ?? 0) ?? 0
+                                                        }
+                                                    </td>
+                                                    <td className='!text-xs !p-2 !text-end border'>
+                                                        Rp. {new Intl.NumberFormat('id-ID', {
+                                                            style: 'decimal',
+                                                        }).format(data?.ppn ?? 0) ?? 0
+                                                        }
+                                                    </td>
+                                                </>
                                             )}
+                                            <td className='!text-xs !p-2 !text-end border'>
+                                                Rp. {new Intl.NumberFormat('id-ID', {
+                                                    style: 'decimal',
+                                                }).format(data?.total ?? 0) ?? 0
+                                                }
+                                            </td>
+                                            {/* <td className='!text-xs !p-2 !text-end border'>
+                                                Rp. {new Intl.NumberFormat('id-ID', {
+                                                    style: 'decimal',
+                                                }).format(data?.nilai_kontrak ?? 0) ?? 0
+                                                }
+                                            </td> */}
+                                            <td className='!text-xs !p-2 !text-center border'>
+                                                {data?.type == 'detail' && (
+                                                    <div className='flex justify-center items-center gap-1'>
+                                                        <Tippy content='Edit Data'>
+                                                            <button
+                                                                onClick={
+                                                                    () => {
+                                                                        editData(data?.id);
+                                                                    }
+                                                                }
+                                                                type="button">
+                                                                <IconEdit className="w-4 h-4 text-info hover:text-cyan-700" />
+                                                            </button>
+                                                        </Tippy>
+                                                        <Tippy content='Hapus Data'>
+                                                            <button
+                                                                onClick={
+                                                                    () => {
+                                                                        confirmDelete(data?.id);
+                                                                    }
+                                                                }
+                                                                type="button">
+                                                                <IconTrashLines className="w-4 h-4 text-danger hover:text-red-700" />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+
+                                {(inputDatas?.length == 0 && !showInput) && (
+                                    <tr>
+                                        <td colSpan={1000}>
+                                            <div className="flex items-center justify-center">
+                                                <button
+                                                    onClick={
+                                                        () => {
+                                                            if (inputDisabled) {
+                                                                showAlert('error', 'Input dinonaktifkan');
+                                                                return;
+                                                            }
+                                                            setShowInput(true);
+                                                            setInputType('create');
+                                                            setDataEdit(null);
+                                                            // setModalInput(true);
+                                                        }
+                                                    }
+                                                    className='btn btn-outline-primary text-xs px-3 py-2 gap-1'
+                                                    type='button'>
+                                                    <IconPlusCircle className='w-4 h-4' />
+                                                    Tambah Data
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
-                                )
-                            })}
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
 
-                            {(inputDatas?.length == 0 && !showInput) && (
-                                <tr>
-                                    <td colSpan={1000}>
-                                        <div className="flex items-center justify-center">
-                                            <button
-                                                onClick={
-                                                    () => {
-                                                        if (inputDisabled) {
-                                                            showAlert('error', 'Input dinonaktifkan');
-                                                            return;
-                                                        }
-                                                        setShowInput(true);
-                                                        setInputType('create');
-                                                        setDataEdit(null);
-                                                        // setModalInput(true);
-                                                    }
-                                                }
-                                                className='btn btn-outline-primary text-xs px-3 py-2 gap-1'
-                                                type='button'>
-                                                <IconPlusCircle className='w-4 h-4' />
-                                                Tambah Data
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-
-                    <div className={showInput ? 'h-[490px] mt-2 fixed bottom-0 sm:bottom-[60px] w-[calc(100%-50px)] sm:w-[calc(100%-125px)]  overflow-x-auto panel pt-0 border border-slate-600 transition-all duration-500' : 'h-[52px] mt-2 fixed bottom-0 sm:bottom-[60px] w-[calc(100%-50px)] sm:w-[calc(100%-125px)]  overflow-x-auto panel pt-0 cursor-pointer border border-slate-200 transition-all duration-500'}
+                    <div className={showInput ? 'h-[calc(100vh-90px)] mt-2 fixed bottom-0 sm:bottom-[0px] w-[calc(100%-50px)] sm:w-[calc(100%-125px)] overflow-x-auto panel pt-0 border border-slate-600 transition-all duration-500 pb-0 z-10' : 'h-[52px] mt-2 fixed bottom-0 sm:bottom-[60px] w-[calc(100%-50px)] sm:w-[calc(100%-125px)]  overflow-x-auto panel pt-0 cursor-pointer border border-slate-200 transition-all duration-500'}
+                        ref={ref}
                     >
                         <div className="relative">
+
                             <div
                                 onClick={
                                     () => {
@@ -1078,9 +1123,8 @@ const Index = () => {
                                 </span>
                             </div>
 
-
-                            <div className={showInput ? 'mt-1 pt-2 border-t p-2' : 'hidden'}>
-                                <div className="flex flex-col sm:flex-row justify-start gap-4">
+                            <div className={showInput ? 'mt-1 pt-2 border-t p-2 pb-0 relative' : 'hidden'}>
+                                <div className="flex flex-col sm:flex-row justify-start gap-4 h-[calc(100vh-120px)] pb-20">
                                     <div className="space-y-4 sm:w-1/3">
 
                                         <div className='sm:col-span-2'>
@@ -1095,7 +1139,7 @@ const Index = () => {
                                                 options={rekeningOptions1}
                                                 defaultValue={
                                                     newInput?.[0]?.rek_id ?
-                                                        rekeningOptions1?.filter((data) => data.value == newInput?.rek_id)[0]
+                                                        rekeningOptions1?.filter((data: any) => data.value == newInput?.rek_id)[0]
                                                         : null
                                                 }
                                                 isSearchable={true}
@@ -1120,7 +1164,7 @@ const Index = () => {
                                                     options={rekeningOptions2}
                                                     defaultValue={
                                                         newInput?.[1]?.rek_id ?
-                                                            rekeningOptions2?.filter((data) => data.value == newInput?.rek_id)[1]
+                                                            rekeningOptions2?.filter((data: any) => data.value == newInput?.rek_id)[1]
                                                             : null
                                                     }
                                                     isSearchable={true}
@@ -1146,7 +1190,7 @@ const Index = () => {
                                                     options={rekeningOptions3}
                                                     defaultValue={
                                                         newInput?.[2]?.rek_id ?
-                                                            rekeningOptions3?.filter((data) => data.value == newInput?.rek_id)[2]
+                                                            rekeningOptions3?.filter((data: any) => data.value == newInput?.rek_id)[2]
                                                             : null
                                                     }
                                                     isSearchable={true}
@@ -1180,7 +1224,7 @@ const Index = () => {
                                                     options={rekeningOptions4}
                                                     defaultValue={
                                                         newInput?.[3]?.rek_id ?
-                                                            rekeningOptions4?.filter((data) => data.value == newInput?.rek_id)[3]
+                                                            rekeningOptions4?.filter((data: any) => data.value == newInput?.rek_id)[3]
                                                             : null
                                                     }
                                                     isSearchable={true}
@@ -1214,7 +1258,7 @@ const Index = () => {
                                                     options={rekeningOptions5}
                                                     defaultValue={
                                                         newInput?.[4]?.rek_id ?
-                                                            rekeningOptions5?.filter((data) => data.value == newInput?.rek_id)[4]
+                                                            rekeningOptions5?.filter((data: any) => data.value == newInput?.rek_id)[4]
                                                             : null
                                                     }
                                                     isSearchable={true}
@@ -1250,7 +1294,7 @@ const Index = () => {
                                                     options={rekeningOptions6}
                                                     defaultValue={
                                                         newInput?.[5]?.rek_id ?
-                                                            rekeningOptions6?.filter((data) => data.value == newInput?.rek_id)[5]
+                                                            rekeningOptions6?.filter((data: any) => data.value == newInput?.rek_id)[5]
                                                             : null
                                                     }
                                                     isSearchable={true}
@@ -1271,7 +1315,7 @@ const Index = () => {
                                             <>
                                                 <div>
                                                     <label htmlFor="ctnTextarea">
-                                                        Judul Uraian
+                                                        Judul
                                                     </label>
                                                     <textarea
                                                         id="ctnTextarea"
@@ -1283,7 +1327,7 @@ const Index = () => {
                                                                 setJudulUraian(e.target.value);
                                                             }
                                                         }
-                                                        placeholder="Ketik Judul Uraian disini..."
+                                                        placeholder="Ketik Judul disini..."
                                                         required></textarea>
                                                 </div>
 
@@ -1335,6 +1379,11 @@ const Index = () => {
                                                                             });
                                                                         }
                                                                     }
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'e') {
+                                                                            e.preventDefault();
+                                                                        }
+                                                                    }}
                                                                     type="number"
                                                                     className="form-input text-xs font-normal px-2 !w-[150px] !h-[38px]"
                                                                     placeholder="Koefisien" required />
@@ -1344,7 +1393,7 @@ const Index = () => {
                                                                 <label className='text-[10px] !mb-0'>
                                                                     Satuan
                                                                 </label>
-                                                                <Select
+                                                                <CreatableSelect
                                                                     id='satuan'
                                                                     className='!text-xs !w-[200px]'
                                                                     minMenuHeight={50}
@@ -1358,6 +1407,7 @@ const Index = () => {
                                                                         })
                                                                     }
                                                                     isSearchable={true}
+                                                                    // createable={true}
                                                                     value={
                                                                         data?.satuan &&
                                                                         satuans?.filter((satuan: any) => satuan.value == data?.satuan)[0]
@@ -1374,7 +1424,6 @@ const Index = () => {
                                                                                 };
                                                                                 return updated;
                                                                             });
-                                                                            console.log(inputUraian)
                                                                         }
                                                                     } />
                                                             </div>
@@ -1397,9 +1446,25 @@ const Index = () => {
                                                                                 };
                                                                                 return updated;
                                                                             });
+                                                                            // masking number
+                                                                            e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                                                         }
                                                                     }
-                                                                    type="number"
+                                                                    onKeyDown={(e) => {
+                                                                        if (
+                                                                            !(
+                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                e.keyCode == 8 ||
+                                                                                e.keyCode == 46 ||
+                                                                                e.keyCode == 37 ||
+                                                                                e.keyCode == 39
+                                                                            )
+                                                                        ) {
+                                                                            e.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                    type="text"
                                                                     className="form-input text-xs font-normal px-2 !w-[150px] !h-[38px]"
                                                                     placeholder="Harga Satuan" required />
                                                             </div>
@@ -1416,27 +1481,48 @@ const Index = () => {
                                                     )
                                                 })}
 
-                                                <div className="flex justify-center pt-2">
+                                                <div className="flex justify-center pt-2 pb-16">
                                                     <button
                                                         onClick={() => addNewRincian()}
                                                         type="button"
                                                         className="btn btn-outline-info font-normal text-xs gap-x-1 px-2 py-1">
                                                         <IconPlus className="w-4 h-4" />
-                                                        Rincian
+                                                        Uraian
                                                     </button>
                                                 </div>
+
                                             </>
                                         )}
                                     </div>
                                 </div>
+
+
+                                <div className="mt-2 px-20 flex items-center justify-end fixed bottom-0 left-0 w-full bg-white py-2">
+                                    <button
+                                        onClick={() => saveData()}
+                                        type="button"
+                                        className={
+                                            showInput
+                                                ? 'btn btn-success font-normal gap-x-1 transition-all duration-500'
+                                                : 'btn btn-success font-normal gap-x-1 transition-all duration-100 opacity-0 pointer-events-none w-[0px] p-0 m-0 overflow-hidden'
+                                        }>
+                                        <IconSave className="w-4 h-4" />
+                                        {showInput && (
+                                            <>
+                                                Tambahkan Data
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
             )}
 
             {view == 'anggaran' && (
-
                 <Transition appear show={modalInput} as={Fragment}>
                     <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>
                         <Transition.Child
@@ -1461,7 +1547,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-semibold text-md">
                                                 Edit Data Realisasi
@@ -1519,6 +1605,12 @@ const Index = () => {
                                                                 });
                                                             }
                                                         }
+                                                        // disable e key
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'e') {
+                                                                e.preventDefault();
+                                                            }
+                                                        }}
                                                         type="number"
                                                         className="form-input text-xs font-normal px-2"
                                                         placeholder="Koefisien" required />
@@ -1527,21 +1619,45 @@ const Index = () => {
                                                 <div className="grow">
                                                     <label className='text-[10px] !mb-0'>
                                                         Satuan
+                                                        <span id="error-edit-satuan" className='text-[9px] font-normal text-red-500 pl-2'>
+                                                        </span>
                                                     </label>
-                                                    <select
-                                                        value={dataEdit?.satuan}
-                                                        className='form-select text-xs font-normal'>
-                                                        <option value="" hidden>
-                                                            Pilih Satuan
-                                                        </option>
-                                                        {satuans?.map((data: any, index: number) => {
-                                                            return (
-                                                                <option key={index} value={data.id}>
-                                                                    {data.name}
-                                                                </option>
-                                                            );
-                                                        })}
-                                                    </select>
+                                                    <Select
+                                                        className='text-xs'
+                                                        placeholder="Pilih Satuan"
+                                                        id="select-edit-satuan"
+                                                        autoFocus={false}
+                                                        options={
+                                                            satuans?.map((data: any, index: number) => {
+                                                                return {
+                                                                    value: data?.id,
+                                                                    label: data?.name
+                                                                }
+                                                            })
+                                                        }
+
+                                                        value={satuans?.filter((data: any) => data.id == dataEdit?.satuan).map((data: any) => {
+                                                            return {
+                                                                value: data.id,
+                                                                label: data.name,
+                                                            };
+                                                        })[0]}
+                                                        isSearchable={true}
+                                                        onChange={
+                                                            (e: any) => {
+                                                                setDataEdit((prev: any) => {
+                                                                    return {
+                                                                        ...prev,
+                                                                        satuan: e.value,
+                                                                    };
+                                                                });
+                                                                const errorEditSatuan = document.getElementById('error-edit-satuan');
+                                                                if (errorEditSatuan) {
+                                                                    errorEditSatuan.innerHTML = '';
+                                                                }
+                                                            }
+                                                        }
+                                                    />
                                                 </div>
 
                                                 <div className="grow">
@@ -1558,9 +1674,25 @@ const Index = () => {
                                                                         harga: e.target.value,
                                                                     };
                                                                 });
+                                                                // masking number
+                                                                e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                                             }
                                                         }
-                                                        type="number"
+                                                        onKeyDown={(e) => {
+                                                            if (
+                                                                !(
+                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                    e.keyCode == 8 ||
+                                                                    e.keyCode == 46 ||
+                                                                    e.keyCode == 37 ||
+                                                                    e.keyCode == 39
+                                                                )
+                                                            ) {
+                                                                e.preventDefault();
+                                                            }
+                                                        }}
+                                                        type="text"
                                                         className="form-input text-xs font-normal px-2"
                                                         placeholder="Harga Satuan" required />
                                                 </div>

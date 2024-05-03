@@ -23,11 +23,17 @@ import IconX from '../../../components/Icon/IconX';
 import IconCaretDown from '../../../components/Icon/IconCaretDown';
 import IconSearch from '../../../components/Icon/IconSearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarAlt, faCalendarPlus, faCog, faEdit, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faCalendarPlus, faCog, faEdit, faExclamationTriangle, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchPeriodes, fetchKegiatans, fetchInstances, fetchPrograms, fetchIndikatorKegiatans } from '../../../apis/fetchdata';
 import { storeIndikatorKegiatan, updateIndikatorKegiatan, deleteIndikatorKegiatan } from '../../../apis/storedata';
 import { set } from 'lodash';
+import IconPencil from '@/components/Icon/IconPencil';
+import IconArrowBackward from '@/components/Icon/IconArrowBackward';
+import IconLayoutGrid from '@/components/Icon/IconLayoutGrid';
+import IconListCheck from '@/components/Icon/IconListCheck';
+import IconEye from '@/components/Icon/IconEye';
+import LoadingSicaram from '@/components/LoadingSicaram';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -75,7 +81,8 @@ const Kegiatan = () => {
     const [search, setSearch] = useState('');
     const [modalInput, setModalInput] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
-    const [dataInput, setDataInput] = useState({
+    const [viewType, setViewType] = useState<any>('grid')
+    const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
         name: '',
@@ -98,11 +105,11 @@ const Kegiatan = () => {
         });
         if (instance) {
             fetchPrograms(periode, instance).then((data) => {
-                const prgs = data.data.map((item) => {
+                const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
                     }
-                }).filter((item) => item != undefined);
+                }).filter((item: any) => item != undefined);
                 setPrograms(prgs);
             });
             setProgram(null);
@@ -130,7 +137,7 @@ const Kegiatan = () => {
         setDataInput({
             inputType: 'edit',
             id: id,
-            name: datas.filter((data) => data.id == id).map((data) => data.name)[0],
+            name: datas.filter((data: any) => data.id == id).map((data: any) => data.name)[0],
             kegiatan_id: kegiatan?.id ?? '',
             program_id: program?.id ?? '',
             instance_id: instance,
@@ -147,7 +154,12 @@ const Kegiatan = () => {
                     showAlert('error', data.message);
                 }
                 if (data.status == 'error validation') {
-                    document.getElementById('error-name').innerHTML = data.message.name?.[0] ?? '';
+                    Object.keys(data.message).map((key: any, index: any) => {
+                        let element = document.getElementById('error-' + key);
+                        if (element) {
+                            element.innerHTML = data.message[key][0];
+                        }
+                    });
                     showAlert('error', 'Please check your input!');
                 }
                 if (data.status == 'success') {
@@ -227,49 +239,56 @@ const Kegiatan = () => {
 
                 <div className="">
                     <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5">
-                        <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
+                        <h2 className="text-lg leading-6 font-bold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
                             Indikator Kinerja Kegiatan <br />
                             {instances?.[instance - 1]?.name ?? '\u00A0'}
                         </h2>
                         <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
 
-                            {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
+                            {instance ? (
                                 <>
-                                    <div className="relative w-[300px]">
-                                        <Select placeholder="Pilih Perangkat Daerah"
-                                            options={
-                                                instances.map((data) => {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.name,
-                                                    };
-                                                })
-                                            }
-                                            value={instances.filter((data) => data.id == instance).map((data) => {
-                                                return {
-                                                    value: data.id,
-                                                    label: data.name,
-                                                };
-                                            })[0]}
-                                            isSearchable={true}
-                                            onChange={(e) => setInstance(e.value)}
-                                            defaultValue={instance} />
-                                    </div>
+                                    {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
+                                        <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={(e) => {
+                                            e.preventDefault();
+                                            setInstance(null);
+                                            setKegiatan(null);
+                                            setPrograms([]);
+                                        }} >
+                                            <IconArrowBackward className="w-4 h-4" />
+                                            <span className="ltr:ml-2 rtl:mr-2">
+                                                Kembali
+                                            </span>
+                                        </button>
+                                    )}
                                 </>
+                            ) : (
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => {
+                                            setViewType('grid')
+                                        }}
+                                        className={viewType == 'grid'
+                                            ? 'btn btn-dark text-white px-2.5'
+                                            : 'btn btn-outline-dark text-slate-900 hover:text-white dark:text-white px-2.5'
+                                        }
+                                        type='button'>
+                                        <IconLayoutGrid className='w-4 h-4' />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setViewType('list')
+                                        }}
+                                        className={viewType == 'list'
+                                            ? 'btn btn-dark text-white px-2.5'
+                                            : 'btn btn-outline-dark text-slate-900 hover:text-white dark:text-white px-2.5'
+                                        }
+                                        type='button'>
+                                        <IconListCheck className='w-4 h-4' />
+                                    </button>
+                                </div>
                             )}
 
-                            <div className="relative hidden">
-                                <input type="search"
-                                    className="form-input rtl:pl-12 ltr:pr-12"
-                                    placeholder='Cari Indikator Kinerja Kegiatan...'
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <div className="absolute rtl:left-0 ltr:right-0 top-0 bottom-0 flex items-center justify-center w-12 h-full">
-                                    <IconSearch className="w-4 h-4 text-slate-400"></IconSearch>
-                                </div>
-                            </div>
-
-                            {kegiatan && (
+                            {(kegiatan && instance) && (
                                 <>
                                     <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addData()} >
                                         <IconPlus className="w-4 h-4" />
@@ -282,164 +301,310 @@ const Kegiatan = () => {
                     </div>
                 </div>
 
-                <div className="relative mt-5 flex flex-col gap-5 lg:flex-row">
+                {(!instance && viewType == 'grid') && (
+                    <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 mt-5 w-full">
+                        {instances?.map((data: any, index: number) => {
+                            return (
+                                <div className="bg-white dark:bg-[#1c232f] rounded-md overflow-hidden text-center shadow relative">
+                                    <div className="bg-slate-700 rounded-t-md bg-center bg-cover p-6 pb-0" style={
+                                        {
+                                            backgroundImage: "url('/assets/images/notification-bg.png')"
+                                            // backgroundImage: data?.logo ? `url(${data?.logo})` : "url('/assets/images/notification-bg.png')"
+                                        }
+                                    }>
+                                        <img className="object-contain w-4/5 h-40 mx-auto" src={data?.logo} alt="contact_image" />
+                                    </div>
+                                    <div className="px-2 py-4">
+                                        <div className="cursor-pointer group"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setInstance(data.id);
+                                            }}>
+                                            <div className="text-lg font-semibold line-clamp-2 h-15 group-hover:text-primary">
+                                                {data?.name}
+                                            </div>
+                                            <div className="text-white-dark group-hover:text-primary">
+                                                ({data?.alias})
+                                            </div>
+                                        </div>
 
-                    <div className="panel w-full lg:w-80 flex-none divide-y divide-[#ebedf2] !overflow-auto border-0 p-0 dark:divide-[#191e3a] lg:relative lg:block ps lg:h-[calc(100vh-200px)]">
-                        {instance ? (
-                            <>
-                                {!program ? (
-                                    <>
-                                        {programs.map((data, index) => {
-                                            return (
-                                                <div key={index} className="flex items-center p-4 hover:bg-blue-100 dark:hover:bg-[#192A3A] cursor-pointer group" onClick={
-                                                    () => {
-                                                        setProgram(data);
-                                                        fetchKegiatans(periode, instance).then((datas) => {
-                                                            const kgts = datas.data.map((item) => {
-                                                                if (item.type == 'kegiatan') {
-                                                                    if (item.program_id == data.id) {
-                                                                        return item;
+                                        <div className="mt-6 flex justify-center gap-4 w-full">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setInstance(data.id);
+                                                }}
+                                                type="button"
+                                                className="btn btn-outline-primary">
+                                                <IconEye className="w-4 h-4 mr-2" />
+                                                Buka
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                )}
+
+                {(!instance && viewType == 'list') && (
+                    <div className="table-responsive panel">
+                        <table className='table-hover'>
+                            <thead className=''>
+                                <tr>
+                                    <th className="!text-center bg-dark text-white border !min-w-[500px]">
+                                        Nama Perangkat Daerah
+                                    </th>
+                                    <th className="!text-center bg-dark text-white border !w-[150px]">
+                                        Opt
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {instances?.map((data: any, index: number) => {
+                                    return (
+                                        <tr>
+                                            <td className='!p-2 border'>
+                                                <div className="flex items-center gap-x-3">
+                                                    <div className="w-[38px] flex-none">
+                                                        <img className="object-contain w-full h-[38px] mx-auto" src={data?.logo} alt="contact_image" />
+                                                    </div>
+                                                    <div className="font-semibold">
+                                                        {data?.name}
+                                                        <div className="text-white-dark text-xs font-normal group-hover:text-primary">
+                                                            ({data?.alias})
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="!p-2 border">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            setInstance(data.id);
+                                                        }}
+                                                        type="button"
+                                                        className="btn btn-outline-primary px-2 py-1 whitespace-nowrap text-[10px]">
+                                                        <IconEye className="w-4 h-4 mr-1" />
+                                                        Buka
+                                                    </button>
+                                                    {/* <button type="button" className="btn btn-outline-secondary px-2 py-1 whitespace-nowrap text-[10px]">
+                                                    <IconLaptop className="w-4 h-4 mr-1" />
+                                                    Lihat Laporan
+                                                </button> */}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                {!instance && instances?.length == 0 && (
+                    <>
+                        <div className="w-full h-[calc(100vh-300px)] flex flex-col items-center justify-center">
+                            {LoadingSicaram()}
+                            <div className="dots-loading text-xl">Memuat Perangkat Daerah...</div>
+                        </div>
+                    </>
+                )}
+
+                {instance && (
+                    <div className="relative mt-5 flex flex-col gap-5 lg:flex-row">
+
+                        <div className="panel w-full lg:w-80 flex-none divide-y divide-[#ebedf2] !overflow-auto border-0 p-0 dark:divide-[#191e3a] lg:relative lg:block ps lg:h-[calc(100vh-200px)]">
+                            {instance ? (
+                                <>
+                                    {!program ? (
+                                        <>
+                                            {programs.map((data: any, index: number) => {
+                                                return (
+                                                    <div key={index} className="flex items-center p-4 hover:bg-blue-100 dark:hover:bg-[#192A3A] cursor-pointer group" onClick={
+                                                        () => {
+                                                            setProgram(data);
+                                                            fetchKegiatans(periode, instance).then((datas) => {
+                                                                const kgts = datas.data.map((item: any) => {
+                                                                    if (item.type == 'kegiatan') {
+                                                                        if (item.program_id == data.id) {
+                                                                            return item;
+                                                                        }
                                                                     }
-                                                                }
-                                                            }).filter((item) => item != undefined);
-                                                            setKegiatans(kgts);
-                                                        });
+                                                                }).filter((item: any) => item != undefined);
+                                                                setKegiatans(kgts);
+                                                            });
+                                                        }
+                                                    }>
+                                                        <div className="ml-0">
+                                                            <div className="text-sm font-medium text-gray-600 group-hover:text-blue-800 dark:text-gray-400">
+                                                                {data?.name}
+                                                            </div>
+                                                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                                                                {data?.fullcode}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                            {programs?.length == 0 && (
+                                                <>
+                                                    <div className="w-full flex items-center p-4 bg-blue-200 hover:bg-blue-200 dark:hover:bg-[#192A3A] cursor-pointer group">
+                                                        <div className="dots-loading-2 whitespace-nowrap text-sm font-medium text-gray-600 group-hover:text-blue-800 dark:text-gray-400">
+                                                            Memuat Program...
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Tippy content="Tekan untuk kembali ke Program">
+                                                <div className="flex items-center p-4 bg-blue-100 cursor-pointer group" onClick={
+                                                    () => {
+                                                        setProgram(null);
+                                                        setKegiatans([]);
+                                                        setKegiatan(null);
+                                                        setDatas([]);
                                                     }
                                                 }>
                                                     <div className="ml-0">
-                                                        <div className="text-sm font-medium text-gray-600 group-hover:text-blue-800 dark:text-gray-400">
-                                                            {data?.name}
+                                                        <div className="text-sm font-medium text-blue-800">
+                                                            {program?.name}
                                                         </div>
-                                                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                                                            {data?.fullcode}
+                                                        <div className="text-xs text-blue-800">
+                                                            {program?.fullcode}
                                                         </div>
                                                     </div>
                                                 </div>
-                                            );
-                                        })}
-                                    </>
-                                ) : (
-                                    <>
-                                        <Tippy content="Tekan untuk kembali ke Program">
-                                            <div className="flex items-center p-4 bg-blue-100 cursor-pointer group" onClick={
-                                                () => {
-                                                    setProgram(null);
-                                                    setKegiatans([]);
-                                                    setKegiatan(null);
-                                                    setDatas([]);
-                                                }
-                                            }>
-                                                <div className="ml-0">
-                                                    <div className="text-sm font-medium text-blue-800">
-                                                        {program?.name}
-                                                    </div>
-                                                    <div className="text-xs text-blue-800">
-                                                        {program?.fullcode}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Tippy>
-                                        <div className="">
+                                            </Tippy>
+                                            <div className="">
 
-                                        </div>
-                                        <div className="divide-y divide-[#ebedf2]">
-                                            {kegiatans.map((data, index) => {
-                                                return (
+                                            </div>
+                                            <div className="divide-y divide-[#ebedf2]">
+                                                {kegiatans.map((data: any, index: number) => {
+                                                    return (
+                                                        <>
+                                                            <div key={index} className={data?.id == kegiatan?.id ? 'flex items-center p-4 bg-orange-200 hover:bg-orange-200 dark:hover:bg-[#192A3A] cursor-pointer group' : 'flex items-center p-4 hover:bg-orange-100 dark:hover:bg-[#192A3A] cursor-pointer group'} onClick={
+                                                                () => {
+                                                                    setKegiatan(data)
+                                                                    setDatas([]);
+                                                                    fetchIndikatorKegiatans(instance, data.id).then((datas) => {
+                                                                        if (datas.status == 'no instance') {
+                                                                            showAlert('error', 'Belum memilih Perangkat Daerah');
+                                                                        }
+                                                                        if (datas.status == 'success') {
+                                                                            setDatas(datas.data);
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }>
+                                                                <div className="ml-3">
+                                                                    <div className={data?.id == kegiatan?.id ? 'ml-1 text-sm font-bold text-orange-700 group-hover:text-orange-800 dark:text-gray-400' : 'text-sm font-medium text-gray-600 group-hover:text-orange-800 dark:text-gray-400'}>
+                                                                        {data?.name}
+                                                                    </div>
+                                                                    <div className={data?.id == kegiatan?.id ? 'ml-1 text-xs text-gray-500 dark:text-gray-400' : 'text-xs text-gray-500 dark:text-gray-400'}>
+                                                                        {data?.fullcode}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    )
+                                                })}
+
+                                                {kegiatans?.length == 0 && (
                                                     <>
-                                                        <div key={index} className={data?.id == kegiatan?.id ? 'flex items-center p-4 bg-orange-200 hover:bg-orange-200 dark:hover:bg-[#192A3A] cursor-pointer group' : 'flex items-center p-4 hover:bg-orange-100 dark:hover:bg-[#192A3A] cursor-pointer group'} onClick={
-                                                            () => {
-                                                                setKegiatan(data)
-                                                                fetchIndikatorKegiatans(instance, data.id).then((datas) => {
-                                                                    if (datas.status == 'no instance') {
-                                                                        showAlert('error', 'Belum memilih Perangkat Daerah');
-                                                                    }
-                                                                    if (datas.status == 'success') {
-                                                                        setDatas(datas.data);
-                                                                    }
-                                                                });
-                                                            }
-                                                        }>
-                                                            <div className="ml-3">
-                                                                <div className={data?.id == kegiatan?.id ? 'ml-1 text-sm font-bold text-orange-700 group-hover:text-orange-800 dark:text-gray-400' : 'text-sm font-medium text-gray-600 group-hover:text-orange-800 dark:text-gray-400'}>
-                                                                    {data?.name}
-                                                                </div>
-                                                                <div className={data?.id == kegiatan?.id ? 'ml-1 text-xs text-gray-500 dark:text-gray-400' : 'text-xs text-gray-500 dark:text-gray-400'}>
-                                                                    {data?.fullcode}
-                                                                </div>
+                                                        <div className="w-full flex items-center p-4 bg-orange-200 hover:bg-orange-200 dark:hover:bg-[#192A3A] cursor-pointer group">
+                                                            <div className="dots-loading-2 whitespace-nowrap text-sm font-medium text-gray-600 group-hover:text-orange-800 dark:text-gray-400">
+                                                                Memuat Kegiatan...
                                                             </div>
                                                         </div>
                                                     </>
-                                                )
-                                            })}
+                                                )}
+                                            </div>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <div className='text-center p-4 hover:bg-gray-100 dark:hover:bg-[#192A3A] cursor-pointer text-base font-bold'>
+                                        Pilih Perangkat Daerah
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        <div className="panel flex-1 p-0">
+                            {kegiatan && (
+                                <div className="text-center text-lg border-b bg-slate-100 px-4 py-2">
+                                    Indikator Kinerja Kegiatan
+                                    <div className='font-semibold'>
+                                        "{kegiatan?.name ?? '\u00A0'}"
+                                    </div>
+                                </div>
+                            )}
+                            <div className="divide-y divide-[#ebedf2]">
+                                {datas?.map((indi: any, index: number) => {
+                                    return (
+                                        <>
+                                            <div key={indi?.id} className="flex items-center justify-between p-5 px-3 text-lg group hover:bg-slate-100 cursor-pointer">
+                                                <div className="flex items-center gap-2 grow" onClick={() => editData(indi?.id)}>
+                                                    <div>
+                                                        {indi?.name}
+                                                    </div>
+                                                </div>
+                                                <div className="w-[75px] flex items-center justify-center gap-x-2">
+                                                    <Tippy content="Edit">
+                                                        <button type="button" onClick={() => editData(indi?.id)}>
+                                                            <IconEdit className="m-auto text-indigo-600 hover:text-indigo-800" />
+                                                        </button>
+                                                    </Tippy>
+                                                    <Tippy content="Delete">
+                                                        <button type="button" onClick={() => confirmDelete(indi?.id)}>
+                                                            <IconTrashLines className="m-auto text-red-600 hover:text-red-800" />
+                                                        </button>
+                                                    </Tippy>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )
+                                })}
+
+                                {datas.length == 0 && (
+                                    <>
+                                        <div className='text-center p-4 hover:bg-gray-100 dark:hover:bg-[#192A3A] cursor-pointer text-base font-bold'>
+                                            {kegiatan ? (
+                                                <>
+                                                    Belum ada data
+                                                </>
+                                            ) : (
+                                                <div className='flex items-center justify-center gap-x-2 text-amber-600 text-xl'>
+                                                    <FontAwesomeIcon icon={faExclamationTriangle} className="w-10 h-10" />
+                                                    <div>
+                                                        Pilih Program & Kegiatan terlebih dahulu
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </>
                                 )}
-                            </>
-                        ) : (
-                            <>
-                                <div className='text-center p-4 hover:bg-gray-100 dark:hover:bg-[#192A3A] cursor-pointer text-base font-bold'>
-                                    Pilih Perangkat Daerah
-                                </div>
-                            </>
-                        )}
-                    </div>
 
-                    <div className="panel flex-1 p-0">
-                        {kegiatan && (
-                            <div className="text-center text-lg border-b bg-slate-100 px-4 py-2">
-                                Indikator Kinerja Kegiatan
-                                <div className='font-semibold'>
-                                    "{kegiatan?.name ?? '\u00A0'}"
-                                </div>
-                            </div>
-                        )}
-                        <div className="divide-y divide-[#ebedf2]">
-                            {datas.map((indi, index) => {
-                                return (
+                                {kegiatan && (
                                     <>
-                                        <div key={indi?.id} className="flex items-center justify-between p-5 px-3 text-lg group hover:bg-slate-100 cursor-pointer">
-                                            <div className="flex items-center gap-2 grow" onClick={() => editData(indi?.id)}>
-                                                <div className="w-[20px]">
-                                                    {index + 1}.
-                                                </div>
-                                                <div>
-                                                    {indi?.name}
-                                                </div>
-                                            </div>
-                                            <div className="w-[50px] text-center">
-                                                <Tippy content="Delete">
-                                                    <button type="button" onClick={() => confirmDelete(indi?.id)}>
-                                                        <IconTrashLines className="m-auto text-red-600 hover:text-red-800" />
-                                                    </button>
-                                                </Tippy>
-                                            </div>
+                                        <div className="pt-5 flex justify-center items-center w-full">
+                                            <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addData()} >
+                                                <IconPlus className="w-4 h-4" />
+                                                <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
+                                            </button>
                                         </div>
                                     </>
-                                )
-                            })}
+                                )}
 
-                            {datas.length == 0 && (
-                                <>
-                                    <div className='text-center p-4 hover:bg-gray-100 dark:hover:bg-[#192A3A] cursor-pointer text-base font-bold'>
-                                        Belum ada data
-                                    </div>
-                                </>
-                            )}
-
-                            {kegiatan && (
-                                <>
-                                    <div className="pt-5 flex justify-center items-center w-full">
-                                        <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addData()} >
-                                            <IconPlus className="w-4 h-4" />
-                                            <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
-                                        </button>
-                                    </div>
-                                </>
-                            )}
-
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
                 <Transition appear show={modalInput} as={Fragment}>
                     <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>

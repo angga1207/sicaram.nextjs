@@ -93,6 +93,30 @@ module.exports = {
                 },
             }),
         },
+        fontSize: {
+            // '5xl': '2rem',
+            // '4xl': '1.75rem',
+            // '3xl': '1.475rem',
+            // '2xl': '1.25rem',
+            // 'xl': '1.125rem',
+            // 'lg': '1rem',
+            // 'base': '0.8rem',
+            // 'sm': '0.75rem',
+            // 'xs': '0.5rem',
+
+
+            '7xl': '5rem',
+            '5xl': '2.5rem',
+            'xl': '1.5rem',
+            'lg': '1.25rem',
+            'md': '1.125rem',
+            'base': '1rem',
+            'sm': '0.875rem',
+            'xs': '0.75rem',
+            '2xs': '0.5rem',
+            '3xs': '0.4rem',
+            '4xs': '0.3rem',
+        }
     },
     plugins: [
         require('@tailwindcss/forms')({

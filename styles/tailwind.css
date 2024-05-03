@@ -364,6 +364,13 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply w-full rounded-md border border-white-light bg-white px-4 py-2 text-sm font-semibold text-black !outline-none focus:border-primary focus:ring-transparent dark:border-[#17263c] dark:bg-[#121e32] dark:text-white-dark dark:focus:border-primary;
     }
 
+    /* input number disable arrow */
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
     .form-input-lg,
     .form-textarea-lg,
     .form-select-lg,
@@ -706,4 +713,26 @@ pre.hljs {
 }
 .swal2-container .swal2-popup.swal2-toast.color-success {
     @apply bg-success;
+}
+
+/* Triple Dots animation */
+.dots-loading {
+    /* font-weight: bold; */
+    display: inline-block;
+    font-family: monospace;
+    /* font-size: 12px; */
+    clip-path: inset(0 3ch 0 0);
+    animation: l 1s steps(4) infinite;
+}
+
+.dots-loading-2 {
+    display: inline-block;
+    clip-path: inset(0 1ch 0 0);
+    animation: l 1s steps(4) infinite;
+}
+
+@keyframes l {
+    to {
+        clip-path: inset(0 -1ch 0 0);
+    }
 }

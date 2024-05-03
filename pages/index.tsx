@@ -1,22 +1,17 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-
+import React, { useEffect } from 'react';
 
 const Index = () => {
 
-    const Router = useRouter();
-    // redirect to /dashboard
+    const router = useRouter();
     useEffect(() => {
-        Router.push('/dashboard');
+        router.push('/dashboard');
     }, []);
 
     return (
         <>
-            <div>
-                <h1>starter page</h1>
-            </div>
+            SICARAM OGAN ILIR
         </>
     );
-};
-
+}
 export default Index;

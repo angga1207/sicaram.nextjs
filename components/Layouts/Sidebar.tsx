@@ -40,7 +40,7 @@ import IconAirplay from '../Icon/IconAirplay';
 import IconDollarSign from '../Icon/IconDollarSign';
 import IconDollarSignCircle from '../Icon/IconDollarSignCircle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboardCheck, faDashboard, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faSitemap } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faSitemap, faSync, faSyncAlt, faTag, faTags } from '@fortawesome/free-solid-svg-icons';
 import { faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 
@@ -225,33 +225,13 @@ const Sidebar = () => {
                                 <AnimateHeight duration={300} height={currentMenu === 'kode-rekening' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <Link href="/reference/periode">
-                                                Akun
+                                            <Link href="/rekening">
+                                                Daftar Rekening
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href="/reference/satuan" className='text-xs'>
-                                                Kelompok
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/reference/satuan" className='text-xs'>
-                                                Jenis
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/reference/satuan" className='text-xs'>
-                                                Objek
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/reference/satuan" className='text-xs'>
-                                                Rincian Objek
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/reference/satuan" className='text-xs'>
-                                                Sub Rincian Objek
+                                            <Link href="/sumber-dana">
+                                                Sumber Dana
                                             </Link>
                                         </li>
                                     </ul>
@@ -279,8 +259,13 @@ const Sidebar = () => {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href="/reference/satuan" className='text-xs'>
+                                            <Link href="/reference/satuan" className=''>
                                                 Satuan
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/reference/tag-sumber-dana" className='text-xs'>
+                                                Tag Sumber Dana
                                             </Link>
                                         </li>
                                     </ul>
@@ -293,6 +278,17 @@ const Sidebar = () => {
                                     SICARAM
                                 </span>
                             </h2>
+
+                            <li className="menu nav-item">
+                                <Link href="/tagging-sumber-dana" className="group">
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faTags} className='shrink-0 group-hover:!text-primary' />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark text-xs">
+                                            Tagging Sumber Dana
+                                        </span>
+                                    </div>
+                                </Link>
+                            </li>
 
                             <li className="menu nav-item">
                                 <Link href="/rpjmd" className="group">
@@ -327,6 +323,17 @@ const Sidebar = () => {
                                 </Link>
                             </li>
 
+                            <li className="menu nav-item">
+                                <Link href="/apbd" className="group">
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faCircleDollarToSlot} className='shrink-0 group-hover:!text-primary' />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                            APBD
+                                        </span>
+                                    </div>
+                                </Link>
+                            </li>
+
 
                             <li className="menu nav-item">
                                 <div className="h-2 border-b">
@@ -334,41 +341,15 @@ const Sidebar = () => {
                                 </div>
                             </li>
                             <li className="menu nav-item">
-                                <Link href="/realisasi/kinerja" className="group">
+                                <Link href="/kinerja" className="group">
                                     <div className="flex items-center">
                                         <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
                                         <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                            Realisasi Kinerja
+                                            SiCaram
                                         </span>
                                     </div>
                                 </Link>
                             </li>
-                            {/* <li className="menu nav-item">
-                                <Link href="/" className="group">
-                                    <div className="flex items-center">
-                                        <IconLaptop className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark text-xs">
-                                            Realisasi Tujuan & Sasaran
-                                        </span>
-                                    </div>
-                                </Link>
-                            </li>
-                            <li className="menu nav-item">
-                                <Link href="/" className="group">
-                                    <div className="flex items-center">
-                                        <IconLaptop className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark text-xs">
-                                            Realisasi Kinerja Urusan
-                                        </span>
-                                    </div>
-                                </Link>
-                            </li> */}
-
-                            {/* <li className="menu nav-item">
-                                <div className="h-2 border-b">
-                                    &nbsp;
-                                </div>
-                            </li> */}
                             <li className="menu nav-item">
                                 <Link href="/" className="group">
                                     <div className="flex items-center">

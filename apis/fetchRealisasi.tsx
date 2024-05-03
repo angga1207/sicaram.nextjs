@@ -14,122 +14,287 @@ const CurrentToken = getCookie('token');
 
 // Instances Start
 export async function fetchInstances(search: any = '') {
-    const res = await axios.get(baseUri + '/caram/realisasi/listInstance?search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi/listInstance?search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchInstance(id: string = '') {
-    const res = await axios.get(baseUri + '/caram/realisasi/listInstance/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi/listInstance/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 // Kode Rekening Start
 export async function fetchKodeRekening(level: any = 1, parent_id: any = null) {
     // caram/getKodeRekening
-    const res = await axios.get(baseUri + '/caram/getKodeRekening?level=' + level + '&parent_id=' + parent_id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/getKodeRekening?level=' + level + '&parent_id=' + parent_id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchProgramsSubKegiatan(instance: string = '') {
     // caram/realisasi/listProgramsSubKegiatan
-    const res = await axios.get(baseUri + '/caram/realisasi/listProgramsSubKegiatan?instance_id=' + instance, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi/listProgramsSubKegiatan?instance_id=' + instance, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 
 export async function fetchDataInformasiSubKegiatan(id: string, periode: any, year: number, month: number) {
-    const res = await axios.get(baseUri + '/caram/realisasi/getDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi/getDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchDataRealisasi(id: string, periode: any, year: number, month: number) {
-    const res = await axios.get(baseUri + '/caram/realisasi/getDataRealisasi/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi/getDataRealisasi/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 
 // saveDataSubKegiatan
 export async function saveDataSubKegiatan(data: any) {
-    const res = await axios.post(baseUri + '/caram/realisasi/saveDataSubKegiatan', data, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const datas = await res.data;
-    return datas;
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi/saveDataSubKegiatan', data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 // getDetailDataSubKegiatan
 export async function detailDataSubKegiatan(id: string, periode: any, year: number, month: number) {
-    const res = await axios.get(baseUri + '/caram/realisasi/detailDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const datas = await res.data;
-    return datas;
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi/detailDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 // updateDataSubKegiatan
-export async function updateDataSubKegiatan(id : any, data: any) {
-    const res = await axios.post(baseUri + '/caram/realisasi/updateDataSubKegiatan/' + id, data, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const datas = await res.data;
-    return datas;
+export async function updateDataSubKegiatan(id: any, data: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi/updateDataSubKegiatan/' + id, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 // Delete Data Sub Kegiatan
 export async function deleteDataRealisasiRincian(id: string, periode: any, year: number, month: number) {
-    // caram/realisasi/deleteDataSubKegiatan/
-    const res = await axios.delete(baseUri + '/caram/realisasi/deleteDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const datas = await res.data;
-    return datas;
+    try {
+        // caram/realisasi/deleteDataSubKegiatan/
+        const res = await axios.delete(baseUri + '/caram/realisasi/deleteDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
+
+// getDataKontrak
+export async function fetchDataKontrak(id: string, periode: any, year: number, month: number) {
+    try {
+        const res = await axios.get(baseUri + '/caram/kontrak/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+// saveKontrak
+export async function saveKontrak(data: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/kontrak', data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+// detailKontrak
+export async function detailKontrak(id: any, periode: any, year: number, month: number) {
+    try {
+        const res = await axios.get(baseUri + '/caram/kontrak/edit/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+// updateKontrak
+export async function updateKontrak(id: any, data: any, periode: any, year: number, month: number) {
+    try {
+        const res = await axios.post(baseUri + '/caram/kontrak/edit/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+// deleteKontrak
+export async function deleteKontrak(id: any, periode: any, year: number, month: number) {
+    try {
+        const res = await axios.delete(baseUri + '/caram/kontrak/delete/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}

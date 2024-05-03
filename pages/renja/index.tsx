@@ -21,7 +21,7 @@ import IconX from '../../components/Icon/IconX';
 import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconSearch from '../../components/Icon/IconSearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight, faArrowUp, faBusinessTime, faCalendarAlt, faCalendarPlus, faCheck, faCheckToSlot, faClipboardCheck, faCog, faEdit, faEnvelopeCircleCheck, faEye, faFlagCheckered, faReply, faReplyAll, faSave, faStopwatch20, faTimesCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faArrowUp, faBusinessTime, faCalendarAlt, faCalendarPlus, faCheck, faCheckToSlot, faClipboardCheck, faCog, faEdit, faEnvelopeCircleCheck, faEye, faFlagCheckered, faReply, faReplyAll, faSave, faStopwatch20, faTimesCircle, faTrashAlt, faUser, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchPeriodes, fetchInstances, fetchSatuans, fetchPrograms, fetchRenja, fetchDetailRenjaKegiatan, fetchDetailRenjaSubKegiatan, fetchRenjaValidatorNotes } from '../../apis/fetchdata';
 import { saveRenjaKegiatan, saveRenjaSubKegiatan, postRenjaNotes } from '../../apis/storedata';
@@ -98,7 +98,7 @@ const Index = () => {
     const [dataValidating, setDataValidating] = useState<any>([]);
     const [message, setMessage] = useState<any>(null);
     const [status, setStatus] = useState<any>(null);
-    const [dataInput, setDataInput] = useState({
+    const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         type: null,
         id: '',
@@ -112,7 +112,7 @@ const Index = () => {
         });
     }
 
-    const dummy = useRef(null);
+    const dummy = useRef<any>(null);
     useEffect(() => {
         dummy?.current?.scrollIntoView({ behavior: "smooth" });
     }, [dataValidating]);
@@ -147,37 +147,37 @@ const Index = () => {
                 setInstances(data.data);
             });
         } else {
-            const instcs = instances.map((item) => {
+            const instcs = instances.map((item: any) => {
                 // filter instances by searchInstance
                 if (item.name.toLowerCase().includes(searchInstance.toLowerCase())) {
                     return item;
                 }
-            }).filter((item) => item != undefined);
+            }).filter((item: any) => item != undefined);
             setInstances(instcs);
         }
     }, [searchInstance]);
 
     useEffect(() => {
-        if (instance) {
+        if (instance && CurrentUser?.role_id == 9) {
             fetchPrograms(periode, instance).then((data) => {
-                const prgs = data.data.map((item) => {
+                const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
                     }
-                }).filter((item) => item != undefined);
+                }).filter((item: any) => item != undefined);
                 setPrograms(prgs);
             });
         }
-    }, [instance]);
+    }, [instance, CurrentUser?.role_id]);
 
 
     const goSearchProgram = (search: any) => {
         setSearchProgram(search);
-        setFilteredPrograms(programs.map((item) => {
+        setFilteredPrograms(programs.map((item: any) => {
             if (item.name.toLowerCase().includes(search.toLowerCase())) {
                 return item;
             }
-        }).filter((item) => item != undefined));
+        }).filter((item: any) => item != undefined));
     }
 
     const backToInstances = () => {
@@ -207,6 +207,7 @@ const Index = () => {
         }
         setInstance(null);
         setProgram(null);
+        setPrograms([]);
         setYear(null);
         setRange([]);
         setAnggarans([]);
@@ -219,11 +220,11 @@ const Index = () => {
     const pickInstance = (id: any) => {
         setInstance(id);
         fetchPrograms(periode, id).then((data) => {
-            const prgs = data.data.map((item) => {
+            const prgs = data.data.map((item: any) => {
                 if (item.type == 'program') {
                     return item;
                 }
-            }).filter((item) => item != undefined);
+            }).filter((item: any) => item != undefined);
             setPrograms(prgs);
         });
     }
@@ -461,7 +462,7 @@ const Index = () => {
         <>
 
             <div className="">
-                <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5">
+                <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5 px-5">
                     <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
                         Renstra Perubahan <br />
                         {instances?.[instance - 1]?.name ?? '\u00A0'}
@@ -505,7 +506,7 @@ const Index = () => {
             {!instance && (
                 <>
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4 font-semibold dark:text-white-dark mb-7">
-                        {instances.map((data, index) => {
+                        {instances?.map((data: any) => {
                             return (
                                 <>
                                     <Tippy content={data.name} placement="top">
@@ -524,26 +525,19 @@ const Index = () => {
                                 </>
                             )
                         })}
-                        {instances.length == 0 && (
-                            <>
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map((data, index) => {
-                                    return (
-                                        <>
-                                            <div className="panel h-[84px] p-2.5 rounded-md flex items-center group cursor-pointer hover:bg-primary-light animate-pulse">
-                                                <div className="w-20 h-[84px] -m-2.5 ltr:mr-4 rtl:ml-4 ltr:rounded-l-md rtl:rounded-r-md transition-all duration-700 group-hover:scale-110 bg-slate-200 flex-none">
-                                                </div>
-                                                <div className='group-hover:text-primary'>
-                                                    <h5 className="text-sm sm:text-base line-clamp-3"></h5>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )
-                                })}
-                            </>
-                        )}
                     </div>
                 </>
             )}
+
+            {!instance && instances?.length == 0 && (
+                <>
+                    <div className="w-full h-[calc(100vh-300px)] flex flex-col items-center justify-center">
+                        {LoadingSicaram()}
+                        <div className="dots-loading text-xl">Memuat Perangkat Daerah...</div>
+                    </div>
+                </>
+            )}
+
 
             {instance && (
                 <div className="panel">
@@ -567,7 +561,7 @@ const Index = () => {
                                         <>
                                             {!searchProgram && (
                                                 <>
-                                                    {programs.map((data, index) => {
+                                                    {programs?.map((data: any) => {
                                                         return (
                                                             <button onClick={(e) =>
                                                                 fetchLoading == false && (
@@ -591,7 +585,7 @@ const Index = () => {
                                             )}
                                             {searchProgram && (
                                                 <>
-                                                    {filteredPrograms.map((data, index) => {
+                                                    {filteredPrograms?.map((data: any) => {
                                                         return (
                                                             <button onClick={(e) =>
                                                                 fetchLoading == false && (
@@ -628,8 +622,21 @@ const Index = () => {
 
                             {program && (
                                 <div className="rounded-t-lg border-t p-4 h-full relative">
-                                    <div className="text-lg font-semibold mb-3 pb-1 border-b">
-                                        Informasi Data
+                                    <div className="flex items-center justify-between mb-3 pb-1 border-b">
+                                        <div className="text-lg font-semibold">
+                                            Informasi Data
+                                        </div>
+                                        <div className="">
+                                            <button
+                                                type='button'
+                                                onClick={(e) => {
+                                                    unPickProgram()
+                                                }}
+                                                className='btn btn-secondary px-1 py-1 gap-1 font-normal'>
+                                                <IconX className="w-3 h-3" />
+                                                Tutup
+                                            </button>
+                                        </div>
                                     </div>
                                     {renja && (
                                         <>
@@ -847,15 +854,6 @@ const Index = () => {
                                                             </button>
                                                         </>
                                                     )}
-                                                    <button
-                                                        type='button'
-                                                        onClick={(e) => {
-                                                            unPickProgram()
-                                                        }}
-                                                        className='btn btn-secondary gap-1'>
-                                                        <IconX className="w-4 h-4" />
-                                                        Tutup
-                                                    </button>
                                                 </div>
                                             </div>
 
@@ -883,7 +881,7 @@ const Index = () => {
                                             {!viewValidating && (
                                                 <>
                                                     <div className="flex items-center justify-center w-full divide divide-x border">
-                                                        {range.map((data, index) => {
+                                                        {range?.map((data: any) => {
                                                             return (
                                                                 <>
                                                                     <button type='button'
@@ -899,7 +897,7 @@ const Index = () => {
                                                     {year ? (
                                                         <>
                                                             <div className="divide-y divide-dashed mt-5 !h-[calc(100vh-310px)] overflow-x-auto">
-                                                                {renjas?.[year]?.map((data, index) => {
+                                                                {renjas?.[year]?.map((data: any, index: number) => {
                                                                     return (
                                                                         <>
                                                                             {data?.type == 'program' && (
@@ -916,6 +914,25 @@ const Index = () => {
                                                                                                     <div className="text-xs text-slate-500 dark:text-slate-300 group-hover:text-slate-700">
                                                                                                         {data?.program_fullcode}
                                                                                                     </div>
+                                                                                                    <div className="flex items-center gap-x-2 text-xs mt-1">
+
+                                                                                                        <Tippy content='Dibuat oleh' placement='bottom'>
+                                                                                                            <div className="flex items-center gap-x-1 text-indigo-400">
+                                                                                                                <FontAwesomeIcon icon={faUser} className="w-2.5 h-2.5" />
+                                                                                                                {data?.created_by}
+                                                                                                            </div>
+                                                                                                        </Tippy>
+
+                                                                                                        {data?.updated_by !== '-' && (
+                                                                                                            <Tippy content='Diperbarui oleh' placement='bottom'>
+                                                                                                                <div className="flex items-center gap-x-1 text-pink-400">
+                                                                                                                    <FontAwesomeIcon icon={faUserEdit} className="w-2.5 h-2.5" />
+                                                                                                                    {data?.updated_by}
+                                                                                                                </div>
+                                                                                                            </Tippy>
+                                                                                                        )}
+
+                                                                                                    </div>
                                                                                                 </div>
                                                                                                 <div className='w-full sm:w-[250px] flex items-center justify-between border-t pt-2 sm:border-0 sm:pt-0'>
                                                                                                     <div className="">
@@ -927,7 +944,7 @@ const Index = () => {
                                                                                                     <div className="">
                                                                                                         Kinerja <br />
                                                                                                         <span className="font-semibold whitespace-nowrap">
-                                                                                                            {data?.percent_kinerja_renja} %
+                                                                                                            {new Intl.NumberFormat(`id-ID`).format(data?.percent_kinerja_renja)} %
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 </div>
@@ -957,7 +974,7 @@ const Index = () => {
                                                                                                     <div className="space-y-1 divide-y divide-slate-300 group-hover:divide-white mt-1 w-full pl-4">
                                                                                                         {(data?.indicators.length > 0) && (
                                                                                                             <>
-                                                                                                                {data?.indicators?.map((data, index) => {
+                                                                                                                {data?.indicators?.map((data: any) => {
                                                                                                                     return (
                                                                                                                         <>
                                                                                                                             <div className="flex items-center justify-between w-full py-1">
@@ -1048,7 +1065,7 @@ const Index = () => {
                                                                                         </div>
                                                                                     </AnimateHeight>
 
-                                                                                </div>
+                                                                                </div >
                                                                             )}
 
                                                                             {data?.type == 'kegiatan' && (
@@ -1064,6 +1081,25 @@ const Index = () => {
                                                                                                     <div className="text-xs text-slate-500 dark:text-slate-300 group-hover:text-slate-700">
                                                                                                         {data?.kegiatan_fullcode}
                                                                                                     </div>
+                                                                                                    <div className="flex items-center gap-x-2 text-xs mt-1">
+
+                                                                                                        <Tippy content='Dibuat oleh' placement='bottom'>
+                                                                                                            <div className="flex items-center gap-x-1 text-indigo-400">
+                                                                                                                <FontAwesomeIcon icon={faUser} className="w-2.5 h-2.5" />
+                                                                                                                {data?.created_by}
+                                                                                                            </div>
+                                                                                                        </Tippy>
+
+                                                                                                        {data?.updated_by !== '-' && (
+                                                                                                            <Tippy content='Diperbarui oleh' placement='bottom'>
+                                                                                                                <div className="flex items-center gap-x-1 text-pink-400">
+                                                                                                                    <FontAwesomeIcon icon={faUserEdit} className="w-2.5 h-2.5" />
+                                                                                                                    {data?.updated_by}
+                                                                                                                </div>
+                                                                                                            </Tippy>
+                                                                                                        )}
+
+                                                                                                    </div>
                                                                                                 </div>
                                                                                                 <div className='w-full sm:w-[250px] flex items-center justify-between border-t pt-2 sm:border-0 sm:pt-0'>
                                                                                                     <div className="">
@@ -1075,7 +1111,7 @@ const Index = () => {
                                                                                                     <div className="">
                                                                                                         Kinerja <br />
                                                                                                         <span className="font-semibold whitespace-nowrap">
-                                                                                                            {data?.percent_kinerja_renja} %
+                                                                                                            {new Intl.NumberFormat(`id-ID`).format(data?.percent_kinerja_renja)} %
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 </div>
@@ -1114,7 +1150,7 @@ const Index = () => {
                                                                                                     <div className="space-y-1 divide-y divide-slate-300 group-hover:divide-white mt-1 w-full pl-4">
                                                                                                         {(data?.indicators.length > 0) && (
                                                                                                             <>
-                                                                                                                {data?.indicators?.map((data, index) => {
+                                                                                                                {data?.indicators?.map((data: any) => {
                                                                                                                     return (
                                                                                                                         <>
                                                                                                                             <div className="flex items-center justify-between w-full py-1">
@@ -1220,6 +1256,25 @@ const Index = () => {
                                                                                                     <div className="text-xs text-slate-500 dark:text-slate-300 group-hover:text-slate-700">
                                                                                                         {data?.sub_kegiatan_fullcode}
                                                                                                     </div>
+                                                                                                    <div className="flex items-center gap-x-2 text-xs mt-1">
+
+                                                                                                        <Tippy content='Dibuat oleh' placement='bottom'>
+                                                                                                            <div className="flex items-center gap-x-1 text-indigo-400">
+                                                                                                                <FontAwesomeIcon icon={faUser} className="w-2.5 h-2.5" />
+                                                                                                                {data?.created_by}
+                                                                                                            </div>
+                                                                                                        </Tippy>
+
+                                                                                                        {data?.updated_by !== '-' && (
+                                                                                                            <Tippy content='Diperbarui oleh' placement='bottom'>
+                                                                                                                <div className="flex items-center gap-x-1 text-pink-400">
+                                                                                                                    <FontAwesomeIcon icon={faUserEdit} className="w-2.5 h-2.5" />
+                                                                                                                    {data?.updated_by}
+                                                                                                                </div>
+                                                                                                            </Tippy>
+                                                                                                        )}
+
+                                                                                                    </div>
                                                                                                 </div>
                                                                                                 <div className='w-full sm:w-[250px] flex items-center justify-between border-t pt-2 sm:border-0 sm:pt-0'>
                                                                                                     <div className="">
@@ -1231,7 +1286,7 @@ const Index = () => {
                                                                                                     <div className="">
                                                                                                         Kinerja <br />
                                                                                                         <span className="font-semibold whitespace-nowrap">
-                                                                                                            {data?.percent_kinerja_renja} %
+                                                                                                            {new Intl.NumberFormat(`id-ID`).format(data?.percent_kinerja_renja)} %
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 </div>
@@ -1270,7 +1325,7 @@ const Index = () => {
                                                                                                     <div className="space-y-1 divide-y divide-slate-300 group-hover:divide-slate-600 mt-1 w-full pl-4">
                                                                                                         {(data?.indicators.length > 0) && (
                                                                                                             <>
-                                                                                                                {data?.indicators?.map((data, index) => {
+                                                                                                                {data?.indicators?.map((data: any) => {
                                                                                                                     return (
                                                                                                                         <>
                                                                                                                             <div className="flex items-center justify-between w-full py-1">
@@ -1383,10 +1438,9 @@ const Index = () => {
 
                                             {viewValidating && (
                                                 <>
-                                                    {/* <div className="scrollbar-container !h-[calc(100vh-250px)] overflow-x-auto mb-[100px]"> */}
                                                     <div className="scrollbar-container relative h-full sm:h-[calc(100vh-250px)] chat-conversation-box ps mt-0 pt-0">
                                                         <div className="p-4 pt-20 pb-20 h-full overflow-x-auto space-y-5">
-                                                            {dataValidating?.map((data, index) => {
+                                                            {dataValidating?.map((data: any) => {
                                                                 return (
                                                                     <>
                                                                         <div>
@@ -1661,7 +1715,7 @@ const Index = () => {
                             )}
                         </div>
                     </div>
-                </div>
+                </div >
             )}
 
             <Transition appear show={modalInput} as={Fragment}>
@@ -1760,7 +1814,7 @@ const Index = () => {
                                                         Perubahan Target Kinerja Tahun {year}
                                                     </div>
                                                     <div className="space-y-2 divide-y mt-4">
-                                                        {dataInput?.indicators?.map((data, index) => {
+                                                        {dataInput?.indicators?.map((data: any, index: number) => {
                                                             return (
                                                                 <>
                                                                     <div className="flex flex-nowrap overflow-y-auto items-center justify-between py-1 gap-y-4">
@@ -1823,7 +1877,7 @@ const Index = () => {
                                                                                     }}
                                                                                     className="form-select ltr:rounded-l-none rtl:rounded-r-none ltr:border-l-0 rtl:border-r-0  group-focus-within:border-indigo-400 cursor-pointer">
                                                                                     <option value="" hidden>Pilih Satuan</option>
-                                                                                    {satuans.map((data, index) => {
+                                                                                    {satuans?.map((data: any, index: number) => {
                                                                                         return (
                                                                                             <>
                                                                                                 <option value={data?.id}>
@@ -1899,7 +1953,7 @@ const Index = () => {
                                                                         }
                                                                     }}
                                                                     onChange={(e) => {
-                                                                        let value = e.target.value ?? 0;
+                                                                        let value: any = e.target.value ?? 0;
                                                                         if (value > 0) {
                                                                             value = value.replace(/^0+/, '');
                                                                         }
@@ -1939,7 +1993,7 @@ const Index = () => {
                                                                         }
                                                                     }}
                                                                     onChange={(e) => {
-                                                                        let value = e.target.value ?? 0;
+                                                                        let value: any = e.target.value ?? 0;
                                                                         if (value > 0) {
                                                                             value = value.replace(/^0+/, '');
                                                                         }
@@ -1979,7 +2033,7 @@ const Index = () => {
                                                                         }
                                                                     }}
                                                                     onChange={(e) => {
-                                                                        let value = e.target.value ?? 0;
+                                                                        let value: any = e.target.value ?? 0;
                                                                         if (value > 0) {
                                                                             value = value.replace(/^0+/, '');
                                                                         }
@@ -2019,7 +2073,7 @@ const Index = () => {
                                                                         }
                                                                     }}
                                                                     onChange={(e) => {
-                                                                        let value = e.target.value ?? 0;
+                                                                        let value: any = e.target.value ?? 0;
                                                                         if (value > 0) {
                                                                             value = value.replace(/^0+/, '');
                                                                         }

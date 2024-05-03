@@ -26,6 +26,7 @@ import { faCalendarAlt, faCalendarPlus, faCog, faEdit, faEye, faTrashAlt } from 
 
 import { fetchPeriodes, fetchUrusans, fetchUrusan } from '../../../apis/fetchdata';
 import { storeUrusan, updateUrusan, deleteUrusan } from '../../../apis/storedata';
+import { number } from 'yup';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -65,7 +66,7 @@ const Index = () => {
     const [search, setSearch] = useState('');
     const [modalInput, setModalInput] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
-    const [dataInput, setDataInput] = useState({
+    const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
         periode_id: '',
@@ -170,10 +171,12 @@ const Index = () => {
                     showAlert('success', data.message);
                 }
                 if (data.status == 'error validation') {
-                    document.getElementById('error-name').innerHTML = data.message.name?.[0] ?? '';
-                    document.getElementById('error-code').innerHTML = data.message.code?.[0] ?? '';
-                    document.getElementById('error-fullcode').innerHTML = data.message.fullcode?.[0] ?? '';
-                    document.getElementById('error-description').innerHTML = data.message.description?.[0] ?? '';
+                    Object.keys(data.message).map((key: any, index: any) => {
+                        let element = document.getElementById('error-' + key);
+                        if (element) {
+                            element.innerHTML = data.message[key][0];
+                        }
+                    });
                     showAlert('error', 'Please check your input!');
                 }
                 if (data.status == 'error') {
@@ -220,7 +223,7 @@ const Index = () => {
             })
             .then((result) => {
                 if (result.value) {
-                    deleteUrusan(id).then((data) => {
+                    deleteUrusan(id ?? null).then((data) => {
                         if (data.status == 'success') {
                             fetchUrusans(periode, search).then((data) => {
                                 setDatas((data?.data));
@@ -271,8 +274,8 @@ const Index = () => {
             <div className="">
 
                 <div className="">
-                    <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
+                    <div className="flex items-center justify-between mb-5 px-5">
+                        <h2 className="text-lg leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
                             Daftar Urusan
                         </h2>
                         <div className="flex items-center justify-center gap-1">
@@ -315,7 +318,7 @@ const Index = () => {
                             </thead>
                             <tbody>
 
-                                {datas.map((data) => {
+                                {datas?.map((data: any) => {
                                     return (
                                         <tr key={data?.id} className='cursor-pointer relative hover:bg-slate-100 dark:hover:bg-slate-700 group'>
                                             <td onClick={() => editUrusan(data?.id)}>
@@ -332,36 +335,32 @@ const Index = () => {
                                             </td>
                                             <td className='w-[150px]' onClick={() => editUrusan(data?.id)}>
                                                 <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100">
-                                                    {data?.type == 'urusan' && (
-                                                        <>
-                                                            <Tippy content="Dibuat Pada">
-                                                                <div className="flex items-center gap-1 text-xs text-slate-500">
-                                                                    <FontAwesomeIcon icon={faCalendarPlus} className="w-3 h-3" />
-                                                                    {
-                                                                        new Date(data?.created_at).toLocaleDateString('id-ID', {
-                                                                            weekday: 'short',
-                                                                            year: 'numeric',
-                                                                            month: 'short',
-                                                                            day: 'numeric',
-                                                                        })
-                                                                    }
-                                                                </div>
-                                                            </Tippy>
-                                                            <Tippy content="Diperbarui Pada">
-                                                                <div className="flex items-center gap-1 text-xs text-slate-500">
-                                                                    <FontAwesomeIcon icon={faCalendarAlt} className="w-3 h-3" />
-                                                                    {
-                                                                        new Date(data?.updated_at).toLocaleDateString('id-ID', {
-                                                                            weekday: 'short',
-                                                                            year: 'numeric',
-                                                                            month: 'short',
-                                                                            day: 'numeric',
-                                                                        })
-                                                                    }
-                                                                </div>
-                                                            </Tippy>
-                                                        </>
-                                                    )}
+                                                    <Tippy content={`Dibuat Pada ` +
+                                                        new Date(data?.created_at).toLocaleDateString('id-ID', {
+                                                            weekday: 'short',
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        })
+                                                    }>
+                                                        <div className="flex items-center gap-1 text-xs text-slate-500">
+                                                            <FontAwesomeIcon icon={faCalendarPlus} className="w-3 h-3" />
+                                                            {data?.created_by}
+                                                        </div>
+                                                    </Tippy>
+                                                    <Tippy content={`Diperbarui Pada ` +
+                                                        new Date(data?.updated_at).toLocaleDateString('id-ID', {
+                                                            weekday: 'short',
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        })
+                                                    }>
+                                                        <div className="flex items-center gap-1 text-xs text-slate-500">
+                                                            <FontAwesomeIcon icon={faCalendarAlt} className="w-3 h-3" />
+                                                            {data?.updated_by}
+                                                        </div>
+                                                    </Tippy>
                                                 </div>
                                             </td>
                                             <td className="relative">
@@ -382,7 +381,7 @@ const Index = () => {
                                     );
                                 })}
 
-                                {(datas.length == 0 && !search) && (
+                                {(datas?.length == 0 && !search) && (
                                     <>
                                         <tr>
                                             <td colSpan={5} className="text-center">
@@ -472,13 +471,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.name == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -507,13 +501,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.code == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -541,13 +530,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.fullcode == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -572,13 +556,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.description == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (

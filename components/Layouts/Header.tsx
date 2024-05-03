@@ -17,6 +17,49 @@ import IconUser from '../Icon/IconUser';
 import IconLockDots from '../Icon/IconLockDots';
 import IconLogout from '../Icon/IconLogout';
 
+import axios, { AxiosRequestConfig } from "axios";
+import { BaseUri } from '@/apis/serverConfig';
+import Swal from 'sweetalert2';
+
+
+const showAlert = async (icon: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+    });
+    toast.fire({
+        icon: icon,
+        title: text,
+        padding: '10px 20px',
+    });
+};
+
+const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
+    Swal.fire({
+        icon: icon,
+        // title: '<i>HTML</i> <u>example</u>',
+        title: title,
+        // html: 'You can use <b>bold text</b>, <a href="//github.com">links</a> and other HTML tags',
+        html: text,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+        padding: '2em',
+        customClass: 'sweet-alerts',
+
+        // callback on confirm
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
+
+
 const Header = () => {
     const router = useRouter();
 
@@ -32,7 +75,18 @@ const Header = () => {
                 setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
             }
             if (!CurrentUser) {
-                serverCheck();
+                serverCheck().then((res) => {
+                    if (res.status == 'error') {
+                        showSweetAlert(
+                            'error',
+                            'Terjadi Kesalahan Server', 'Server tidak merespon! <br /> Silahkan untuk reload halaman?',
+                            'Reload',
+                            'Batal',
+                            () => {
+                                window.location.reload();
+                            });
+                    }
+                });
             }
         }
     }, [CurrentToken]);
@@ -76,15 +130,40 @@ const Header = () => {
             dispatch(toggleRTL('ltr'));
         }
     };
+
     const [flag, setFlag] = useState('');
     useEffect(() => {
         setLocale(localStorage.getItem('i18nextLng') || themeConfig.locale);
     });
     const dispatch = useDispatch();
 
-    function createMarkup(messages: any) {
-        return { __html: messages };
-    }
+    const logout = () => {
+        const uri = BaseUri() + '/logout';
+        try {
+            const res = axios.get(uri, {
+                headers: {
+                    'Authorization': 'Bearer ' + CurrentToken
+                }
+            }).then((response) => {
+                if (response.status == 200) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('locked');
+                    window.location.href = '/login';
+                }
+            }).catch((error) => {
+                if (error.response.status == 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('locked');
+                    window.location.href = '/login';
+                }
+            });
+        } catch (error) {
+            showAlert('error', 'Terjadi Kesalahan Server' + ' ' + error);
+        }
+    };
+
     const [messages, setMessages] = useState([
         {
             id: 1,
@@ -172,18 +251,42 @@ const Header = () => {
                     <div className="hidden ltr:mr-2 rtl:ml-2 sm:block">
                         <ul className="flex items-center space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]">
                             <li>
-                                <div className="text-base font-bold">
-                                    <span className="hidden sm:inline">SiCaram,</span> Kabupaten Ogan Ilir
+                                <div className="text-base font-bold flex items-center gap-x-3">
+                                    <div>
+                                        <span className="hidden sm:inline">SiCaram,</span> Kabupaten Ogan Ilir
+                                    </div>
+                                    <div className="flex items-center space-x-1.5 text-xs">
+                                        <IconCalendar className="h-3.5 w-3.5" />
+                                        <span className="font-semibold">
+                                            {new Date().toLocaleDateString(i18n.language, {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                            })}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center space-x-1.5 text-xs">
-                                    <IconCalendar className="h-3.5 w-3.5" />
-                                    <span className="font-semibold">
-                                        {new Date().toLocaleDateString(i18n.language, {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                        })}
+                                <div>
+                                    <span className="text-slate-800 dark:text-[#d0d2d6] text-lg">
+                                        {/* {router.pathname.replace('/', '')} */}
+
+                                        {router.pathname.includes('realisasi/anggaran') && (
+                                            <span className="flex items-center space-x-1.5">
+                                                <span className="font-semibold">
+                                                    Realisasi Anggaran
+                                                </span>
+                                            </span>
+                                        )}
+
+                                        {router.pathname.includes('realisasi/kontrak') && (
+                                            <span className="flex items-center space-x-1.5">
+                                                <span className="font-semibold">
+                                                    Realisasi Kontrak
+                                                </span>
+                                            </span>
+                                        )}
+
                                     </span>
                                 </div>
                             </li>
@@ -225,6 +328,36 @@ const Header = () => {
                                     <IconLaptop />
                                 </button>
                             )}
+                        </div>
+
+                        <div className="dropdown shrink-0">
+                            <Dropdown
+                                offset={[0, 8]}
+                                placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
+                                btnClassName="block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60"
+                                button={flag && <img className="h-5 w-5 rounded-full object-cover" src={`/assets/images/flags/${flag.toUpperCase()}.svg`} alt="flag" />}
+                            >
+                                <ul className="grid w-[280px] grid-cols-2 gap-2 !px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
+                                    {themeConfig.languageList.map((item: any) => {
+                                        return (
+                                            <li key={item.code}>
+                                                <button
+                                                    type="button"
+                                                    className={`flex w-full hover:text-primary ${i18n.language === item.code ? 'bg-primary/10 text-primary' : ''}`}
+                                                    onClick={() => {
+                                                        dispatch(toggleLocale(item.code));
+                                                        i18n.changeLanguage(item.code);
+                                                        setLocale(item.code);
+                                                    }}
+                                                >
+                                                    <img src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="h-5 w-5 rounded-full object-cover" />
+                                                    <span className="ltr:ml-3 rtl:mr-3">{item.name}</span>
+                                                </button>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </Dropdown>
                         </div>
 
                         <div className="dropdown flex shrink-0">

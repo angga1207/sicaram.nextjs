@@ -65,7 +65,7 @@ const Profile = () => {
 
     const [saveLoadingProfile, setSaveLoadingProfile] = useState(false);
 
-    const [dataInput, setDataInput] = useState({
+    const [dataInput, setDataInput] = useState<any>({
         fullname: '',
         username: '',
         email: '',
@@ -91,7 +91,7 @@ const Profile = () => {
 
     const [isEditProfile, setIsEditProfile] = useState(false);
 
-    const onChangePhotoProfile = (e) => {
+    const onChangePhotoProfile = (e: any) => {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -111,7 +111,7 @@ const Profile = () => {
         }
     }
 
-    const deleteTemporaryImage = (e) => {
+    const deleteTemporaryImage = (e: any) => {
         e.preventDefault();
         setDataInput({
             'id': dataInput.id,
@@ -150,22 +150,19 @@ const Profile = () => {
             setSaveLoadingProfile(false);
         }
         if (res.status == 'error validation') {
-            if (res.message.fullname) {
-                document.getElementById('fullname').classList.add('border-danger');
-            } else {
-                document.getElementById('fullname').classList.remove('border-danger');
-            }
-            if (res.message.username) {
-                document.getElementById('username').classList.add('border-danger');
-            } else {
-                document.getElementById('fullname').classList.remove('border-danger');
-            }
-            if (res.message.email) {
-                document.getElementById('email').classList.add('border-danger');
-            } else {
-                document.getElementById('fullname').classList.remove('border-danger');
-            }
-            // showAlert('error', res?.message ?? 'Data gagal disimpan');
+
+            Object.keys(res.message).map((key: any) => {
+
+                let element = document.getElementById(key);
+                if (element) {
+                    if (key) {
+                        element.classList.add('border-danger');
+                    } else {
+                        element.classList.remove('border-danger');
+                    }
+                }
+            });
+            showAlert('error', res?.message[0] ?? 'Data gagal disimpan');
             setSaveLoadingProfile(false);
         }
 
@@ -435,7 +432,7 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 hidden">
+                {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div className="panel">
                         <div className="mb-5">
                             <h5 className="text-lg font-semibold dark:text-white-light">Summary</h5>
@@ -644,7 +641,7 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
             </div>
         </div>

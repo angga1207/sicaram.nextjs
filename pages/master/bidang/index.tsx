@@ -14,6 +14,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import Dropdown from '../../../components/Dropdown';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
+import Select from 'react-select'
 
 import IconTrashLines from '../../../components/Icon/IconTrashLines';
 import IconPlus from '../../../components/Icon/IconPlus';
@@ -59,14 +60,14 @@ const Index = () => {
 
     const { t, i18n } = useTranslation();
 
-    const [datas, setDatas] = useState([]);
-    const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
-    const [urusans, setUrusans] = useState([]);
-    const [search, setSearch] = useState('');
+    const [datas, setDatas] = useState<any>([]);
+    const [periodes, setPeriodes] = useState<any>([]);
+    const [periode, setPeriode] = useState<any>(1);
+    const [urusans, setUrusans] = useState<any>([]);
+    const [search, setSearch] = useState<any>('');
     const [modalInput, setModalInput] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
-    const [dataInput, setDataInput] = useState({
+    const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
         periode_id: '',
@@ -144,7 +145,7 @@ const Index = () => {
             name: '',
             code: '',
             fullcode: '',
-            parent_code: urusans.filter((data) => data.id == urusan_id)[0].code ?? '',
+            parent_code: urusans?.filter((data: any) => data?.id == urusan_id)[0].code ?? '',
             description: '',
         });
         setModalInput(true);
@@ -186,9 +187,9 @@ const Index = () => {
 
     }
 
-    const changeUrusan = (e) => {
-        const Parent = urusans.filter((data) => data.id == e);
-        setDataInput((prevState) => ({
+    const changeUrusan = (e: any) => {
+        const Parent = urusans.filter((data: any) => data.id == e);
+        setDataInput((prevState: any) => ({
             ...prevState,
             urusan_id: e,
             parent_code: Parent[0].code ?? '',
@@ -211,10 +212,12 @@ const Index = () => {
                     showAlert('success', data.message);
                 }
                 if (data.status == 'error validation') {
-                    document.getElementById('error-name').innerHTML = data.message.name?.[0] ?? '';
-                    document.getElementById('error-code').innerHTML = data.message.code?.[0] ?? '';
-                    document.getElementById('error-fullcode').innerHTML = data.message.fullcode?.[0] ?? '';
-                    document.getElementById('error-description').innerHTML = data.message.description?.[0] ?? '';
+                    Object.keys(data.message).map((key: any, index: any) => {
+                        let element = document.getElementById('error-' + key);
+                        if (element) {
+                            element.innerHTML = data.message[key][0];
+                        }
+                    });
                     showAlert('error', 'Please check your input!');
                 }
                 if (data.status == 'error') {
@@ -261,7 +264,7 @@ const Index = () => {
             })
             .then((result) => {
                 if (result.value) {
-                    deleteBidang(id).then((data) => {
+                    deleteBidang(id ?? null).then((data) => {
                         if (data.status == 'success') {
                             fetchBidangs(periode, search).then((data) => {
                                 setDatas((data?.data));
@@ -310,8 +313,8 @@ const Index = () => {
             <div className="">
 
                 <div className="">
-                    <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
+                    <div className="flex items-center justify-between mb-5 px-5">
+                        <h2 className="text-lg leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
                             Daftar Bidang
                         </h2>
                         <div className="flex items-center justify-center gap-1">
@@ -354,7 +357,7 @@ const Index = () => {
                             </thead>
                             <tbody>
 
-                                {datas.map((data) => {
+                                {datas?.map((data: any) => {
                                     return (
                                         <tr className={data?.type == 'urusan' ? 'cursor-pointer group relative bg-green-100 dark:bg-green-800' : 'cursor-pointer group relative hover:bg-slate-100 dark:hover:bg-slate-700'}>
                                             <td className='!py-5'>
@@ -381,40 +384,38 @@ const Index = () => {
                                                     </td>
                                                 </>
                                             )}
+
                                             <td className='w-[150px]' onClick={() => editBidang(data?.id)}>
                                                 <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100">
-                                                    {data?.type == 'bidang' && (
-                                                        <>
-                                                            <Tippy content="Dibuat Pada">
-                                                                <div className="flex items-center gap-1 text-xs text-slate-500">
-                                                                    <FontAwesomeIcon icon={faCalendarPlus} className="w-3 h-3" />
-                                                                    {
-                                                                        new Date(data?.created_at).toLocaleDateString('id-ID', {
-                                                                            weekday: 'short',
-                                                                            year: 'numeric',
-                                                                            month: 'short',
-                                                                            day: 'numeric',
-                                                                        })
-                                                                    }
-                                                                </div>
-                                                            </Tippy>
-                                                            <Tippy content="Diperbarui Pada">
-                                                                <div className="flex items-center gap-1 text-xs text-slate-500">
-                                                                    <FontAwesomeIcon icon={faCalendarAlt} className="w-3 h-3" />
-                                                                    {
-                                                                        new Date(data?.updated_at).toLocaleDateString('id-ID', {
-                                                                            weekday: 'short',
-                                                                            year: 'numeric',
-                                                                            month: 'short',
-                                                                            day: 'numeric',
-                                                                        })
-                                                                    }
-                                                                </div>
-                                                            </Tippy>
-                                                        </>
-                                                    )}
+                                                    <Tippy content={`Dibuat Pada ` +
+                                                        new Date(data?.created_at).toLocaleDateString('id-ID', {
+                                                            weekday: 'short',
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        })
+                                                    }>
+                                                        <div className="flex items-center gap-1 text-xs text-slate-500">
+                                                            <FontAwesomeIcon icon={faCalendarPlus} className="w-3 h-3" />
+                                                            {data?.created_by}
+                                                        </div>
+                                                    </Tippy>
+                                                    <Tippy content={`Diperbarui Pada ` +
+                                                        new Date(data?.updated_at).toLocaleDateString('id-ID', {
+                                                            weekday: 'short',
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        })
+                                                    }>
+                                                        <div className="flex items-center gap-1 text-xs text-slate-500">
+                                                            <FontAwesomeIcon icon={faCalendarAlt} className="w-3 h-3" />
+                                                            {data?.updated_by}
+                                                        </div>
+                                                    </Tippy>
                                                 </div>
                                             </td>
+
                                             <td className="relative">
                                                 <div className="flex justify-center items-center gap-2 absolute inset-y-0 inset-x-0 w-full">
                                                     {data?.type == 'bidang' ? (
@@ -443,7 +444,7 @@ const Index = () => {
                                     );
                                 })}
 
-                                {(datas.length == 0 && !search) && (
+                                {(datas?.length == 0 && !search) && (
                                     <>
                                         <tr>
                                             <td colSpan={5} className="text-center">
@@ -526,6 +527,58 @@ const Index = () => {
 
                                             <div className="space-y-3">
                                                 <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
+
+                                                    <div className='xl:col-span-2'>
+                                                        <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
+                                                            Urusan
+                                                            <span className='text-red-600 mx-1'>*</span>
+                                                        </label>
+                                                        {(dataInput.inputType == 'edit' && dataInput.name == null) ? (
+                                                            <>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <div className="">
+                                                                    <Select
+                                                                        className='text-sm font-semibold'
+                                                                        placeholder="Pilih Urusan"
+                                                                        autoFocus={false}
+                                                                        options={
+                                                                            urusans?.map((data: any, index: number) => {
+                                                                                return {
+                                                                                    value: data?.id,
+                                                                                    label: data?.fullcode + ' - ' + data?.name,
+                                                                                }
+                                                                            })
+                                                                        }
+
+                                                                        value={urusans?.filter((data: any) => data.id == dataInput?.urusan_id).map((data: any) => {
+                                                                            return {
+                                                                                value: data.id,
+                                                                                label: data.fullcode + ' - ' + data.name,
+                                                                            };
+                                                                        })[0]}
+                                                                        isSearchable={true}
+                                                                        onChange={
+                                                                            (e: any) => {
+                                                                                setDataInput((prev: any) => {
+                                                                                    return {
+                                                                                        ...prev,
+                                                                                        urusan_id: e.value,
+                                                                                    };
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                    />
+                                                                    <div id="error-urusan_id" className='validation-elements text-red-500 text-xs'></div>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </div>
+
                                                     <div className='xl:col-span-2'>
                                                         <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Nama Bidang Urusan
@@ -533,13 +586,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.name == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -561,47 +609,6 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div className='xl:col-span-2'>
-                                                        <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
-                                                            Urusan
-                                                            <span className='text-red-600 mx-1'>*</span>
-                                                        </label>
-                                                        {(dataInput.inputType == 'edit' && dataInput.name == null) ? (
-                                                            <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
-                                                                </div>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <div className="">
-                                                                    <select
-                                                                        name="urusan_id"
-                                                                        id="urusan_id"
-                                                                        className='form-select'
-                                                                        value={dataInput.urusan_id}
-                                                                        onChange={(e) => changeUrusan(e.target.value)}
-                                                                    >
-                                                                        <option value="" hidden>Pilih Urusan</option>
-                                                                        {urusans.map((data) => {
-                                                                            return (
-                                                                                <option key={data?.id} value={data?.id}>
-                                                                                    {data?.code + ' - ' + data?.name}
-                                                                                </option>
-                                                                            );
-                                                                        })}
-                                                                    </select>
-                                                                    <div id="error-name" className='validation-elements text-red-500 text-xs'></div>
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                    </div>
-
                                                     <div>
                                                         <label htmlFor="alias" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Kode Bidang Urusan
@@ -609,13 +616,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.code == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -643,13 +645,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.fullcode == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -674,13 +671,8 @@ const Index = () => {
                                                         </label>
                                                         {(dataInput.inputType == 'edit' && dataInput.description == null) ? (
                                                             <>
-                                                                <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                                    <div>
-                                                                        <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                                    </div>
-                                                                    <div>
-                                                                        Loading...
-                                                                    </div>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">Memuat...</div>
                                                                 </div>
                                                             </>
                                                         ) : (

@@ -82,11 +82,11 @@ const Index = () => {
     }, []);
     const { t, i18n } = useTranslation();
 
-    const [datas, setDatas] = useState([]);
+    const [datas, setDatas] = useState<any>([]);
     const [search, setSearch] = useState('');
     const [modalInput, setModalInput] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
-    const [dataInput, setDataInput] = useState({
+    const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
         name: '',
@@ -168,7 +168,12 @@ const Index = () => {
                     showAlert('success', data.message);
                 }
                 if (data.status == 'error validation') {
-                    document.getElementById('error-name').innerHTML = data.message.name?.[0] ?? '';
+                    Object.keys(data.message).map((key: any, index: any) => {
+                        let element = document.getElementById('error-' + key);
+                        if (element) {
+                            element.innerHTML = data.message[key][0];
+                        }
+                    });
                 }
                 if (data.status == 'error') {
                     console.log(data.message)
@@ -238,7 +243,7 @@ const Index = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {datas.map((data) => {
+                                {datas?.map((data: any) => {
                                     return (
                                         <>
                                             <tr>
@@ -294,7 +299,7 @@ const Index = () => {
                                     )
                                 })}
 
-                                {(datas.length == 0 && !search) && (
+                                {(datas?.length == 0 && !search) && (
                                     <>
                                         <tr>
                                             <td colSpan={5} className="text-center">

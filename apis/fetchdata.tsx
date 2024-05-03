@@ -13,175 +13,338 @@ const baseUri = BaseUri();
 const CurrentToken = getCookie('token');
 
 export async function fetchAllDataUsers(role: string, search: string = '') {
-    const res = await axios.get(baseUri + '/users?' + '_fRole=' + role + '&search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/users?' + '_fRole=' + role + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 // Roles Start
 export async function fetchRoles(search: string = '') {
-    const res = await axios.get(baseUri + '/roles?search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/roles?search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchRole(id: string = '') {
-    const res = await axios.get(baseUri + '/roles/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/roles/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Roles End
 
 
 // Users Start
 export async function fetchUsers(role: string, search: string = '') {
-    const res = await axios.get(baseUri + '/users?' + '_fRole=' + role + '&search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/users?' + '_fRole=' + role + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchUser(id: string = '') {
-    const res = await axios.get(baseUri + '/users/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/users/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Users End
 
 
 // Instances Start
 export async function fetchInstances(search: any = '') {
-    const res = await axios.get(baseUri + '/instances?search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/instances?search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchInstance(id: string = '') {
-    const res = await axios.get(baseUri + '/instances/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/instances/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Instances End
 
 
 // Periode Start
 export async function fetchPeriodes(search: any = '') {
-    const res = await axios.get(baseUri + '/ref-periode?search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-periode?search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+
+    // const res = await axios.get(baseUri + '/ref-periode?search=' + search, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `Bearer ${CurrentToken}`,
+    //     },
+    // });
+    // const data = await res.data;
+    // return data;
 }
 
 export async function fetchRangePeriode(id: any) {
-    // ref-periode-range
-    const res = await axios.get(baseUri + '/ref-periode-range?periode_id=' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-periode-range?periode_id=' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 // Satuan Start
 export async function fetchSatuans(search: any = '') {
-    const res = await axios.get(baseUri + '/ref-satuan?search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    // console.log(res);
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-satuan?search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Satuan End
+
+// Master Rekening Start
+export async function fetchRekenings(periode: any, level: any, parent_id: any = '', search: any = '') {
+    // ref/rekening
+    try {
+        const res = await axios.get(baseUri + '/ref-rekening?periode=' + periode + '&search=' + search + '&level=' + level + '&parent_id=' + parent_id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
+}
+
+export async function fetchRekening(id: string = '', level: any, periode: any) {
+    // ref-rekening/{id}
+    try {
+        const res = await axios.get(baseUri + '/ref-rekening/' + id + '?level=' + level + '&periode=' + periode, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+// Master Sumber Dana
+export async function fetchSumberDanas(periode: any, search: any = '') {
+    try {
+        const res = await axios.get(baseUri + '/ref-sumber-dana?periode=' + periode + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
+}
 
 
 // Urusan Start
 export async function fetchUrusans(periode: any, search: any = '') {
-    const res = await axios.get(baseUri + '/ref-urusan?periode=' + periode + '&search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-urusan?periode=' + periode + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
 }
 
 export async function fetchUrusan(id: string = '') {
-    const res = await axios.get(baseUri + '/ref-urusan/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-urusan/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Urusan End
 
 // Bidang Start
 export async function fetchBidangs(periode: any, search: any = '') {
-    const res = await axios.get(baseUri + '/ref-bidang?periode=' + periode + '&search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-bidang?periode=' + periode + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
 }
 
 export async function fetchBidang(id: string = '') {
-    const res = await axios.get(baseUri + '/ref-bidang/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-bidang/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Bidang End
 
@@ -204,14 +367,21 @@ export async function fetchPrograms(periode: any, instance: any, search: any = '
 }
 
 export async function fetchProgram(id: string = '') {
-    const res = await axios.get(baseUri + '/ref-program/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-program/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Program End
 
@@ -234,14 +404,21 @@ export async function fetchKegiatans(periode: any, instance: any, search: any = 
 }
 
 export async function fetchKegiatan(id: string = '') {
-    const res = await axios.get(baseUri + '/ref-kegiatan/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-kegiatan/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Kegiatan End
 
@@ -264,173 +441,364 @@ export async function fetchSubKegiatans(periode: any, instance: any, search: any
 }
 
 export async function fetchSubKegiatan(id: string = '') {
-    const res = await axios.get(baseUri + '/ref-sub-kegiatan/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-sub-kegiatan/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // SubKegiatan End
 
 // Indikator Kinjerja Kegiatan Start
 export async function fetchIndikatorKegiatans(instance: any, kegiatan: any, search: any = '') {
-    // ref-indikator-kegiatan
-    const res = await axios.get(baseUri + '/ref-indikator-kegiatan?instance=' + instance + '&kegiatan=' + kegiatan + '&search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-indikator-kegiatan?instance=' + instance + '&kegiatan=' + kegiatan + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchIndikatorKegiatan(id: string = '') {
-    // ref-indikator-kegiatan
-    const res = await axios.get(baseUri + '/ref-indikator-kegiatan/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-indikator-kegiatan/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Indikator Kinjerja Kegiatan Start
 
 // Indikator Kinjerja SubKegiatan Start
 export async function fetchIndikatorSubKegiatans(instance: any, subkegiatan: any, search: any = '') {
     // ref-indikator-kegiatan
-    const res = await axios.get(baseUri + '/ref-indikator-sub-kegiatan?instance=' + instance + '&subkegiatan=' + subkegiatan + '&search=' + search, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-indikator-sub-kegiatan?instance=' + instance + '&subkegiatan=' + subkegiatan + '&search=' + search, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchIndikatorSubKegiatan(id: string = '') {
     // ref-indikator-kegiatan
-    const res = await axios.get(baseUri + '/ref-indikator-sub-kegiatan/' + id, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/ref-indikator-sub-kegiatan/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+
+    }
 }
 // Indikator Kinjerja SubKegiatan Start
 
 
 // RPJMD Start
 export async function fetchRPJMD(periode: any, instance: any, program: any) {
-    const res = await axios.get(baseUri + '/caram/rpjmd?periode=' + periode + '&instance=' + instance + '&program=' + program, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/rpjmd?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // RPJMD End
 
 
 // Renstra Start
 export async function fetchRenstra(periode: any, instance: any, program: any) {
-    const res = await axios.get(baseUri + '/caram/renstra?periode=' + periode + '&instance=' + instance + '&program=' + program, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renstra?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchDetailRenstraKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any) {
-    const res = await axios.get(baseUri + '/caram/renstra/' + kegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=kegiatan', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renstra/' + kegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=kegiatan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchDetailRenstraSubKegiatan(periode: any, instance: any, program: any, subkegiatan: any, year: any) {
-    const res = await axios.get(baseUri + '/caram/renstra/' + subkegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=subkegiatan', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renstra/' + subkegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=subkegiatan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchRenstraValidatorNotes(periode: any, instance: any, program: any, renstra: any) {
-    const res = await axios.get(baseUri + '/caram/renstra/' + renstra + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renstra/' + renstra + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 // Renstra End
 
 
 // Renja Start
 export async function fetchRenja(periode: any, instance: any, program: any) {
-    const res = await axios.get(baseUri + '/caram/renja?periode=' + periode + '&instance=' + instance + '&program=' + program, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    // console.log(res);
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renja?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchDetailRenjaKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any) {
-    const res = await axios.get(baseUri + '/caram/renja/' + kegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=kegiatan', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renja/' + kegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=kegiatan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchDetailRenjaSubKegiatan(periode: any, instance: any, program: any, subkegiatan: any, year: any) {
-    const res = await axios.get(baseUri + '/caram/renja/' + subkegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=subkegiatan', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renja/' + subkegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=subkegiatan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function fetchRenjaValidatorNotes(periode: any, instance: any, program: any, renja: any) {
-    const res = await axios.get(baseUri + '/caram/renja/' + renja + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/caram/renja/' + renja + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+
+// APBD Start
+export async function fetchProgramsAPBD(periode: any, instance: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/ref-apbd?periode=' + periode + '&instance=' + instance, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchAPBD(periode: any, instance: any, program: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/apbd?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        // console.log(res);
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchDetailApbdKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/apbd/' + kegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=kegiatan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchDetailApbdSubKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/apbd/' + kegiatan + '?periode=' + periode + '&instance=' + instance + '&program=' + program + '&year=' + year + '&type=subkegiatan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchApbdValidatorNotes(periode: any, instance: any, program: any, apbd: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/apbd/' + apbd + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }

@@ -4,6 +4,7 @@ import DefaultLayout from '../components/Layouts/DefaultLayout';
 import { Provider } from 'react-redux';
 import store from '../store/index';
 import Head from 'next/head';
+import NextNProgress from 'nextjs-progressbar';
 
 import { appWithI18Next } from 'ni18n';
 import { ni18nConfig } from 'ni18n.config.ts';
@@ -13,6 +14,27 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 
 import '../styles/tailwind.css';
 import { NextPage } from 'next';
+
+import React, { useEffect } from 'react';
+import { getMessaging, onMessage } from 'firebase/messaging';
+import firebaseApp from '@/utils/firebase/firebase';
+import useFcmToken from '@/utils/hooks/useFcmToken';
+import Swal from 'sweetalert2';
+
+const showAlert = async (icon: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        showCloseButton: true,
+        timer: 3000,
+    });
+    toast.fire({
+        icon: icon,
+        title: text,
+        padding: '10px 20px',
+    });
+}
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -24,6 +46,48 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+    const { fcmToken, notificationPermissionStatus } = useFcmToken();
+
+    useEffect(() => {
+        if (window && fcmToken) {
+            const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
+            const currentToken = localStorage.getItem('token') ?? null;
+            if (currentUser && currentToken) {
+                fetch('http://127.0.0.1:8000/api/users/' + currentUser?.id + '/fcm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${currentToken}`,
+                    },
+                    body: JSON.stringify({
+                        fcmToken: fcmToken,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log('FCM token saved');
+                    })
+                    .catch((error) => {
+                    });
+            }
+            if (notificationPermissionStatus === 'denied') {
+                showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
+            }
+        }
+    }, []);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+            const messaging = getMessaging(firebaseApp);
+            const unsubscribe = onMessage(messaging, (payload) => {
+                showAlert('info', payload?.notification?.body);
+            });
+            return () => {
+                unsubscribe(); // Unsubscribe from the onMessage event
+            };
+        }
+    }, []);
 
     return (
         <Provider store={store}>
@@ -48,6 +112,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                 </style>
             </Head>
 
+            <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} />
             {getLayout(<Component {...pageProps} />)}
         </Provider>
     );

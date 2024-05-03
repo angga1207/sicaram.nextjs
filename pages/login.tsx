@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setPageTitle, toggleRTL } from '../store/themeConfigSlice';
@@ -17,6 +17,30 @@ import React from "react";
 import { setCookie } from 'cookies-next';
 import ReCAPTCHA from "react-google-recaptcha";
 
+import Swal from 'sweetalert2';
+
+const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
+    Swal.fire({
+        icon: icon,
+        // title: '<i>HTML</i> <u>example</u>',
+        title: title,
+        // html: 'You can use <b>bold text</b>, <a href="//github.com">links</a> and other HTML tags',
+        html: text,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+        padding: '2em',
+        customClass: 'sweet-alerts',
+
+        // callback on confirm
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    });
+}
 
 const Login = () => {
 
@@ -24,17 +48,15 @@ const Login = () => {
 
     useEffect(() => {
         if (window) {
-
+            // localStorage.removeItem('token');
+            // console.log(localStorage.getItem('token'))
             if (localStorage.getItem('token')) {
-                setUserToken(localStorage.getItem('token'));
-                // router.push('/');
+                // setUserToken(localStorage.getItem('token'));
+                router.push('/');
                 // return;
+            } else {
+                localStorage.removeItem('token');
             }
-
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('userPassword');
-            localStorage.removeItem('locked');
         }
     }, []);
 
@@ -45,7 +67,7 @@ const Login = () => {
     const router = useRouter();
 
     const [email, setEmail] = React.useState("");
-    const recaptchaRef = React.createRef();
+    const recaptchaRef = React.createRef<any>();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -54,8 +76,7 @@ const Login = () => {
         AttempLogin(e);
     };
 
-
-    const onReCAPTCHAChange = (captchaCode) => {
+    const onReCAPTCHAChange = (captchaCode: any) => {
         if (captchaCode) {
             return;
         }
@@ -67,10 +88,23 @@ const Login = () => {
     const AttempLogin = async (e: any) => {
         e.preventDefault();
         setSubmitLoading(true);
-        document.getElementsByClassName('validation').innerHTML = '';
+
+        const elements = document.getElementsByClassName('validation');
+        while (elements.length > 0) elements[0].remove();
+
+        // document.getElementsByClassName('validation')?.innerHTML = '';
 
         if (!recaptchaRef?.current.getValue()) {
-            document.getElementById('errorCaptcha').innerHTML = 'Please check the captcha';
+
+            // document.getElementById('errorCaptcha').innerHTML = 'Please check the captcha';
+            showSweetAlert(
+                'error',
+                'Captcha tidak di centang', 'Silahkan centang captcha!',
+                'OK',
+                'Batal',
+                () => {
+                    return;
+                });
             setSubmitLoading(false);
             return;
         }
@@ -80,44 +114,62 @@ const Login = () => {
             password: e.target.Password.value,
         };
         const uri = BaseUri() + '/login';
-        const res = await axios.post(uri, formData, {
-            headers: {
-                'Content-Type': 'application/json',
+        try {
+            const res = await axios.post(uri, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const json = await res?.data;
+
+            if (json?.status === 'error validation') {
+                Object.keys(json.message).map((key: any, index: any) => {
+                    let element = document.getElementById('error-' + key);
+                    if (element) {
+                        element.innerHTML = json.message[key][0];
+                    }
+                });
+                // if (json?.message?.username) {
+                //     document.getElementById('errorUsername').innerHTML = json?.message?.username;
+                // }
+                // if (json?.message?.password) {
+                //     document.getElementById('errorPassword').innerHTML = json?.message?.password;
+                // }
+                setSubmitLoading(false);
+                return;
             }
-        });
-        const json = await res.data;
 
-        if (json?.status === 'error validation') {
-            if (json?.message?.username) {
-                document.getElementById('errorUsername').innerHTML = json?.message?.username;
+            const data = await json.data;
+
+            if (!data) {
+                alert('Login failed');
+                setSubmitLoading(false);
+                return;
             }
-            if (json?.message?.password) {
-                document.getElementById('errorPassword').innerHTML = json?.message?.password;
+
+            if (json.status == 'success') {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('userPassword', formData.password);
+                localStorage.setItem('locked', 'false');
+                setCookie('token', data.token);
+                setUserToken(data.token);
             }
-            setSubmitLoading(false);
-            return;
+
+            // router push to latest url
+            // router.push(router.query.next ? router.query.next.toString() : '/');
+
+        } catch (error) {
+            showSweetAlert(
+                'error',
+                'Terjadi Kesalahan Server', 'Server tidak merespon! <br /> Silahkan untuk reload halaman?',
+                'Reload',
+                'Batal',
+                () => {
+                    window.location.reload();
+                });
+            return error;
         }
-
-        const data = await json.data;
-
-        if (!data) {
-            alert('Login failed');
-            setSubmitLoading(false);
-            return;
-        }
-
-        if (json.status == 'success') {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('userPassword', formData.password);
-            localStorage.setItem('locked', 'false');
-            setCookie('token', data.token);
-            setUserToken(data.token);
-        }
-
-
-        // router push to latest url
-        // router.push(router.query.next ? router.query.next.toString() : '/');
     }
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -188,7 +240,7 @@ const Login = () => {
                                         Username
                                     </label>
                                     <div className="relative text-white-dark">
-                                        <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark" />
+                                        <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark" value={'developer'} />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                             <IconUser fill={true} />
                                         </span>
@@ -201,6 +253,7 @@ const Login = () => {
                                     <div className="relative text-white-dark">
                                         <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 placeholder:text-white-dark"
                                             type={showPassword ? 'text' : 'password'}
+                                            value={'oganilir123'}
                                             onChange={(e) => {
                                                 setShowPassword(false);
                                             }}
@@ -211,14 +264,14 @@ const Login = () => {
 
                                         <div className="absolute end-4 top-1/2 -translate-y-1/2">
                                             <button type="button" className="btn btn-outline-primary p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
-                                                <IconEye fill={true} />
+                                                <IconEye />
                                             </button>
                                         </div>
                                     </div>
                                     <div id="errorPassword" className='validation text-red-500 text-sm'>
                                     </div>
                                 </div>
-                                <div>
+                                <div className='hidden'>
                                     <label className="flex cursor-pointer items-center">
                                         <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
                                         <span className="text-white-dark">
@@ -230,7 +283,8 @@ const Login = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         // size="invisible"
-                                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                                        // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                                        sitekey="6LfHuEIpAAAAACBeEcIdetRr1jN1PowPKs6lz5Le"
                                         onChange={onReCAPTCHAChange}
                                     />
                                     <div id="errorCaptcha" className='validation text-red-500 text-sm'>
@@ -238,7 +292,7 @@ const Login = () => {
                                 </div>
                                 {submitLoading ? (
                                     <>
-                                        <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                        <button type="button" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                             <div className="flex items-center justify-center">
                                                 <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
                                                 <span className="ltr:ml-3 rtl:mr-3">Loading...</span>

@@ -68,7 +68,7 @@ const Index = () => {
 
     const [isMounted, setIsMounted] = useState(false);
     const [isClient, setIsClient] = useState(false);
-    const ref = useRef(null);
+    const ref = useRef<any>(null);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
@@ -113,27 +113,29 @@ const Index = () => {
     useEffect(() => {
         setInstance((router.query.instance ?? null) ?? CurrentUser?.instance_id);
     }, [CurrentUser, router.query.instance]);
-    useEffect(() => {
-        if (!router.query.year) {
-            if (instance) {
-                router.push({
-                    pathname: '/realisasi/kinerja',
-                    query: {
-                        year: new Date().getFullYear(),
-                        instance: instance,
-                    },
-                });
-            } else {
-                router.push({
-                    pathname: '/realisasi/kinerja',
-                    query: {
-                        year: new Date().getFullYear(),
-                    },
-                });
-            }
-        }
-        setYear(router.query.year ?? new Date().getFullYear());
-    }, [router.query.year]);
+
+    // useEffect(() => {
+    //     if (!router.query.year) {
+    //         if (instance) {
+    //             // prevent default instance
+    //             router.push({
+    //                 pathname: '/realisasi/kinerja',
+    //                 query: {
+    //                     year: new Date().getFullYear(),
+    //                     instance: instance,
+    //                 },
+    //             });
+    //         } else {
+    //             router.push({
+    //                 pathname: '/realisasi/kinerja',
+    //                 query: {
+    //                     year: new Date().getFullYear(),
+    //                 },
+    //             });
+    //         }
+    //     }
+    //     setYear(router.query.year ?? new Date().getFullYear());
+    // }, [router.query.year]);
 
     useEffect(() => {
         fetchPeriodes().then((data) => {
@@ -146,7 +148,9 @@ const Index = () => {
             setSatuans(data.data);
         });
         fetchRangePeriode(periode).then((data) => {
-            setYears(data.data.years);
+            if (data.status == 'success') {
+                setYears(data.data.years);
+            }
         });
     }, [CurrentUser, periode]);
 
@@ -156,34 +160,18 @@ const Index = () => {
                 setInstances(data.data);
             });
         } else {
-            const instcs = instances.map((item) => {
+            const instcs = instances.map((item: any) => {
                 if (item.name.toLowerCase().includes(searchInstance.toLowerCase())) {
                     return item;
                 }
-            }).filter((item) => item != undefined);
+            }).filter((item: any) => item != undefined);
             setInstances(instcs);
         }
     }, [searchInstance]);
 
     const backToInstances = () => {
         setInstance(null);
-        router.push({
-            pathname: '/realisasi/kinerja',
-            query: {
-                year: year,
-            },
-        });
-    }
-
-    const selectInputInstance = (id: any) => {
-        setInstance(id);
-        router.push({
-            pathname: '/realisasi/kinerja',
-            query: {
-                instance: id,
-                year: year,
-            },
-        });
+        setDatas([]);
     }
 
     useEffect(() => {
@@ -224,7 +212,7 @@ const Index = () => {
 
     // click outside container to collapse all
     useEffect(() => {
-        const handleOutSideClick = (event) => {
+        const handleOutSideClick = (event: any) => {
             if (!ref.current?.contains(event.target)) {
                 setShowPrograms([]);
                 setShowKegiatans([]);
@@ -236,8 +224,6 @@ const Index = () => {
             window.removeEventListener("mousedown", handleOutSideClick);
         };
     }, [ref]);
-
-    console.log(months)
 
     return (
         <>
@@ -316,94 +302,39 @@ const Index = () => {
                     {instances?.map((data: any, index: number) => {
                         return (
                             <div className="bg-white dark:bg-[#1c232f] rounded-md overflow-hidden text-center shadow relative">
-                                <div className="bg-white dark:bg-[#1c232f] rounded-md overflow-hidden text-center shadow relative">
-                                    <div className="bg-slate-700 rounded-t-md bg-center bg-cover p-6 pb-0" style={
-                                        {
-                                            backgroundImage: "url('/assets/images/notification-bg.png')"
-                                            // backgroundImage: data?.logo ? `url(${data?.logo})` : "url('/assets/images/notification-bg.png')"
-                                        }
-                                    }>
-                                        <img className="object-contain w-4/5 h-40 mx-auto" src={data?.logo} alt="contact_image" />
-                                    </div>
-                                    <div className="px-6 pb-24 -mt-10 relative">
-                                        <div className="shadow-md bg-white dark:bg-gray-900 rounded-md px-2 py-4">
-                                            <div className="cursor-pointer group">
-                                                <div className="text-lg font-semibold line-clamp-2 h-15 group-hover:text-primary">
-                                                    {data?.name}
-                                                </div>
-                                                <div className="text-white-dark group-hover:text-primary">
-                                                    ({data?.alias})
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center justify-between flex-wrap mt-6 gap-3">
-                                                <div className="flex-auto">
-                                                    <div className="text-info">
-                                                        {data?.programs}
-                                                    </div>
-                                                    <div>Program</div>
-                                                </div>
-                                                <div className="flex-auto">
-                                                    <div className="text-info">
-                                                        {data?.kegiatans}
-                                                    </div>
-                                                    <div>Kegiatan</div>
-                                                </div>
-                                                <div className="flex-auto">
-                                                    <div className="text-info">
-                                                        {data?.sub_kegiatans}
-                                                    </div>
-                                                    <div>Sub Kegiatan</div>
-                                                </div>
-                                            </div>
-                                            <div className="mt-4">
-                                                <ul className="flex space-x-4 rtl:space-x-reverse items-center justify-center h-7">
-                                                    {data?.website && (
-                                                        <li>
-                                                            <a href={data?.website} target='_blank' className="btn btn-outline-dark p-0 h-7 w-7 rounded-full">
-                                                                <FontAwesomeIcon icon={faGlobeAsia} className="w-4 h-4" />
-                                                            </a>
-                                                        </li>
-                                                    )}
-                                                    {data?.facebook && (
-                                                        <li>
-                                                            <a href={data?.facebook} target='_blank' className="btn btn-outline-primary p-0 h-7 w-7 rounded-full">
-                                                                <FontAwesomeIcon icon={faFacebookF} className="w-4 h-4" />
-                                                            </a>
-                                                        </li>
-                                                    )}
-                                                    {data?.instagram && (
-                                                        <li>
-                                                            <a href={data?.instagram} target='_blank' className="btn btn-outline-secondary p-0 h-7 w-7 rounded-full">
-                                                                <FontAwesomeIcon icon={faInstagram} className="w-4 h-4" />
-                                                            </a>
-                                                        </li>
-                                                    )}
-                                                    {data?.youtube && (
-                                                        <li>
-                                                            <a href={data?.youtube} target='_blank' className="btn btn-outline-danger p-0 h-7 w-7 rounded-full">
-                                                                <FontAwesomeIcon icon={faYoutube} className="w-4 h-4" />
-                                                            </a>
-                                                        </li>
-                                                    )}
-                                                </ul>
-                                            </div>
+                                <div className="bg-slate-700 rounded-t-md bg-center bg-cover p-6 pb-0" style={
+                                    {
+                                        backgroundImage: "url('/assets/images/notification-bg.png')"
+                                        // backgroundImage: data?.logo ? `url(${data?.logo})` : "url('/assets/images/notification-bg.png')"
+                                    }
+                                }>
+                                    <img className="object-contain w-4/5 h-40 mx-auto" src={data?.logo} alt="contact_image" />
+                                </div>
+                                <div className="px-2 py-4">
+                                    <div className="cursor-pointer group"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setInstance(data.id);
+                                        }}>
+                                        <div className="text-lg font-semibold line-clamp-2 h-15 group-hover:text-primary">
+                                            {data?.name}
+                                        </div>
+                                        <div className="text-white-dark group-hover:text-primary">
+                                            ({data?.alias})
                                         </div>
                                     </div>
-                                    <div className="mt-6 flex justify-center gap-4 absolute bottom-0 w-full ltr:left-0 rtl:right-0 p-6">
+
+                                    <div className="mt-6 flex justify-center gap-4 w-full">
                                         <button
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                selectInputInstance(data.id);
+                                                setInstance(data.id);
                                             }}
                                             type="button"
                                             className="btn btn-outline-primary">
                                             <IconPencil className="w-4 h-4 mr-2" />
                                             Buka
                                         </button>
-                                        {/* <button type="button" className="btn btn-outline-secondary">
-                                            <IconLaptop className="w-4 h-4 mr-2" />
-                                            Lihat Laporan
-                                        </button> */}
                                     </div>
                                 </div>
                             </div>
@@ -515,7 +446,7 @@ const Index = () => {
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        selectInputInstance(data.id);
+                                                        setInstance(data.id);
                                                     }}
                                                     type="button"
                                                     className="btn btn-outline-primary px-2 py-1 whitespace-nowrap text-[10px]">
@@ -534,6 +465,16 @@ const Index = () => {
                         </tbody>
                     </table>
                 </div>
+            )}
+
+
+            {!instance && instances?.length == 0 && (
+                <>
+                    <div className="w-full h-[calc(100vh-300px)] flex flex-col items-center justify-center">
+                        {LoadingSicaram()}
+                        <div className="dots-loading text-xl">Memuat Perangkat Daerah...</div>
+                    </div>
+                </>
             )}
 
             {instance && (
@@ -627,14 +568,8 @@ const Index = () => {
                                                                                     <select
                                                                                         value={year}
                                                                                         onChange={(e) => {
+                                                                                            e.preventDefault();
                                                                                             setYear(e.target.value);
-                                                                                            router.push({
-                                                                                                pathname: '/realisasi/kinerja',
-                                                                                                query: {
-                                                                                                    year: e.target.value,
-                                                                                                    instance: instance,
-                                                                                                },
-                                                                                            });
                                                                                         }}
                                                                                         className='form-select w-[130px] border-indigo-400 bg-transparent font-normal mr-2'>
                                                                                         {years?.map((yr: any, index: number) => {
@@ -674,7 +609,7 @@ const Index = () => {
                                                                                             </Link> */}
                                                                                             {/* <Link
                                                                                                 target='_blank'
-                                                                                                href="#"
+                                                                                                href={`/realisasi/kontrak/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
                                                                                                 className='btn btn-warning font-normal'>
                                                                                                 Input Kontrak
                                                                                                 <IconArrowForward className='w-4 h-4 ml-2' />
@@ -708,6 +643,12 @@ const Index = () => {
                             </div>
                         )
                     })}
+
+                    {datas?.length == 0 && (
+                        <div className="w-full h-[calc(100vh-300px)] flex flex-col items-center justify-center">
+                            <div className="dots-loading text-xl">Memuat Program {instances?.[instance - 1]?.alias ?? '\u00A0'}...</div>
+                        </div>
+                    )}
                 </div >
             )}
         </>
