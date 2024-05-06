@@ -420,12 +420,12 @@ const Index = () => {
                 </div>
 
                 <div className="grid grid-cols-10 gap-4">
+                    <div className="col-span-10 mb-0 text-center font-bold text-xl">
+                        Peringkat Perangkat Daerah Berdasarkan Capaian Anggaran
+                    </div>
                     <div className="col-span-10 lg:col-span-4 relative h-full">
                         <div className="panel h-full overflow-hidden border-0 p-0">
                             <div className="min-h-[280px] bg-gradient-to-r from-[#4361ee] to-[#160f6b] p-6">
-                                <div className="mb-4 text-center font-semibold text-base text-white">
-                                    Perangkat Daerah Terbaik Bulan Ini
-                                </div>
                                 <div className="flex gap-x-2 items-center justify-between text-white">
                                     <div className="flex-none relative bg-white rounded-full w-32 h-32 shadow">
                                         <div className="absolute top-0 left-0 w-32 h-32 rounded-full animate-blinkingBg"></div>
@@ -503,7 +503,7 @@ const Index = () => {
                                     <div className="px-4 flex items-center justify-between">
                                         <div className="w-full">
                                             <div className="flex items-baseline font-semibold">
-                                                <div className="text-md ltr:mr-1 rtl:ml-1 text-white-dark group-hover:text-dark">
+                                                <div className="text-xl mr-2">
                                                     <span className='text-xs'>#</span>{item.rank}.
                                                 </div>
                                                 <div className="text-md uppercase">{item.instance_name}</div>
@@ -529,13 +529,13 @@ const Index = () => {
                                                                     <circle
                                                                         className="text-success  progress-ring__circle stroke-current animate-pulse"
                                                                         stroke-width="20"
-                                                                        stroke-linecap="round"
+                                                                        // stroke-linecap="round"
                                                                         cx="50"
                                                                         cy="50"
                                                                         r="40"
                                                                         fill="transparent"
                                                                         stroke-dasharray="251.2"
-                                                                        stroke-dashoffset={`calc(251.2 - (251.2 * ${item.persentase_realisasi_anggaran}) / 100)`}
+                                                                        stroke-dashoffset={`calc(251.2 - (251.2 * ${item.persentase_realisasi_anggaran ?? 0}) / 100)`}
                                                                     ></circle>
 
                                                                     <text x="50" y="50" font-family="Verdana" font-size="12" text-anchor="middle" alignment-baseline="middle" className="">
@@ -545,7 +545,7 @@ const Index = () => {
                                                                 </svg>
                                                             </div>
                                                         </Tippy>
-                                                        <div className="text-start">
+                                                        <div className="flex flex-col gap-4 justify-start items-start ml-4">
                                                             <Tippy content="Target Anggaran" theme='dark'>
                                                                 <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Anggaran: </span>
@@ -560,15 +560,35 @@ const Index = () => {
                                                             </Tippy>
                                                         </div>
                                                     </div>
+                                                    <div className="flex items-center justify-center gap-4">
+                                                        <div className="font-semibold">
+                                                            (5)
+                                                            <span className='text-xs ml-1'>
+                                                                Program
+                                                            </span>
+                                                        </div>
+                                                        <div className="font-semibold">
+                                                            (18)
+                                                            <span className='text-xs ml-1'>
+                                                                Kegiatan
+                                                            </span>
+                                                        </div>
+                                                        <div className="font-semibold">
+                                                            (32)
+                                                            <span className='text-xs ml-1'>
+                                                                Sub Kegiatan
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             </div>
                                         </div>
 
-                                        <div className="w-24">
-                                            <div className="w-20 h-20 relative rounded-full">
+                                        <div className="w-32">
+                                            <div className="w-32 h-32 relative rounded-full">
                                                 {/* <div className="opacity-0 group-hover:opacity-100 absolute top-0 left-0 w-20 h-20 rounded-full animate-blinkingBg"></div> */}
-                                                <img src={item.instance_logo} alt={item.instance_name} className='w-20 h-20 p-1 rounded-full object-contain' />
+                                                <img src={item.instance_logo} alt={item.instance_name} className='w-full h-full p-1 rounded-full object-contain' />
                                             </div>
                                         </div>
                                     </div>

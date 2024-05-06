@@ -162,7 +162,7 @@ const Index = () => {
                             <span className="ltr:ml-2 rtl:mr-2">Import Excel</span>
                         </button>
 
-                        <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addData()} >
+                        <button type="button" className="btn btn-info whitespace-nowrap">
                             <IconPlus className="w-4 h-4" />
                             <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
                         </button>
