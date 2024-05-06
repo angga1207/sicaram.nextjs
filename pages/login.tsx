@@ -284,7 +284,7 @@ const Login = () => {
                                         ref={recaptchaRef}
                                         // size="invisible"
                                         // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-                                        sitekey="6LfHuEIpAAAAACBeEcIdetRr1jN1PowPKs6lz5Le"
+                                        sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
                                         onChange={onReCAPTCHAChange}
                                     />
                                     <div id="errorCaptcha" className='validation text-red-500 text-sm'>
