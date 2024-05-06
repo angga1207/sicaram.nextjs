@@ -93,6 +93,40 @@ module.exports = {
                 },
             }),
         },
+        keyframes: {
+            blinkingBg: {
+                '0%': { backgroundColor: '#4261ee80' },
+                '16.6%': { backgroundColor: '#4261ee70' },
+                '33.36%': { backgroundColor: '#4261ee60' },
+                '50%': { backgroundColor: '#4261ee40' },
+                '66.6%': { backgroundColor: '#4261ee60' },
+                '82.9%': { backgroundColor: '#4261ee70' },
+                '100%': { backgroundColor: '#4261ee80' }
+            },
+            blinkingTextPrimary: {
+                '0%': { color: '#4261eefc' },
+                '16.6%': { color: '#4261eebc' },
+                '33.36%': { color: '#4261eeac' },
+                '50%': { color: '#4261ee9c' },
+                '66.6%': { color: '#4261eeac' },
+                '82.9%': { color: '#4261eebc' },
+                '100%': { color: '#4261eefc' }
+            },
+            blinkingTextSuccess: {
+                '0%': { color: '#00ab55fc' },
+                '16.6%': { color: '#00ab55bc' },
+                '33.36%': { color: '#00ab55ac' },
+                '50%': { color: '#00ab559c' },
+                '66.6%': { color: '#00ab55ac' },
+                '82.9%': { color: '#00ab55bc' },
+                '100%': { color: '#00ab55fc' }
+            }
+        },
+        animation: {
+            blinkingBg: 'blinkingBg 5s ease-in-out infinite',
+            blinkingTextPrimary: 'blinkingTextPrimary 2s ease-in-out infinite',
+            blinkingTextSuccess: 'blinkingTextSuccess 2s ease-in-out infinite',
+        },
         fontSize: {
             // '5xl': '2rem',
             // '4xl': '1.75rem',

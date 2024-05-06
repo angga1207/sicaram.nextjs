@@ -45,3 +45,14 @@ export async function summaryRealisasi(periode: any, year: any) {
     const data = await res.data;
     return data;
 }
+
+export async function getRankInstance(periode: any, year: any) {
+    const res = await axios.get(baseUri + '/dashboard/rank-instance?periode=' + periode + '&year=' + year, {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${CurrentToken}`,
+        },
+    });
+    const data = await res.data;
+    return data;
+}

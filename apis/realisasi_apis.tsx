@@ -56,6 +56,29 @@ export async function SaveRealisasi(id: any, datas: any, periode: any, year: any
     }
 }
 
+export async function SaveRincianRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/detail', {
+            data: datas,
+            periode: periode,
+            year: year,
+            month: month
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
+}
+
 export async function fetchLogs(id: any, year: any, month: any) {
     try {
         const res = await axios.get(baseUri + '/caram/realisasi/' + id + '/logs', {

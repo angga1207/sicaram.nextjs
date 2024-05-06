@@ -116,7 +116,7 @@ const Sidebar = () => {
                     <PerfectScrollbar className="relative h-[calc(100vh-80px)]">
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
 
-                            <li className="menu nav-item">
+                            {/* <li className="menu nav-item">
                                 <Link href="/" className="group">
                                     <div className="flex items-center">
                                         <FontAwesomeIcon icon={faHomeUser} className='shrink-0 group-hover:!text-primary' />
@@ -125,6 +125,40 @@ const Sidebar = () => {
                                         </span>
                                     </div>
                                 </Link>
+                            </li> */}
+
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'dashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('dashboard')}>
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faHomeUser} className='shrink-0 group-hover:!text-primary' />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                            Dashboard
+                                        </span>
+                                    </div>
+                                    <div className={currentMenu !== 'dashboard' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'dashboard' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/dashboard">
+                                                Dashboard
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link className='text-xs' href="/dashboard/capaian-keuangan">
+                                                Capaian Keuangan
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link className='text-xs' href="/dashboard/capaian-kinerja">
+                                                Capaian Kinerja
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
                             </li>
 
                             {/* Start Here */}
