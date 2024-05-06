@@ -77,22 +77,22 @@ const Header = () => {
             if (!CurrentUser) {
                 serverCheck().then((res) => {
                     if (res.status == 'error') {
-
-                        Swal.fire({
-                            title: 'Terjadi Kesalahan Server',
-                            text: 'Server tidak merespon! <br /> Silahkan untuk reload halaman?',
-                            icon: 'error',
-                            showCancelButton: true,
-                            confirmButtonText: 'Login Ulang',
-                            cancelButtonText: 'Reload',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = '/login';
-                            }
-                            if (result.isDismissed) {
-                                // window.location.reload();
-                            }
-                        });
+                        window.location.href = '/login';
+                        // Swal.fire({
+                        //     title: 'Terjadi Kesalahan Server',
+                        //     text: 'Server tidak merespon! Silahkan untuk reload halaman?',
+                        //     icon: 'error',
+                        //     showCancelButton: true,
+                        //     confirmButtonText: 'Login Ulang',
+                        //     cancelButtonText: 'Reload',
+                        // }).then((result) => {
+                        //     if (result.isConfirmed) {
+                        //         window.location.href = '/login';
+                        //     }
+                        //     if (result.isDismissed) {
+                        //         // window.location.reload();
+                        //     }
+                        // });
                     }
                 });
             }
