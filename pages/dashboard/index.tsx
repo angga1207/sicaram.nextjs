@@ -58,19 +58,6 @@ const Index = () => {
     }, []);
 
     useEffect(() => {
-        setAnggaranSeries([]);
-        chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
-            if (data.status === 'success') {
-                setAnggaranSeries(data.data);
-            }
-        });
-
-        chartKinerja(periode, new Date().getFullYear(), view).then((data) => {
-            if (data.status === 'success') {
-                setKinerjaSeries(data.data);
-            }
-        });
-
         summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
             if (data.status === 'success') {
                 setKinerjaSummary(data.data);
@@ -84,7 +71,6 @@ const Index = () => {
                 setAnggaranSummary(data?.data);
                 setPercentageAnggaranSummary(data?.data?.realisasi?.realisasi / data?.data?.target?.target * 100);
             }
-            console.log(AnggaranSummary, percentageAnggaranSummary)
         });
         getRankInstance(periode, new Date().getFullYear()).then((data) => {
             if (data.status === 'success') {
@@ -92,148 +78,6 @@ const Index = () => {
             }
         });
     }, []);
-
-    // Kinerja Chart
-    const apexChartKinerja: any = {
-        series: [
-            {
-                name: 'Capaian',
-                data: KinerjaSeries?.realisasi?.map((item: any) => item.realisasi),
-            },
-        ],
-        options: {
-            chart: {
-                height: 350,
-                type: 'bar',
-                fontFamily: 'Nunito, sans-serif',
-                toolbar: {
-                    show: false,
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                show: true,
-                width: 0,
-            },
-            colors: ['#000080'], // target, capaian
-            xaxis: {
-                labels: {
-                    show: true,
-                },
-                // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-                categories: KinerjaSeries?.realisasi?.map((item: any) => item.month_name) ?? [],
-            },
-            yaxis: {
-                show: false,
-                labels: {
-                    show: true,
-                    formatter: (value: number) => {
-                        return value + ' %';
-                    },
-                },
-                max: 100,
-            },
-            fill: {
-                // opacity: 1,
-                type: 'gradient',
-                gradient: {
-                    shade: 'light',
-                    type: "vertical",
-                    shadeIntensity: 0.5,
-                    gradientToColors: undefined,
-                    inverseColors: true,
-                    opacityFrom: 1,
-                    opacityTo: 1,
-                    stops: [0, 50, 100],
-                    colorStops: []
-                },
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '90%',
-                    borderRadius: 5,
-                    borderRadiusApplication: 'around',
-                    borderRadiusWhenStacked: 'last',
-                },
-            },
-            legend: {
-                show: false,
-            },
-            grid: {
-                show: false,
-                xaxis: {
-                    lines: {
-                        show: false,
-                    },
-                },
-                padding: {
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                },
-            },
-        },
-    };
-
-    const apexChartKinerja2: any = {
-        // series: [44],
-        series: [KinerjaSummary?.realisasi?.toFixed(2) ?? 0],
-        options: {
-            chart: {
-                height: 280,
-                type: "radialBar",
-            },
-
-            colors: ["#4361ee"],
-            plotOptions: {
-                radialBar: {
-                    hollow: {
-                        margin: 0,
-                        size: "70%",
-                        background: "#293450"
-                    },
-                    track: {
-                        dropShadow: {
-                            enabled: true,
-                            top: 2,
-                            left: 0,
-                            blur: 4,
-                            opacity: 0.15
-                        }
-                    },
-                    dataLabels: {
-                        name: {
-                            offsetY: -10,
-                            color: "#fff",
-                            fontSize: "13px"
-                        },
-                        value: {
-                            color: "#fff",
-                            fontSize: "30px",
-                            show: true
-                        }
-                    }
-                }
-            },
-            fill: {
-                type: "gradient",
-                gradient: {
-                    shade: "dark",
-                    type: "vertical",
-                    gradientToColors: ["#20E647"],
-                    stops: [0, 100]
-                }
-            },
-            stroke: {
-                lineCap: "round"
-            },
-            labels: ["Rata-Rata Laporan Kinerja"],
-        }
-    };
 
     return (
         <>
