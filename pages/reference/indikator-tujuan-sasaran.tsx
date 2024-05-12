@@ -347,7 +347,7 @@ const Index = () => {
                                                             reverseButtons: true
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
-                                                                deleteData(data?.id);
+                                                                // deleteData(data?.id);
                                                             }
                                                         }
                                                         );
