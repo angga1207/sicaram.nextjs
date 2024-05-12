@@ -1,6 +1,6 @@
 import { IRootState } from '@/store';
 import { setPageTitle } from '@/store/themeConfigSlice';
-import { faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -21,7 +21,7 @@ import React from "react";
 // import CountUp from 'react-countup';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
-import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchdashboard';
+import { chartRealisasi, summaryRealisasi, getRankInstance, chartKinerja, summaryKinerja } from '@/apis/fetchdashboard';
 import Link from 'next/link';
 
 const Index = () => {
@@ -44,6 +44,9 @@ const Index = () => {
 
     const [AnggaranSeries, setAnggaranSeries] = useState<any>([]);
     const [AnggaranSummary, setAnggaranSummary] = useState<any>([]);
+    const [percentageAnggaranSummary, setPercentageAnggaranSummary] = useState<any>(0);
+    const [KinerjaSeries, setKinerjaSeries] = useState<any>([]);
+    const [KinerjaSummary, setKinerjaSummary] = useState<any>([]);
     const [RankInstances, setRankInstances] = useState<any>([]);
 
     useEffect(() => {
@@ -61,13 +64,27 @@ const Index = () => {
                 setAnggaranSeries(data.data);
             }
         });
+
+        chartKinerja(periode, new Date().getFullYear(), view).then((data) => {
+            if (data.status === 'success') {
+                setKinerjaSeries(data.data);
+            }
+        });
+
+        summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
+            if (data.status === 'success') {
+                setKinerjaSummary(data.data);
+            }
+        });
     }, [view]);
 
     useEffect(() => {
         summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
             if (data.status === 'success') {
-                setAnggaranSummary(data.data);
+                setAnggaranSummary(data?.data);
+                setPercentageAnggaranSummary(data?.data?.realisasi?.realisasi / data?.data?.target?.target * 100);
             }
+            console.log(AnggaranSummary, percentageAnggaranSummary)
         });
         getRankInstance(periode, new Date().getFullYear()).then((data) => {
             if (data.status === 'success') {
@@ -77,15 +94,11 @@ const Index = () => {
     }, []);
 
     // Kinerja Chart
-    const chartKinerja: any = {
+    const apexChartKinerja: any = {
         series: [
             {
                 name: 'Capaian',
-                data: [44, 55, 41, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-            {
-                name: 'Target',
-                data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+                data: KinerjaSeries?.realisasi?.map((item: any) => item.realisasi),
             },
         ],
         options: {
@@ -104,12 +117,13 @@ const Index = () => {
                 show: true,
                 width: 0,
             },
-            colors: ['#20E647', '#4361ee'], // capaian, target
+            colors: ['#000080'], // target, capaian
             xaxis: {
                 labels: {
                     show: true,
                 },
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                categories: KinerjaSeries?.realisasi?.map((item: any) => item.month_name) ?? [],
             },
             yaxis: {
                 show: false,
@@ -119,6 +133,7 @@ const Index = () => {
                         return value + ' %';
                     },
                 },
+                max: 100,
             },
             fill: {
                 // opacity: 1,
@@ -164,8 +179,9 @@ const Index = () => {
         },
     };
 
-    const chartKinerja2: any = {
-        series: [44],
+    const apexChartKinerja2: any = {
+        // series: [44],
+        series: [KinerjaSummary?.realisasi?.toFixed(2) ?? 0],
         options: {
             chart: {
                 height: 280,
@@ -258,7 +274,7 @@ const Index = () => {
                                     stroke-linecap="round" // square or round
                                     fill="transparent"
                                     stroke-dasharray={754.285714286}
-                                    stroke-dashoffset={(754.285714286) - 59 / 100 * (754.285714286)}
+                                    stroke-dashoffset={(754.285714286) - percentageAnggaranSummary?.toFixed(2) ?? 0 / 100 * (754.285714286)}
                                     className="text-success progress-ring__circle stroke-current group-hover:animate-blinkingTextSuccess" />
 
                             </svg>
@@ -272,7 +288,7 @@ const Index = () => {
                                 >
                                 </Player>
                                 <div className="text-5xl font-semibold -mt-10">
-                                    59%
+                                    {percentageAnggaranSummary?.toFixed(2) ?? 0}%
                                 </div>
                             </div>
                             <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
@@ -282,8 +298,9 @@ const Index = () => {
                         <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-500'>
                             Capaian Keuangan
                         </div>
-                        <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-200 duration-500">
-                            Tekan untuk Melihat Rincian Capaian Keuangan
+                        <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-200 duration-500 flex items-center justify-center">
+                            <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
+                            Klik untuk Melihat Rincian Capaian Keuangan
                         </div>
                     </Link>
 
@@ -308,7 +325,7 @@ const Index = () => {
                                     stroke-linecap="round" // square or round
                                     fill="transparent"
                                     stroke-dasharray={754.285714286}
-                                    stroke-dashoffset={(754.285714286) - 23 / 100 * (754.285714286)}
+                                    stroke-dashoffset={(754.285714286) - KinerjaSummary?.realisasi?.toFixed(2) / 100 * (754.285714286)}
                                     className="text-primary progress-ring__circle stroke-current group-hover:animate-blinkingTextPrimary" />
 
                             </svg>
@@ -321,7 +338,7 @@ const Index = () => {
                                 >
                                 </Player>
                                 <div className="text-5xl font-semibold -mt-10">
-                                    23%
+                                    {KinerjaSummary?.realisasi?.toFixed(2)}%
                                 </div>
                             </div>
                             <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
@@ -331,56 +348,14 @@ const Index = () => {
                         <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-500'>
                             Capaian Kinerja
                         </div>
-                        <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-200 duration-500">
-                            Tekan untuk Melihat Rincian Capaian Kinerja
+                        <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-200 duration-500 flex items-center justify-center">
+                            <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
+                            Klik untuk Melihat Rincian Capaian Kinerja
                         </div>
                     </div>
 
                 </div>
 
-                <div className="grid grid-cols-10 gap-4 hidden">
-                    <div className="col-span-10 lg:col-span-7 relative panel">
-                        <h5 className="text-lg font-semibold">
-                            Laporan Kinerja Kabupaten Ogan Ilir
-                        </h5>
-                        <div className="rounded-lg bg-white dark:bg-black">
-                            {isMounted ? (
-                                <ReactApexChart series={chartKinerja.series} options={chartKinerja.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={350} width={'100%'} />
-                            ) : (
-                                <div className="grid min-h-[350px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                    <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="col-span-10 lg:col-span-3 relative panel h-full">
-                        <div className="mb-5 flex items-center justify-between dark:text-white-light">
-                            <h5 className="">
-                                <div className="text-base font-semibold">
-                                    Rata-Rata Laporan Kinerja
-                                </div>
-                                <span className='font-normal text-xs'>
-                                    Per 1 Januari hingga Saat Ini
-                                </span>
-                            </h5>
-                        </div>
-                        <div>
-                            <div className="space-y-6">
-
-                                {isMounted ? (
-                                    <ReactApexChart series={chartKinerja2.series} options={chartKinerja2.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="radialBar" height={350} width={'100%'} />
-                                ) : (
-                                    <div className="grid min-h-[350px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                        <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
-                                    </div>
-                                )}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
         </>
     );

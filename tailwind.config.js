@@ -95,13 +95,13 @@ module.exports = {
         },
         keyframes: {
             blinkingBg: {
-                '0%': { backgroundColor: '#4261ee80' },
-                '16.6%': { backgroundColor: '#4261ee70' },
-                '33.36%': { backgroundColor: '#4261ee60' },
-                '50%': { backgroundColor: '#4261ee40' },
-                '66.6%': { backgroundColor: '#4261ee60' },
-                '82.9%': { backgroundColor: '#4261ee70' },
-                '100%': { backgroundColor: '#4261ee80' }
+                '0%': { backgroundColor: '#eeeeeefc' },
+                '16.6%': { backgroundColor: '#eeeeeebc' },
+                '33.36%': { backgroundColor: '#eeeeeeac' },
+                // '50%': { backgroundColor: '#eeeeee9c' },
+                '66.6%': { backgroundColor: '#eeeeeeac' },
+                '82.9%': { backgroundColor: '#eeeeeebc' },
+                '100%': { backgroundColor: '#eeeeeefc' }
             },
             blinkingTextPrimary: {
                 '0%': { color: '#4261eefc' },
@@ -123,7 +123,7 @@ module.exports = {
             }
         },
         animation: {
-            blinkingBg: 'blinkingBg 5s ease-in-out infinite',
+            blinkingBg: 'blinkingBg 3s ease-in-out infinite',
             blinkingTextPrimary: 'blinkingTextPrimary 2s ease-in-out infinite',
             blinkingTextSuccess: 'blinkingTextSuccess 2s ease-in-out infinite',
         },

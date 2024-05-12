@@ -302,6 +302,52 @@ const Sidebar = () => {
                                                 Tag Sumber Dana
                                             </Link>
                                         </li>
+                                        <li>
+                                            <Link href="/reference/tujuan-sasaran" className='text-xs'>
+                                                Tujuan & Sasaran
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/reference/indikator-tujuan-sasaran" className='text-xs'>
+                                                Indikator Tujuan & Sasaran
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
+
+                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                <IconMinus className="hidden h-5 w-4 flex-none" />
+                                <span>
+                                    Tujuan & Sasaran
+                                </span>
+                            </h2>
+
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'head-tujuan-sasaran' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('head-tujuan-sasaran')}>
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                            Tujuan & Sasaran
+                                        </span>
+                                    </div>
+                                    <div className={currentMenu !== 'head-tujuan-sasaran' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'head-tujuan-sasaran' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/master/tujuan-sasaran" className='text-xs'>
+                                                Master Tujuan & Sasaran
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/master/tujuan-sasaran/perangkat-daerah" className='text-xs'>
+                                                Tujuan & Sasaran Perangkat Daerah
+                                            </Link>
+                                        </li>
                                     </ul>
                                 </AnimateHeight>
                             </li>
@@ -347,6 +393,17 @@ const Sidebar = () => {
                             </li>
 
                             <li className="menu nav-item">
+                                <Link href="/apbd" className="group">
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faCircleDollarToSlot} className='shrink-0 group-hover:!text-primary' />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                            APBD
+                                        </span>
+                                    </div>
+                                </Link>
+                            </li>
+
+                            <li className="menu nav-item">
                                 <Link href="/renja" className="group">
                                     <div className="flex items-center">
                                         <FontAwesomeIcon icon={faFileContract} className='shrink-0 group-hover:!text-primary' />
@@ -357,16 +414,6 @@ const Sidebar = () => {
                                 </Link>
                             </li>
 
-                            <li className="menu nav-item">
-                                <Link href="/apbd" className="group">
-                                    <div className="flex items-center">
-                                        <FontAwesomeIcon icon={faCircleDollarToSlot} className='shrink-0 group-hover:!text-primary' />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                            APBD
-                                        </span>
-                                    </div>
-                                </Link>
-                            </li>
 
 
                             <li className="menu nav-item">
@@ -379,7 +426,7 @@ const Sidebar = () => {
                                     <div className="flex items-center">
                                         <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
                                         <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                            SiCaram
+                                            Realisasi
                                         </span>
                                     </div>
                                 </Link>
@@ -388,8 +435,8 @@ const Sidebar = () => {
                                 <Link href="/" className="group">
                                     <div className="flex items-center">
                                         <FontAwesomeIcon icon={faClipboardCheck} className='shrink-0 group-hover:!text-primary' />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark text-xs">
-                                            Laporan Realisasi
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                            Laporan
                                         </span>
                                     </div>
                                 </Link>

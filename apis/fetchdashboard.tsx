@@ -36,23 +36,94 @@ export async function chartRealisasi(periode: any, year: any, view: any) {
 }
 
 export async function summaryRealisasi(periode: any, year: any) {
-    const res = await axios.get(baseUri + '/dashboard/summary-realisasi?periode=' + periode + '&year=' + year, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/dashboard/summary-realisasi?periode=' + periode + '&year=' + year, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function getRankInstance(periode: any, year: any) {
-    const res = await axios.get(baseUri + '/dashboard/rank-instance?periode=' + periode + '&year=' + year, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/dashboard/rank-instance?periode=' + periode + '&year=' + year, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function chartKinerja(periode: any, year: number, view: any) {
+    try {
+        const res = await axios.get(baseUri + '/dashboard/chart-kinerja?periode=' + periode + '&year=' + year + '&view=' + view, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function summaryKinerja(periode: any, year: any, view: any) {
+    try {
+        const res = await axios.get(baseUri + '/dashboard/summary-kinerja?periode=' + periode + '&year=' + year + '&view=' + view, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function getDetailInstance(slug: any, periode: any, year: any, view: any) {
+    try {
+        const res = await axios.get(baseUri + '/dashboard/instance/' + slug + '?periode=' + periode + '&year=' + year, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                view: view
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }

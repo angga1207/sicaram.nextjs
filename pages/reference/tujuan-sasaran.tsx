@@ -12,8 +12,11 @@ import { Dialog, Transition } from '@headlessui/react';
 import Swal from 'sweetalert2';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Select from 'react-select';
+import { Tab } from '@headlessui/react';
 
-import { getSumberDana, saveSumberDana, deleteSumberDana } from '@/apis/references';
+import { getRefTujuanSasaran, getDetailRefTujuanSasaran, saveRefTujuanSasaran, deleteRefTujuanSasaran } from '@/apis/references';
+import { fetchInstances } from '@/apis/fetchdata';
 
 import IconArrowBackward from '@/components/Icon/IconArrowBackward';
 import IconPlus from '@/components/Icon/IconPlus';
@@ -23,6 +26,7 @@ import IconSearch from '@/components/Icon/IconSearch';
 import IconTrashLines from '@/components/Icon/IconTrashLines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -43,7 +47,7 @@ const Index = () => {
     const ref = useRef<any>(null);
 
     useEffect(() => {
-        dispatch(setPageTitle('Referensi Tag Sumber Dana'));
+        dispatch(setPageTitle('Referensi Tujuan & Sasaran'));
     });
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
@@ -60,6 +64,7 @@ const Index = () => {
     const route = useRouter();
 
     const [datas, setDatas] = useState<any>([]);
+    const [type, setType] = useState<any>('tujuan');
     const [pagination, setPagination] = useState<any>({
         current_page: 1,
         from: 1,
@@ -68,6 +73,10 @@ const Index = () => {
         per_page: 10,
         total: 0,
     });
+    const [periode, setPeriode] = useState(1);
+    const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
+    // const [instance, setInstance] = useState<any>(14);
+    const [instances, setInstances] = useState<any>([]);
     const [isEmptyDatas, setIsEmptyDatas] = useState(false);
     const [search, setSearch] = useState<any>('');
     const [modalInput, setModalInput] = useState(false);
@@ -75,93 +84,89 @@ const Index = () => {
     const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
-        parent_id: null,
         name: '',
-        description: '',
-        status: '',
+        instance_id: instance,
+        type: type,
     });
 
+    useEffect(() => {
+        if (CurrentUser?.role_id !== 9) {
+            fetchInstances().then((data: any) => {
+                setInstances(data.data.map((item: any) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                }));
+                setInstances([
+                    {
+                        value: null,
+                        label: 'KABUPATEN OGAN ILIR'
+                    },
+                    ...data.data.map((item: any) => {
+                        return {
+                            value: item.id,
+                            label: item.name
+                        }
+                    })
+                ]);
+            });
+        }
+    }, []);
 
     useEffect(() => {
         setIsEmptyDatas(false);
-        getSumberDana(search, pagination?.current_page).then((res: any) => {
+        getRefTujuanSasaran(search, pagination?.current_page, instance, type).then((res: any) => {
             if (res.status == 'success') {
-                setDatas(res.data.data);
-                setPagination({
-                    current_page: res.data.current_page,
-                    from: res.data.from,
-                    to: res.data.to,
-                    last_page: res.data.last_page,
-                    per_page: res.data.per_page,
-                    total: res.data.total,
-                });
-                if (res.data.data.length == 0) {
-                    setIsEmptyDatas(true);
-                }
+                setDatas(res.data);
             }
             if (res.status == 'error') {
                 showAlert('error', res.message);
             }
         });
-    }, [search]);
+    }, [search, type, pagination?.current_page, instance]);
 
     const addData = () => {
-        setSaveLoading(false);
         setDataInput({
             inputType: 'create',
             id: '',
             name: '',
-            description: '',
-            status: '',
+            instance_id: instance,
+            type: type,
         });
         setModalInput(true);
-        let div = document.getElementById('input-name');
-        if (div) {
-            div.focus();
-        }
     }
 
-    const editData = (id: any) => {
-        setSaveLoading(false);
-        setDataInput({
-            inputType: 'edit',
-            id: id,
-            name: datas?.find((x: any) => x.id == id)?.name,
-            description: datas?.find((x: any) => x.id == id)?.description,
-            status: datas?.find((x: any) => x.id == id)?.status,
+    const getDetail = (id: any) => {
+        getDetailRefTujuanSasaran(id, type).then((res: any) => {
+            if (res.status == 'success') {
+                setDataInput({
+                    inputType: 'edit',
+                    id: res.data.id,
+                    name: res.data.name,
+                    status: res.data.status,
+                    instance_id: res.data.instance_id,
+                    type: type,
+                });
+                setModalInput(true);
+            }
+            if (res.status == 'error') {
+                showAlert('error', res.message);
+            }
         });
         setModalInput(true);
     }
 
     const save = () => {
         setSaveLoading(true);
-        saveSumberDana(dataInput).then((res: any) => {
-            if (res.status == 'error validation') {
-                setSaveLoading(false);
-                Object.keys(res.message).map((key: any, index: any) => {
-                    let element = document.getElementById('error-' + key);
-                    if (element) {
-                        element.innerHTML = res.message[key][0];
-                    }
-                });
-            }
+        saveRefTujuanSasaran(dataInput).then((res: any) => {
             if (res.status == 'success') {
-                showAlert('success', res.message);
                 setModalInput(false);
-                getSumberDana(search, pagination?.current_page).then((res: any) => {
+                showAlert('success', res.message);
+                setSaveLoading(false);
+                getRefTujuanSasaran(search, pagination?.current_page, instance, type).then((res: any) => {
                     if (res.status == 'success') {
-                        setDatas(res.data.data);
-                        setPagination({
-                            current_page: res.data.current_page,
-                            from: res.data.from,
-                            to: res.data.to,
-                            last_page: res.data.last_page,
-                            per_page: res.data.per_page,
-                            total: res.data.total,
-                        });
-                        if (res.data.data.length == 0) {
-                            setIsEmptyDatas(true);
-                        }
+                        setDatas(res.data);
                     }
                     if (res.status == 'error') {
                         showAlert('error', res.message);
@@ -170,28 +175,18 @@ const Index = () => {
             }
             if (res.status == 'error') {
                 showAlert('error', res.message);
+                setSaveLoading(false);
             }
         });
     }
 
-    const deleteData = (id: any) => {
-        deleteSumberDana(id).then((res: any) => {
+    const deleteData = (id: any, type: any) => {
+        deleteRefTujuanSasaran(id, type).then((res: any) => {
             if (res.status == 'success') {
                 showAlert('success', res.message);
-                getSumberDana(search, pagination?.current_page).then((res: any) => {
+                getRefTujuanSasaran(search, pagination?.current_page, instance, type).then((res: any) => {
                     if (res.status == 'success') {
-                        setDatas(res.data.data);
-                        setPagination({
-                            current_page: res.data.current_page,
-                            from: res.data.from,
-                            to: res.data.to,
-                            last_page: res.data.last_page,
-                            per_page: res.data.per_page,
-                            total: res.data.total,
-                        });
-                        if (res.data.data.length == 0) {
-                            setIsEmptyDatas(true);
-                        }
+                        setDatas(res.data);
                     }
                     if (res.status == 'error') {
                         showAlert('error', res.message);
@@ -208,24 +203,43 @@ const Index = () => {
         <>
             <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5 px-5">
                 <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
-                    Referensi Tag Sumber Dana
+                    Referensi {type === 'tujuan' ? 'Tujuan' : 'Sasaran'}
                 </h2>
                 <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
 
                     <div className="relative">
-                        <form onSubmit={
-                            (e) => {
-                                e.preventDefault();
-                                setSearch(ref?.current?.value);
-                            }
-                        }>
+                        <form
+                            className='flex items-center gap-2'
+                            onSubmit={
+                                (e) => {
+                                    e.preventDefault();
+                                    setSearch(ref?.current?.value);
+                                }
+                            }>
+                            <Select
+                                placeholder="Pilih Perangkat Daerah"
+                                isSearchable={true}
+                                value={instances?.find((item: any) => item.value === instance) ?? null}
+                                className='w-[300px]'
+                                onChange={(value: any) => {
+                                    setInstance(value?.value);
+                                }}
+                                options={instances} />
+
                             <input type="search"
-                                className="form-input rtl:pl-12 ltr:pr-12"
-                                placeholder='Cari Tag Sumber Dana...'
+                                className="form-input w-[200px]"
+                                placeholder={type === 'tujuan' ? 'Cari Tujuan...' : 'Cari Sasaran...'}
+                                // value={search}
                                 onChange={(e) => {
+                                    // setSearch(e.target.value);
                                     const value = e.target.value;
                                     if (value == '') {
-                                        setSearch(value);
+                                        setSearch(value)
+                                    }
+                                }}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        setSearch(ref?.current?.value);
                                     }
                                 }}
                                 ref={ref}
@@ -245,24 +259,73 @@ const Index = () => {
                 </div>
             </div>
 
+            <div className="mr-3 flex border-b border-white-light dark:border-[#191e3a]">
+
+                <div
+                    onClick={(e) => {
+                        setType('tujuan');
+                        setSearch('');
+                        setPagination({
+                            current_page: 1,
+                            from: 1,
+                            to: 1,
+                            last_page: null,
+                            per_page: 10,
+                            total: 0,
+                        });
+                    }}
+                    className={type === 'tujuan' ?
+                        `w-full rounded-tl-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold cursor-pointer` :
+                        `w-full rounded-tl-lg !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary cursor-pointer`}>
+                    Tujuan
+                </div>
+
+                <div
+                    onClick={(e) => {
+                        setType('sasaran');
+                        setSearch('');
+                        setPagination({
+                            current_page: 1,
+                            from: 1,
+                            to: 1,
+                            last_page: null,
+                            per_page: 10,
+                            total: 0,
+                        });
+                    }}
+                    className={type === 'sasaran' ?
+                        `w-full rounded-tr-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold cursor-pointer` :
+                        `w-full rounded-tr-lg !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary cursor-pointer`}>
+                    Sasaran
+                </div>
+
+            </div>
+
             <div className="panel">
                 <div className="table-responsive mb-5">
                     <table className="table-hover">
                         <thead>
                             <tr>
-                                <th className='border !min-w-[300px]'>
-                                    Nama
+                                <th className='!text-center border !min-w-[300px]'>
+                                    Nama {type === 'tujuan' ? 'Tujuan' : 'Sasaran'}
                                 </th>
-                                <th className="!text-center border !w-[100px]'">
+                                <th className='!text-center border !w-[300px]'>
+                                    Perangkat Daerah
+                                </th>
+                                <th className="!text-center border !w-[100px]">
                                     Opt
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
+
                             {datas?.map((data: any, index: any) => (
                                 <tr key={index}>
                                     <td className='border !py-1'>
                                         {data?.name}
+                                    </td>
+                                    <td className='border !py-1 !text-center'>
+                                        {data?.instance?.name ?? 'Kabupaten Ogan Ilir'}
                                     </td>
                                     <td className='border !py-1'>
                                         <div className="flex gap-1 items-center justify-center">
@@ -271,7 +334,7 @@ const Index = () => {
                                                 <button type="button"
                                                     className="btn btn-outline-info px-1.5 py-1.5"
                                                     onClick={() => {
-                                                        editData(data?.id);
+                                                        getDetail(data?.id);
                                                     }}>
                                                     <IconEdit className="w-4 h-4" />
                                                 </button>
@@ -291,7 +354,7 @@ const Index = () => {
                                                             reverseButtons: true
                                                         }).then((result) => {
                                                             if (result.isConfirmed) {
-                                                                deleteData(data?.id);
+                                                                deleteData(data?.id, type);
                                                             }
                                                         }
                                                         );
@@ -351,6 +414,7 @@ const Index = () => {
                                 </tr>
                             )}
                         </tbody>
+
                         {pagination?.last_page > 1 && (
                             <tfoot>
                                 <tr>
@@ -358,24 +422,13 @@ const Index = () => {
                                         <div className="flex items-center justify-center gap-2 py-2">
                                             <button type="button" className="btn btn-outline-info px-1.5 py-1" onClick={() => {
                                                 if (pagination?.current_page > 1) {
-                                                    getSumberDana(search, pagination?.current_page - 1).then((res: any) => {
-                                                        if (res.status == 'success') {
-                                                            setDatas(res.data.data);
-                                                            setPagination({
-                                                                current_page: res.data.current_page,
-                                                                from: res.data.from,
-                                                                to: res.data.to,
-                                                                last_page: res.data.last_page,
-                                                                per_page: res.data.per_page,
-                                                                total: res.data.total,
-                                                            });
-                                                            if (res.data.data.length == 0) {
-                                                                setIsEmptyDatas(true);
-                                                            }
-                                                        }
-                                                        if (res.status == 'error') {
-                                                            showAlert('error', res.message);
-                                                        }
+                                                    setPagination({
+                                                        current_page: pagination?.current_page - 1,
+                                                        from: 1,
+                                                        to: 1,
+                                                        last_page: null,
+                                                        per_page: 10,
+                                                        total: 0,
                                                     });
                                                 }
                                             }}>
@@ -390,24 +443,13 @@ const Index = () => {
 
                                             <button type="button" className="btn btn-outline-info px-1.5 py-1" onClick={() => {
                                                 if (pagination?.current_page < pagination?.last_page) {
-                                                    getSumberDana(search, pagination?.current_page + 1).then((res: any) => {
-                                                        if (res.status == 'success') {
-                                                            setDatas(res.data.data);
-                                                            setPagination({
-                                                                current_page: res.data.current_page,
-                                                                from: res.data.from,
-                                                                to: res.data.to,
-                                                                last_page: res.data.last_page,
-                                                                per_page: res.data.per_page,
-                                                                total: res.data.total,
-                                                            });
-                                                            if (res.data.data.length == 0) {
-                                                                setIsEmptyDatas(true);
-                                                            }
-                                                        }
-                                                        if (res.status == 'error') {
-                                                            showAlert('error', res.message);
-                                                        }
+                                                    setPagination({
+                                                        current_page: pagination?.current_page + 1,
+                                                        from: 1,
+                                                        to: 1,
+                                                        last_page: null,
+                                                        per_page: 10,
+                                                        total: 0,
                                                     });
                                                 }
                                             }}>
@@ -450,7 +492,9 @@ const Index = () => {
                                 <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[40%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                         <h5 className="font-bold text-lg">
-                                            {dataInput?.inputType == 'create' ? 'Tambah Tag Sumber Dana' : 'Edit Tag Sumber Dana'}
+                                            {/* {dataInput?.inputType == 'create' ? 'Tambah Tag Sumber Dana' : 'Edit Tag Sumber Dana'} */}
+                                            {dataInput?.inputType == 'create' ? 'Tambah' : 'Edit'}
+                                            {type === 'tujuan' ? ' Tujuan' : ' Sasaran'}
                                         </h5>
                                         <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalInput(false)}>
                                             <IconX className="w-5 h-5" />
@@ -465,13 +509,14 @@ const Index = () => {
 
                                             <div className="">
                                                 <label className="form-label font-normal text-xs mb-0.5">
-                                                    Nama Tag
+                                                    Nama
+                                                    {type === 'tujuan' ? ' Tujuan' : ' Sasaran'}
                                                 </label>
                                                 <input
                                                     type='text'
                                                     name="name"
                                                     id="input-name"
-                                                    placeholder='Nama tag sumber dana...'
+                                                    placeholder={'Nama ' + (type === 'tujuan' ? 'Tujuan' : 'Sasaran')}
                                                     value={dataInput?.name}
                                                     autoComplete='off'
                                                     autoFocus={true}
@@ -513,6 +558,6 @@ const Index = () => {
 
         </>
     );
-};
+}
 
 export default Index;

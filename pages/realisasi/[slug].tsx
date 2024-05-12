@@ -140,8 +140,8 @@ const Index = () => {
 
     const confirmSave = () => {
         Swal.fire({
-            title: 'Simpan Target Kinerja',
-            text: 'Apakah Anda yakin ingin menyimpan target kinerja ini?',
+            title: 'Simpan Realisasi',
+            text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, Simpan',
@@ -270,41 +270,38 @@ const Index = () => {
                             <thead className='sticky top-0 left-0 z-[1]'>
                                 <tr>
                                     <th rowSpan={2}
-                                        className='!text-center !text-xs !px-2.5 !py-1.5 border-0 !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[150px]'>
+                                        className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[150px]'>
                                         Kode Rekening
                                     </th>
                                     <th rowSpan={2}
-                                        className='!text-center !text-xs !px-2.5 !py-1.5 border-x !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !min-w-[400px]'>
+                                        className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !min-w-[400px]'>
                                         Uraian
                                     </th>
-                                    <th rowSpan={1} colSpan={3}
-                                        className='!text-center !text-xs !px-2.5 !py-1.5 border-x !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !min-w-[250px]'>
+                                    <th rowSpan={1} colSpan={2}
+                                        className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !min-w-[250px]'>
                                         Koefisien
                                     </th>
                                     <th rowSpan={2}
-                                        className='!text-center !text-xs !px-2.5 !py-1.5 border-x !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                        className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                         Harga (Rp)
                                     </th>
                                     <th rowSpan={1} colSpan={2}
-                                        className='!text-center !text-xs !px-2.5 !py-1.5 border-x !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
-                                        Jumlah
+                                        className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                        Jumlah (Rp)
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th className='!text-center !text-xs !px-2.5 !py-1.5 border !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                    <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                         Target
                                     </th>
-                                    <th className='!text-center !text-xs !px-2.5 !py-1.5 border !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                    <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                         Realisasi
                                     </th>
-                                    <th className='!text-center !text-xs !px-2.5 !py-1.5 border !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
-                                        Persentase
+                                    <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                        Anggaran
                                     </th>
-                                    <th className='!text-center !text-xs !px-2.5 !py-1.5 border !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
-                                        Anggaran (Rp)
-                                    </th>
-                                    <th className='!text-center !text-xs !px-2.5 !py-1.5 border !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
-                                        Realisasi (Rp)
+                                    <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                        Realisasi
                                     </th>
                                 </tr>
                             </thead>
@@ -324,7 +321,7 @@ const Index = () => {
                                                         </td>
 
                                                         <td className='border !border-slate-400 dark:!border-slate-100'
-                                                            colSpan={data.long ? 5 : 1}
+                                                            colSpan={data.long ? 4 : 1}
                                                         >
                                                             <div className="text-xs font-semibold">
                                                                 {data.type == 'rekening' && (
@@ -615,7 +612,7 @@ const Index = () => {
                                                                         <tr>
                                                                             <td className='border-y !border-slate-400 dark:!border-slate-100'>
                                                                             </td>
-                                                                            <td className='border !border-slate-400 dark:!border-slate-100' colSpan={5}>
+                                                                            <td className='border !border-slate-400 dark:!border-slate-100' colSpan={4}>
                                                                                 <div className="text-xs font-semibold">
                                                                                     {rincian?.title}
                                                                                 </div>
@@ -904,7 +901,7 @@ const Index = () => {
                                                                                                 </Tippy>
                                                                                             </div>
                                                                                         </td>
-                                                                                        <td className='border !border-slate-400 dark:!border-slate-100'>
+                                                                                        {/* <td className='border !border-slate-400 dark:!border-slate-100'>
                                                                                             <div className="flex items-center gap-x-1">
                                                                                                 <div>
                                                                                                     <input
@@ -1001,7 +998,7 @@ const Index = () => {
                                                                                                     / {keterangan?.target_persentase_kinerja}%
                                                                                                 </div>
                                                                                             </div>
-                                                                                        </td>
+                                                                                        </td> */}
                                                                                         <td className='border !border-slate-400 dark:!border-slate-100'>
                                                                                             <div className="text-xs text-end px-2">
                                                                                                 {new Intl.NumberFormat('id-ID', {

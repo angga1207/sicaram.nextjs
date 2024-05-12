@@ -24,10 +24,10 @@ import IconX from '../../components/Icon/IconX';
 import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconSearch from '../../components/Icon/IconSearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight, faArrowUp, faBusinessTime, faCalendarAlt, faCalendarPlus, faCheck, faCheckCircle, faCheckToSlot, faClipboardCheck, faCog, faEdit, faEnvelopeCircleCheck, faEye, faFlagCheckered, faHourglassHalf, faReply, faReplyAll, faSave, faStopwatch20, faTimesCircle, faTrashAlt, faUndo, faUser, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faArrowUp, faBusinessTime, faCalendarAlt, faCalendarPlus, faCheck, faCheckCircle, faCheckToSlot, faClipboardCheck, faCloudUploadAlt, faCog, faEdit, faEnvelopeCircleCheck, faEye, faFlagCheckered, faHourglassHalf, faReply, faReplyAll, faSave, faStopwatch20, faTimesCircle, faTrashAlt, faUndo, faUser, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchPeriodes, fetchInstances, fetchSatuans, fetchPrograms, fetchProgramsAPBD, fetchAPBD, fetchDetailApbdKegiatan, fetchDetailApbdSubKegiatan, fetchApbdValidatorNotes } from '@/apis/fetchdata';
-import { saveApbdKegiatan, saveApbdSubKegiatan, postApbdNotes } from '@/apis/storedata'
+import { saveApbdKegiatan, saveApbdSubKegiatan, postApbdNotes, uploadExcelApbd } from '@/apis/storedata'
 
 import IconArrowLeft from '@/components/Icon/IconArrowLeft';
 import IconArrowBackward from '@/components/Icon/IconArrowBackward';
@@ -94,11 +94,16 @@ const Index = () => {
     const [status, setStatus] = useState<any>(null);
     const [disabledSentMessage, setDisabledSentMessage] = useState(false);
     const [modalInput, setModalInput] = useState(false);
+    const [modalUploadExcel, setModalUploadExcel] = useState(false);
     const [tabModal, setTabModal] = useState('kinerja');
     const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         type: null,
         id: '',
+    });
+    const [dataInputExcel, setDataInputExcel] = useState<any>({
+        date: null,
+        file: null,
     });
 
     const resetDataInput = () => {
@@ -388,6 +393,37 @@ const Index = () => {
         }
     }
 
+    const saveExcel = () => {
+        uploadExcelApbd(dataInputExcel).then((data: any) => {
+            if (data.status == 'success') {
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: data?.message,
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonText: 'Tutup',
+                }).then((result) => {
+                    setModalUploadExcel(false);
+                    setDataInputExcel({
+                        date: null,
+                        file: null,
+                    });
+                });
+            }
+            else {
+                Swal.fire({
+                    title: 'Gagal',
+                    text: data?.message,
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Tutup',
+                }).then((result) => {
+                    return;
+                });
+            }
+        });
+    }
+
     useEffect(() => {
         document.getElementById('textarea-message')?.classList.remove('border-red-500');
         document.getElementById('textarea-message')?.classList.remove('focus:border-red-500');
@@ -453,6 +489,17 @@ const Index = () => {
                     </h2>
                     <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
 
+                        <div className="">
+                            <button
+                                type='button'
+                                onClick={() => {
+                                    setModalUploadExcel(true)
+                                }}
+                                className='btn btn-sm btn-warning'>
+                                Upload Rekap 5
+                            </button>
+                        </div>
+
                         {!instance ? (
                             <>
                                 <div className="relative">
@@ -494,6 +541,17 @@ const Index = () => {
                             <Tippy content={data.name} placement="top">
                                 <div className="panel h-[84px] p-2.5 rounded-md flex items-center group cursor-pointer hover:bg-primary-light"
                                     onClick={(e) => {
+                                        Swal.fire({
+                                            title: 'Mohon Maaf',
+                                            text: 'Fitur sedang dalam perbaikan?',
+                                            icon: 'warning',
+                                            showCancelButton: false,
+                                            // confirmButtonText: 'Ya, saya yakin',
+                                            cancelButtonText: 'Tidak',
+                                        }).then((result) => {
+                                            return;
+                                        });
+                                        return;
                                         pickInstance(data?.id)
                                     }}>
                                     <div className="w-20 h-[84px] -m-2.5 ltr:mr-4 rtl:ml-4 ltr:rounded-l-md rtl:rounded-r-md transition-all duration-700 group-hover:scale-110 bg-slate-200 flex-none">
@@ -543,23 +601,41 @@ const Index = () => {
                                                 return (
                                                     <tr className='hover:bg-slate-100 dark:hover:bg-slate-600 cursor-pointer group'>
                                                         <td className='!text-end !py-5'
-                                                            onClick={(e) =>
+                                                            onClick={(e) => {
+                                                                Swal.fire({
+                                                                    title: 'Mohon Maaf',
+                                                                    text: 'Fitur sedang dalam perbaikan?',
+                                                                    icon: 'warning',
+                                                                    showCancelButton: false,
+                                                                    cancelButtonText: 'Tidak',
+                                                                }).then((result) => {
+                                                                    return;
+                                                                });
+                                                                return;
                                                                 fetchLoading == false && (
-                                                                    <>
-                                                                        {pickProgram(data?.id)}
-                                                                    </>
-                                                                )}>
+                                                                    pickProgram(data?.id)
+                                                                )
+                                                            }}>
                                                             <div className='group-hover:font-semibold'>
                                                                 {data?.fullcode}
                                                             </div>
                                                         </td>
                                                         <td
-                                                            onClick={(e) =>
+                                                            onClick={(e) => {
+                                                                Swal.fire({
+                                                                    title: 'Mohon Maaf',
+                                                                    text: 'Fitur sedang dalam perbaikan?',
+                                                                    icon: 'warning',
+                                                                    showCancelButton: false,
+                                                                    cancelButtonText: 'Tidak',
+                                                                }).then((result) => {
+                                                                    return;
+                                                                });
+                                                                return;
                                                                 fetchLoading == false && (
-                                                                    <>
-                                                                        {pickProgram(data?.id)}
-                                                                    </>
-                                                                )}>
+                                                                    pickProgram(data?.id)
+                                                                )
+                                                            }}>
                                                             <div className='group-hover:font-semibold'>
                                                                 {data?.name}
                                                             </div>
@@ -1762,9 +1838,552 @@ const Index = () => {
                 </div>
             )}
 
+            {instance && (
+                <Transition appear show={modalInput} as={Fragment}>
+                    <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0" />
+                        </Transition.Child>
+                        <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen px-4">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
+                                        <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                            <h5 className="font-bold text-lg">
+                                                {dataInput?.type == 'kegiatan' ? (
+                                                    <>
+                                                        {dataInput?.inputType == 'create' ? 'Tambah APBD Kegiatan' : 'Edit APBD Kegiatan'}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {dataInput?.inputType == 'create' ? 'Tambah APBD Sub Kegiatan' : 'Edit APBD Sub Kegiatan'}
+                                                    </>
+                                                )}
+                                            </h5>
+                                            <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalInput(false)}>
+                                                <IconX></IconX>
+                                            </button>
+                                        </div>
+                                        <div className="p-5">
 
-            <Transition appear show={modalInput} as={Fragment}>
-                <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>
+
+                                            <div className="space-y-3">
+                                                {dataInput?.type == 'kegiatan' && (
+                                                    <>
+                                                        <div className="xl:col-span-2">
+                                                            <div className="font-semibold text-md">
+                                                                {dataInput?.kegiatan_name}
+                                                            </div>
+                                                            <div className="text-sm text-slate-500">
+                                                                {dataInput?.kegiatan_fullcode}
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {dataInput?.type == 'sub-kegiatan' && (
+                                                    <>
+                                                        <div className="xl:col-span-2">
+                                                            <div className="font-semibold text-md">
+                                                                {dataInput?.sub_kegiatan_name}
+                                                            </div>
+                                                            <div className="text-sm text-slate-500">
+                                                                {dataInput?.sub_kegiatan_fullcode}
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
+
+
+                                                {dataInput?.type == 'sub-kegiatan' && (
+                                                    <div className="w-full flex items-center justify-between rounded border divide-x cursor-pointer">
+                                                        <div
+                                                            onClick={(e) => {
+                                                                setTabModal('kinerja');
+                                                            }}
+                                                            className={tabModal == 'kinerja' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
+                                                            Target Kinerja
+                                                        </div>
+                                                        <div
+                                                            onClick={(e) => {
+                                                                setTabModal('anggaran');
+                                                            }}
+                                                            className={tabModal == 'anggaran' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
+                                                            Anggaran
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {tabModal == 'kinerja' && (
+                                                    <div className="xl:col-span-2">
+                                                        <div className="underline font-semibold text-slate-500 text-base">
+                                                            Target Kinerja APBD Tahun {year}
+                                                        </div>
+                                                        <div className="space-y-2 divide-y mt-4">
+                                                            {dataInput?.indicators?.map((data: any, index: number) => {
+                                                                return (
+                                                                    <>
+                                                                        <div className="flex flex-nowrap overflow-y-auto items-center justify-between py-1 gap-y-4">
+                                                                            <div className="grow w-[500px] flex items-center">
+                                                                                <FontAwesomeIcon icon={faArrowRight} className="w-2.5 h-2.5 inline-block mr-2 text-slate-400" />
+                                                                                <span>
+                                                                                    {data?.name}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="w-[400px] text-center">
+                                                                                <div className="flex group">
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        value={dataInput?.indicators?.[index]?.value ?? ''}
+                                                                                        onChange={(e) => {
+                                                                                            const value = e.target.value ?? 0;
+                                                                                            setDataInput((prev: any) => {
+                                                                                                const newIndicators = prev?.indicators?.map((item: any, i: any) => {
+                                                                                                    if (i == index) {
+                                                                                                        return {
+                                                                                                            ...item,
+                                                                                                            value: value
+                                                                                                        }
+                                                                                                    }
+                                                                                                    return item;
+                                                                                                }
+                                                                                                );
+                                                                                                return {
+                                                                                                    ...prev,
+                                                                                                    indicators: newIndicators
+                                                                                                }
+                                                                                            });
+                                                                                            setUnsave(true);
+                                                                                        }}
+                                                                                        placeholder="Target Kinerja..."
+                                                                                        className="form-input ltr:rounded-r-none
+                                                                                           rtl:rounded-l-none group-focus-within:border-indigo-400 cursor-pointer" />
+
+                                                                                    <select
+                                                                                        value={dataInput?.indicators?.[index]?.satuan_id ?? ''}
+                                                                                        onChange={(e) => {
+                                                                                            const satuan_id = e.target.value;
+                                                                                            setDataInput((prev: any) => {
+                                                                                                const newIndicators = prev?.indicators?.map((item: any, i: any) => {
+                                                                                                    if (i == index) {
+                                                                                                        return {
+                                                                                                            ...item,
+                                                                                                            satuan_id: satuan_id
+                                                                                                        }
+                                                                                                    }
+                                                                                                    return item;
+                                                                                                }
+                                                                                                );
+                                                                                                return {
+                                                                                                    ...prev,
+                                                                                                    indicators: newIndicators
+                                                                                                }
+                                                                                            });
+                                                                                            setUnsave(true);
+                                                                                        }}
+                                                                                        className="form-select ltr:rounded-l-none rtl:rounded-r-none ltr:border-l-0 rtl:border-r-0  group-focus-within:border-indigo-400 cursor-pointer">
+                                                                                        <option value="" hidden>Pilih Satuan</option>
+                                                                                        {satuans?.map((data: any, index: number) => {
+                                                                                            return (
+                                                                                                <>
+                                                                                                    <option value={data?.id}>
+                                                                                                        {data?.name}
+                                                                                                    </option>
+                                                                                                </>
+                                                                                            )
+                                                                                        })}
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </>
+                                                                )
+                                                            })}
+
+                                                            <div className="pt-4">
+                                                                <div className="text-xs text-slate-500">
+                                                                    Persentase Target Kinerja (%)
+                                                                </div>
+                                                                <div className="flex group w-full lg:w-1/2">
+                                                                    <input
+                                                                        type="text"
+                                                                        min={0}
+                                                                        max={100}
+                                                                        value={dataInput?.percent_kinerja ?? 0}
+                                                                        onChange={(e: any) => {
+                                                                            if (e.target.value > 100) {
+                                                                                e.target.value = 100;
+                                                                            }
+                                                                            if (e.target.value.length > 3) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                            const value = e.target.value ?? 0;
+
+                                                                            setDataInput((prev: any) => {
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    percent_kinerja: value
+                                                                                }
+                                                                            });
+                                                                            setUnsave(true);
+                                                                        }}
+                                                                        onKeyDown={(e: any) => {
+                                                                            if (
+                                                                                !(
+                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                    e.keyCode == 8 ||
+                                                                                    e.keyCode == 46 ||
+                                                                                    e.keyCode == 37 ||
+                                                                                    e.keyCode == 39
+                                                                                )
+                                                                            ) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+                                                                        placeholder="Target Kinerja..."
+                                                                        className="form-input ltr:rounded-r-none
+                                                                                           rtl:rounded-l-none group-focus-within:border-indigo-400 cursor-pointer" />
+                                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
+                                                                        %
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {(tabModal == 'anggaran' && dataInput?.type == 'sub-kegiatan') && (
+                                                    <div className="xl:col-span-2">
+                                                        <div className="underline font-semibold text-base">
+                                                            APBD Tahun {year}
+                                                        </div>
+
+                                                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
+
+                                                            <div>
+                                                                <label className='text-sm text-slate-500 font-normal'>
+                                                                    Anggaran Belanja Operasional
+                                                                </label>
+                                                                <div className="flex group">
+                                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
+                                                                        Rp.
+                                                                    </div>
+                                                                    <input
+                                                                        type="text"
+                                                                        onChange={(e) => {
+                                                                            e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                                                            let value: any = e.target.value ?? 0;
+                                                                            if (value > 0) {
+                                                                                value = value.replace(/^0+/, '');
+                                                                            }
+                                                                            if (value == '') value = 0;
+                                                                            setDataInput((prev: any) => {
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    anggaran: {
+                                                                                        ...prev?.anggaran,
+                                                                                        anggaran_operasi: value
+                                                                                    },
+                                                                                    total_anggaran:
+                                                                                        parseInt(value ? value?.replace(/\./g, '') : 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_modal.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_tidak_terduga.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_transfer.toString().replace(/\./g, '') ?? 0)
+                                                                                }
+                                                                            });
+                                                                            setUnsave(true);
+                                                                        }}
+
+                                                                        onKeyDown={(e) => {
+                                                                            if (
+                                                                                !(
+                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                    e.keyCode == 8 ||
+                                                                                    e.keyCode == 46 ||
+                                                                                    e.keyCode == 37 ||
+                                                                                    e.keyCode == 39
+                                                                                )
+                                                                            ) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+
+                                                                        value={dataInput?.anggaran?.anggaran_operasi ?? ''}
+                                                                        placeholder="Anggaran Belanja Operasional"
+                                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div>
+                                                                <label className='text-sm text-slate-500 font-normal'>
+                                                                    Anggaran Belanja Modal
+                                                                </label>
+                                                                <div className="flex group">
+                                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
+                                                                        Rp.
+                                                                    </div>
+                                                                    <input
+                                                                        type="text"
+                                                                        onChange={(e) => {
+                                                                            e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                                                            let value: any = e.target.value ?? 0;
+                                                                            if (value > 0) {
+                                                                                value = value.replace(/^0+/, '');
+                                                                            }
+                                                                            if (value == '') value = 0;
+                                                                            setDataInput((prev: any) => {
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    anggaran: {
+                                                                                        ...prev?.anggaran,
+                                                                                        anggaran_modal: value
+                                                                                    },
+                                                                                    total_anggaran:
+                                                                                        parseInt(value ? value?.replace(/\./g, '') : 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_operasi.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_tidak_terduga.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_transfer.toString().replace(/\./g, '') ?? 0)
+                                                                                }
+                                                                            });
+                                                                            setUnsave(true);
+                                                                        }}
+
+                                                                        onKeyDown={(e) => {
+                                                                            if (
+                                                                                !(
+                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                    e.keyCode == 8 ||
+                                                                                    e.keyCode == 46 ||
+                                                                                    e.keyCode == 37 ||
+                                                                                    e.keyCode == 39
+                                                                                )
+                                                                            ) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+                                                                        value={dataInput?.anggaran?.anggaran_modal ?? ''}
+                                                                        placeholder="Anggaran Belanja Modal"
+                                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div>
+                                                                <label className='text-sm text-slate-500 font-normal'>
+                                                                    Anggaran Belanja Tidak Terduga
+                                                                </label>
+                                                                <div className="flex group">
+                                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
+                                                                        Rp.
+                                                                    </div>
+                                                                    <input
+                                                                        type="text"
+                                                                        onChange={(e) => {
+                                                                            e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                                                            let value: any = e.target.value ?? 0;
+                                                                            if (value > 0) {
+                                                                                value = value.replace(/^0+/, '');
+                                                                            }
+                                                                            if (value == '') value = 0;
+                                                                            setDataInput((prev: any) => {
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    anggaran: {
+                                                                                        ...prev?.anggaran,
+                                                                                        anggaran_tidak_terduga: value
+                                                                                    },
+                                                                                    total_anggaran:
+                                                                                        parseInt(value ? value?.replace(/\./g, '') : 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_operasi.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_modal.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_transfer.toString().replace(/\./g, '') ?? 0)
+                                                                                }
+                                                                            });
+                                                                            setUnsave(true);
+                                                                        }}
+
+                                                                        onKeyDown={(e) => {
+                                                                            if (
+                                                                                !(
+                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                    e.keyCode == 8 ||
+                                                                                    e.keyCode == 46 ||
+                                                                                    e.keyCode == 37 ||
+                                                                                    e.keyCode == 39
+                                                                                )
+                                                                            ) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+                                                                        value={dataInput?.anggaran?.anggaran_tidak_terduga ?? ''}
+                                                                        placeholder="Anggaran Belanja Tidak Terduga"
+                                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div>
+                                                                <label className='text-sm text-slate-500 font-normal'>
+                                                                    Anggaran Belanja Transfer
+                                                                </label>
+                                                                <div className="flex group">
+                                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
+                                                                        Rp.
+                                                                    </div>
+                                                                    <input
+                                                                        type="text"
+                                                                        onChange={(e) => {
+                                                                            e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                                                            let value: any = e.target.value ?? 0;
+                                                                            if (value > 0) {
+                                                                                value = value.replace(/^0+/, '');
+                                                                            }
+                                                                            if (value == '') value = 0;
+                                                                            setDataInput((prev: any) => {
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    anggaran: {
+                                                                                        ...prev?.anggaran,
+                                                                                        anggaran_transfer: value
+                                                                                    },
+                                                                                    total_anggaran:
+                                                                                        parseInt(value ? value?.replace(/\./g, '') : 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_operasi.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_modal.toString().replace(/\./g, '') ?? 0) +
+                                                                                        parseInt(prev?.anggaran?.anggaran_tidak_terduga.toString().replace(/\./g, '') ?? 0)
+                                                                                }
+                                                                            });
+                                                                            setUnsave(true);
+                                                                        }}
+
+                                                                        onKeyDown={(e) => {
+                                                                            if (
+                                                                                !(
+                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                    e.keyCode == 8 ||
+                                                                                    e.keyCode == 46 ||
+                                                                                    e.keyCode == 37 ||
+                                                                                    e.keyCode == 39
+                                                                                )
+                                                                            ) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+                                                                        value={dataInput?.anggaran?.anggaran_transfer ?? ''}
+                                                                        placeholder="Anggaran Belanja Transfer"
+                                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div className=""></div>
+
+                                                            <div>
+                                                                <label className='text-sm text-slate-800 font-normal'>
+                                                                    Total Anggaran
+                                                                </label>
+                                                                <div className="flex group">
+                                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
+                                                                        Rp.
+                                                                    </div>
+                                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-slate-400 bg-slate-200 cursor-text">
+                                                                        {new Intl.NumberFormat(`id-ID`).format(dataInput?.total_anggaran)}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className='xl:col-span-2 hidden'>
+                                                    <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
+                                                        Nama Urusan
+                                                        <span className='text-red-600 mx-1'>*</span>
+                                                    </label>
+                                                    {(dataInput?.inputType == 'edit' && dataInput?.name == null) ? (
+                                                        <>
+                                                            <div className="w-full form-input flex items-center gap-2 text-slate-400">
+                                                                <div>
+                                                                    <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
+                                                                </div>
+                                                                <div>
+                                                                    Loading...
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className="">
+                                                                <input
+                                                                    type="text"
+                                                                    name="name"
+                                                                    id="name"
+                                                                    className="form-input"
+                                                                    placeholder="Masukkan Urusan"
+                                                                    value={dataInput?.name}
+                                                                    autoComplete='off'
+                                                                    onChange={(e) => setDataInput({ ...dataInput, name: e.target.value })}
+                                                                />
+                                                                <div id="error-name" className='validation-elements text-red-500 text-xs'></div>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex justify-end items-center mt-4">
+                                                <button type="button" className="btn btn-outline-danger" onClick={() => setModalInput(false)}>
+                                                    <IconX className="w-4 h-4 mr-2" />
+                                                    Batalkan
+                                                </button>
+
+                                                {saveLoading == false ? (
+                                                    <>
+                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => save()}>
+                                                            <IconSave className="w-4 h-4 mr-2" />
+                                                            Simpan
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4 gap-2">
+                                                            <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
+                                                            Menyimpan...
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
+
+                                        </div>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
+                        </div>
+                    </Dialog>
+                </Transition>
+            )}
+
+            <Transition appear show={modalUploadExcel} as={Fragment}>
+                <Dialog as="div" open={modalUploadExcel} onClose={() => setModalUploadExcel(false)}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -1787,7 +2406,7 @@ const Index = () => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                         <h5 className="font-bold text-lg">
                                             {dataInput?.type == 'kegiatan' ? (
@@ -1808,483 +2427,43 @@ const Index = () => {
 
 
                                         <div className="space-y-3">
-                                            {dataInput?.type == 'kegiatan' && (
-                                                <>
-                                                    <div className="xl:col-span-2">
-                                                        <div className="font-semibold text-md">
-                                                            {dataInput?.kegiatan_name}
-                                                        </div>
-                                                        <div className="text-sm text-slate-500">
-                                                            {dataInput?.kegiatan_fullcode}
-                                                        </div>
-                                                    </div>
-                                                </>
-                                            )}
-                                            {dataInput?.type == 'sub-kegiatan' && (
-                                                <>
-                                                    <div className="xl:col-span-2">
-                                                        <div className="font-semibold text-md">
-                                                            {dataInput?.sub_kegiatan_name}
-                                                        </div>
-                                                        <div className="text-sm text-slate-500">
-                                                            {dataInput?.sub_kegiatan_fullcode}
-                                                        </div>
-                                                    </div>
-                                                </>
-                                            )}
+                                            <div className="">
+                                                <input type='date'
+                                                    className='form-input'
+                                                    value={dataInputExcel?.date ?? ''}
+                                                    onChange={(e) => {
+                                                        setDataInputExcel({
+                                                            ...dataInputExcel,
+                                                            date: e.target.value
+                                                        });
+                                                    }} />
+                                            </div>
 
-
-                                            {dataInput?.type == 'sub-kegiatan' && (
-                                                <div className="w-full flex items-center justify-between rounded border divide-x cursor-pointer">
-                                                    <div
-                                                        onClick={(e) => {
-                                                            setTabModal('kinerja');
-                                                        }}
-                                                        className={tabModal == 'kinerja' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
-                                                        Target Kinerja
-                                                    </div>
-                                                    <div
-                                                        onClick={(e) => {
-                                                            setTabModal('anggaran');
-                                                        }}
-                                                        className={tabModal == 'anggaran' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
-                                                        Anggaran
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {tabModal == 'kinerja' && (
-                                                <div className="xl:col-span-2">
-                                                    <div className="underline font-semibold text-slate-500 text-base">
-                                                        Target Kinerja APBD Tahun {year}
-                                                    </div>
-                                                    <div className="space-y-2 divide-y mt-4">
-                                                        {dataInput?.indicators?.map((data: any, index: number) => {
-                                                            return (
-                                                                <>
-                                                                    <div className="flex flex-nowrap overflow-y-auto items-center justify-between py-1 gap-y-4">
-                                                                        <div className="grow w-[500px] flex items-center">
-                                                                            <FontAwesomeIcon icon={faArrowRight} className="w-2.5 h-2.5 inline-block mr-2 text-slate-400" />
-                                                                            <span>
-                                                                                {data?.name}
-                                                                            </span>
-                                                                        </div>
-                                                                        <div className="w-[400px] text-center">
-                                                                            <div className="flex group">
-                                                                                <input
-                                                                                    type="text"
-                                                                                    value={dataInput?.indicators?.[index]?.value ?? ''}
-                                                                                    onChange={(e) => {
-                                                                                        const value = e.target.value ?? 0;
-                                                                                        setDataInput((prev: any) => {
-                                                                                            const newIndicators = prev?.indicators?.map((item: any, i: any) => {
-                                                                                                if (i == index) {
-                                                                                                    return {
-                                                                                                        ...item,
-                                                                                                        value: value
-                                                                                                    }
-                                                                                                }
-                                                                                                return item;
-                                                                                            }
-                                                                                            );
-                                                                                            return {
-                                                                                                ...prev,
-                                                                                                indicators: newIndicators
-                                                                                            }
-                                                                                        });
-                                                                                        setUnsave(true);
-                                                                                    }}
-                                                                                    placeholder="Target Kinerja..."
-                                                                                    className="form-input ltr:rounded-r-none
-                                                                                           rtl:rounded-l-none group-focus-within:border-indigo-400 cursor-pointer" />
-
-                                                                                <select
-                                                                                    value={dataInput?.indicators?.[index]?.satuan_id ?? ''}
-                                                                                    onChange={(e) => {
-                                                                                        const satuan_id = e.target.value;
-                                                                                        setDataInput((prev: any) => {
-                                                                                            const newIndicators = prev?.indicators?.map((item: any, i: any) => {
-                                                                                                if (i == index) {
-                                                                                                    return {
-                                                                                                        ...item,
-                                                                                                        satuan_id: satuan_id
-                                                                                                    }
-                                                                                                }
-                                                                                                return item;
-                                                                                            }
-                                                                                            );
-                                                                                            return {
-                                                                                                ...prev,
-                                                                                                indicators: newIndicators
-                                                                                            }
-                                                                                        });
-                                                                                        setUnsave(true);
-                                                                                    }}
-                                                                                    className="form-select ltr:rounded-l-none rtl:rounded-r-none ltr:border-l-0 rtl:border-r-0  group-focus-within:border-indigo-400 cursor-pointer">
-                                                                                    <option value="" hidden>Pilih Satuan</option>
-                                                                                    {satuans?.map((data: any, index: number) => {
-                                                                                        return (
-                                                                                            <>
-                                                                                                <option value={data?.id}>
-                                                                                                    {data?.name}
-                                                                                                </option>
-                                                                                            </>
-                                                                                        )
-                                                                                    })}
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </>
-                                                            )
-                                                        })}
-
-                                                        <div className="pt-4">
-                                                            <div className="text-xs text-slate-500">
-                                                                Persentase Target Kinerja (%)
-                                                            </div>
-                                                            <div className="flex group w-full lg:w-1/2">
-                                                                <input
-                                                                    type="text"
-                                                                    min={0}
-                                                                    max={100}
-                                                                    value={dataInput?.percent_kinerja ?? 0}
-                                                                    onChange={(e: any) => {
-                                                                        if (e.target.value > 100) {
-                                                                            e.target.value = 100;
-                                                                        }
-                                                                        if (e.target.value.length > 3) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                        const value = e.target.value ?? 0;
-
-                                                                        setDataInput((prev: any) => {
-                                                                            return {
-                                                                                ...prev,
-                                                                                percent_kinerja: value
-                                                                            }
-                                                                        });
-                                                                        setUnsave(true);
-                                                                    }}
-                                                                    onKeyDown={(e: any) => {
-                                                                        if (
-                                                                            !(
-                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                e.keyCode == 8 ||
-                                                                                e.keyCode == 46 ||
-                                                                                e.keyCode == 37 ||
-                                                                                e.keyCode == 39
-                                                                            )
-                                                                        ) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                    }}
-                                                                    placeholder="Target Kinerja..."
-                                                                    className="form-input ltr:rounded-r-none
-                                                                                           rtl:rounded-l-none group-focus-within:border-indigo-400 cursor-pointer" />
-                                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
-                                                                    %
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {(tabModal == 'anggaran' && dataInput?.type == 'sub-kegiatan') && (
-                                                <div className="xl:col-span-2">
-                                                    <div className="underline font-semibold text-base">
-                                                        APBD Tahun {year}
-                                                    </div>
-
-                                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
-
-                                                        <div>
-                                                            <label className='text-sm text-slate-500 font-normal'>
-                                                                Anggaran Belanja Operasional
-                                                            </label>
-                                                            <div className="flex group">
-                                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
-                                                                    Rp.
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    onChange={(e) => {
-                                                                        e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                                                                        let value: any = e.target.value ?? 0;
-                                                                        if (value > 0) {
-                                                                            value = value.replace(/^0+/, '');
-                                                                        }
-                                                                        if (value == '') value = 0;
-                                                                        setDataInput((prev: any) => {
-                                                                            return {
-                                                                                ...prev,
-                                                                                anggaran: {
-                                                                                    ...prev?.anggaran,
-                                                                                    anggaran_operasi: value
-                                                                                },
-                                                                                total_anggaran:
-                                                                                    parseInt(value ? value?.replace(/\./g, '') : 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_modal.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_tidak_terduga.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_transfer.toString().replace(/\./g, '') ?? 0)
-                                                                            }
-                                                                        });
-                                                                        setUnsave(true);
-                                                                    }}
-
-                                                                    onKeyDown={(e) => {
-                                                                        if (
-                                                                            !(
-                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                e.keyCode == 8 ||
-                                                                                e.keyCode == 46 ||
-                                                                                e.keyCode == 37 ||
-                                                                                e.keyCode == 39
-                                                                            )
-                                                                        ) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                    }}
-
-                                                                    value={dataInput?.anggaran?.anggaran_operasi ?? ''}
-                                                                    placeholder="Anggaran Belanja Operasional"
-                                                                    className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div>
-                                                            <label className='text-sm text-slate-500 font-normal'>
-                                                                Anggaran Belanja Modal
-                                                            </label>
-                                                            <div className="flex group">
-                                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
-                                                                    Rp.
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    onChange={(e) => {
-                                                                        e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                                                                        let value: any = e.target.value ?? 0;
-                                                                        if (value > 0) {
-                                                                            value = value.replace(/^0+/, '');
-                                                                        }
-                                                                        if (value == '') value = 0;
-                                                                        setDataInput((prev: any) => {
-                                                                            return {
-                                                                                ...prev,
-                                                                                anggaran: {
-                                                                                    ...prev?.anggaran,
-                                                                                    anggaran_modal: value
-                                                                                },
-                                                                                total_anggaran:
-                                                                                    parseInt(value ? value?.replace(/\./g, '') : 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_operasi.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_tidak_terduga.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_transfer.toString().replace(/\./g, '') ?? 0)
-                                                                            }
-                                                                        });
-                                                                        setUnsave(true);
-                                                                    }}
-
-                                                                    onKeyDown={(e) => {
-                                                                        if (
-                                                                            !(
-                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                e.keyCode == 8 ||
-                                                                                e.keyCode == 46 ||
-                                                                                e.keyCode == 37 ||
-                                                                                e.keyCode == 39
-                                                                            )
-                                                                        ) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                    }}
-                                                                    value={dataInput?.anggaran?.anggaran_modal ?? ''}
-                                                                    placeholder="Anggaran Belanja Modal"
-                                                                    className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div>
-                                                            <label className='text-sm text-slate-500 font-normal'>
-                                                                Anggaran Belanja Tidak Terduga
-                                                            </label>
-                                                            <div className="flex group">
-                                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
-                                                                    Rp.
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    onChange={(e) => {
-                                                                        e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                                                                        let value: any = e.target.value ?? 0;
-                                                                        if (value > 0) {
-                                                                            value = value.replace(/^0+/, '');
-                                                                        }
-                                                                        if (value == '') value = 0;
-                                                                        setDataInput((prev: any) => {
-                                                                            return {
-                                                                                ...prev,
-                                                                                anggaran: {
-                                                                                    ...prev?.anggaran,
-                                                                                    anggaran_tidak_terduga: value
-                                                                                },
-                                                                                total_anggaran:
-                                                                                    parseInt(value ? value?.replace(/\./g, '') : 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_operasi.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_modal.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_transfer.toString().replace(/\./g, '') ?? 0)
-                                                                            }
-                                                                        });
-                                                                        setUnsave(true);
-                                                                    }}
-
-                                                                    onKeyDown={(e) => {
-                                                                        if (
-                                                                            !(
-                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                e.keyCode == 8 ||
-                                                                                e.keyCode == 46 ||
-                                                                                e.keyCode == 37 ||
-                                                                                e.keyCode == 39
-                                                                            )
-                                                                        ) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                    }}
-                                                                    value={dataInput?.anggaran?.anggaran_tidak_terduga ?? ''}
-                                                                    placeholder="Anggaran Belanja Tidak Terduga"
-                                                                    className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div>
-                                                            <label className='text-sm text-slate-500 font-normal'>
-                                                                Anggaran Belanja Transfer
-                                                            </label>
-                                                            <div className="flex group">
-                                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
-                                                                    Rp.
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    onChange={(e) => {
-                                                                        e.target.value = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                                                                        let value: any = e.target.value ?? 0;
-                                                                        if (value > 0) {
-                                                                            value = value.replace(/^0+/, '');
-                                                                        }
-                                                                        if (value == '') value = 0;
-                                                                        setDataInput((prev: any) => {
-                                                                            return {
-                                                                                ...prev,
-                                                                                anggaran: {
-                                                                                    ...prev?.anggaran,
-                                                                                    anggaran_transfer: value
-                                                                                },
-                                                                                total_anggaran:
-                                                                                    parseInt(value ? value?.replace(/\./g, '') : 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_operasi.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_modal.toString().replace(/\./g, '') ?? 0) +
-                                                                                    parseInt(prev?.anggaran?.anggaran_tidak_terduga.toString().replace(/\./g, '') ?? 0)
-                                                                            }
-                                                                        });
-                                                                        setUnsave(true);
-                                                                    }}
-
-                                                                    onKeyDown={(e) => {
-                                                                        if (
-                                                                            !(
-                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                e.keyCode == 8 ||
-                                                                                e.keyCode == 46 ||
-                                                                                e.keyCode == 37 ||
-                                                                                e.keyCode == 39
-                                                                            )
-                                                                        ) {
-                                                                            e.preventDefault();
-                                                                        }
-                                                                    }}
-                                                                    value={dataInput?.anggaran?.anggaran_transfer ?? ''}
-                                                                    placeholder="Anggaran Belanja Transfer"
-                                                                    className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
-                                                            </div>
-                                                        </div>
-
-                                                        <div className=""></div>
-
-                                                        <div>
-                                                            <label className='text-sm text-slate-800 font-normal'>
-                                                                Total Anggaran
-                                                            </label>
-                                                            <div className="flex group">
-                                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] text-slate-500">
-                                                                    Rp.
-                                                                </div>
-                                                                <div className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-slate-400 bg-slate-200 cursor-text">
-                                                                    {new Intl.NumberFormat(`id-ID`).format(dataInput?.total_anggaran)}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            )}
-                                            <div className='xl:col-span-2 hidden'>
-                                                <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
-                                                    Nama Urusan
-                                                    <span className='text-red-600 mx-1'>*</span>
-                                                </label>
-                                                {(dataInput?.inputType == 'edit' && dataInput?.name == null) ? (
-                                                    <>
-                                                        <div className="w-full form-input flex items-center gap-2 text-slate-400">
-                                                            <div>
-                                                                <span className="animate-spin border-4 border-transparent border-l-slate-500 rounded-full w-6 h-6 inline-block align-middle m-auto dark:border-l-dark"></span>
-                                                            </div>
-                                                            <div>
-                                                                Loading...
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <div className="">
-                                                            <input
-                                                                type="text"
-                                                                name="name"
-                                                                id="name"
-                                                                className="form-input"
-                                                                placeholder="Masukkan Urusan"
-                                                                value={dataInput?.name}
-                                                                autoComplete='off'
-                                                                onChange={(e) => setDataInput({ ...dataInput, name: e.target.value })}
-                                                            />
-                                                            <div id="error-name" className='validation-elements text-red-500 text-xs'></div>
-                                                        </div>
-                                                    </>
-                                                )}
+                                            <div className="">
+                                                <input type='file'
+                                                    accept='.xlsx, .xls'
+                                                    className='form-input'
+                                                    onChange={(e: any) => {
+                                                        const file = e?.target?.files[0];
+                                                        setDataInputExcel({
+                                                            ...dataInputExcel,
+                                                            file: file
+                                                        });
+                                                    }} />
                                             </div>
                                         </div>
 
                                         <div className="flex justify-end items-center mt-4">
-                                            <button type="button" className="btn btn-outline-danger" onClick={() => setModalInput(false)}>
+                                            <button type="button" className="btn btn-outline-danger" onClick={() => setModalUploadExcel(false)}>
                                                 <IconX className="w-4 h-4 mr-2" />
                                                 Batalkan
                                             </button>
 
                                             {saveLoading == false ? (
                                                 <>
-                                                    <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => save()}>
-                                                        <IconSave className="w-4 h-4 mr-2" />
-                                                        Simpan APBD
+                                                    <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => saveExcel()}>
+                                                        <FontAwesomeIcon icon={faCloudUploadAlt} className='w-4 h-4 mr-2' />
+                                                        Unggah
                                                     </button>
                                                 </>
                                             ) : (

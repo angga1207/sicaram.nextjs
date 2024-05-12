@@ -1,6 +1,7 @@
 import { IRootState } from '@/store';
+import { useRouter } from 'next/router';
 import { setPageTitle } from '@/store/themeConfigSlice';
-import { faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -22,11 +23,13 @@ import React from "react";
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchdashboard';
+import Link from 'next/link';
 
 const Index = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     useEffect(() => {
-        dispatch(setPageTitle('Dashboard'));
+        dispatch(setPageTitle('Capaian Keuangan'));
     });
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -167,7 +170,9 @@ const Index = () => {
                         // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
 
                         // return jt / m / t
-                        if (value >= 1000000000) {
+                        if (value >= 1000000000000) {
+                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' T';
+                        } else if (value >= 1000000000) {
                             return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
                         } else if (value >= 1000000) {
                             return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
@@ -355,12 +360,9 @@ const Index = () => {
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
                                             {new Date(AnggaranSummary?.target?.updated_at).toLocaleString('id-ID', {
-                                                day: 'numeric',
                                                 month: 'short',
                                                 year: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric'
-                                            })} WIB
+                                            })}
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto">
@@ -378,12 +380,9 @@ const Index = () => {
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
                                             {new Date(AnggaranSummary?.realisasi?.updated_at).toLocaleString('id-ID', {
-                                                day: 'numeric',
                                                 month: 'short',
                                                 year: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric'
-                                            })} WIB
+                                            })}
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">
@@ -421,11 +420,13 @@ const Index = () => {
 
                 <div className="grid grid-cols-10 gap-4">
                     <div className="col-span-10 mb-0 text-center font-bold text-xl">
-                        Peringkat Perangkat Daerah Berdasarkan Capaian Anggaran
+                        Capaian Realisasi Anggaran
+                        <br />
+                        Perangkat Daerah Kabupaten Ogan Ilir
                     </div>
                     <div className="col-span-10 lg:col-span-4 relative h-full">
                         <div className="panel h-full overflow-hidden border-0 p-0">
-                            <div className="min-h-[280px] bg-gradient-to-r from-[#4361ee] to-[#160f6b] p-6">
+                            <div className="min-h-[280px] bg-gradient-to-r from-[#49ee43] to-[#206b0f] p-6">
                                 <div className="flex gap-x-2 items-center justify-between text-white">
                                     <div className="flex-none relative bg-white rounded-full w-32 h-32 shadow">
                                         <div className="absolute top-0 left-0 w-32 h-32 rounded-full animate-blinkingBg"></div>
@@ -459,7 +460,7 @@ const Index = () => {
                                 <div className="mb-5 space-y-1">
                                     <div className="flex items-center justify-between">
                                         <p className="font-semibold text-[#515365]">
-                                            Target Anggaran
+                                            Anggaran
                                         </p>
                                         <p className="text-base">
                                             <span>Rp. </span>
@@ -470,7 +471,7 @@ const Index = () => {
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <p className="font-semibold text-[#515365]">
-                                            Realisasi Anggaran
+                                            Realisasi
                                         </p>
                                         <p className="text-base">
                                             <span>Rp. </span>
@@ -479,11 +480,32 @@ const Index = () => {
                                             </span>
                                         </p>
                                     </div>
+
+                                    <div className="flex items-center justify-center gap-4 pt-4">
+                                        <div className="font-semibold text-md">
+                                            ({RankInstances[0]?.instance_programs_count})
+                                            <span className='text-sm ml-1'>
+                                                Program
+                                            </span>
+                                        </div>
+                                        <div className="font-semibold text-md">
+                                            ({RankInstances[0]?.instance_kegiatans_count})
+                                            <span className='text-sm ml-1'>
+                                                Kegiatan
+                                            </span>
+                                        </div>
+                                        <div className="font-semibold text-md">
+                                            ({RankInstances[0]?.instance_sub_kegiatans_count})
+                                            <span className='text-sm ml-1'>
+                                                Sub Kegiatan
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="flex justify-around px-2 text-center">
-                                    <button type="button" className="btn btn-secondary ltr:mr-2 rtl:ml-2">
+                                    <Link href={`/dashboard/pd/${RankInstances[0]?.instance_alias}`} className="btn btn-outline-success ltr:mr-2 rtl:ml-2">
                                         Lihat Detail
-                                    </button>
+                                    </Link>
                                     <button type="button" className="btn btn-success">
                                         Beri Pujian
                                         <FontAwesomeIcon icon={faThumbsUp} className="w-4 h-4 ml-1" />
@@ -498,6 +520,9 @@ const Index = () => {
                             {RankInstances.map((item: any, index: number) => (
                                 <div
                                     key={`rank-` + index}
+                                    onClick={(e) => {
+                                        router.push(`/dashboard/pd/${item.instance_alias}`);
+                                    }}
                                     className='bg-white dark:bg-[#192A3A] w-full items-center p-4 hover:bg-blue-200 hover:animate-blinkingBg dark:hover:bg-blue-900 rounded shadow cursor-pointer group'
                                 >
                                     <div className="px-4 flex items-center justify-between">
@@ -515,7 +540,7 @@ const Index = () => {
                                                         Capaian Anggaran
                                                     </div>
                                                     <div className="flex gap-4 items-center">
-                                                        <Tippy content="Realisasi Anggaran" theme='success'>
+                                                        <Tippy content="Capaian Anggaran" theme='success'>
                                                             <div className="relative w-40 h-40 cursor-pointer">
                                                                 <svg className="w-full h-full" viewBox="0 0 100 100">
                                                                     <circle
@@ -546,13 +571,13 @@ const Index = () => {
                                                             </div>
                                                         </Tippy>
                                                         <div className="flex flex-col gap-4 justify-start items-start ml-4">
-                                                            <Tippy content="Target Anggaran" theme='dark'>
+                                                            <Tippy content="Nilai Anggaran" theme='dark'>
                                                                 <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Anggaran: </span>
                                                                     Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
                                                                 </div>
                                                             </Tippy>
-                                                            <Tippy content="Realisasi Anggaran" theme='dark'>
+                                                            <Tippy content="Nilai Realisasi" theme='dark'>
                                                                 <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Realisasi: </span>
                                                                     Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
@@ -562,19 +587,19 @@ const Index = () => {
                                                     </div>
                                                     <div className="flex items-center justify-center gap-4">
                                                         <div className="font-semibold">
-                                                            (5)
+                                                            ({item?.instance_programs_count})
                                                             <span className='text-xs ml-1'>
                                                                 Program
                                                             </span>
                                                         </div>
                                                         <div className="font-semibold">
-                                                            (18)
+                                                            ({item?.instance_kegiatans_count})
                                                             <span className='text-xs ml-1'>
                                                                 Kegiatan
                                                             </span>
                                                         </div>
                                                         <div className="font-semibold">
-                                                            (32)
+                                                            ({item?.instance_sub_kegiatans_count})
                                                             <span className='text-xs ml-1'>
                                                                 Sub Kegiatan
                                                             </span>
@@ -587,8 +612,13 @@ const Index = () => {
 
                                         <div className="w-32">
                                             <div className="w-32 h-32 relative rounded-full">
-                                                {/* <div className="opacity-0 group-hover:opacity-100 absolute top-0 left-0 w-20 h-20 rounded-full animate-blinkingBg"></div> */}
                                                 <img src={item.instance_logo} alt={item.instance_name} className='w-full h-full p-1 rounded-full object-contain' />
+                                            </div>
+                                            <div className="mt-4 text-[10px] flex items-center justify-center text-lime-700 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                                <FontAwesomeIcon icon={faAngleDoubleRight} className="w-2 h-2 mr-1" />
+                                                <div className="whitespace-nowrap">
+                                                    Klik untuk Melihat Detail
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -599,6 +629,29 @@ const Index = () => {
                     </div>
                 </div>
 
+            </div>
+
+            <div className="fixed bottom-[110px] z-50 ltr:right-[10px] rtl:left-[10px]">
+                <button
+                    onClick={(e) => {
+                        router.back();
+                    }}
+                    type="button"
+                    className="btn btn-outline-warning animate-pulse rounded-full bg-[#fafafa] p-2 dark:bg-[#060818] dark:hover:bg-warning -rotate-90">
+                    <svg width="24" height="24" className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            opacity="0.5"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M12 20.75C12.4142 20.75 12.75 20.4142 12.75 20L12.75 10.75L11.25 10.75L11.25 20C11.25 20.4142 11.5858 20.75 12 20.75Z"
+                            fill="currentColor"
+                        ></path>
+                        <path
+                            d="M6.00002 10.75C5.69667 10.75 5.4232 10.5673 5.30711 10.287C5.19103 10.0068 5.25519 9.68417 5.46969 9.46967L11.4697 3.46967C11.6103 3.32902 11.8011 3.25 12 3.25C12.1989 3.25 12.3897 3.32902 12.5304 3.46967L18.5304 9.46967C18.7449 9.68417 18.809 10.0068 18.6929 10.287C18.5768 10.5673 18.3034 10.75 18 10.75L6.00002 10.75Z"
+                            fill="currentColor"
+                        ></path>
+                    </svg>
+                </button>
             </div>
         </>
     );

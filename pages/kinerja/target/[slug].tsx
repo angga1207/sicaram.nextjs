@@ -417,7 +417,7 @@ const Index = () => {
                                                                             </div>
                                                                         </div>
                                                                         <div className="">
-                                                                            {(data.is_detail === true) && (
+                                                                            {(data.is_detail === true && month === 1) && (
                                                                                 <>
                                                                                     <Tippy content={`Tambah Rincian Belanja`}>
                                                                                         <button
@@ -487,6 +487,7 @@ const Index = () => {
                                                                                     <textarea
                                                                                         value={rincian?.title}
                                                                                         readOnly={subKegiatan?.status == 'verified' ? true : false}
+                                                                                        disabled={month === 1 ? false : true}
                                                                                         onChange={
                                                                                             (e) => {
                                                                                                 if (subKegiatan?.status == 'verified') {
@@ -515,21 +516,23 @@ const Index = () => {
                                                                                             minHeight: rincian?.title?.split('\n').length > 1 ? '50px' ? rincian?.title?.split('\n').length > 2 ? '75px' : 'unset' : 'unset' : 'unset',
                                                                                             overflow: rincian?.title?.split('\n').length > 1 ? 'hidden' : 'hidden',
                                                                                         }}
-                                                                                        className='form-input w-full border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 resize-none leading-tight'
+                                                                                        className='form-input w-full border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 resize-none leading-tight disabled:opacity-50'
                                                                                         placeholder='Rincian Belanja' />
                                                                                 </div>
 
                                                                                 <div className="">
-                                                                                    <Tippy content={`Hapus Rincian Belanja`}>
-                                                                                        <button
-                                                                                            type='button'
-                                                                                            className='btn bg-danger text-white w-5 h-5 p-1 rounded-full'
-                                                                                            onClick={(e) => {
-                                                                                                confirmDeleteRincianBelanja(index, indexRincian, rincian?.id);
-                                                                                            }}>
-                                                                                            <FontAwesomeIcon icon={faTrashAlt} className='' />
-                                                                                        </button>
-                                                                                    </Tippy>
+                                                                                    {month === 1 && (
+                                                                                        <Tippy content={`Hapus Rincian Belanja`}>
+                                                                                            <button
+                                                                                                type='button'
+                                                                                                className='btn bg-danger text-white w-5 h-5 p-1 rounded-full'
+                                                                                                onClick={(e) => {
+                                                                                                    confirmDeleteRincianBelanja(index, indexRincian, rincian?.id);
+                                                                                                }}>
+                                                                                                <FontAwesomeIcon icon={faTrashAlt} className='' />
+                                                                                            </button>
+                                                                                        </Tippy>
+                                                                                    )}
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -556,6 +559,7 @@ const Index = () => {
                                                                                             <textarea
                                                                                                 value={keterangan?.title}
                                                                                                 readOnly={subKegiatan?.status == 'verified' ? true : false}
+                                                                                                disabled={month === 1 ? false : true}
                                                                                                 onChange={
                                                                                                     (e) => {
                                                                                                         if (subKegiatan?.status == 'verified') {
@@ -588,7 +592,7 @@ const Index = () => {
                                                                                                     minHeight: keterangan?.title?.split('\n').length > 1 ? '50px' ? keterangan?.title?.split('\n').length > 2 ? '75px' : 'unset' : 'unset' : 'unset',
                                                                                                     overflow: keterangan?.title?.split('\n').length > 1 ? 'hidden' : 'hidden',
                                                                                                 }}
-                                                                                                className='form-input border-slate-400 dark:border-slate-100 dark:text-white w-full min-h-8 font-normal text-xs px-1.5 py-1 resize-none leading-tight'
+                                                                                                className='form-input border-slate-400 dark:border-slate-100 dark:text-white w-full min-h-8 font-normal text-xs px-1.5 py-1 resize-none leading-tight disabled:opacity-50'
                                                                                                 placeholder='Keterangan Rincian Belanja' />
                                                                                         </div>
                                                                                     </td>

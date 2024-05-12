@@ -845,6 +845,27 @@ export async function postApbdNotes(periode: any, instance: any, program: any, a
     }
 }
 
+export async function uploadExcelApbd(dataInputExcel: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/upload-apbd', {
+            'file': dataInputExcel?.file,
+            'date': dataInputExcel?.date,
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        })
+        const dataRes = await res.data;
+        return dataRes;
+    } catch (error) {
+        return {
+            'status': 'error',
+            'message': error,
+        }
+    }
+}
+
 // const [remaining, setRemaining] = useState(0);
 // const [progress, setProgress] = useState(0);
 
