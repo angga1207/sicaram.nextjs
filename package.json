@@ -30,6 +30,7 @@
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.2",
     "firebase": "^10.8.0",
+    "lightbox.js-react": "^1.0.7",
     "next": "13.1.2",
     "nextjs-progressbar": "^0.0.16",
     "ni18n": "^1.0.5",
@@ -50,6 +51,7 @@
     "swiper": "^8.4.7",
     "tom-select": "^2.3.1",
     "typescript": "4.9.4",
+    "yet-another-react-lightbox": "^3.18.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

@@ -33,6 +33,28 @@ export async function getMasterData(id: any, year: any, month: any) {
     }
 }
 
+export async function getKeteranganSubKegiatan(idRealisasiSubKegiatan: any, year: any, month: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi-keterangan/' + idRealisasiSubKegiatan + '/get', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                year: year,
+                month: month
+            }
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
+}
+
 export async function SaveRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
     try {
         const res = await axios.post(baseUri + '/caram/realisasi/' + id, {
@@ -70,6 +92,50 @@ export async function SaveRincianRealisasi(id: any, datas: any, periode: any, ye
             }
         });
         // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
+}
+
+export async function SaveKeterangan(idRealisasiSubKegiatan: any, datas: any, year: any, month: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi-keterangan/' + idRealisasiSubKegiatan + '/save', {
+            'id': datas.id,
+            'note': datas.note,
+            'link_map': datas.link_map,
+            'faktor_penghambat': datas.faktor_penghambat,
+            'longitude': datas.longitude,
+            'latitude': datas.latitude,
+            'newFiles': datas.newFiles
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        })
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'no instance'
+        }
+    }
+}
+
+export async function DeleteKeteranganImage(id: any) {
+    // /caram/realisasi-keterangan-delete-file/{id)
+    try {
+        const res = await axios.delete(baseUri + '/caram/realisasi-keterangan-delete-file/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
         const data = await res.data;
         return data;
     } catch (error) {
@@ -140,6 +206,30 @@ export async function sendReplyVerification(id: any, data: any, year: any, month
     } catch (error) {
         return {
             status: 'no instance'
+        }
+    }
+}
+
+export async function getKontrakSPSE(search: any, year: any, kodeSatker: any) {
+    try {
+        // /caram/realisasi-keterangan-fetch-spse-kontrak
+        const res = await axios.get(baseUri + '/caram/realisasi-keterangan-fetch-spse-kontrak', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                kode_satker: kodeSatker,
+                search: search,
+                year: year,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
         }
     }
 }

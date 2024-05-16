@@ -24,6 +24,7 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchdashboard';
 import Link from 'next/link';
+import LoadingSicaram from '@/components/LoadingSicaram';
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -326,11 +327,12 @@ const Index = () => {
                             </div>
                         </div>
                         <div className="rounded-lg bg-white dark:bg-black">
-                            {isMounted ? (
+                            {isMounted && AnggaranSeries?.length !== 0 ? (
                                 <ReactApexChart series={chartAnggaran.series} options={chartAnggaran.options} type="area" height={550} width={'100%'} />
                             ) : (
-                                <div className="grid min-h-[400px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                    <span className="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                                <div className="flex flex-col gap-10 min-h-[550px] items-center justify-center">
+                                    <LoadingSicaram></LoadingSicaram>
+                                    <div className="dots-loading text-xl">Memuat Data...</div>
                                 </div>
                             )}
                         </div>
@@ -359,14 +361,30 @@ const Index = () => {
                                             Anggaran
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
-                                            {new Date(AnggaranSummary?.target?.updated_at).toLocaleString('id-ID', {
-                                                month: 'short',
-                                                year: 'numeric',
-                                            })}
+                                            {AnggaranSummary?.target?.updated_at ? (
+                                                <>
+                                                    {new Date(AnggaranSummary?.target?.updated_at).toLocaleString('id-ID', {
+                                                        month: 'short',
+                                                        year: 'numeric',
+                                                    })}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    -
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto">
-                                        Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target?.target)}
+                                        {AnggaranSummary?.target?.target ? (
+                                            <>
+                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target?.target)}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="dots-loading text-sm">...</div>
+                                            </>
+                                        )}
                                     </span>
                                 </div>
 
@@ -379,14 +397,30 @@ const Index = () => {
                                             Realisasi
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
-                                            {new Date(AnggaranSummary?.realisasi?.updated_at).toLocaleString('id-ID', {
-                                                month: 'short',
-                                                year: 'numeric',
-                                            })}
+                                            {AnggaranSummary?.realisasi?.updated_at ? (
+                                                <>
+                                                    {new Date(AnggaranSummary?.realisasi?.updated_at).toLocaleString('id-ID', {
+                                                        month: 'short',
+                                                        year: 'numeric',
+                                                    })}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    -
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">
-                                        Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi?.realisasi)}
+                                        {AnggaranSummary?.realisasi?.realisasi ? (
+                                            <>
+                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi?.realisasi)}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="dots-loading text-sm">...</div>
+                                            </>
+                                        )}
                                     </span>
                                 </div>
 
@@ -398,8 +432,15 @@ const Index = () => {
                                         Capaian Realisasi
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-slate-800 dark:text-white font-semibold ltr:ml-auto rtl:mr-auto">
-                                        {/* Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi?.realisasi - AnggaranSummary?.target?.target)} */}
-                                        {((AnggaranSummary?.realisasi?.realisasi / AnggaranSummary?.target?.target) * 100).toFixed(2)} %
+                                        {AnggaranSummary?.realisasi?.realisasi ? (
+                                            <>
+                                                {((AnggaranSummary?.realisasi?.realisasi / AnggaranSummary?.target?.target) * 100).toFixed(2)} %
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="dots-loading text-sm">..</div>
+                                            </>
+                                        )}
                                     </span>
                                 </div>
 
@@ -430,14 +471,30 @@ const Index = () => {
                                 <div className="flex gap-x-2 items-center justify-between text-white">
                                     <div className="flex-none relative bg-white rounded-full w-32 h-32 shadow">
                                         <div className="absolute top-0 left-0 w-32 h-32 rounded-full animate-blinkingBg"></div>
-                                        <img src={RankInstances[0]?.instance_logo} alt='award' className='w-32 h-32 object-contain rounded-full p-1 relative z-10 shadow-xl' />
+                                        {RankInstances?.length !== 0 ? (
+                                            <img src={RankInstances[0]?.instance_logo} alt='award' className='w-32 h-32 object-contain rounded-full p-1 relative z-10 shadow-xl' />
+                                        ) : (
+                                            <div className="animate-pulse w-32 h-32 bg-slate-200 rounded-full"></div>
+                                        )}
                                     </div>
                                     <div className="text-xl font-semibold line-clamp-4 cursor-pointer">
                                         <div className="text-md">
-                                            {RankInstances[0]?.instance_code}
+                                            {RankInstances?.length !== 0 ? (
+                                                <>
+                                                    {RankInstances[0]?.instance_code}
+                                                </>
+                                            ) : (
+                                                <div className="animate-pulse w-full h-[25px] bg-slate-200 rounded"></div>
+                                            )}
                                         </div>
-                                        {RankInstances[0]?.instance_name}
-                                        {RankInstances[0]?.instance_alias ? ` (${RankInstances[0]?.instance_alias})` : ''}
+                                        {RankInstances?.length !== 0 ? (
+                                            <>
+                                                {RankInstances[0]?.instance_name}
+                                                {RankInstances[0]?.instance_alias ? ` (${RankInstances[0]?.instance_alias})` : ''}
+                                            </>
+                                        ) : (
+                                            <div className="animate-pulse w-full h-[25px] bg-slate-200 rounded"></div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -482,34 +539,42 @@ const Index = () => {
                                     </div>
 
                                     <div className="flex items-center justify-center gap-4 pt-4">
-                                        <div className="font-semibold text-md">
-                                            ({RankInstances[0]?.instance_programs_count})
-                                            <span className='text-sm ml-1'>
-                                                Program
-                                            </span>
-                                        </div>
-                                        <div className="font-semibold text-md">
-                                            ({RankInstances[0]?.instance_kegiatans_count})
-                                            <span className='text-sm ml-1'>
-                                                Kegiatan
-                                            </span>
-                                        </div>
-                                        <div className="font-semibold text-md">
-                                            ({RankInstances[0]?.instance_sub_kegiatans_count})
-                                            <span className='text-sm ml-1'>
-                                                Sub Kegiatan
-                                            </span>
-                                        </div>
+                                        {RankInstances?.length !== 0 && (
+                                            <>
+                                                <div className="font-semibold text-md">
+                                                    ({RankInstances[0]?.instance_programs_count})
+                                                    <span className='text-sm ml-1'>
+                                                        Program
+                                                    </span>
+                                                </div>
+                                                <div className="font-semibold text-md">
+                                                    ({RankInstances[0]?.instance_kegiatans_count})
+                                                    <span className='text-sm ml-1'>
+                                                        Kegiatan
+                                                    </span>
+                                                </div>
+                                                <div className="font-semibold text-md">
+                                                    ({RankInstances[0]?.instance_sub_kegiatans_count})
+                                                    <span className='text-sm ml-1'>
+                                                        Sub Kegiatan
+                                                    </span>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex justify-around px-2 text-center">
-                                    <Link href={`/dashboard/pd/${RankInstances[0]?.instance_alias}`} className="btn btn-outline-success ltr:mr-2 rtl:ml-2">
-                                        Lihat Detail
-                                    </Link>
-                                    <button type="button" className="btn btn-success">
-                                        Beri Pujian
-                                        <FontAwesomeIcon icon={faThumbsUp} className="w-4 h-4 ml-1" />
-                                    </button>
+                                    {RankInstances?.length !== 0 && (
+                                        <>
+                                            <Link href={`/dashboard/pd/${RankInstances[0]?.instance_alias}`} className="btn btn-outline-success ltr:mr-2 rtl:ml-2">
+                                                Lihat Detail
+                                            </Link>
+                                            <button type="button" className="btn btn-success hidden">
+                                                Beri Pujian
+                                                <FontAwesomeIcon icon={faThumbsUp} className="w-4 h-4 ml-1" />
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -517,6 +582,11 @@ const Index = () => {
                     <div className="col-span-10 lg:col-span-6">
 
                         <div className='space-y-2 h-full lg:h-[calc(100vh-200px)] overflow-x-auto'>
+                            {RankInstances?.length === 0 && (
+                                <div className='panel h-full shadow-xl'>
+                                    <LoadingSicaram></LoadingSicaram>
+                                </div>
+                            )}
                             {RankInstances.map((item: any, index: number) => (
                                 <div
                                     key={`rank-` + index}

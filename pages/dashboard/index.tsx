@@ -23,6 +23,7 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 import { chartRealisasi, summaryRealisasi, getRankInstance, chartKinerja, summaryKinerja } from '@/apis/fetchdashboard';
 import Link from 'next/link';
+import LoadingSicaram from '@/components/LoadingSicaram';
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -72,11 +73,6 @@ const Index = () => {
                 setPercentageAnggaranSummary(data?.data?.realisasi?.realisasi / data?.data?.target?.target * 100);
             }
         });
-        getRankInstance(periode, new Date().getFullYear()).then((data) => {
-            if (data.status === 'success') {
-                setRankInstances(data.data);
-            }
-        });
     }, []);
 
     return (
@@ -98,47 +94,53 @@ const Index = () => {
 
                     <Link href={`/dashboard/capaian-keuangan`}
                         className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
-                        <div className="flex items-center justify-center cursor-pointer">
-                            <svg className="transform -rotate-90 w-[360px] h-[360px]">
-                                <circle
-                                    cx="180"
-                                    cy="180"
-                                    r="120"
-                                    stroke="currentColor"
-                                    stroke-width="60"
-                                    fill="transparent"
-                                    className="text-dark-light" />
+                        {AnggaranSummary?.length === 0 && (
+                            <div className="w-[360px] h-[360px] flex items-center justify-center">
+                                <LoadingSicaram></LoadingSicaram>
+                            </div>
+                        )}
+                        {AnggaranSummary?.length !== 0 && (
+                            <div className="flex items-center justify-center cursor-pointer">
+                                <svg className="transform -rotate-90 w-[360px] h-[360px]">
+                                    <circle
+                                        cx="180"
+                                        cy="180"
+                                        r="120"
+                                        stroke="currentColor"
+                                        stroke-width="60"
+                                        fill="transparent"
+                                        className="text-dark-light" />
 
-                                <circle
-                                    cx="180"
-                                    cy="180"
-                                    r="120"
-                                    stroke="currentColor"
-                                    stroke-width="60"
-                                    stroke-linecap="round" // square or round
-                                    fill="transparent"
-                                    stroke-dasharray={754.285714286}
-                                    stroke-dashoffset={(754.285714286) - percentageAnggaranSummary?.toFixed(2) ?? 0 / 100 * (754.285714286)}
-                                    className="text-success progress-ring__circle stroke-current group-hover:animate-blinkingTextSuccess" />
+                                    <circle
+                                        cx="180"
+                                        cy="180"
+                                        r="120"
+                                        stroke="currentColor"
+                                        strokeWidth="60"
+                                        strokeLinecap="round" // square or round
+                                        fill="transparent"
+                                        strokeDasharray={754.285714286}
+                                        strokeDashoffset={(754.285714286) - percentageAnggaranSummary?.toFixed(2) ?? 0 / 100 * (754.285714286)}
+                                        className="text-success progress-ring__circle stroke-current group-hover:animate-blinkingTextSuccess" />
 
-                            </svg>
-                            <div className="absolute w-[180px] h-[180px] rounded-full flex flex-col items-center justify-center text-success">
-                                <Player
-                                    autoplay
-                                    loop
-                                    src="https://lottie.host/57136a3b-aff5-4b0b-99c7-2408199230ad/aneTHQRQbg.json"
-                                    // style={{ height: '100px', width: '200px' }}
-                                    className='w-32 h-32'
-                                >
-                                </Player>
-                                <div className="text-5xl font-semibold -mt-10">
-                                    {percentageAnggaranSummary?.toFixed(2) ?? 0}%
+                                </svg>
+                                <div className="absolute w-[180px] h-[180px] rounded-full flex flex-col items-center justify-center text-success">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="https://lottie.host/57136a3b-aff5-4b0b-99c7-2408199230ad/aneTHQRQbg.json"
+                                        className='w-32 h-32'
+                                    >
+                                    </Player>
+                                    <div className="text-5xl font-semibold -mt-10">
+                                        {percentageAnggaranSummary?.toFixed(2) ?? 0}%
+                                    </div>
+                                </div>
+                                <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
+                                    <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
                                 </div>
                             </div>
-                            <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
-                                <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
-                            </div>
-                        </div>
+                        )}
                         <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-500'>
                             Capaian Keuangan
                         </div>
@@ -149,46 +151,53 @@ const Index = () => {
                     </Link>
 
                     <div className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
-                        <div className="flex items-center justify-center cursor-pointer">
-                            <svg className="transform -rotate-90 w-[360px] h-[360px]">
-                                <circle
-                                    cx="180"
-                                    cy="180"
-                                    r="120"
-                                    stroke="currentColor"
-                                    stroke-width="60"
-                                    fill="transparent"
-                                    className="text-dark-light" />
+                        {KinerjaSummary?.length === 0 && (
+                            <div className="w-[360px] h-[360px] flex items-center justify-center">
+                                <LoadingSicaram></LoadingSicaram>
+                            </div>
+                        )}
+                        {KinerjaSummary?.length !== 0 && (
+                            <div className="flex items-center justify-center cursor-pointer">
+                                <svg className="transform -rotate-90 w-[360px] h-[360px]">
+                                    <circle
+                                        cx="180"
+                                        cy="180"
+                                        r="120"
+                                        stroke="currentColor"
+                                        stroke-width="60"
+                                        fill="transparent"
+                                        className="text-dark-light" />
 
-                                <circle
-                                    cx="180"
-                                    cy="180"
-                                    r="120"
-                                    stroke="currentColor"
-                                    stroke-width="60"
-                                    stroke-linecap="round" // square or round
-                                    fill="transparent"
-                                    stroke-dasharray={754.285714286}
-                                    stroke-dashoffset={(754.285714286) - KinerjaSummary?.realisasi?.toFixed(2) / 100 * (754.285714286)}
-                                    className="text-primary progress-ring__circle stroke-current group-hover:animate-blinkingTextPrimary" />
+                                    <circle
+                                        cx="180"
+                                        cy="180"
+                                        r="120"
+                                        stroke="currentColor"
+                                        stroke-width="60"
+                                        stroke-linecap="round" // square or round
+                                        fill="transparent"
+                                        stroke-dasharray={754.285714286}
+                                        stroke-dashoffset={(754.285714286) - KinerjaSummary?.realisasi?.toFixed(2) / 100 * (754.285714286)}
+                                        className="text-primary progress-ring__circle stroke-current group-hover:animate-blinkingTextPrimary" />
 
-                            </svg>
-                            <div className="absolute w-[180px] h-[180px] rounded-full flex flex-col items-center justify-center text-primary">
-                                <Player
-                                    autoplay
-                                    loop
-                                    src="https://lottie.host/d24409b0-afb0-445f-be09-884f03bc70a6/Q6WQhrKAkZ.json"
-                                    className='w-32 h-32'
-                                >
-                                </Player>
-                                <div className="text-5xl font-semibold -mt-10">
-                                    {KinerjaSummary?.realisasi?.toFixed(2)}%
+                                </svg>
+                                <div className="absolute w-[180px] h-[180px] rounded-full flex flex-col items-center justify-center text-primary">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="https://lottie.host/d24409b0-afb0-445f-be09-884f03bc70a6/Q6WQhrKAkZ.json"
+                                        className='w-32 h-32'
+                                    >
+                                    </Player>
+                                    <div className="text-5xl font-semibold -mt-10">
+                                        {KinerjaSummary?.realisasi?.toFixed(2)}%
+                                    </div>
+                                </div>
+                                <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
+                                    <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
                                 </div>
                             </div>
-                            <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
-                                <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
-                            </div>
-                        </div>
+                        )}
                         <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-500'>
                             Capaian Kinerja
                         </div>

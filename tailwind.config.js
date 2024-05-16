@@ -120,12 +120,22 @@ module.exports = {
                 '66.6%': { color: '#00ab55ac' },
                 '82.9%': { color: '#00ab55bc' },
                 '100%': { color: '#00ab55fc' }
-            }
+            },
+            animateSpin: {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+            },
+            animatePulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.5' },
+            },
         },
         animation: {
             blinkingBg: 'blinkingBg 3s ease-in-out infinite',
             blinkingTextPrimary: 'blinkingTextPrimary 2s ease-in-out infinite',
             blinkingTextSuccess: 'blinkingTextSuccess 2s ease-in-out infinite',
+            spin: 'animateSpin 1s linear infinite',
+            pulse: 'animatePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         },
         fontSize: {
             // '5xl': '2rem',

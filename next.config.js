@@ -9,7 +9,17 @@ const nextConfig = {
         APP_NAME: 'SiCaram Ogan Ilir',
         APP_NAME_ALIAS: 'SiCaram',
         APP_DESCRIPTION: 'Sistem Informasi Caram',
-    }
+    },
+
+    // avoid headers cors
+    async headers() {
+        return [
+            {
+                source: '/(.*)',
+                headers: securityHeaders,
+            },
+        ];
+    },
 };
 
 module.exports = nextConfig;

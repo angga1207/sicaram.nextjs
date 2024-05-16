@@ -394,6 +394,7 @@ const Index = () => {
     }
 
     const saveExcel = () => {
+        setSaveLoading(true);
         uploadExcelApbd(dataInputExcel).then((data: any) => {
             if (data.status == 'success') {
                 Swal.fire({
@@ -408,6 +409,7 @@ const Index = () => {
                         date: null,
                         file: null,
                     });
+                    setSaveLoading(false);
                 });
             }
             else {
@@ -418,6 +420,7 @@ const Index = () => {
                     showCancelButton: false,
                     confirmButtonText: 'Tutup',
                 }).then((result) => {
+                    setSaveLoading(false);
                     return;
                 });
             }

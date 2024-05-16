@@ -99,7 +99,7 @@ const Login = () => {
             // document.getElementById('errorCaptcha').innerHTML = 'Please check the captcha';
             showSweetAlert(
                 'error',
-                'Captcha tidak di centang', 'Silahkan centang captcha!',
+                'Verifikasi Robot', 'Anda tidak lolos verifikasi robot!',
                 'OK',
                 'Batal',
                 () => {

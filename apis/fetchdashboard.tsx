@@ -127,3 +127,66 @@ export async function getDetailInstance(slug: any, periode: any, year: any, view
         }
     }
 }
+
+export async function getDetailProgram(instaceSlug: any, programId: any, periode: any, year: any, view: any) {
+    try {
+        const res = await axios.get(baseUri + '/dashboard/instance/' + instaceSlug + '/detail/prg/' + programId + '?periode=' + periode + '&year=' + year, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                view: view
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function getDetaiKegiatan(instaceSlug: any, kegiatanId: any, periode: any, year: any, view: any) {
+    try {
+        const res = await axios.get(baseUri + '/dashboard/instance/' + instaceSlug + '/detail/kgt/' + kegiatanId + '?periode=' + periode + '&year=' + year, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                view: view
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function getDetailSubKegiatan(instaceSlug: any, subKegiatanId: any, periode: any, year: any, view: any) {
+    try {
+        const res = await axios.get(baseUri + '/dashboard/instance/' + instaceSlug + '/detail/skgt/' + subKegiatanId + '?periode=' + periode + '&year=' + year, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                view: view
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
