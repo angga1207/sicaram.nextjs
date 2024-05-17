@@ -9,9 +9,26 @@ import { useTranslation } from 'react-i18next';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
 import IconLockDots from '@/components/Icon/IconLockDots';
 import Link from 'next/link';
+import { BaseUri } from '@/apis/serverConfig';
+import axios from "axios";
 
 import { setCookie, getCookie, hasCookie, deleteCookie } from 'cookies-next';
 
+
+import Swal from 'sweetalert2';
+const showAlert = async (icon: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+    });
+    toast.fire({
+        icon: icon,
+        title: text,
+        padding: '10px 20px',
+    });
+};
 
 
 const UnlockBox = () => {
@@ -39,12 +56,39 @@ const UnlockBox = () => {
     }, []);
 
     if (CurrentUser.length == 0 && !CurrentToken && isClient) {
-        window.location.href = '/auth/login';
+        window.location.href = '/login';
     }
 
     if (Locked == 'true' && isClient) {
-        window.location.href = '/auth/lockscreen';
+        // window.location.href = '/lockscreen';
     }
+
+    const logout = () => {
+        const uri = BaseUri() + '/logout';
+        try {
+            const res = axios.get(uri, {
+                headers: {
+                    'Authorization': 'Bearer ' + CurrentToken
+                }
+            }).then((response: any) => {
+                if (response.status == 200) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('locked');
+                    window.location.href = '/login';
+                }
+            }).catch((error) => {
+                if (error.response.status == 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('locked');
+                    window.location.href = '/login';
+                }
+            });
+        } catch (error) {
+            showAlert('error', 'Terjadi Kesalahan Server' + ' ' + error);
+        }
+    };
 
     const submitForm = (e: any) => {
         e.preventDefault();
@@ -105,7 +149,7 @@ const UnlockBox = () => {
                 <div className="relative w-full max-w-[870px] rounded-md bg-[linear-gradient(45deg,#fff9f9_0%,rgba(255,255,255,0)_25%,rgba(255,255,255,0)_75%,_#fff9f9_100%)] p-2 dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
                     <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px]">
                         <div className="absolute end-6 top-6">
-                            <div className="dropdown">
+                            <div className="dropdown hidden">
                                 {flag && (
                                     <Dropdown
                                         offset={[0, 8]}
@@ -178,9 +222,14 @@ const UnlockBox = () => {
                                 <button type="submit" className="btn bg-gradient-to-r from-blue-500 to-indigo-700 hover:from-blue-400 hover:to-indigo-800 hover:via-cyan-500 text-white !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                     Buka Kunci
                                 </button>
-                                <Link href="/auth/login" className="btn bg-gradient-to-r from-red-500 to-amber-700 hover:from-red-400 hover:to-amber-800 hover:via-orange-500 text-white !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                <button
+                                    onClick={() => {
+                                        logout();
+                                    }}
+                                    type='button'
+                                    className="btn bg-gradient-to-r from-red-500 to-amber-700 hover:from-red-400 hover:to-amber-800 hover:via-orange-500 text-white !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                     Logout
-                                </Link>
+                                </button>
                             </form>
                         </div>
                     </div>

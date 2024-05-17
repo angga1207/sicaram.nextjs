@@ -605,7 +605,8 @@ const Index = () => {
                                                                                                 target='_blank'
                                                                                                 href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
                                                                                                 className='btn btn-secondary font-normal'>
-                                                                                                Input Target
+                                                                                                {/* Input Target */}
+                                                                                                Input Rincian Belanja
                                                                                                 <IconArrowForward className='w-4 h-4 ml-2' />
                                                                                             </Link>
                                                                                             {/* <Link

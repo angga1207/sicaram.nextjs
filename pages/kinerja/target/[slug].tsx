@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
+import LoadingSicaram from '@/components/LoadingSicaram';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -362,6 +363,17 @@ const Index = () => {
                             </tr>
                         </thead>
                         <tbody className='dark:text-white'>
+                            {(!datas || datas?.length === 0) && (
+                                <tr>
+                                    <td colSpan={100} className='h-[calc(100vh-300px)]'>
+                                        <div className="h-full w-full flex items-center justify-center flex-col">
+                                            <LoadingSicaram></LoadingSicaram>
+                                            <div className="dots-loading text-xl">Memuat Data...</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )}
+
                             {(datas && datas?.length > 0) && (
                                 <>
                                     {datas?.map((data: any, index: any) => {
@@ -1082,44 +1094,47 @@ const Index = () => {
                                     Muat Ulang
                                 </div>
                             )}
-                            <div
-                                onClick={(e) => {
-                                    if (unsaveStatus) {
-                                        e.preventDefault();
-                                        Swal.fire({
-                                            title: 'Peringatan',
-                                            text: 'Data yang belum disimpan akan hilang. Apakah Anda yakin ingin meninggalkan halaman ini?',
-                                            icon: 'warning',
-                                            showCancelButton: true,
-                                            confirmButtonText: 'Ya, Keluar',
-                                            cancelButtonText: 'Batal',
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                route.push({
-                                                    pathname: `/realisasi/${subKegiatanId}`,
-                                                    query: {
-                                                        periode: periode,
-                                                        year: year,
-                                                        month: month,
-                                                    },
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        route.push({
-                                            pathname: `/realisasi/${subKegiatanId}`,
-                                            query: {
-                                                periode: periode,
-                                                year: year,
-                                                month: month,
-                                            },
-                                        });
-                                    }
-                                }}
-                                className='btn btn-sm flex whitespace-nowrap dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white cursor-pointer'>
-                                <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4' />
-                                Buka Realisasi
-                            </div>
+                            {subKegiatan?.status === 'verified' && (
+                                <div
+                                    onClick={(e) => {
+                                        if (unsaveStatus) {
+                                            e.preventDefault();
+                                            Swal.fire({
+                                                title: 'Peringatan',
+                                                text: 'Data yang belum disimpan akan hilang. Apakah Anda yakin ingin meninggalkan halaman ini?',
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Ya, Keluar',
+                                                cancelButtonText: 'Batal',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    route.push({
+                                                        pathname: `/realisasi/${subKegiatanId}`,
+                                                        query: {
+                                                            periode: periode,
+                                                            year: year,
+                                                            month: month,
+                                                        },
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            route.push({
+                                                pathname: `/realisasi/${subKegiatanId}`,
+                                                query: {
+                                                    periode: periode,
+                                                    year: year,
+                                                    month: month,
+                                                },
+                                            });
+                                        }
+                                    }}
+                                    className='btn btn-sm flex whitespace-nowrap dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white cursor-pointer'>
+                                    <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4' />
+                                    Buka Realisasi
+                                </div>
+                            )}
+
                             {dataBackEndError === false ? (
                                 <button
                                     type='button'

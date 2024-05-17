@@ -12,14 +12,14 @@ const nextConfig = {
     },
 
     // avoid headers cors
-    async headers() {
-        return [
-            {
-                source: '/(.*)',
-                headers: securityHeaders,
-            },
-        ];
-    },
+    // async headers() {
+    //     return [
+    //         {
+    //             source: '/(.*)',
+    //             headers: securityHeaders,
+    //         },
+    //     ];
+    // },
 };
 
 module.exports = nextConfig;

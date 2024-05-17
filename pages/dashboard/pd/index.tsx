@@ -55,12 +55,8 @@ const Index = () => {
         }
     }, []);
 
-    if (CurrentUser?.role_id === 9) {
-        router.push('/dashboard');
-    }
-
     const [periode, setPeriode] = useState<any>(1);
-    const [slug, setSlug] = useState<any>(null);
+    // const [slug, setSlug] = useState<any>(null);
     const [year, setYear] = useState<any>(null);
     const [month, setMonth] = useState<any>(null);
     const [tab, setTab] = useState<string>('summary');
@@ -98,12 +94,11 @@ const Index = () => {
     useEffect(() => {
         setYear(router.query.year ?? new Date().getFullYear());
         setMonth(router.query.month ?? new Date().getMonth());
-        setSlug(router.query.slug as string);
-    });
+    }, []);
 
     useEffect(() => {
-        if (slug) {
-            getDetailInstance(router.query.slug as string, 1, year, view).then((res) => {
+        if (CurrentUser.instance_alias) {
+            getDetailInstance(CurrentUser.instance_alias as string, 1, year, view).then((res) => {
                 if (res.status === 'success') {
                     setInstance(res.data.instance);
                     setAdmins(res.data.admins)
@@ -115,8 +110,12 @@ const Index = () => {
                 }
             });
 
+        } else if (CurrentUser.role_id !== 9) {
+            if (isMounted) {
+                router.push('/dashboard');
+            }
         }
-    }, [slug, view]);
+    }, [CurrentUser, view]);
 
     useEffect(() => {
         if (Instance) {
@@ -607,7 +606,7 @@ const Index = () => {
 
     const pickProgram = (data: any) => {
         setSelectedProgram(data);
-        getDetailProgram(slug, data.id, periode, year, view).then((res) => {
+        getDetailProgram(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedProgram((prevState: any) => ({
@@ -882,7 +881,7 @@ const Index = () => {
 
     const pickKegiatan = (data: any) => {
         setSelectedKegiatan(data);
-        getDetaiKegiatan(slug, data.id, periode, year, view).then((res) => {
+        getDetaiKegiatan(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedKegiatan((prevState: any) => ({
@@ -1156,7 +1155,7 @@ const Index = () => {
 
     const pickSubKegiatan = (data: any) => {
         setSelectedSubKegiatan(data);
-        getDetailSubKegiatan(slug, data.id, periode, year, view).then((res) => {
+        getDetailSubKegiatan(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedSubKegiatan((prevState: any) => ({
@@ -3132,29 +3131,6 @@ const Index = () => {
                 )}
             </div >
 
-
-            <div className="fixed bottom-[110px] z-50 ltr:right-[10px] rtl:left-[10px]">
-                <button
-                    onClick={(e) => {
-                        router.back();
-                    }}
-                    type="button"
-                    className="btn btn-outline-warning animate-pulse rounded-full bg-[#fafafa] p-2 dark:bg-[#060818] dark:hover:bg-warning -rotate-90">
-                    <svg width="24" height="24" className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            opacity="0.5"
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M12 20.75C12.4142 20.75 12.75 20.4142 12.75 20L12.75 10.75L11.25 10.75L11.25 20C11.25 20.4142 11.5858 20.75 12 20.75Z"
-                            fill="currentColor"
-                        ></path>
-                        <path
-                            d="M6.00002 10.75C5.69667 10.75 5.4232 10.5673 5.30711 10.287C5.19103 10.0068 5.25519 9.68417 5.46969 9.46967L11.4697 3.46967C11.6103 3.32902 11.8011 3.25 12 3.25C12.1989 3.25 12.3897 3.32902 12.5304 3.46967L18.5304 9.46967C18.7449 9.68417 18.809 10.0068 18.6929 10.287C18.5768 10.5673 18.3034 10.75 18 10.75L6.00002 10.75Z"
-                            fill="currentColor"
-                        ></path>
-                    </svg>
-                </button>
-            </div>
         </>
     );
 }

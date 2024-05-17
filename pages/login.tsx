@@ -191,7 +191,11 @@ const Login = () => {
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
-            router.push('/');
+            if (localStorage.user.role_id === 9) {
+                router.push('/dashboard/pd');
+            } else {
+                router.push('/dashboard');
+            }
         }
     }, [userToken]);
 
@@ -240,7 +244,9 @@ const Login = () => {
                                         Username
                                     </label>
                                     <div className="relative text-white-dark">
-                                        <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark" value={'developer'} />
+                                        <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark"
+                                        // value={'developer'}
+                                        />
                                         <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                             <IconUser fill={true} />
                                         </span>
@@ -253,7 +259,7 @@ const Login = () => {
                                     <div className="relative text-white-dark">
                                         <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 placeholder:text-white-dark"
                                             type={showPassword ? 'text' : 'password'}
-                                            value={'oganilir123'}
+                                            // value={'oganilir123'}
                                             onChange={(e) => {
                                                 setShowPassword(false);
                                             }}

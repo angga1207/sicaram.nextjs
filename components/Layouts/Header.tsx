@@ -96,6 +96,10 @@ const Header = () => {
                     }
                 });
             }
+
+            if (Locked == 'true') {
+                window.location.href = '/lockscreen';
+            }
         }
     }, [CurrentToken]);
 
@@ -236,6 +240,13 @@ const Header = () => {
 
     const { t, i18n } = useTranslation();
 
+    const kunciLayar = () => {
+        showSweetAlert('warning', 'Kunci Layar', 'Apakah anda yakin ingin mengunci layar?', 'Ya', 'Tidak', () => {
+            localStorage.setItem('locked', 'true');
+            window.location.href = '/lockscreen';
+        });
+    }
+
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
             <div className="shadow-sm">
@@ -338,7 +349,7 @@ const Header = () => {
                             )}
                         </div>
 
-                        <div className="dropdown shrink-0">
+                        {/* <div className="dropdown shrink-0">
                             <Dropdown
                                 offset={[0, 8]}
                                 placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
@@ -366,7 +377,7 @@ const Header = () => {
                                     })}
                                 </ul>
                             </Dropdown>
-                        </div>
+                        </div> */}
 
                         <div className="dropdown flex shrink-0">
                             <Dropdown
@@ -395,7 +406,7 @@ const Header = () => {
                                                     <>
                                                         <Tippy content={CurrentUser?.instance_name ? CurrentUser?.instance_name : ''}>
                                                             <div className="rounded bg-success-light px-1 text-xs text-success line-clamp-2 cursor-pointer text-center">
-                                                                {CurrentUser?.instance_name ? CurrentUser?.instance_name : ''}
+                                                                {CurrentUser?.instance_alias ? CurrentUser?.instance_alias : ''}
                                                             </div>
                                                         </Tippy>
                                                     </>
@@ -410,10 +421,14 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/auth/lockscreen" className="dark:hover:text-white">
+                                        <div
+                                            onClick={() => {
+                                                kunciLayar();
+                                            }}
+                                            className="flex px-4 py-2 dark:hover:text-white cursor-pointer hover:bg-indigo-50 hover:text-indigo-700">
                                             <IconLockDots className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                             Kunci Layar
-                                        </Link>
+                                        </div>
                                     </li>
                                     <li className="border-t border-white-light dark:border-white-light/10">
                                         <Link href="#" className="!py-3 text-danger"

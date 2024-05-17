@@ -59,7 +59,9 @@ import {
     faPencilAlt,
     faThumbTack,
     faFileSignature,
-    faAngleDoubleRight
+    faAngleDoubleRight,
+    faExclamationTriangle,
+    faAngleDoubleLeft
 } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
@@ -390,6 +392,38 @@ const Index = () => {
 
     const pickKontrak = (data: any) => {
         setSelectedKontrak(data);
+    }
+
+
+    if (subKegiatan && subKegiatan.status_target != 'verified') {
+        return (
+            <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
+                <div className="flex items-center justify-center gap-2">
+                    <FontAwesomeIcon icon={faExclamationTriangle} className='w-8 h-8 text-cyan-500' />
+                    <div className="text-[40px] font-semibold text-cyan-500">
+                        Mohon Maaf,
+                    </div>
+                </div>
+                <div className="text-xl font-semibold text-cyan-500">
+                    Anda Tidak Dapat Mengakses Halaman Ini
+                </div>
+                <div className="text-lg font-semibold text-orange-500 mt-2">
+                    Dikarenakan Target Belum Terverifikasi
+                </div>
+                {/* back button */}
+                <div className="mt-4">
+                    <button
+                        onClick={() => {
+                            closeWindow();
+                        }}
+                        className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center"
+                    >
+                        <FontAwesomeIcon icon={faAngleDoubleLeft} className='w-4 h-4 mr-2' />
+                        Kembali
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -1732,7 +1766,7 @@ const Index = () => {
                                                     onClick={() => {
                                                         pickKontrak(kontrak)
                                                     }}
-                                                    className={`${kontrak.no_kontrak === selectedKontrak.no_kontrak ? 'bg-blue-100' : ''} p-4 shadow-md cursor-pointer select-none hover:bg-blue-100 hover:shadow-blue-200 group`}>
+                                                    className={`${kontrak?.no_kontrak === selectedKontrak?.no_kontrak ? 'bg-blue-100' : ''} p-4 shadow-md cursor-pointer select-none hover:bg-blue-100 hover:shadow-blue-200 group`}>
                                                     <div className="flex-1">
                                                         <h4 className="font-semibold text-lg mb-2 text-primary">
                                                             {kontrak?.no_kontrak}
@@ -2074,7 +2108,7 @@ const Index = () => {
                                             <div className="text-end">
                                                 <button
                                                     onClick={() => {
-                                                        saveKontrak();
+                                                        // saveKontrak();
                                                     }}
                                                     type="button"
                                                     className="btn btn-success">

@@ -57,6 +57,11 @@ const Index = () => {
         }
     }, []);
 
+    if (CurrentUser?.role_id === 9) {
+        router.push('/dashboard');
+    }
+
+
     useEffect(() => {
         setAnggaranSeries([]);
         chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
@@ -172,7 +177,7 @@ const Index = () => {
 
                         // return jt / m / t
                         if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' T';
+                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
                         } else if (value >= 1000000000) {
                             return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
                         } else if (value >= 1000000) {

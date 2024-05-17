@@ -22,6 +22,7 @@ import IconX from '@/components/Icon/IconX';
 import IconEdit from '@/components/Icon/IconEdit';
 import IconSearch from '@/components/Icon/IconSearch';
 import IconTrashLines from '@/components/Icon/IconTrashLines';
+import Page403 from '@/components/Layouts/Page403';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -184,6 +185,12 @@ const Index = () => {
         });
     }
 
+    if (CurrentUser?.role_id && [10, 11].includes(CurrentUser?.role_id)) {
+        return (
+            <Page403 />
+        )
+    }
+
     return (
         <>
             <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5 px-5">
@@ -257,29 +264,31 @@ const Index = () => {
                                                 </button>
                                             </Tippy>
 
-                                            <Tippy content="Hapus" placement="top" arrow={false} delay={100}>
-                                                <button type="button"
-                                                    className="btn btn-outline-danger px-1.5 py-1.5"
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            title: 'Apakah Anda Yakin?',
-                                                            text: "Data yang dihapus tidak dapat dikembalikan!",
-                                                            icon: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonText: 'Ya, Hapus!',
-                                                            cancelButtonText: 'Tidak, Batalkan!',
-                                                            reverseButtons: true
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                deleteData(data?.id);
+                                            {[1, 2, 3, 4, 5].includes(CurrentUser?.role_id) && (
+                                                <Tippy content="Hapus" placement="top" arrow={false} delay={100}>
+                                                    <button type="button"
+                                                        className="btn btn-outline-danger px-1.5 py-1.5"
+                                                        onClick={() => {
+                                                            Swal.fire({
+                                                                title: 'Apakah Anda Yakin?',
+                                                                text: "Data yang dihapus tidak dapat dikembalikan!",
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                cancelButtonText: 'Tidak, Batalkan!',
+                                                                reverseButtons: true
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    deleteData(data?.id);
+                                                                }
                                                             }
+                                                            );
                                                         }
-                                                        );
-                                                    }
-                                                    }>
-                                                    <IconTrashLines className="w-3 h-3" />
-                                                </button>
-                                            </Tippy>
+                                                        }>
+                                                        <IconTrashLines className="w-3 h-3" />
+                                                    </button>
+                                                </Tippy>
+                                            )}
 
                                         </div>
                                     </td>

@@ -24,9 +24,11 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import { chartRealisasi, summaryRealisasi, getRankInstance, chartKinerja, summaryKinerja } from '@/apis/fetchdashboard';
 import Link from 'next/link';
 import LoadingSicaram from '@/components/LoadingSicaram';
+import { useRouter } from 'next/router';
 
 const Index = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     useEffect(() => {
         dispatch(setPageTitle('Dashboard'));
     });
@@ -57,6 +59,10 @@ const Index = () => {
             }
         }
     }, []);
+
+    if (CurrentUser?.role_id === 9) {
+        router.push('/dashboard/pd');
+    }
 
     useEffect(() => {
         summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {

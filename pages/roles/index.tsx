@@ -27,6 +27,7 @@ import { faBusinessTime, faCog, faEdit, faEye, faShield, faShieldAlt, faSpellChe
 import { fetchRoles, fetchRole } from '../../apis/fetchdata';
 import { storeRole, updateRole, deleteRole } from '../../apis/storedata';
 import { faSearchengin } from '@fortawesome/free-brands-svg-icons';
+import Page403 from '@/components/Layouts/Page403';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -199,154 +200,158 @@ const Index = () => {
     }
 
 
-
-    return (
-        <>
-            <div className="">
+    if (CurrentUser?.role_id && [1].includes(CurrentUser?.role_id)) {
+        return (
+            <>
                 <div className="">
-                    <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
-                            Daftar Peran Pengguna
-                        </h2>
-                        <div className="flex items-center justify-center gap-1">
+                    <div className="">
+                        <div className="flex items-center justify-between mb-5">
+                            <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
+                                Daftar Peran Pengguna
+                            </h2>
+                            <div className="flex items-center justify-center gap-1">
 
-                            <div className="relative">
-                                <input type="search"
-                                    className="form-input rtl:pl-12 ltr:pr-12"
-                                    placeholder='Cari Peran Pengguna...'
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <div className="absolute rtl:left-0 ltr:right-0 top-0 bottom-0 flex items-center justify-center w-12 h-full">
-                                    <IconSearch className="w-4 h-4 text-slate-400"></IconSearch>
+                                <div className="relative">
+                                    <input type="search"
+                                        className="form-input rtl:pl-12 ltr:pr-12"
+                                        placeholder='Cari Peran Pengguna...'
+                                        onChange={(e) => setSearch(e.target.value)}
+                                    />
+                                    <div className="absolute rtl:left-0 ltr:right-0 top-0 bottom-0 flex items-center justify-center w-12 h-full">
+                                        <IconSearch className="w-4 h-4 text-slate-400"></IconSearch>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addRole()} >
+                                {/* <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addRole()} >
                                 <IconPlus className="w-4 h-4" />
                                 <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
                             </button> */}
+                            </div>
+
                         </div>
-
                     </div>
-                </div>
 
-                <div className="panel">
+                    <div className="panel">
 
-                    <div className="table-responsive mb-5">
-                        <table className="table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th className=''>
-                                        Nama Peran Pengguna
-                                    </th>
-                                    <th className='w-[200px] !text-center'>Jumlah Pengguna</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {datas?.map((data: any) => {
-                                    return (
+                        <div className="table-responsive mb-5">
+                            <table className="table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th className=''>
+                                            Nama Peran Pengguna
+                                        </th>
+                                        <th className='w-[200px] !text-center'>Jumlah Pengguna</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {datas?.map((data: any) => {
+                                        return (
+                                            <>
+                                                <tr>
+                                                    <td>
+                                                        <div className="flex items-center gap-x-4">
+                                                            <div>
+                                                                {data?.display_name}
+                                                            </div>
+                                                            {data?.id == 2 && (
+                                                                <>
+                                                                    <div className="badge m-0 bg-green-200 text-green-900 cursor-pointer">
+                                                                        <FontAwesomeIcon icon={faShieldAlt} className='w-3 h-3' />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            {(data?.id == 3 || data?.id == 4 || data?.id == 5) && (
+                                                                <>
+                                                                    <div className="badge m-0 bg-white-light text-black cursor-pointer">
+                                                                        <FontAwesomeIcon icon={faShieldAlt} className='w-3 h-3' />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            {(data?.id == 6 || data?.id == 7 || data?.id == 8) && (
+                                                                <>
+                                                                    <div className="badge m-0 bg-amber-200 text-amber-900 cursor-pointer">
+                                                                        <FontAwesomeIcon icon={faSpellCheck} className='w-3 h-3' />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            {(data?.id == 9) && (
+                                                                <>
+                                                                    <div className="badge m-0 bg-red-200 text-red-900 cursor-pointer">
+                                                                        <FontAwesomeIcon icon={faBusinessTime} className='w-3 h-3' />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            {(data?.id == 10) && (
+                                                                <>
+                                                                    <div className="badge m-0 bg-indigo-200 text-indigo-900 cursor-pointer">
+                                                                        <FontAwesomeIcon icon={faSearchengin} className='w-3 h-3' />
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="text-center">
+                                                            {data?.users_count} Orang
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </>
+                                        )
+                                    })}
+
+                                    {(datas?.length == 0 && !search) && (
                                         <>
                                             <tr>
-                                                <td>
-                                                    <div className="flex items-center gap-x-4">
-                                                        <div>
-                                                            {data?.display_name}
-                                                        </div>
-                                                        {data?.id == 2 && (
-                                                            <>
-                                                                <div className="badge m-0 bg-green-200 text-green-900 cursor-pointer">
-                                                                    <FontAwesomeIcon icon={faShieldAlt} className='w-3 h-3' />
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                        {(data?.id == 3 || data?.id == 4 || data?.id == 5) && (
-                                                            <>
-                                                                <div className="badge m-0 bg-white-light text-black cursor-pointer">
-                                                                    <FontAwesomeIcon icon={faShieldAlt} className='w-3 h-3' />
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                        {(data?.id == 6 || data?.id == 7 || data?.id == 8) && (
-                                                            <>
-                                                                <div className="badge m-0 bg-amber-200 text-amber-900 cursor-pointer">
-                                                                    <FontAwesomeIcon icon={faSpellCheck} className='w-3 h-3' />
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                        {(data?.id == 9) && (
-                                                            <>
-                                                                <div className="badge m-0 bg-red-200 text-red-900 cursor-pointer">
-                                                                    <FontAwesomeIcon icon={faBusinessTime} className='w-3 h-3' />
-                                                                </div>
-                                                            </>
-                                                        )}
-                                                        {(data?.id == 10) && (
-                                                            <>
-                                                                <div className="badge m-0 bg-indigo-200 text-indigo-900 cursor-pointer">
-                                                                    <FontAwesomeIcon icon={faSearchengin} className='w-3 h-3' />
-                                                                </div>
-                                                            </>
-                                                        )}
+                                                <td colSpan={5} className="text-center">
+                                                    <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div className="text-center">
-                                                        {data?.users_count} Orang
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={5} className="text-center">
+                                                    <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={5} className="text-center">
+                                                    <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={5} className="text-center">
+                                                    <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={5} className="text-center">
+                                                    <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={5} className="text-center">
+                                                    <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
                                                     </div>
                                                 </td>
                                             </tr>
                                         </>
-                                    )
-                                })}
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
 
-                                {(datas?.length == 0 && !search) && (
-                                    <>
-                                        <tr>
-                                            <td colSpan={5} className="text-center">
-                                                <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={5} className="text-center">
-                                                <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={5} className="text-center">
-                                                <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={5} className="text-center">
-                                                <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={5} className="text-center">
-                                                <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colSpan={5} className="text-center">
-                                                <div className="w-full h-[50px] rounded animate-pulse bg-slate-200">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </>
-                                )}
-                            </tbody>
-                        </table>
                     </div>
 
                 </div>
-
-            </div>
-        </>
+            </>
+        );
+    }
+    return (
+        <Page403 />
     );
 };
 

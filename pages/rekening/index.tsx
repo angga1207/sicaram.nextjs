@@ -27,6 +27,7 @@ import { fetchRekening, fetchRekenings } from '@/apis/fetchdata';
 import Select from 'react-select';
 import { deleteRefRekening, storeRefRekening, updateRefRekening, uploadExcel } from '@/apis/storedata';
 import IconEye from '@/components/Icon/IconEye';
+import Page403 from '@/components/Layouts/Page403';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -702,679 +703,657 @@ const Index = () => {
         });
     }
 
-    if (CurrentUser?.role_id >= 9) {
+    if (CurrentUser?.role_id && [1, 2, 4, 7].includes(CurrentUser?.role_id)) {
         return (
             <>
-                <div className="flex items-center justify-center h-[calc(100vh-200px)]">
-                    <div className="flex flex-col items-center justify-center">
-                        <div className="text-5xl font-bold text-slate-500 dark:text-slate-400">
-                            403
+                <div className="">
+                    <div className="flex items-center justify-between mb-5 px-5">
+                        <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
+                            Daftar Rekening
+                            {level == 1 ? ' Akun' : ''}
+                            {level == 2 ? ' Kelompok' : ''}
+                            {level == 3 ? ' Jenis' : ''}
+                            {level == 4 ? ' Objek' : ''}
+                            {level == 5 ? ' Rincian' : ''}
+                            {level == 6 ? ' Sub Rincian' : ''}
+                        </h2>
+                        <div className="flex items-center justify-center gap-1">
+                            <button type="button" className="btn btn-primary whitespace-nowrap" onClick={() => addImport()} >
+                                <FontAwesomeIcon icon={faFileUpload} className="w-4 h-4" />
+                                <span className="ltr:ml-2 rtl:mr-2">Import Excel</span>
+                            </button>
+
+                            <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addData()} >
+                                <IconPlus className="w-4 h-4" />
+                                <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
+                            </button>
                         </div>
-                        <div className="text-2xl font-medium text-slate-600 dark:text-slate-400">
-                            Forbidden
-                        </div>
-                        <div className="text-slate-600 dark:text-slate-400">
-                            You are not allowed to access this page!
-                        </div>
-                        <div className="mt-5">
-                            <Link href="/">
-                                <div className="btn btn-outline-primary">
-                                    Back to Home
-                                </div>
-                            </Link>
-                        </div>
+
                     </div>
                 </div>
-            </>
-        );
-    }
 
-    return (
-        <>
-            <div className="">
-                <div className="flex items-center justify-between mb-5 px-5">
-                    <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
-                        Daftar Rekening
-                        {level == 1 ? ' Akun' : ''}
-                        {level == 2 ? ' Kelompok' : ''}
-                        {level == 3 ? ' Jenis' : ''}
-                        {level == 4 ? ' Objek' : ''}
-                        {level == 5 ? ' Rincian' : ''}
-                        {level == 6 ? ' Sub Rincian' : ''}
-                    </h2>
-                    <div className="flex items-center justify-center gap-1">
-                        <button type="button" className="btn btn-primary whitespace-nowrap" onClick={() => addImport()} >
-                            <FontAwesomeIcon icon={faFileUpload} className="w-4 h-4" />
-                            <span className="ltr:ml-2 rtl:mr-2">Import Excel</span>
-                        </button>
-
-                        <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addData()} >
-                            <IconPlus className="w-4 h-4" />
-                            <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            <div className="panel">
-                <div className="flex items-center gap-1 mb-2">
-                    {(active1 && level > 1) && (
-                        <Tippy content={active1?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
-                            <div
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    if (level > 1) {
-                                        getChilds(active1);
-                                    }
-                                }}
-                                className="btn btn-primary text-xs font-normal text-white p-3 cursor-pointer">
-                                <div className="text-center whitespace-nowrap truncate max-w-[300px]">
-                                    {active1?.fullcode} &nbsp;
-                                    {active1?.name}
-                                </div>
-                            </div>
-                        </Tippy>
-                    )}
-
-                    {(active2 && level >= 2) && (
-                        <>
-                            <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
+                <div className="panel">
+                    <div className="flex items-center gap-1 mb-2">
+                        {(active1 && level > 1) && (
                             <Tippy content={active1?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
                                 <div
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        if (level > 2) {
-                                            getChilds(active2);
+                                        if (level > 1) {
+                                            getChilds(active1);
                                         }
                                     }}
-                                    className="btn btn-success text-xs font-normal text-white p-3 cursor-pointer">
+                                    className="btn btn-primary text-xs font-normal text-white p-3 cursor-pointer">
                                     <div className="text-center whitespace-nowrap truncate max-w-[300px]">
-                                        {active2?.fullcode} &nbsp;
-                                        {active2?.name}
+                                        {active1?.fullcode} &nbsp;
+                                        {active1?.name}
                                     </div>
                                 </div>
                             </Tippy>
-                        </>
-                    )}
+                        )}
 
-                    {(active3 && level >= 3) && (
-                        <>
-                            <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
-                            <Tippy content={active1?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
+                        {(active2 && level >= 2) && (
+                            <>
+                                <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
+                                <Tippy content={active1?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
+                                    <div
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (level > 2) {
+                                                getChilds(active2);
+                                            }
+                                        }}
+                                        className="btn btn-success text-xs font-normal text-white p-3 cursor-pointer">
+                                        <div className="text-center whitespace-nowrap truncate max-w-[300px]">
+                                            {active2?.fullcode} &nbsp;
+                                            {active2?.name}
+                                        </div>
+                                    </div>
+                                </Tippy>
+                            </>
+                        )}
+
+                        {(active3 && level >= 3) && (
+                            <>
+                                <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
+                                <Tippy content={active1?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
+                                    <div
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (level > 3) {
+                                                getChilds(active3);
+                                            }
+                                        }}
+                                        className="btn btn-secondary text-xs font-normal text-white p-3 cursor-pointer">
+                                        <div className="text-center whitespace-nowrap truncate max-w-[300px]">
+                                            {active3?.fullcode} &nbsp;
+                                            {active3?.name}
+                                        </div>
+                                    </div>
+                                </Tippy>
+                            </>
+                        )}
+
+                        {(active4 && level >= 4) && (
+                            <>
+                                <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
+                                <Tippy content={active4?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
+                                    <div
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (level > 4) {
+                                                getChilds(active4);
+                                            }
+                                        }}
+                                        className="btn btn-info text-xs font-normal text-white p-3 cursor-pointer">
+                                        <div className="text-center whitespace-nowrap truncate max-w-[300px]">
+                                            {active4?.fullcode} &nbsp;
+                                            {active4?.name}
+                                        </div>
+                                    </div>
+                                </Tippy>
+                            </>
+                        )}
+
+                        {(active5 && level >= 5) && (
+                            <>
+                                <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
+                                <Tippy content={active5?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
+                                    <div
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (level > 5) {
+                                                getChilds(active5);
+                                            }
+                                        }}
+                                        className="btn btn-warning text-xs font-normal text-white p-3 cursor-pointer">
+                                        <div className="text-center whitespace-nowrap truncate max-w-[300px]">
+                                            {active5?.fullcode} &nbsp;
+                                            {active5?.name}
+                                        </div>
+                                    </div>
+                                </Tippy>
+                            </>
+                        )}
+
+                        {active1 && (
+                            <Tippy content="Reset" placement="top" arrow={false} delay={100} duration={200} >
                                 <div
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        if (level > 3) {
-                                            getChilds(active3);
-                                        }
+                                        setLevel(1);
+                                        setActive1(false);
+                                        setActive2(false);
+                                        setActive3(false);
+                                        setActive4(false);
+                                        setActive5(false);
+                                        setActive6(false);
+                                        fetchRekenings(periode, 1).then((res) => {
+                                            if (res.status === 'success') {
+                                                setDatas(res.data);
+                                            }
+                                        });
                                     }}
-                                    className="btn btn-secondary text-xs font-normal text-white p-3 cursor-pointer">
-                                    <div className="text-center whitespace-nowrap truncate max-w-[300px]">
-                                        {active3?.fullcode} &nbsp;
-                                        {active3?.name}
-                                    </div>
+                                    className="flex-none cursor-pointer group border border-transparent hover:border-red-400 p-0.5 rounded-full ml-3">
+                                    <IconX className="w-4 h-4 group-hover:text-red-400" />
                                 </div>
                             </Tippy>
-                        </>
-                    )}
+                        )}
 
-                    {(active4 && level >= 4) && (
-                        <>
-                            <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
-                            <Tippy content={active4?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
-                                <div
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        if (level > 4) {
-                                            getChilds(active4);
-                                        }
-                                    }}
-                                    className="btn btn-info text-xs font-normal text-white p-3 cursor-pointer">
-                                    <div className="text-center whitespace-nowrap truncate max-w-[300px]">
-                                        {active4?.fullcode} &nbsp;
-                                        {active4?.name}
-                                    </div>
-                                </div>
-                            </Tippy>
-                        </>
-                    )}
-
-                    {(active5 && level >= 5) && (
-                        <>
-                            <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-slate-400" />
-                            <Tippy content={active5?.name ?? ''} placement="top" arrow={false} delay={100} duration={200} >
-                                <div
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        if (level > 5) {
-                                            getChilds(active5);
-                                        }
-                                    }}
-                                    className="btn btn-warning text-xs font-normal text-white p-3 cursor-pointer">
-                                    <div className="text-center whitespace-nowrap truncate max-w-[300px]">
-                                        {active5?.fullcode} &nbsp;
-                                        {active5?.name}
-                                    </div>
-                                </div>
-                            </Tippy>
-                        </>
-                    )}
-
-                    {active1 && (
-                        <Tippy content="Reset" placement="top" arrow={false} delay={100} duration={200} >
-                            <div
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setLevel(1);
-                                    setActive1(false);
-                                    setActive2(false);
-                                    setActive3(false);
-                                    setActive4(false);
-                                    setActive5(false);
-                                    setActive6(false);
-                                    fetchRekenings(periode, 1).then((res) => {
-                                        if (res.status === 'success') {
-                                            setDatas(res.data);
-                                        }
-                                    });
-                                }}
-                                className="flex-none cursor-pointer group border border-transparent hover:border-red-400 p-0.5 rounded-full ml-3">
-                                <IconX className="w-4 h-4 group-hover:text-red-400" />
-                            </div>
-                        </Tippy>
-                    )}
-
-                </div>
-                <div className="table-responsive mb-3">
-                    <table className="table-hover align-middle">
-                        <thead>
-                            <tr>
-                                <th className='!py-5 border w-[150px] !text-center'>
-                                    Kode
-                                </th>
-                                <th colSpan={2} className='!py-5 border min-w-[500px]'>
-                                    Uraian Rekening
-                                    {level == 1 ? ' Akun' : ''}
-                                    {level == 2 ? ' Kelompok' : ''}
-                                    {level == 3 ? ' Jenis' : ''}
-                                    {level == 4 ? ' Objek' : ''}
-                                    {level == 5 ? ' Rincian' : ''}
-                                    {level == 6 ? ' Sub Rincian' : ''}
-                                </th>
-                                <th className="!py-5 border !text-center w-[100px]">
-                                    Option
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {datas?.map((data: any, index: number) => (
-                                <>
-                                    <tr key={index}
-                                        className='cursor-pointer group'>
-                                        <td
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                getChilds(data);
-                                            }}
-                                            className="!py-1 border">
-                                            <div className="text-xs">
-                                                {data?.fullcode}
-                                            </div>
-                                        </td>
-                                        <td
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                getChilds(data);
-                                            }}
-                                            colSpan={2}
-                                            className="!py-1 !px-0 border">
-                                            <div className="flex items-center gap-x-1">
-                                                <IconEye className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-success" />
-                                                <div className='text-xs'>
-                                                    {data?.name}
+                    </div>
+                    <div className="table-responsive mb-3">
+                        <table className="table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th className='!py-5 border w-[150px] !text-center'>
+                                        Kode
+                                    </th>
+                                    <th colSpan={2} className='!py-5 border min-w-[500px]'>
+                                        Uraian Rekening
+                                        {level == 1 ? ' Akun' : ''}
+                                        {level == 2 ? ' Kelompok' : ''}
+                                        {level == 3 ? ' Jenis' : ''}
+                                        {level == 4 ? ' Objek' : ''}
+                                        {level == 5 ? ' Rincian' : ''}
+                                        {level == 6 ? ' Sub Rincian' : ''}
+                                    </th>
+                                    <th className="!py-5 border !text-center w-[100px]">
+                                        Option
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {datas?.map((data: any, index: number) => (
+                                    <>
+                                        <tr key={index}
+                                            className='cursor-pointer group'>
+                                            <td
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    getChilds(data);
+                                                }}
+                                                className="!py-1 border">
+                                                <div className="text-xs">
+                                                    {data?.fullcode}
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td className="!py-1 border !text-center">
-                                            <div className="flex items-center justify-center gap-2">
-                                                <Tippy content="Edit" placement="top" arrow={false} delay={100} duration={200} >
-                                                    <button type="button" className="btn btn-outline-info px-1 py-1" onClick={() => editData(data)} >
-                                                        <IconEdit className="w-4 h-4" />
-                                                    </button>
-                                                </Tippy>
-                                                <Tippy content="Hapus" placement="top" arrow={false} delay={100} duration={200} >
-                                                    <button type="button" className="btn btn-outline-danger px-1 py-1" onClick={() => confirmDeleteData(data)} >
-                                                        <IconTrashLines className="w-4 h-4" />
-                                                    </button>
-                                                </Tippy>
+                                            </td>
+                                            <td
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    getChilds(data);
+                                                }}
+                                                colSpan={2}
+                                                className="!py-1 !px-0 border">
+                                                <div className="flex items-center gap-x-1">
+                                                    <IconEye className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-success" />
+                                                    <div className='text-xs'>
+                                                        {data?.name}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="!py-1 border !text-center">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <Tippy content="Edit" placement="top" arrow={false} delay={100} duration={200} >
+                                                        <button type="button" className="btn btn-outline-info px-1 py-1" onClick={() => editData(data)} >
+                                                            <IconEdit className="w-4 h-4" />
+                                                        </button>
+                                                    </Tippy>
+                                                    <Tippy content="Hapus" placement="top" arrow={false} delay={100} duration={200} >
+                                                        <button type="button" className="btn btn-outline-danger px-1 py-1" onClick={() => confirmDeleteData(data)} >
+                                                            <IconTrashLines className="w-4 h-4" />
+                                                        </button>
+                                                    </Tippy>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </>
+                                ))}
+
+                                {(datas?.length == 0 && noData == false) && (
+                                    <tr>
+                                        <td colSpan={5} className="text-center">
+                                            <div className="w-full h-[30px] rounded animate-pulse bg-slate-200">
                                             </div>
                                         </td>
                                     </tr>
-                                </>
-                            ))}
+                                )}
 
-                            {(datas?.length == 0 && noData == false) && (
-                                <tr>
-                                    <td colSpan={5} className="text-center">
-                                        <div className="w-full h-[30px] rounded animate-pulse bg-slate-200">
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-
-                            {(datas?.length == 0 && noData == true) && (
-                                <tr>
-                                    <td colSpan={5} className="text-center">
-                                        <div className="text-xs text-slate-700 dark:text-slate-200 text-center">
-                                            Tidak ada data
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                {(datas?.length == 0 && noData == true) && (
+                                    <tr>
+                                        <td colSpan={5} className="text-center">
+                                            <div className="text-xs text-slate-700 dark:text-slate-200 text-center">
+                                                Tidak ada data
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <Transition appear show={modalInput} as={Fragment}>
-                <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0" />
-                    </Transition.Child>
-                    <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
-                        <div className="flex items-center justify-center min-h-screen px-4">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
+                <Transition appear show={modalInput} as={Fragment}>
+                    <Dialog as="div" open={modalInput} onClose={() => setModalInput(false)}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0" />
+                        </Transition.Child>
+                        <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen px-4">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
 
-                                    <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
-                                        <h5 className="font-bold text-lg">
-                                            {dataInput.inputType == 'create' ? 'Tambah Rekening' : 'Edit Rekening'}
-                                        </h5>
-                                        <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalInput(false)}>
-                                            <IconX></IconX>
-                                        </button>
-                                    </div>
+                                        <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                            <h5 className="font-bold text-lg">
+                                                {dataInput.inputType == 'create' ? 'Tambah Rekening' : 'Edit Rekening'}
+                                            </h5>
+                                            <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalInput(false)}>
+                                                <IconX></IconX>
+                                            </button>
+                                        </div>
 
-                                    <div className="p-5 pb-10 w-full h-[calc(100vh-350px)] relative overflow-auto">
-                                        <div className="flex flex-col sm:flex-row gap-4">
+                                        <div className="p-5 pb-10 w-full h-[calc(100vh-350px)] relative overflow-auto">
+                                            <div className="flex flex-col sm:flex-row gap-4">
 
-                                            <div className={dataInput?.level >= 2 ? 'w-full sm:w-1/2 space-y-3 relative' : 'hidden'}>
+                                                <div className={dataInput?.level >= 2 ? 'w-full sm:w-1/2 space-y-3 relative' : 'hidden'}>
 
-                                                <div className={dataInput?.level >= 1 ? '' : 'hidden'}>
-                                                    <label className='text-xs font-normal'>
-                                                        Akun
-                                                    </label>
-                                                    <Select
-                                                        placeholder="Pilih Rekening Akun"
-                                                        className='text-xs'
-                                                        options={options1}
-                                                        value={
-                                                            dataInput?.rek_1_id ?
-                                                                options1?.filter((data: any) => data.value == dataInput?.rek_1_id)[0]
-                                                                : null
-                                                        }
-                                                        onChange={(e) => {
-                                                            setDataInput({
-                                                                ...dataInput,
-                                                                rek_1_id: e?.value,
-                                                                rek_2_id: '',
-                                                                rek_3_id: '',
-                                                                rek_4_id: '',
-                                                                rek_5_id: '',
-                                                                level: 2,
-                                                            });
-
-                                                            fetchRekenings(periode, 2, e?.value).then((res) => {
-                                                                if (res.status === 'success') {
-                                                                    setOptions2(res.data.map((data: any) => ({
-                                                                        value: data.id,
-                                                                        label: data.fullcode + ' - ' + data.name,
-                                                                    })) ?? []);
-                                                                }
-                                                            });
-                                                            setOptions3([]);
-                                                            setOptions4([]);
-                                                            setOptions5([]);
-                                                            setOptions6([]);
-                                                        }}
-                                                        isDisabled={dataInput.inputType == 'edit' ? true : false}
-                                                    />
-                                                </div>
-
-                                                <div className={dataInput?.level >= 2 ? '' : 'hidden'}>
-                                                    <label className='text-xs font-normal'>
-                                                        Kelompok
-                                                    </label>
-                                                    <Select
-                                                        placeholder="Pilih Rekening Kelompok"
-                                                        className='text-xs'
-                                                        options={options2}
-                                                        value={
-                                                            dataInput?.rek_2_id ?
-                                                                options2?.filter((data: any) => data.value == dataInput?.rek_2_id)[0]
-                                                                : null
-                                                        }
-                                                        onChange={(e) => {
-                                                            setDataInput({
-                                                                ...dataInput,
-                                                                rek_2_id: e?.value,
-                                                                rek_3_id: '',
-                                                                rek_4_id: '',
-                                                                rek_5_id: '',
-                                                                level: 3,
-                                                            });
-
-                                                            fetchRekenings(periode, 3, e?.value).then((res) => {
-                                                                if (res.status === 'success') {
-                                                                    setOptions3(res.data.map((data: any) => ({
-                                                                        value: data.id,
-                                                                        label: data.fullcode + ' - ' + data.name,
-                                                                    })) ?? []);
-                                                                }
-                                                            });
-                                                            setOptions4([]);
-                                                            setOptions5([]);
-                                                            setOptions6([]);
-                                                        }}
-                                                        isDisabled={dataInput.inputType == 'edit' ? true : false}
-                                                    />
-                                                </div>
-
-                                                <div className={dataInput?.level >= 3 ? '' : 'hidden'}>
-                                                    <label className='text-xs font-normal'>
-                                                        Jenis
-                                                    </label>
-                                                    <Select
-                                                        placeholder="Pilih Rekening Jenis"
-                                                        className='text-xs'
-                                                        options={options3}
-                                                        value={
-                                                            dataInput?.rek_3_id ?
-                                                                options3?.filter((data: any) => data.value == dataInput?.rek_3_id)[0]
-                                                                : null
-                                                        }
-                                                        onChange={(e) => {
-                                                            setDataInput({
-                                                                ...dataInput,
-                                                                rek_3_id: e?.value,
-                                                                rek_4_id: '',
-                                                                rek_5_id: '',
-                                                                level: 4,
-                                                            });
-
-                                                            fetchRekenings(periode, 4, e?.value).then((res) => {
-                                                                if (res.status === 'success') {
-                                                                    setOptions4(res.data.map((data: any) => ({
-                                                                        value: data.id,
-                                                                        label: data.fullcode + ' - ' + data.name,
-                                                                    })) ?? []);
-                                                                }
-                                                            });
-                                                            setOptions5([]);
-                                                            setOptions6([]);
-                                                        }}
-                                                        isDisabled={dataInput.inputType == 'edit' ? true : false}
-                                                    />
-                                                </div>
-
-                                                <div className={dataInput?.level >= 4 ? '' : 'hidden'}>
-                                                    <label className='text-xs font-normal'>
-                                                        Objek
-                                                    </label>
-                                                    <Select
-                                                        placeholder="Pilih Rekening Objek"
-                                                        className='text-xs'
-                                                        options={options4}
-                                                        value={
-                                                            dataInput?.rek_4_id ?
-                                                                options4?.filter((data: any) => data.value == dataInput?.rek_4_id)[0]
-                                                                : null
-                                                        }
-                                                        onChange={(e) => {
-                                                            setDataInput({
-                                                                ...dataInput,
-                                                                rek_4_id: e?.value,
-                                                                rek_5_id: '',
-                                                                level: 5,
-                                                            });
-
-                                                            fetchRekenings(periode, 5, e?.value).then((res) => {
-                                                                if (res.status === 'success') {
-                                                                    setOptions5(res.data.map((data: any) => ({
-                                                                        value: data.id,
-                                                                        label: data.fullcode + ' - ' + data.name,
-                                                                    })) ?? []);
-                                                                }
-                                                            });
-                                                            setOptions6([]);
-                                                        }}
-                                                        isDisabled={dataInput.inputType == 'edit' ? true : false}
-                                                    />
-                                                </div>
-
-                                                <div className={dataInput?.level >= 5 ? '' : 'hidden'}>
-                                                    <label className='text-xs font-normal'>
-                                                        Rincian
-                                                    </label>
-                                                    <Select
-                                                        placeholder="Pilih Rekening Rincian"
-                                                        className='text-xs'
-                                                        options={options5}
-                                                        value={
-                                                            dataInput?.rek_5_id ?
-                                                                options5?.filter((data: any) => data.value == dataInput?.rek_5_id)[0]
-                                                                : null
-                                                        }
-                                                        onChange={(e) => {
-                                                            setDataInput({
-                                                                ...dataInput,
-                                                                rek_5_id: e?.value,
-                                                                level: 6,
-                                                            });
-
-                                                            fetchRekenings(periode, 6, e?.value).then((res) => {
-                                                                if (res.status === 'success') {
-                                                                    setOptions6(res.data.map((data: any) => ({
-                                                                        value: data.id,
-                                                                        label: data.fullcode + ' - ' + data.name,
-                                                                    })) ?? []);
-                                                                }
-                                                            });
-                                                        }}
-                                                        isDisabled={dataInput.inputType == 'edit' ? true : false}
-                                                    />
-                                                </div>
-
-                                            </div>
-
-                                            <div className={dataInput?.level >= 2 ? 'w-full sm:w-1/2 space-y-3' : 'w-full'}>
-
-                                                <div>
-                                                    <label className="text-xs font-normal">
-                                                        Kode
-                                                        {dataInput?.level == 1 ? ' Akun' : ''}
-                                                        {dataInput?.level == 2 ? ' Kelompok' : ''}
-                                                        {dataInput?.level == 3 ? ' Jenis' : ''}
-                                                        {dataInput?.level == 4 ? ' Objek' : ''}
-                                                        {dataInput?.level == 5 ? ' Rincian' : ''}
-                                                        {dataInput?.level == 6 ? ' Sub Rincian' : ''}
-                                                    </label>
-                                                    <div className="">
-                                                        <input
-                                                            type="number"
-                                                            onKeyDown={(e) => {
-                                                                if (e.key == 'e') {
-                                                                    e.preventDefault();
-                                                                }
-                                                            }}
-                                                            className="form-input font-normal text-xs px-2"
-                                                            placeholder="Masukkan Kode"
-                                                            value={dataInput?.code}
-                                                            onChange={(e) => setDataInput({ ...dataInput, code: e.target.value })}
-                                                        />
-                                                        <div id="error-code" className='validation-elements text-red-500 text-xs'></div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label className="text-xs font-normal">
-                                                        Uraian Rekening
-                                                        {dataInput?.level == 1 ? ' Akun' : ''}
-                                                        {dataInput?.level == 2 ? ' Kelompok' : ''}
-                                                        {dataInput?.level == 3 ? ' Jenis' : ''}
-                                                        {dataInput?.level == 4 ? ' Objek' : ''}
-                                                        {dataInput?.level == 5 ? ' Rincian' : ''}
-                                                        {dataInput?.level == 6 ? ' Sub Rincian' : ''}
-                                                    </label>
-                                                    <div className="">
-                                                        <textarea
-                                                            className="form-input h-[100px] resize-none font-normal text-xs px-2"
-                                                            placeholder={
-                                                                (dataInput?.level == 1 ? 'Masukkan Uraian Akun' : '') ||
-                                                                (dataInput?.level == 2 ? 'Masukkan Uraian Kelompok' : '') ||
-                                                                (dataInput?.level == 3 ? 'Masukkan Uraian Jenis' : '') ||
-                                                                (dataInput?.level == 4 ? 'Masukkan Uraian Objek' : '') ||
-                                                                (dataInput?.level == 5 ? 'Masukkan Uraian Rincian' : '')
+                                                    <div className={dataInput?.level >= 1 ? '' : 'hidden'}>
+                                                        <label className='text-xs font-normal'>
+                                                            Akun
+                                                        </label>
+                                                        <Select
+                                                            placeholder="Pilih Rekening Akun"
+                                                            className='text-xs'
+                                                            options={options1}
+                                                            value={
+                                                                dataInput?.rek_1_id ?
+                                                                    options1?.filter((data: any) => data.value == dataInput?.rek_1_id)[0]
+                                                                    : null
                                                             }
-                                                            value={dataInput?.name}
-                                                            onChange={(e) => setDataInput({ ...dataInput, name: e.target.value })}
-                                                        ></textarea>
-                                                        <div id="error-name" className='validation-elements text-red-500 text-xs'></div>
+                                                            onChange={(e) => {
+                                                                setDataInput({
+                                                                    ...dataInput,
+                                                                    rek_1_id: e?.value,
+                                                                    rek_2_id: '',
+                                                                    rek_3_id: '',
+                                                                    rek_4_id: '',
+                                                                    rek_5_id: '',
+                                                                    level: 2,
+                                                                });
+
+                                                                fetchRekenings(periode, 2, e?.value).then((res) => {
+                                                                    if (res.status === 'success') {
+                                                                        setOptions2(res.data.map((data: any) => ({
+                                                                            value: data.id,
+                                                                            label: data.fullcode + ' - ' + data.name,
+                                                                        })) ?? []);
+                                                                    }
+                                                                });
+                                                                setOptions3([]);
+                                                                setOptions4([]);
+                                                                setOptions5([]);
+                                                                setOptions6([]);
+                                                            }}
+                                                            isDisabled={dataInput.inputType == 'edit' ? true : false}
+                                                        />
+                                                    </div>
+
+                                                    <div className={dataInput?.level >= 2 ? '' : 'hidden'}>
+                                                        <label className='text-xs font-normal'>
+                                                            Kelompok
+                                                        </label>
+                                                        <Select
+                                                            placeholder="Pilih Rekening Kelompok"
+                                                            className='text-xs'
+                                                            options={options2}
+                                                            value={
+                                                                dataInput?.rek_2_id ?
+                                                                    options2?.filter((data: any) => data.value == dataInput?.rek_2_id)[0]
+                                                                    : null
+                                                            }
+                                                            onChange={(e) => {
+                                                                setDataInput({
+                                                                    ...dataInput,
+                                                                    rek_2_id: e?.value,
+                                                                    rek_3_id: '',
+                                                                    rek_4_id: '',
+                                                                    rek_5_id: '',
+                                                                    level: 3,
+                                                                });
+
+                                                                fetchRekenings(periode, 3, e?.value).then((res) => {
+                                                                    if (res.status === 'success') {
+                                                                        setOptions3(res.data.map((data: any) => ({
+                                                                            value: data.id,
+                                                                            label: data.fullcode + ' - ' + data.name,
+                                                                        })) ?? []);
+                                                                    }
+                                                                });
+                                                                setOptions4([]);
+                                                                setOptions5([]);
+                                                                setOptions6([]);
+                                                            }}
+                                                            isDisabled={dataInput.inputType == 'edit' ? true : false}
+                                                        />
+                                                    </div>
+
+                                                    <div className={dataInput?.level >= 3 ? '' : 'hidden'}>
+                                                        <label className='text-xs font-normal'>
+                                                            Jenis
+                                                        </label>
+                                                        <Select
+                                                            placeholder="Pilih Rekening Jenis"
+                                                            className='text-xs'
+                                                            options={options3}
+                                                            value={
+                                                                dataInput?.rek_3_id ?
+                                                                    options3?.filter((data: any) => data.value == dataInput?.rek_3_id)[0]
+                                                                    : null
+                                                            }
+                                                            onChange={(e) => {
+                                                                setDataInput({
+                                                                    ...dataInput,
+                                                                    rek_3_id: e?.value,
+                                                                    rek_4_id: '',
+                                                                    rek_5_id: '',
+                                                                    level: 4,
+                                                                });
+
+                                                                fetchRekenings(periode, 4, e?.value).then((res) => {
+                                                                    if (res.status === 'success') {
+                                                                        setOptions4(res.data.map((data: any) => ({
+                                                                            value: data.id,
+                                                                            label: data.fullcode + ' - ' + data.name,
+                                                                        })) ?? []);
+                                                                    }
+                                                                });
+                                                                setOptions5([]);
+                                                                setOptions6([]);
+                                                            }}
+                                                            isDisabled={dataInput.inputType == 'edit' ? true : false}
+                                                        />
+                                                    </div>
+
+                                                    <div className={dataInput?.level >= 4 ? '' : 'hidden'}>
+                                                        <label className='text-xs font-normal'>
+                                                            Objek
+                                                        </label>
+                                                        <Select
+                                                            placeholder="Pilih Rekening Objek"
+                                                            className='text-xs'
+                                                            options={options4}
+                                                            value={
+                                                                dataInput?.rek_4_id ?
+                                                                    options4?.filter((data: any) => data.value == dataInput?.rek_4_id)[0]
+                                                                    : null
+                                                            }
+                                                            onChange={(e) => {
+                                                                setDataInput({
+                                                                    ...dataInput,
+                                                                    rek_4_id: e?.value,
+                                                                    rek_5_id: '',
+                                                                    level: 5,
+                                                                });
+
+                                                                fetchRekenings(periode, 5, e?.value).then((res) => {
+                                                                    if (res.status === 'success') {
+                                                                        setOptions5(res.data.map((data: any) => ({
+                                                                            value: data.id,
+                                                                            label: data.fullcode + ' - ' + data.name,
+                                                                        })) ?? []);
+                                                                    }
+                                                                });
+                                                                setOptions6([]);
+                                                            }}
+                                                            isDisabled={dataInput.inputType == 'edit' ? true : false}
+                                                        />
+                                                    </div>
+
+                                                    <div className={dataInput?.level >= 5 ? '' : 'hidden'}>
+                                                        <label className='text-xs font-normal'>
+                                                            Rincian
+                                                        </label>
+                                                        <Select
+                                                            placeholder="Pilih Rekening Rincian"
+                                                            className='text-xs'
+                                                            options={options5}
+                                                            value={
+                                                                dataInput?.rek_5_id ?
+                                                                    options5?.filter((data: any) => data.value == dataInput?.rek_5_id)[0]
+                                                                    : null
+                                                            }
+                                                            onChange={(e) => {
+                                                                setDataInput({
+                                                                    ...dataInput,
+                                                                    rek_5_id: e?.value,
+                                                                    level: 6,
+                                                                });
+
+                                                                fetchRekenings(periode, 6, e?.value).then((res) => {
+                                                                    if (res.status === 'success') {
+                                                                        setOptions6(res.data.map((data: any) => ({
+                                                                            value: data.id,
+                                                                            label: data.fullcode + ' - ' + data.name,
+                                                                        })) ?? []);
+                                                                    }
+                                                                });
+                                                            }}
+                                                            isDisabled={dataInput.inputType == 'edit' ? true : false}
+                                                        />
+                                                    </div>
+
+                                                </div>
+
+                                                <div className={dataInput?.level >= 2 ? 'w-full sm:w-1/2 space-y-3' : 'w-full'}>
+
+                                                    <div>
+                                                        <label className="text-xs font-normal">
+                                                            Kode
+                                                            {dataInput?.level == 1 ? ' Akun' : ''}
+                                                            {dataInput?.level == 2 ? ' Kelompok' : ''}
+                                                            {dataInput?.level == 3 ? ' Jenis' : ''}
+                                                            {dataInput?.level == 4 ? ' Objek' : ''}
+                                                            {dataInput?.level == 5 ? ' Rincian' : ''}
+                                                            {dataInput?.level == 6 ? ' Sub Rincian' : ''}
+                                                        </label>
+                                                        <div className="">
+                                                            <input
+                                                                type="number"
+                                                                onKeyDown={(e) => {
+                                                                    if (e.key == 'e') {
+                                                                        e.preventDefault();
+                                                                    }
+                                                                }}
+                                                                className="form-input font-normal text-xs px-2"
+                                                                placeholder="Masukkan Kode"
+                                                                value={dataInput?.code}
+                                                                onChange={(e) => setDataInput({ ...dataInput, code: e.target.value })}
+                                                            />
+                                                            <div id="error-code" className='validation-elements text-red-500 text-xs'></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="text-xs font-normal">
+                                                            Uraian Rekening
+                                                            {dataInput?.level == 1 ? ' Akun' : ''}
+                                                            {dataInput?.level == 2 ? ' Kelompok' : ''}
+                                                            {dataInput?.level == 3 ? ' Jenis' : ''}
+                                                            {dataInput?.level == 4 ? ' Objek' : ''}
+                                                            {dataInput?.level == 5 ? ' Rincian' : ''}
+                                                            {dataInput?.level == 6 ? ' Sub Rincian' : ''}
+                                                        </label>
+                                                        <div className="">
+                                                            <textarea
+                                                                className="form-input h-[100px] resize-none font-normal text-xs px-2"
+                                                                placeholder={
+                                                                    (dataInput?.level == 1 ? 'Masukkan Uraian Akun' : '') ||
+                                                                    (dataInput?.level == 2 ? 'Masukkan Uraian Kelompok' : '') ||
+                                                                    (dataInput?.level == 3 ? 'Masukkan Uraian Jenis' : '') ||
+                                                                    (dataInput?.level == 4 ? 'Masukkan Uraian Objek' : '') ||
+                                                                    (dataInput?.level == 5 ? 'Masukkan Uraian Rincian' : '')
+                                                                }
+                                                                value={dataInput?.name}
+                                                                onChange={(e) => setDataInput({ ...dataInput, name: e.target.value })}
+                                                            ></textarea>
+                                                            <div id="error-name" className='validation-elements text-red-500 text-xs'></div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div className="sticky bottom-0 left-0 w-full p-4 bg-white dark:bg-slate-900">
+                                            <div className="flex justify-end items-center">
+                                                <button type="button" className="btn btn-outline-danger" onClick={() => setModalInput(false)}>
+                                                    Batalkan
+                                                </button>
+
+                                                {saveLoading == false ? (
+                                                    <>
+                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => save()}>
+                                                            Simpan
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4 gap-2">
+                                                            <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
+                                                            Menyimpan...
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
+                        </div>
+                    </Dialog>
+                </Transition >
+
+                <Transition appear show={modalImport} as={Fragment}>
+                    <Dialog as="div" open={modalImport} onClose={() => setModalImport(false)}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0" />
+                        </Transition.Child>
+                        <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen px-4">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+
+                                        <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                            <h5 className="font-bold text-lg">
+                                                Import Rekening
+                                            </h5>
+                                            <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalImport(false)}>
+                                                <IconX></IconX>
+                                            </button>
+                                        </div>
+
+                                        <div className="p-5 pb-10 w-full relative overflow-auto">
+                                            <div className="flex flex-col space-y-3">
+
+                                                <div>
+                                                    <label className="text-xs font-normal">
+                                                        Pilih File Excel
+                                                    </label>
+                                                    <div className="">
+                                                        <input type="file" className="form-input" onChange={(e: any) => setFile(e?.target?.files[0])} accept='.xlsx,.xls' />
                                                     </div>
                                                 </div>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className="sticky bottom-0 left-0 w-full p-4 bg-white dark:bg-slate-900">
-                                        <div className="flex justify-end items-center">
-                                            <button type="button" className="btn btn-outline-danger" onClick={() => setModalInput(false)}>
-                                                Batalkan
-                                            </button>
-
-                                            {saveLoading == false ? (
-                                                <>
-                                                    <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => save()}>
-                                                        Simpan
-                                                    </button>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4 gap-2">
-                                                        <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
-                                                        Menyimpan...
-                                                    </button>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                </Dialog.Panel>
-                            </Transition.Child>
-                        </div>
-                    </div>
-                </Dialog>
-            </Transition >
-
-            <Transition appear show={modalImport} as={Fragment}>
-                <Dialog as="div" open={modalImport} onClose={() => setModalImport(false)}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0" />
-                    </Transition.Child>
-                    <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
-                        <div className="flex items-center justify-center min-h-screen px-4">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
-
-                                    <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
-                                        <h5 className="font-bold text-lg">
-                                            Import Rekening
-                                        </h5>
-                                        <button type="button" className="text-white-dark hover:text-dark" onClick={() => setModalImport(false)}>
-                                            <IconX></IconX>
-                                        </button>
-                                    </div>
-
-                                    <div className="p-5 pb-10 w-full relative overflow-auto">
-                                        <div className="flex flex-col space-y-3">
-
-                                            <div>
-                                                <label className="text-xs font-normal">
-                                                    Pilih File Excel
-                                                </label>
-                                                <div className="">
-                                                    <input type="file" className="form-input" onChange={(e: any) => setFile(e?.target?.files[0])} accept='.xlsx,.xls' />
-                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="sticky bottom-0 left-0 w-full p-4 bg-white dark:bg-slate-900">
-                                        <div className="flex justify-end items-center">
-                                            <button type="button" className="btn btn-outline-danger" onClick={() => setModalImport(false)}>
-                                                Batalkan
-                                            </button>
+                                        <div className="sticky bottom-0 left-0 w-full p-4 bg-white dark:bg-slate-900">
+                                            <div className="flex justify-end items-center">
+                                                <button type="button" className="btn btn-outline-danger" onClick={() => setModalImport(false)}>
+                                                    Batalkan
+                                                </button>
 
-                                            {saveLoading == false ? (
-                                                <>
-                                                    <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => uploadFile()}>
-                                                        Simpan
-                                                    </button>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4 gap-2">
-                                                        <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
-                                                        Menyimpan...
-                                                    </button>
-                                                </>
-                                            )}
+                                                {saveLoading == false ? (
+                                                    <>
+                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => uploadFile()}>
+                                                            Simpan
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4 gap-2">
+                                                            <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
+                                                            Menyimpan...
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                </Dialog.Panel>
-                            </Transition.Child>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
                         </div>
-                    </div>
-                </Dialog>
-            </Transition >
+                    </Dialog>
+                </Transition >
 
-        </>
+            </>
+        );
+    }
+    return (
+        <Page403 />
     );
 }
 
