@@ -1655,7 +1655,22 @@ const Index = () => {
                         </div>
                         <form
                             className='mt-10 grid grid-cols-10 gap-5'>
-                            <div className="col-span-10 md:col-span-5 space-y-5">
+                            <div className="col-span-10 md:col-span-5 space-y-2">
+                                <div className="">
+                                    <label>Catatan</label>
+                                    <textarea
+                                        value={dataKeterangan?.notes}
+                                        onChange={(e) => {
+                                            setUnsaveKeteranganStatus(true);
+                                            setDataKeterangan((prev: any) => {
+                                                const updated = { ...prev };
+                                                updated['notes'] = e.target.value;
+                                                return updated;
+                                            });
+                                        }}
+                                        placeholder='Masukkan Catatan Disini...'
+                                        className='form-input resize-none min-h-[150px]'></textarea>
+                                </div>
                                 <div className="">
                                     <label>Faktor Penghambat</label>
                                     <textarea
@@ -2503,7 +2518,7 @@ const Index = () => {
                                         </div>
 
                                         <div className="flex flex-wrap items-center justify-end border-t pt-1 gap-2">
-                                            {(CurrentUser?.role_id === 9 || CurrentUser?.role_id === 1) && (
+                                            {([1, 2, 9].includes(CurrentUser?.role_id)) && (
                                                 <div>
                                                     <button
                                                         onClick={() => requestVerification()}
@@ -2514,15 +2529,17 @@ const Index = () => {
                                                     </button>
                                                 </div>
                                             )}
-                                            <div>
-                                                <button
-                                                    onClick={() => replyVerification()}
-                                                    type="button"
-                                                    className="btn btn-outline-success text-xs w-full">
-                                                    <IconSend className="w-4 h-4 mr-1" />
-                                                    Tanggapi Permintaan
-                                                </button>
-                                            </div>
+                                            {([1, 2, 6].includes(CurrentUser?.role_id)) && (
+                                                <div>
+                                                    <button
+                                                        onClick={() => replyVerification()}
+                                                        type="button"
+                                                        className="btn btn-outline-success text-xs w-full">
+                                                        <IconSend className="w-4 h-4 mr-1" />
+                                                        Tanggapi Permintaan
+                                                    </button>
+                                                </div>
+                                            )}
                                             <div>
                                                 <button
                                                     onClick={() => {

@@ -395,7 +395,7 @@ const Index = () => {
 
                 {instance && (
                     <div className="panel flex gap-5">
-                        <div className={selectedSubKegiatan === null ? 'space-y-2 transition-all duration-700 w-full' : 'space-y-2 transition-all duration-700 w-1/2'}>
+                        <div className={selectedSubKegiatan === null ? 'space-y-2 transition-all duration-700 h-[calc(100vh-280px)] overflow-auto w-full' : 'space-y-2 transition-all duration-700 h-[calc(100vh-280px)] overflow-auto w-1/2'}>
 
                             {datas?.map((data: any, index: number) => (
                                 <div key={index} className="text-slate-700 dark:text-white border border-[#d3d3d3] rounded dark:border-[#1b2e4b]">

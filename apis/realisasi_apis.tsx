@@ -105,7 +105,7 @@ export async function SaveKeterangan(idRealisasiSubKegiatan: any, datas: any, ye
     try {
         const res = await axios.post(baseUri + '/caram/realisasi-keterangan/' + idRealisasiSubKegiatan + '/save', {
             'id': datas.id,
-            'note': datas.note,
+            'notes': datas.notes,
             'link_map': datas.link_map,
             'faktor_penghambat': datas.faktor_penghambat,
             'longitude': datas.longitude,
