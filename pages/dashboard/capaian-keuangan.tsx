@@ -466,7 +466,7 @@ const Index = () => {
 
                 <div className="grid grid-cols-10 gap-4">
                     <div className="col-span-10 mb-0 text-center font-bold text-xl">
-                        Capaian Realisasi Anggaran
+                        Capaian Keuangan
                         <br />
                         Perangkat Daerah Kabupaten Ogan Ilir
                     </div>

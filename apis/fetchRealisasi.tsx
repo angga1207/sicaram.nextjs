@@ -69,14 +69,18 @@ export async function fetchKodeRekening(level: any = 1, parent_id: any = null) {
     }
 }
 
-export async function fetchProgramsSubKegiatan(instance: string = '') {
+export async function fetchProgramsSubKegiatan(instance: string = '', year: number = 0) {
     // caram/realisasi/listProgramsSubKegiatan
     try {
-        const res = await axios.get(baseUri + '/caram/realisasi/listProgramsSubKegiatan?instance_id=' + instance, {
+        const res = await axios.get(baseUri + '/caram/realisasi/listProgramsSubKegiatan', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
+            params: {
+                instance_id: instance,
+                year: year,
+            }
         });
         const data = await res.data;
         return data;

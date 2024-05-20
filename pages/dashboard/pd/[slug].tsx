@@ -95,6 +95,9 @@ const Index = () => {
     const [AnggaranSeriesSubKegiatan, setAnggaranSeriesSubKegiatan] = useState<any>([]);
     const [KinerjaSeriesSubKegiatan, setKinerjaSeriesSubKegiatan] = useState<any>([]);
 
+    const [detailRealisasi, setDetailRealisasi] = useState<any>([]);
+    const [selectedDetailRealisasi, setSelectedDetailRealisasi] = useState<any>(null);
+
     useEffect(() => {
         setYear(router.query.year ?? new Date().getFullYear());
         setMonth(router.query.month ?? new Date().getMonth());
@@ -1165,6 +1168,7 @@ const Index = () => {
                 }));
                 setAnggaranSeriesSubKegiatan(res.data.chart_keuangan);
                 setKinerjaSeriesSubKegiatan(res.data.chart_kinerja);
+                setDetailRealisasi(res.data.rincian_realisasi)
             }
         });
     }
@@ -2917,6 +2921,141 @@ const Index = () => {
                                     </>
                                 )}
                             </>
+                        )}
+
+                        {selectedSubKegiatan && (
+                            <div className="panel">
+                                <div className='text-md font-semibold underline mb-5'>
+                                    Rincian Realisasi
+                                </div>
+
+                                <div className="table-responsive h-[calc(100vh-200px)]">
+                                    <table className=''>
+                                        <thead className='!bg-slate-800 sticky top-0 left-0 w-full'>
+                                            <tr>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[150px]'>
+                                                    Kode Rekening
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center'>
+                                                    Uraian
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[120px]'>
+                                                    Koefisien Target
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[120px]'>
+                                                    Koefisien Realisasi
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[120px]'>
+                                                    Harga Satuan
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[200px]'>
+                                                    Anggaran
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[200px]'>
+                                                    Realisasi
+                                                </th>
+                                                <th className='!bg-slate-800 !text-white !text-center !w-[100px]'>
+                                                    Data Bulan
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {detailRealisasi?.data?.map((detail: any, indexRincian: number) => (
+                                                <>
+                                                    <tr className={detail?.type === 'target-kinerja' ? '!bg-blue-50' : ''}>
+                                                        <td>
+                                                            {detail?.fullcode}
+                                                        </td>
+                                                        <td colSpan={4}>
+                                                            {detail?.type === 'rekening' && (
+                                                                <>
+                                                                    {detail?.uraian}
+                                                                </>
+                                                            )}
+                                                            {detail?.type === 'target-kinerja' && (
+                                                                <span className="font-semibold">
+                                                                    [#] {detail?.nama_paket}
+                                                                </span>
+                                                            )}
+                                                        </td>
+                                                        <td className='!text-end'>
+                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.pagu)}
+                                                        </td>
+                                                        <td className='!text-end'>
+                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}
+                                                        </td>
+                                                        <td>
+                                                            {new Date(
+                                                                detail?.realisasi_year + '-' + detail?.realisasi_month + '-01'
+                                                            )?.toLocaleDateString('id-ID', {
+                                                                year: 'numeric',
+                                                                month: 'long',
+                                                            })}
+                                                        </td>
+                                                    </tr>
+                                                    {detail?.rincian_belanja?.map((rincian: any, indexRincianBelanja: number) => (
+                                                        <>
+                                                            <tr className='!bg-blue-50'>
+                                                                <td></td>
+                                                                <td colSpan={4} className="!font-semibold">
+                                                                    {rincian?.title}
+                                                                </td>
+                                                                <td className='!text-end !whitespace-nowrap'>
+                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.pagu)}
+                                                                </td>
+                                                                <td className='!text-end !whitespace-nowrap'>
+                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.realisasi_anggaran)}
+                                                                </td>
+                                                                <td>
+                                                                    {new Date(
+                                                                        rincian?.realisasi_year + '-' + rincian?.realisasi_month + '-01'
+                                                                    )?.toLocaleDateString('id-ID', {
+                                                                        year: 'numeric',
+                                                                        month: 'long',
+                                                                    })}
+                                                                </td>
+                                                            </tr>
+                                                            {rincian?.keterangan_rincian?.map((keterangan: any, indexKeterangan: number) => (
+                                                                <tr className='!bg-blue-50'>
+                                                                    <td></td>
+                                                                    <td className="">
+                                                                        {keterangan?.title}
+                                                                    </td>
+                                                                    <td className="">
+                                                                        {keterangan?.koefisien + ' ' + keterangan?.satuan_name}
+                                                                    </td>
+                                                                    <td className="">
+                                                                        {keterangan?.koefisien_realisasi + ' ' + keterangan?.satuan_name}
+                                                                    </td>
+                                                                    <td className="!text-end !whitespace-nowrap">
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.harga_satuan)}
+                                                                    </td>
+                                                                    <td className="!text-end !whitespace-nowrap">
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.pagu)}
+                                                                    </td>
+                                                                    <td className="!text-end !whitespace-nowrap">
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.realisasi_anggaran_keterangan)}
+                                                                    </td>
+                                                                    <td>
+                                                                        {new Date(
+                                                                            keterangan?.realisasi_year + '-' + keterangan?.realisasi_month + '-01'
+                                                                        )?.toLocaleDateString('id-ID', {
+                                                                            year: 'numeric',
+                                                                            month: 'long',
+                                                                        })}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </>
+                                                    ))}
+                                                </>
+                                            ))}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         )}
                     </div>
                 )}

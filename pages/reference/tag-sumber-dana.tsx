@@ -205,7 +205,7 @@ const Index = () => {
         });
     }
 
-    if (CurrentUser?.role_id && [1, 2, 4, 7].includes(CurrentUser?.role_id)) {
+    if (CurrentUser?.role_id && [1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) {
         return (
             <>
                 <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5 px-5">

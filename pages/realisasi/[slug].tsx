@@ -147,7 +147,7 @@ const Index = () => {
         message: null,
     });
     const [showTags, setShowTags] = useState(false);
-    const [tab, setTab] = useState(1);
+    const [tab, setTab] = useState(2);
     const [openLightBox, setOpenLightBox] = useState(false);
 
     const [images, setImages] = useState<any>([]);
@@ -431,34 +431,7 @@ const Index = () => {
             <div className="panel p-0">
 
                 <div className="w-full flex items-center">
-                    <button
-                        onClick={(e) => {
-                            if (unsaveKeteranganStatus) {
-                                e.preventDefault();
-                                Swal.fire({
-                                    title: 'Peringatan',
-                                    text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Ya, Lanjutkan',
-                                    cancelButtonText: 'Batal',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        setUnsaveKeteranganStatus(false);
-                                        setTab(1);
-                                    }
-                                });
-                            } else {
-                                setTab(1);
-                            }
-                        }}
-                        className={`${tab === 1 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tl grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
-                    >
-                        <FontAwesomeIcon icon={faListUl} className='w-4 h-4' />
-                        <span className='font-semibold whitespace-nowrap uppercase'>
-                            Data Realisasi
-                        </span>
-                    </button>
+
                     <button
                         onClick={(e) => {
                             if (unsaveKeteranganStatus) {
@@ -487,6 +460,7 @@ const Index = () => {
                             Rincian Belanja
                         </span>
                     </button>
+
                     <button
                         onClick={() => {
                             setTab(3)
@@ -498,6 +472,7 @@ const Index = () => {
                             Keterangan
                         </span>
                     </button>
+
                     <button
                         onClick={(e) => {
                             if (unsaveKeteranganStatus) {
@@ -526,6 +501,36 @@ const Index = () => {
                             Kontrak
                         </span>
                     </button>
+
+                    <button
+                        onClick={(e) => {
+                            if (unsaveKeteranganStatus) {
+                                e.preventDefault();
+                                Swal.fire({
+                                    title: 'Peringatan',
+                                    text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Ya, Lanjutkan',
+                                    cancelButtonText: 'Batal',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        setUnsaveKeteranganStatus(false);
+                                        setTab(1);
+                                    }
+                                });
+                            } else {
+                                setTab(1);
+                            }
+                        }}
+                        className={`${tab === 1 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tl grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                    >
+                        <FontAwesomeIcon icon={faListUl} className='w-4 h-4' />
+                        <span className='font-semibold whitespace-nowrap uppercase'>
+                            Data Realisasi
+                        </span>
+                    </button>
+
                 </div>
 
                 {tab === 2 && (
@@ -1494,6 +1499,9 @@ const Index = () => {
                                             Indikator
                                         </th>
                                         <th className='!text-center !text-xs !w-[150px]'>
+                                            Target (Renstra)
+                                        </th>
+                                        <th className='!text-center !text-xs !w-[150px]'>
                                             Target (Renja)
                                         </th>
                                         <th className='!text-center !text-xs !w-[150px]'>
@@ -1512,6 +1520,33 @@ const Index = () => {
                                                     <td>
                                                         <div className='text-xs'>
                                                             {indicator?.name}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className='text-xs'>
+                                                            <div className="whitespace-nowrap">
+                                                                {indicator?.type === 'anggaran' && (
+                                                                    <>
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {
+                                                                            style: 'decimal',
+                                                                            minimumFractionDigits: 0,
+                                                                        }).format(indicator?.target_renstra)}
+                                                                    </>
+                                                                )}
+                                                                {indicator?.type === 'kinerja' && (
+                                                                    <>
+                                                                        {new Intl.NumberFormat('id-ID', {
+                                                                            style: 'decimal',
+                                                                            minimumFractionDigits: 0,
+                                                                        }).format(indicator?.target_renstra ?? 0)} {indicator?.satuan_name_renstra}
+                                                                    </>
+                                                                )}
+                                                                {indicator?.type === 'persentase-kinerja' && (
+                                                                    <>
+                                                                        {indicator?.target_renstra} {indicator?.satuan_name_renstra}
+                                                                    </>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -1554,10 +1589,14 @@ const Index = () => {
                                                                 )}
                                                                 {indicator?.type === 'kinerja' && (
                                                                     <>
-                                                                        {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(indicator?.target ?? 0)} {indicator?.satuan_name}
+                                                                        {indicator?.target && (
+                                                                            <>
+                                                                                {new Intl.NumberFormat('id-ID', {
+                                                                                    style: 'decimal',
+                                                                                    minimumFractionDigits: 0,
+                                                                                }).format(indicator?.target ?? 0)} {indicator?.satuan_name}
+                                                                            </>
+                                                                        )}
                                                                     </>
                                                                 )}
                                                                 {indicator?.type === 'persentase-kinerja' && (
@@ -1572,6 +1611,7 @@ const Index = () => {
                                                         <div className='text-xs'>
                                                             <input
                                                                 value={indicator?.realisasi}
+                                                                disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
                                                                 onChange={(e) => {
                                                                     setUnsaveStatus(true);
                                                                     setDataRincian((prev: any) => {
@@ -1594,7 +1634,7 @@ const Index = () => {
                                                                         return updated;
                                                                     });
                                                                 }}
-                                                                className='form-input px-1 py-0.5 text-xs font-normal'
+                                                                className='form-input px-1 py-0.5 text-xs font-normal disabled:bg-slate-200'
                                                             />
                                                         </div>
                                                     </td>

@@ -91,7 +91,8 @@ const Index = () => {
     const [periodes, setPeriodes] = useState([]);
     const [periode, setPeriode] = useState(1);
     const [years, setYears] = useState<any>(null);
-    const [year, setYear] = useState<any>(router.query.year ?? new Date().getFullYear());
+    // const [year, setYear] = useState<any>(router.query.year ?? new Date().getFullYear());
+    const [year, setYear] = useState<any>(null);
     const [months, setMonths] = useState<any>([
         { id: 1, name: 'Januari' },
         { id: 2, name: 'Februari' },
@@ -179,22 +180,26 @@ const Index = () => {
         }
     }, [searchInstance]);
 
-    const backToInstances = () => {
-        setInstance(null);
-        setDatas([]);
-    }
-
     useEffect(() => {
-        if (instance) {
-            fetchProgramsSubKegiatan(instance).then((data) => {
+        if (instance && year) {
+            fetchProgramsSubKegiatan(instance, year).then((data) => {
                 setDatas(data.data);
             });
         }
-    }, [instance]);
+    }, [instance, year]);
 
     const [showPrograms, setShowPrograms] = useState<string[]>([]);
     const [showKegiatans, setShowKegiatans] = useState<string[]>([]);
     const [showSubKegiatans, setShowSubKegiatans] = useState<string[]>([]);
+
+    const backToInstances = () => {
+        setInstance(null);
+        setYear(null);
+        setDatas([]);
+        setShowPrograms([]);
+        setShowKegiatans([]);
+        setShowSubKegiatans([]);
+    }
 
     const togglePrograms = (id: any) => {
         if (showPrograms.includes(id)) {
@@ -245,19 +250,19 @@ const Index = () => {
     }
 
     // click outside container to collapse all
-    useEffect(() => {
-        const handleOutSideClick = (event: any) => {
-            if (!ref.current?.contains(event.target)) {
-                setShowPrograms([]);
-                setShowKegiatans([]);
-                setShowSubKegiatans([]);
-            }
-        };
-        window.addEventListener("mousedown", handleOutSideClick);
-        return () => {
-            window.removeEventListener("mousedown", handleOutSideClick);
-        };
-    }, [ref]);
+    // useEffect(() => {
+    //     const handleOutSideClick = (event: any) => {
+    //         if (!ref.current?.contains(event.target)) {
+    //             setShowPrograms([]);
+    //             setShowKegiatans([]);
+    //             setShowSubKegiatans([]);
+    //         }
+    //     };
+    //     window.addEventListener("mousedown", handleOutSideClick);
+    //     return () => {
+    //         window.removeEventListener("mousedown", handleOutSideClick);
+    //     };
+    // }, [ref]);
 
     return (
         <>
@@ -468,7 +473,6 @@ const Index = () => {
                 </div>
             )}
 
-
             {!instance && instances?.length == 0 && (
                 <>
                     <div className="w-full h-[calc(100vh-300px)] flex flex-col items-center justify-center">
@@ -478,7 +482,27 @@ const Index = () => {
                 </>
             )}
 
-            {instance && (
+            {instance && !year && (
+                <div className='p-10'>
+                    <div className="text-center text-md font-semibold mb-5">
+                        Pilih Tahun
+                    </div>
+                    <div className="flex items-center justify-center gap-4">
+                        {years?.map((yr: any, index: number) => (
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setYear(yr);
+                                }}
+                                className={new Date().getFullYear() === yr ? 'btn btn-primary mr-2' : 'btn btn-outline-primary mr-2'}>
+                                {yr}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {instance && year && (
                 <div className="space-y-2" ref={ref}>
                     {datas?.map((program: any, index: number) => {
                         return (
@@ -560,29 +584,155 @@ const Index = () => {
 
                                                                         {showSubKegiatans.includes(subkegiatan?.id) && (
                                                                             <div className="mt-0 mb-5 panel p-3 pt-1 bg-blue-100 dark:bg-blue-900 rounded-t-none">
-                                                                                <div className="">
-                                                                                    <div className="text-xs font-normal mb-1">
-                                                                                        Input Realisasi
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <div className="text-center">
+                                                                                        <div className="text-xs mb-1">
+                                                                                            Target
+                                                                                        </div>
+                                                                                        {subkegiatan?.target_status == 'draft' && (
+                                                                                            <span className="badge bg-primary">
+                                                                                                Draft
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.target_status == 'verified' && (
+                                                                                            <span className="badge bg-success">
+                                                                                                Terverifikasi
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.target_status == 'return' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Dikembalikan
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.target_status == 'waiting' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Menunggu
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.target_status == 'sent' && (
+                                                                                            <span className="badge bg-info">
+                                                                                                Dikirim
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.target_status == 'reject' && (
+                                                                                            <span className="badge bg-danger">
+                                                                                                Ditolak
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <div className="text-center">
+                                                                                        <div className="text-xs mb-1">
+                                                                                            Renstra
+                                                                                        </div>
+                                                                                        {subkegiatan?.renstra_status == 'draft' && (
+                                                                                            <span className="badge bg-primary">
+                                                                                                Draft
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renstra_status == 'verified' && (
+                                                                                            <span className="badge bg-success">
+                                                                                                Terverifikasi
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renstra_status == 'return' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Dikembalikan
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renstra_status == 'waiting' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Menunggu
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renstra_status == 'sent' && (
+                                                                                            <span className="badge bg-info">
+                                                                                                Dikirim
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renstra_status == 'reject' && (
+                                                                                            <span className="badge bg-danger">
+                                                                                                Ditolak
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <div className="text-center">
+                                                                                        <div className="text-xs mb-1">
+                                                                                            Renja
+                                                                                        </div>
+                                                                                        {subkegiatan?.renja_status == 'draft' && (
+                                                                                            <span className="badge bg-primary">
+                                                                                                Draft
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renja_status == 'verified' && (
+                                                                                            <span className="badge bg-success">
+                                                                                                Terverifikasi
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renja_status == 'return' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Dikembalikan
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renja_status == 'waiting' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Menunggu
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renja_status == 'sent' && (
+                                                                                            <span className="badge bg-info">
+                                                                                                Dikirim
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.renja_status == 'reject' && (
+                                                                                            <span className="badge bg-danger">
+                                                                                                Ditolak
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <div className="text-center">
+                                                                                        <div className="text-xs mb-1">
+                                                                                            APBD
+                                                                                        </div>
+                                                                                        {subkegiatan?.apbd_status == 'draft' && (
+                                                                                            <span className="badge bg-primary">
+                                                                                                Draft
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.apbd_status == 'verified' && (
+                                                                                            <span className="badge bg-success">
+                                                                                                Terverifikasi
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.apbd_status == 'return' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Dikembalikan
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.apbd_status == 'waiting' && (
+                                                                                            <span className="badge bg-warning">
+                                                                                                Menunggu
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.apbd_status == 'sent' && (
+                                                                                            <span className="badge bg-info">
+                                                                                                Dikirim
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {subkegiatan?.apbd_status == 'reject' && (
+                                                                                            <span className="badge bg-danger">
+                                                                                                Ditolak
+                                                                                            </span>
+                                                                                        )}
                                                                                     </div>
                                                                                 </div>
-                                                                                <div className="flex items-center justify-start divide-x divide-indigo-500 overflow-x-auto pb-3 lg:pb-0">
-                                                                                    <select
-                                                                                        value={year}
-                                                                                        onChange={(e) => {
-                                                                                            e.preventDefault();
-                                                                                            setYear(e.target.value);
-                                                                                        }}
-                                                                                        className='form-select w-[130px] border-indigo-400 bg-transparent font-normal mr-2'>
-                                                                                        {years?.map((yr: any, index: number) => {
-                                                                                            return (
-                                                                                                <option key={index} value={yr}>
-                                                                                                    {yr}
-                                                                                                </option>
-                                                                                            )
-                                                                                        })}
-                                                                                    </select>
-
-                                                                                    <div className="px-2">
+                                                                                <div className="flex gap-2 mt-4">
+                                                                                    <div className="text-xs font-normal mb-1">
+                                                                                        Input Realisasi Tahun {year}
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="flex items-center justify-start gap-2 divide-x divide-indigo-500 overflow-x-auto pb-3 lg:pb-0">
+                                                                                    <div className="px-0">
                                                                                         <select
                                                                                             className='form-select rw-[130px] border-indigo-400 bg-transparent font-normal mr-2'
                                                                                             onChange={(e) => {
@@ -592,7 +742,10 @@ const Index = () => {
                                                                                             <option value="" >Pilih Bulan</option>
                                                                                             {months?.map((item: any, index: number) => {
                                                                                                 return (
-                                                                                                    <option key={index} value={item?.id}>
+                                                                                                    <option
+                                                                                                        key={'select-month-' + index}
+                                                                                                        disabled={item?.id > new Date().getMonth() + 1}
+                                                                                                        value={item?.id}>
                                                                                                         {item?.name}
                                                                                                     </option>
                                                                                                 )
@@ -601,14 +754,33 @@ const Index = () => {
                                                                                     </div>
                                                                                     {(periode && year && month) && (
                                                                                         <div className="px-2 flex items-center gap-x-1">
-                                                                                            <Link
-                                                                                                target='_blank'
-                                                                                                href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                                                                                                className='btn btn-secondary font-normal'>
-                                                                                                {/* Input Target */}
-                                                                                                Input Rincian Belanja
-                                                                                                <IconArrowForward className='w-4 h-4 ml-2' />
-                                                                                            </Link>
+                                                                                            {(subkegiatan.renstra_status === 'verified' && subkegiatan.renja_status === 'verified' && subkegiatan.apbd_status === 'verified') ? (
+                                                                                                <Link
+                                                                                                    // target='_blank'
+                                                                                                    href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
+                                                                                                    className='btn btn-secondary font-normal'>
+                                                                                                    Input Rincian Belanja
+                                                                                                    <IconArrowForward className='w-4 h-4 ml-2' />
+                                                                                                </Link>
+                                                                                            ) : (
+                                                                                                <div className="flex items-center gap-2">
+                                                                                                    {subkegiatan.renstra_status !== 'verified' && (
+                                                                                                        <span className="badge bg-danger">
+                                                                                                            Renstra Belum Terverifikasi
+                                                                                                        </span>
+                                                                                                    )}
+                                                                                                    {subkegiatan.renja_status !== 'verified' && (
+                                                                                                        <span className="badge bg-danger">
+                                                                                                            Renja Belum Terverifikasi
+                                                                                                        </span>
+                                                                                                    )}
+                                                                                                    {subkegiatan.apbd_status !== 'verified' && (
+                                                                                                        <span className="badge bg-danger">
+                                                                                                            APBD Belum Terverifikasi
+                                                                                                        </span>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            )}
                                                                                             {/* <Link
                                                                                                 target='_blank'
                                                                                                 href={`/realisasi/kontrak/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
@@ -616,13 +788,15 @@ const Index = () => {
                                                                                                 Input Kontrak
                                                                                                 <IconArrowForward className='w-4 h-4 ml-2' />
                                                                                             </Link> */}
-                                                                                            <Link
-                                                                                                target='_blank'
-                                                                                                href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                                                                                                className='btn btn-success font-normal'>
-                                                                                                Input Realisasi
-                                                                                                <IconArrowForward className='w-4 h-4 ml-2' />
-                                                                                            </Link>
+                                                                                            {subkegiatan.target_status === 'verified' && (
+                                                                                                <Link
+                                                                                                    // target='_blank'
+                                                                                                    href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
+                                                                                                    className='btn btn-success font-normal'>
+                                                                                                    Input Realisasi
+                                                                                                    <IconArrowForward className='w-4 h-4 ml-2' />
+                                                                                                </Link>
+                                                                                            )}
                                                                                         </div>
                                                                                     )}
                                                                                 </div>
