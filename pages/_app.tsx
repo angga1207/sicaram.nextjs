@@ -52,36 +52,36 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     const baseUri = BaseUri();
 
     useEffect(() => {
-        if (window && fcmToken) {
-            const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
-            const currentToken = localStorage.getItem('token') ?? null;
-            if (currentUser && currentToken) {
-                fetch(baseUri + '/users/' + currentUser?.id + '/fcm', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${currentToken}`,
-                    },
-                    body: JSON.stringify({
-                        fcmToken: fcmToken,
-                    }),
+        // if (window && fcmToken) {
+        const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
+        const currentToken = localStorage.getItem('token') ?? null;
+        if (currentUser && currentToken) {
+            fetch(baseUri + '/users/' + currentUser?.id + '/fcm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${currentToken}`,
+                },
+                body: JSON.stringify({
+                    fcmToken: fcmToken,
+                }),
+            })
+                .then((response) => {
+                    // response.json();
+                    // console.log(response.json());
+                    console.log('FCM token saved');
                 })
-                    .then((response) => {
-                        // response.json();
-                        // console.log(response.json());
-                        console.log('FCM token saved');
-                    })
-                    .then((data) => {
-                        console.log('FCM token saved');
-                    })
-                    .catch((error) => {
-                    });
-            }
-            if (notificationPermissionStatus === 'denied') {
-                showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
-            }
+                .then((data) => {
+                    // console.log('FCM token saved');
+                })
+                .catch((error) => {
+                });
         }
-    }, []);
+        if (notificationPermissionStatus === 'denied') {
+            showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
+        }
+        // }
+    }, [fcmToken]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
