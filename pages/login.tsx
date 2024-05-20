@@ -251,7 +251,7 @@ const Login = () => {
                                             <IconUser fill={true} />
                                         </span>
                                     </div>
-                                    <div id="errorUsername" className='validation text-red-500 text-sm'>
+                                    <div id="error-username" className='validation text-red-500 text-sm'>
                                     </div>
                                 </div>
                                 <div>
@@ -274,7 +274,7 @@ const Login = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div id="errorPassword" className='validation text-red-500 text-sm'>
+                                    <div id="error-password" className='validation text-red-500 text-sm'>
                                     </div>
                                 </div>
                                 <div className='hidden'>
