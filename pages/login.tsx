@@ -129,12 +129,17 @@ const Login = () => {
                         element.innerHTML = json.message[key][0];
                     }
                 });
-                // if (json?.message?.username) {
-                //     document.getElementById('errorUsername').innerHTML = json?.message?.username;
-                // }
-                // if (json?.message?.password) {
-                //     document.getElementById('errorPassword').innerHTML = json?.message?.password;
-                // }
+                if (json?.message?.username) {
+                    showSweetAlert('error', 'Error', json?.message?.username, 'OK', 'Batal', () => {
+                        return;
+                    })
+                }
+                if (json?.message?.password) {
+                    // document?.getElementById('error-password')?.innerHTML = json?.message?.password;
+                    showSweetAlert('error', 'Error', json?.message?.password, 'OK', 'Batal', () => {
+                        return;
+                    })
+                }
                 setSubmitLoading(false);
                 return;
             }
