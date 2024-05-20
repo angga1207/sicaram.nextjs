@@ -16,10 +16,11 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBriefcase, faExclamationTriangle, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faCalendarAlt, faClock, faExclamationTriangle, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
-import { updateUserWithPhoto } from '../../apis/storedata';
+import { updateUserWithPhoto } from '@/apis/storedata';
+import { fetchUserMe } from '@/apis/fetchdata';
 
 const showAlert = async (icon: any, text: string) => {
     const toast = Swal.mixin({
@@ -49,6 +50,9 @@ const Profile = () => {
     const [isClient, setIsClient] = useState(false);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
+    const [data, setData] = useState<any>({});
+    const [userLogs, setUserLogs] = useState<any>([]);
+
     useEffect(() => {
         if (window) {
             if (localStorage.getItem('user')) {
@@ -60,6 +64,7 @@ const Profile = () => {
     useEffect(() => {
         setIsMounted(true)
         setIsClient(true)
+
     }, []);
     const { t, i18n } = useTranslation();
 
@@ -78,16 +83,23 @@ const Profile = () => {
     const [photoProfile, setPhotoProfile] = useState('');
 
     useEffect(() => {
-        setDataInput({
-            fullname: CurrentUser?.fullname ?? '',
-            username: CurrentUser?.username ?? '',
-            email: CurrentUser?.email ?? '',
-            photo: '',
-            photoFile: '',
-            password: '',
-            password_confirmation: '',
-        })
-    }, [CurrentUser]);
+        fetchUserMe().then((res: any) => {
+            if (res.status == 'success') {
+                setDataInput({
+                    fullname: res.data?.fullname ?? '',
+                    username: res.data?.username ?? '',
+                    email: res.data?.email ?? '',
+                    photo: '',
+                    photoFile: '',
+                    password: '',
+                    password_confirmation: '',
+                })
+
+                setUserLogs(res.data?.userLogs ?? []);
+            }
+        });
+
+    }, []);
 
     const [isEditProfile, setIsEditProfile] = useState(false);
 
@@ -130,13 +142,13 @@ const Profile = () => {
     const saveProfile = async () => {
         setSaveLoadingProfile(true);
         const data = {
-            id: CurrentUser?.id,
+            id: dataInput?.id,
             fullname: dataInput.fullname,
             username: dataInput.username,
             email: dataInput.email,
             foto: dataInput.photo,
             fotoPath: dataInput.photoFile,
-            role: CurrentUser?.role_id,
+            role: dataInput?.role_id,
             password: dataInput.password ?? '',
             password_confirmation: dataInput.password_confirmation ?? '',
         }
@@ -327,100 +339,63 @@ const Profile = () => {
                         )}
                     </div>
 
-                    <div className="panel lg:col-span-2 xl:col-span-3 hidden">
+                    <div className="panel lg:col-span-2 xl:col-span-3">
                         <div className="mb-5">
-                            <h5 className="text-lg font-semibold dark:text-white-light">Task</h5>
+                            <h5 className="text-lg font-semibold dark:text-white-light">
+                                Aktivitas Terakhir
+                            </h5>
                         </div>
                         <div className="mb-5">
                             <div className="table-responsive font-semibold text-[#515365] dark:text-white-light">
                                 <table className="whitespace-nowrap">
                                     <thead>
-                                        <tr>
-                                            <th>Projects</th>
-                                            <th>Progress</th>
-                                            <th>Task Done</th>
-                                            <th className="text-center">Time</th>
+                                        <tr className='!bg-slate-800 text-white'>
+                                            <th className='!w-[0px] !text-center'>
+                                                <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4 shrink-0" />
+                                            </th>
+                                            <th className="text-center"></th>
+                                            <th className="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody className="dark:text-white-dark">
-                                        <tr>
-                                            <td>Figma Design</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-[29.56%] rounded-full bg-danger"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-danger">29.56%</td>
-                                            <td className="text-center">2 mins ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Vue Migration</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-1/2 rounded-full bg-info"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-success">50%</td>
-                                            <td className="text-center">4 hrs ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Flutter App</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-[39%] rounded-full  bg-warning"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-danger">39%</td>
-                                            <td className="text-center">a min ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>API Integration</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-[78.03%] rounded-full  bg-success"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-success">78.03%</td>
-                                            <td className="text-center">2 weeks ago</td>
-                                        </tr>
 
-                                        <tr>
-                                            <td>Blog Update</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-full  rounded-full  bg-secondary"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-success">100%</td>
-                                            <td className="text-center">18 hrs ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Landing Page</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-[19.15%] rounded-full  bg-danger"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-danger">19.15%</td>
-                                            <td className="text-center">5 days ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shopify Dev</td>
-                                            <td>
-                                                <div className="flex h-1.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                                                    <div className="w-[60.55%] rounded-full bg-primary"></div>
-                                                </div>
-                                            </td>
-                                            <td className="text-success">60.55%</td>
-                                            <td className="text-center">8 days ago</td>
-                                        </tr>
+                                        {userLogs?.map((item: any, index: number) => (
+                                            <>
+                                                <tr className='bg-slate-100 dark:bg-slate-700'>
+                                                    <td colSpan={3}>
+                                                        {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                                    </td>
+                                                </tr>
+                                                {item?.logs?.map((log: any, index: number) => (
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>
+                                                            <div className="flex items-center gap-x-2 text-slate-500">
+                                                                <FontAwesomeIcon icon={faTag} className="w-4 h-4 shrink-0" />
+                                                                <div className="">
+                                                                    {log?.description}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            <div className="flex items-center gap-1 text-slate-400">
+                                                                <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
+                                                                <div>
+                                                                    {new Date(log?.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr >
+                                                ))}
+                                            </>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
-                    <div className="panel lg:col-span-2 xl:col-span-3">
+                    {/* <div className="panel lg:col-span-2 xl:col-span-3">
                         <div className="flex items-center justify-center gap-2 text-2xl font-bold text-center h-full w-full text-warning cursor-pointer hover:text-orange-600 hover:bg-orange-50 duration-500">
                             <div>
                                 <FontAwesomeIcon icon={faExclamationTriangle} className="w-5 h-5 shrink-0" />
@@ -429,7 +404,7 @@ const Profile = () => {
                                 Work In Progress
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-2">

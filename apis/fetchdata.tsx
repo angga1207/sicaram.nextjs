@@ -105,6 +105,24 @@ export async function fetchUser(id: string = '') {
         }
     }
 }
+
+export async function fetchUserMe() {
+    try {
+        const res = await axios.get(baseUri + '/users-me', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
 // Users End
 
 
