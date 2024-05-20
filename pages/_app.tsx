@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import { ReactElement, ReactNode, Suspense } from 'react';
+import { ReactElement, ReactNode, Suspense, useState } from 'react';
 import DefaultLayout from '../components/Layouts/DefaultLayout';
 import { Provider } from 'react-redux';
 import store from '../store/index';
@@ -20,6 +20,7 @@ import { getMessaging, onMessage } from 'firebase/messaging';
 import firebaseApp from '@/utils/firebase/firebase';
 import useFcmToken from '@/utils/hooks/useFcmToken';
 import Swal from 'sweetalert2';
+import { BaseUri } from '@/apis/serverConfig';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -48,12 +49,14 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
     const { fcmToken, notificationPermissionStatus } = useFcmToken();
 
+    const baseUri = BaseUri();
+
     useEffect(() => {
         if (window && fcmToken) {
             const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
             const currentToken = localStorage.getItem('token') ?? null;
             if (currentUser && currentToken) {
-                fetch('http://127.0.0.1:8000/api/users/' + currentUser?.id + '/fcm', {
+                fetch(baseUri + '/users/' + currentUser?.id + '/fcm', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -63,7 +66,11 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                         fcmToken: fcmToken,
                     }),
                 })
-                    .then((response) => response.json())
+                    .then((response) => {
+                        // response.json();
+                        // console.log(response.json());
+                        console.log('FCM token saved');
+                    })
                     .then((data) => {
                         console.log('FCM token saved');
                     })

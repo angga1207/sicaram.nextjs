@@ -109,9 +109,14 @@ const Login = () => {
             return;
         }
 
+        const fcmToken = localStorage.getItem('fcm_token');
+        console.log(fcmToken);
+
+
         const formData = {
             username: e.target.Username.value,
             password: e.target.Password.value,
+            // fcm_token: 'fcm_token',
         };
         const uri = BaseUri() + '/login';
         try {
