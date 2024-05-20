@@ -499,7 +499,7 @@ const Index = () => {
                                                                                     <textarea
                                                                                         value={rincian?.title}
                                                                                         readOnly={subKegiatan?.status == 'verified' ? true : false}
-                                                                                        disabled={month === 1 ? false : true}
+                                                                                        disabled={month == 1 ? false : true}
                                                                                         onChange={
                                                                                             (e) => {
                                                                                                 if (subKegiatan?.status == 'verified') {
@@ -533,7 +533,7 @@ const Index = () => {
                                                                                 </div>
 
                                                                                 <div className="">
-                                                                                    {month === 1 && (
+                                                                                    {month == 1 && (
                                                                                         <Tippy content={`Hapus Rincian Belanja`}>
                                                                                             <button
                                                                                                 type='button'
@@ -571,7 +571,7 @@ const Index = () => {
                                                                                             <textarea
                                                                                                 value={keterangan?.title}
                                                                                                 readOnly={subKegiatan?.status == 'verified' ? true : false}
-                                                                                                disabled={month === 1 ? false : true}
+                                                                                                disabled={month == 1 ? false : true}
                                                                                                 onChange={
                                                                                                     (e) => {
                                                                                                         if (subKegiatan?.status == 'verified') {

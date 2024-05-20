@@ -84,6 +84,22 @@ const showAlert = async (icon: any, text: any) => {
     });
 };
 
+const showAlertBox = async (icon: any, title: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: false,
+        position: 'center',
+        showConfirmButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'Tutup',
+    });
+    toast.fire({
+        icon: icon,
+        title: title,
+        text: text,
+        padding: '10px 20px',
+    });
+};
+
 const Index = () => {
     const dispatch = useDispatch();
     const ref = useRef<any>(null);
@@ -233,20 +249,20 @@ const Index = () => {
             if (result.isConfirmed) {
                 SaveRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
                     if (data.status == 'success') {
-                        showAlert('success', 'Data berhasil disimpan');
+                        showAlertBox('success', 'Berhasil', data.message);
                         setUnsaveStatus(false);
                     }
                     else {
-                        showAlert('error', data.message);
+                        showAlertBox('error', 'Error', data.message);
                     }
                 });
                 SaveRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
                     if (data.status == 'success') {
-                        showAlert('success', 'Data berhasil disimpan');
+                        showAlertBox('success', 'Berhasil', data.message);
                         setUnsaveStatus(false);
                     }
                     else {
-                        showAlert('error', data.message);
+                        showAlertBox('error', 'Error', data.message);
                     }
                 });
             }
@@ -661,12 +677,212 @@ const Index = () => {
                                                                     </div>
                                                                 )}
 
-                                                                {(data?.type == 'target-kinerja' && data?.is_detail === true) && (
+                                                                {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length > 0) && (
                                                                     <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
                                                                         {new Intl.NumberFormat('id-ID', {
                                                                             style: 'decimal',
                                                                             minimumFractionDigits: 0,
                                                                         }).format(data?.realisasi_anggaran ?? 0)}
+                                                                    </div>
+                                                                )}
+
+                                                                {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length == 0) && (
+                                                                    <div>
+                                                                        <input type='text'
+                                                                            className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
+                                                                            value={data?.realisasi_anggaran}
+                                                                            onKeyDown={(e: any) => {
+                                                                                if (!(
+                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                    e.keyCode == 8 ||
+                                                                                    e.keyCode == 46 ||
+                                                                                    e.keyCode == 37 ||
+                                                                                    e.keyCode == 39 ||
+                                                                                    e.keyCode == 188 ||
+                                                                                    e.keyCode == 9 ||
+                                                                                    // copy & paste
+                                                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                                                    // command + c & command + v
+                                                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                                                    // command + a
+                                                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                                                )) {
+                                                                                    e.preventDefault();
+                                                                                }
+                                                                            }}
+                                                                            disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
+                                                                            onChange={(e) => {
+                                                                                if (subKegiatan?.status === 'verified') {
+                                                                                    showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
+                                                                                    return;
+                                                                                }
+                                                                                if (subKegiatan?.status_target !== 'verified') {
+                                                                                    showAlert('error', 'Target Belum Terverifikasi');
+                                                                                    return;
+                                                                                }
+                                                                                setUnsaveStatus(true);
+                                                                                let value = e.target.value ? parseFloat(e.target.value.toString().replace(/,/g, '.')) : 0;
+                                                                                setDatas((prev: any) => {
+                                                                                    const updated = [...prev];
+                                                                                    let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                    let isPaguMatch = sumRealisasiAnggaran == data.pagu ? true : false;
+                                                                                    let isRealisasiMatch = value == data.pagu ? true : false;
+                                                                                    updated[index] = {
+                                                                                        editable: data?.editable,
+                                                                                        long: data?.long,
+                                                                                        type: data?.type,
+                                                                                        id: data?.id,
+                                                                                        id_rek_1: data?.id_rek_1,
+                                                                                        id_rek_2: data?.id_rek_2,
+                                                                                        id_rek_3: data?.id_rek_3,
+                                                                                        id_rek_4: data?.id_rek_4,
+                                                                                        id_rek_5: data?.id_rek_5,
+                                                                                        id_rek_6: data?.id_rek_6,
+                                                                                        parent_id: data?.parent_id,
+                                                                                        year: data?.year,
+                                                                                        jenis: data?.jenis,
+                                                                                        sumber_dana_id: data?.sumber_dana_id,
+                                                                                        sumber_dana_fullcode: data?.sumber_dana_fullcode,
+                                                                                        sumber_dana_name: data?.sumber_dana_name,
+                                                                                        nama_paket: data?.nama_paket,
+                                                                                        pagu: data?.pagu,
+                                                                                        realisasi_anggaran: value,
+                                                                                        temp_pagu: data?.temp_pagu,
+                                                                                        is_pagu_match: isPaguMatch,
+                                                                                        is_detail: data?.is_detail,
+                                                                                        created_by: data?.created_by,
+                                                                                        created_by_name: data?.created_by_name,
+                                                                                        updated_by: data?.updated_by,
+                                                                                        updated_by_name: data?.updated_by_name,
+                                                                                        rincian_belanja: data?.rincian_belanja,
+                                                                                    };
+
+                                                                                    const Rekening6 = updated.find((item: any) => item.id == data.parent_id);
+                                                                                    const Rekening6Index = updated.findIndex((item: any) => item.id == data.parent_id);
+                                                                                    const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.parent_id == data.parent_id);
+                                                                                    let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+
+                                                                                    updated[Rekening6Index] = {
+                                                                                        editable: Rekening6?.editable,
+                                                                                        long: Rekening6?.long,
+                                                                                        type: Rekening6?.type,
+                                                                                        rek: Rekening6?.rek,
+                                                                                        id: Rekening6?.id,
+                                                                                        parent_id: Rekening6?.parent_id,
+                                                                                        uraian: Rekening6?.uraian,
+                                                                                        fullcode: Rekening6?.fullcode,
+                                                                                        pagu: Rekening6?.pagu,
+                                                                                        rincian_belanja: Rekening6?.rincian_belanja,
+                                                                                        realisasi_anggaran: RincianSumAnggaran,
+                                                                                    };
+
+                                                                                    const Rekening5 = updated.find((item: any) => item.id == data.id_rek_5);
+                                                                                    const Rekening5Index = updated.findIndex((item: any) => item.id == data.id_rek_5);
+                                                                                    const updatedRekening6 = updated.filter((item: any) => item.rek == 6 && item.parent_id == data.id_rek_5);
+                                                                                    let SumAnggaranRekening5 = updatedRekening6.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+
+                                                                                    updated[Rekening5Index] = {
+                                                                                        editable: Rekening5?.editable,
+                                                                                        long: Rekening5?.long,
+                                                                                        type: Rekening5?.type,
+                                                                                        rek: Rekening5?.rek,
+                                                                                        id: Rekening5?.id,
+                                                                                        parent_id: Rekening5?.parent_id,
+                                                                                        uraian: Rekening5?.uraian,
+                                                                                        fullcode: Rekening5?.fullcode,
+                                                                                        pagu: Rekening5?.pagu,
+                                                                                        rincian_belanja: Rekening5?.rincian_belanja,
+                                                                                        realisasi_anggaran: SumAnggaranRekening5,
+                                                                                    };
+
+                                                                                    const Rekening4 = updated.find((item: any) => item.id == data.id_rek_4);
+                                                                                    const Rekening4Index = updated.findIndex((item: any) => item.id == data.id_rek_4);
+                                                                                    const updatedRekening5 = updated.filter((item: any) => item.rek === 5 && item.parent_id == data.id_rek_4);
+                                                                                    let SumAnggaranRekening4 = updatedRekening5.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+
+                                                                                    updated[Rekening4Index] = {
+                                                                                        editable: Rekening4?.editable,
+                                                                                        long: Rekening4?.long,
+                                                                                        type: Rekening4?.type,
+                                                                                        rek: Rekening4?.rek,
+                                                                                        id: Rekening4?.id,
+                                                                                        parent_id: Rekening4?.parent_id,
+                                                                                        uraian: Rekening4?.uraian,
+                                                                                        fullcode: Rekening4?.fullcode,
+                                                                                        pagu: Rekening4?.pagu,
+                                                                                        rincian_belanja: Rekening4?.rincian_belanja,
+                                                                                        realisasi_anggaran: SumAnggaranRekening4,
+                                                                                    };
+
+                                                                                    const Rekening3 = updated.find((item: any) => item.id == data.id_rek_3);
+                                                                                    const Rekening3Index = updated.findIndex((item: any) => item.id == data.id_rek_3);
+                                                                                    const updatedRekening4 = updated.filter((item: any) => item.rek === 4 && item.parent_id == data.id_rek_3);
+                                                                                    let SumAnggaranRekening3 = updatedRekening4.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+
+                                                                                    updated[Rekening3Index] = {
+                                                                                        editable: Rekening3?.editable,
+                                                                                        long: Rekening3?.long,
+                                                                                        type: Rekening3?.type,
+                                                                                        rek: Rekening3?.rek,
+                                                                                        id: Rekening3?.id,
+                                                                                        parent_id: Rekening3?.parent_id,
+                                                                                        uraian: Rekening3?.uraian,
+                                                                                        fullcode: Rekening3?.fullcode,
+                                                                                        pagu: Rekening3?.pagu,
+                                                                                        rincian_belanja: Rekening3?.rincian_belanja,
+                                                                                        realisasi_anggaran: SumAnggaranRekening3,
+                                                                                    };
+
+                                                                                    const Rekening2 = updated.find((item: any) => item.id == data.id_rek_2);
+                                                                                    const Rekening2Index = updated.findIndex((item: any) => item.id == data.id_rek_2);
+                                                                                    const updatedRekening3 = updated.filter((item: any) => item.rek === 3 && item.parent_id == data.id_rek_2);
+                                                                                    let SumAnggaranRekening2 = updatedRekening3.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+
+                                                                                    updated[Rekening2Index] = {
+                                                                                        editable: Rekening2?.editable,
+                                                                                        long: Rekening2?.long,
+                                                                                        type: Rekening2?.type,
+                                                                                        rek: Rekening2?.rek,
+                                                                                        id: Rekening2?.id,
+                                                                                        parent_id: Rekening2?.parent_id,
+                                                                                        uraian: Rekening2?.uraian,
+                                                                                        fullcode: Rekening2?.fullcode,
+                                                                                        pagu: Rekening2?.pagu,
+                                                                                        rincian_belanja: Rekening2?.rincian_belanja,
+                                                                                        realisasi_anggaran: SumAnggaranRekening2,
+                                                                                    };
+
+                                                                                    const Rekening1 = updated.find((item: any) => item.id == data.id_rek_1);
+                                                                                    const Rekening1Index = updated.findIndex((item: any) => item.id == data.id_rek_1);
+                                                                                    const updatedRekening2 = updated.filter((item: any) => item.rek === 2 && item.parent_id == data.id_rek_1);
+                                                                                    let SumAnggaranRekening1 = updatedRekening2.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+
+                                                                                    updated[Rekening1Index] = {
+                                                                                        editable: Rekening1?.editable,
+                                                                                        long: Rekening1?.long,
+                                                                                        type: Rekening1?.type,
+                                                                                        rek: Rekening1?.rek,
+                                                                                        id: Rekening1?.id,
+                                                                                        parent_id: Rekening1?.parent_id,
+                                                                                        uraian: Rekening1?.uraian,
+                                                                                        fullcode: Rekening1?.fullcode,
+                                                                                        pagu: Rekening1?.pagu,
+                                                                                        rincian_belanja: Rekening1?.rincian_belanja,
+                                                                                        realisasi_anggaran: SumAnggaranRekening1,
+                                                                                    };
+
+                                                                                    return updated;
+                                                                                })
+                                                                                updateTotalRealisasi();
+                                                                            }}
+                                                                            onBlur={(e) => {
+                                                                                updateTotalRealisasi();
+                                                                            }}
+                                                                        />
                                                                     </div>
                                                                 )}
 
@@ -1171,104 +1387,6 @@ const Index = () => {
                                                                                                     </Tippy>
                                                                                                 </div>
                                                                                             </td>
-                                                                                            {/* <td className='border !border-slate-400 dark:!border-slate-100'>
-                                                                                            <div className="flex items-center gap-x-1">
-                                                                                                <div>
-                                                                                                    <input
-                                                                                                        type='number'
-                                                                                                        min={0}
-                                                                                                        max={keterangan?.target_persentase_kinerja}
-                                                                                                        className='form-input w-[75px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
-                                                                                                        value={keterangan?.persentase_kinerja}
-                                                                                                        onKeyDown={(e: any) => {
-                                                                                                            if (!(
-                                                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                                                e.keyCode == 8 ||
-                                                                                                                e.keyCode == 46 ||
-                                                                                                                e.keyCode == 37 ||
-                                                                                                                e.keyCode == 39 ||
-                                                                                                                e.keyCode == 188 ||
-                                                                                                                e.keyCode == 9 ||
-                                                                                                                // copy & paste
-                                                                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                                                                // command + c & command + v
-                                                                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                                                                // command + a
-                                                                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                                                                            )) {
-                                                                                                                e.preventDefault();
-                                                                                                            }
-                                                                                                            if (e?.target?.value < 0) {
-                                                                                                                e.target.value = 0;
-                                                                                                            }
-                                                                                                            if (keterangan?.target_persentase_kinerja) {
-                                                                                                                if (e?.target?.value >= keterangan?.target_persentase_kinerja) {
-                                                                                                                    e.target.value = keterangan?.target_persentase_kinerja;
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (e?.target?.value >= 100) {
-                                                                                                                    e.target.value = 100;
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }}
-                                                                                                        onBlur={(e: any) => {
-                                                                                                            if (e.target.value < 0) {
-                                                                                                                e.target.value = 0;
-                                                                                                            }
-                                                                                                            if (keterangan?.target_persentase_kinerja) {
-                                                                                                                if (e?.target?.value >= keterangan?.target_persentase_kinerja) {
-                                                                                                                    e.target.value = keterangan?.target_persentase_kinerja;
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (e?.target?.value >= 100) {
-                                                                                                                    e.target.value = 100;
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }}
-                                                                                                        onChange={(e: any) => {
-                                                                                                            let value = e.target.value ? e.target.value : 0;
-                                                                                                            if (value < 0) {
-                                                                                                                value = 0;
-                                                                                                            }
-                                                                                                            if (value >= 100) {
-                                                                                                                value = 100;
-                                                                                                            }
-                                                                                                            setDatas((prev: any) => {
-                                                                                                                const updated = [...prev];
-                                                                                                                updated[index]['rincian_belanja'][indexRincian]['keterangan_rincian'][indexKeterangan] = {
-                                                                                                                    editable: keterangan?.editable,
-                                                                                                                    id: keterangan?.id,
-                                                                                                                    long: keterangan?.long,
-                                                                                                                    type: keterangan?.type,
-                                                                                                                    target_kinerja_id: keterangan?.target_kinerja_id,
-                                                                                                                    title: keterangan?.title,
-                                                                                                                    koefisien: keterangan?.koefisien,
-                                                                                                                    koefisien_realisasi: keterangan?.koefisien_realisasi,
-                                                                                                                    satuan_id: keterangan?.satuan_id,
-                                                                                                                    satuan_name: keterangan?.satuan_name,
-                                                                                                                    harga_satuan: keterangan?.harga_satuan,
-                                                                                                                    ppn: keterangan?.ppn,
-                                                                                                                    pagu: keterangan?.pagu,
-                                                                                                                    is_realisasi_match: keterangan?.is_realisasi_match,
-                                                                                                                    realisasi_anggaran_keterangan: keterangan?.realisasi_anggaran_keterangan,
-                                                                                                                    target_persentase_kinerja: keterangan?.target_persentase_kinerja,
-                                                                                                                    persentase_kinerja: value,
-                                                                                                                };
-                                                                                                                return updated;
-                                                                                                            });
-                                                                                                        }}
-                                                                                                        disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
-                                                                                                    />
-                                                                                                </div>
-                                                                                                <div className="whitespace-nowrap">
-                                                                                                    / {keterangan?.target_persentase_kinerja}%
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </td> */}
                                                                                             <td className='border !border-slate-400 dark:!border-slate-100'>
                                                                                                 <div className="text-xs text-end px-2">
                                                                                                     {new Intl.NumberFormat('id-ID', {
