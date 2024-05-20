@@ -440,7 +440,7 @@ const Index = () => {
                 setMessage('');
                 setStatus('');
                 if (data.status == 'success') {
-                    showAlert('success', data.message);
+                    // showAlert('success', data.message);
                     fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
                         if (data.status == 'success') {
                             setDataValidating(data.data);
@@ -1428,7 +1428,6 @@ const Index = () => {
 
                                                 {viewValidating && (
                                                     <>
-                                                        {/* <div className="scrollbar-container !h-[calc(100vh-250px)] overflow-x-auto mb-[100px]"> */}
                                                         <div className="scrollbar-container relative h-full sm:h-[calc(100vh-250px)] chat-conversation-box ps mt-0 pt-0">
                                                             <div className="p-4 pt-20 pb-20 h-full overflow-x-auto space-y-5">
                                                                 {dataValidating?.map((data: any, index: number) => {
@@ -1619,74 +1618,129 @@ const Index = () => {
 
 
                                                             <div className="p-2 sticky bottom-0 left-0 w-full bg-white z-10">
-                                                                <div className="sm:flex w-full justify-center items-start sm:gap-1">
-                                                                    <div className="relative flex-1">
-                                                                        <textarea
-                                                                            value={message}
-                                                                            onChange={(e) => {
-                                                                                setMessage(e.target.value);
-                                                                            }}
-                                                                            id="textarea-message"
-                                                                            className="form-textarea rounded-xl border-transparent bg-[#f4f4f4] px-5 focus:outline-none focus:border-slate-600 py-2 resize-none"
-                                                                            style={{
-                                                                                height: message?.split('\n').length > 1 ? 'auto' : '38px',
-                                                                                minHeight: message?.split('\n').length > 1 ? '50px' ? message?.split('\n').length > 2 ? '75px' : 'unset' : 'unset' : 'unset',
-                                                                                overflow: message?.split('\n').length > 1 ? 'hidden' : 'hidden',
-                                                                            }}
-                                                                            placeholder="Ketik pesan disini..."
-                                                                        ></textarea>
-                                                                    </div>
-                                                                    <div className="flex flex-col sm:flex-row gap-1 items-center justify-center">
-                                                                        <select
-                                                                            value={status}
-                                                                            onChange={(e) => {
-                                                                                setStatus(e.target.value)
-                                                                            }}
-                                                                            id="select-status"
-                                                                            className='form-select rounded-xl border-transparent bg-[#f4f4f4] px-6 w-full sm:w-[200px] focus:outline-none focus:border-slate-600'>
-                                                                            {CurrentUser?.role_id == 9 && (
-                                                                                <>
-                                                                                    <option value="" hidden>Pilih Status</option>
-                                                                                    <option value="sent">
-                                                                                        Kirim Ke Verifikator
-                                                                                    </option>
-                                                                                    <option value="draft">
-                                                                                        Draft
-                                                                                    </option>
-                                                                                </>
-                                                                            )}
 
-                                                                            {CurrentUser?.role_id != 9 && (
-                                                                                <>
-                                                                                    <option value="">Pilih Status</option>
-                                                                                    <option value="verified">
-                                                                                        Verifikasi
-                                                                                    </option>
-                                                                                    <option value="reject">
-                                                                                        Tolak
-                                                                                    </option>
-                                                                                    <option value="return">
-                                                                                        Kembalikan
-                                                                                    </option>
-                                                                                    <option value="waiting">
-                                                                                        Tunggu
-                                                                                    </option>
-                                                                                </>
-                                                                            )}
-                                                                        </select>
-                                                                        <button
-                                                                            onClick={(e) => {
-                                                                                sendMessage();
-                                                                                // setMessage('');
-                                                                                // setStatus('');
-                                                                            }}
-                                                                            type="button"
-                                                                            className="bg-success dark:bg-success-dark-light text-white hover:bg-success-light p-2 hover:text-success flex gap-2 items-center justify-center rounded-xl w-auto sm:w-[150px]">
-                                                                            <IconSend className="w-5 h-5" />
-                                                                            Kirim
-                                                                        </button>
+                                                                {(['sent', 'waiting', 'verified'].includes(renstra?.status) && [1, 2, 6].includes(CurrentUser?.role_id)) && (
+                                                                    <div className="sm:flex w-full justify-center items-start sm:gap-1">
+                                                                        <div className="relative flex-1">
+                                                                            <textarea
+                                                                                value={message}
+                                                                                onChange={(e) => {
+                                                                                    setMessage(e.target.value);
+                                                                                }}
+                                                                                id="textarea-message"
+                                                                                className="form-textarea rounded-xl border-transparent bg-[#f4f4f4] px-5 focus:outline-none focus:border-slate-600 py-2 resize-none"
+                                                                                style={{
+                                                                                    height: message?.split('\n').length > 1 ? 'auto' : '38px',
+                                                                                    minHeight: message?.split('\n').length > 1 ? '50px' ? message?.split('\n').length > 2 ? '75px' : 'unset' : 'unset' : 'unset',
+                                                                                    overflow: message?.split('\n').length > 1 ? 'hidden' : 'hidden',
+                                                                                }}
+                                                                                placeholder="Ketik pesan disini..."
+                                                                            ></textarea>
+                                                                        </div>
+                                                                        <div className="flex flex-col sm:flex-row gap-1 items-center justify-center">
+                                                                            <select
+                                                                                value={status}
+                                                                                onChange={(e) => {
+                                                                                    setStatus(e.target.value)
+                                                                                }}
+                                                                                id="select-status"
+                                                                                className='form-select rounded-xl border-transparent bg-[#f4f4f4] px-6 w-full sm:w-[200px] focus:outline-none focus:border-slate-600'>
+
+                                                                                <option value="">Pilih Status</option>
+                                                                                <option value="verified">
+                                                                                    Verifikasi
+                                                                                </option>
+                                                                                <option value="reject">
+                                                                                    Tolak
+                                                                                </option>
+                                                                                <option value="return">
+                                                                                    Kembalikan
+                                                                                </option>
+                                                                                <option value="waiting">
+                                                                                    Tunggu
+                                                                                </option>
+
+                                                                            </select>
+                                                                            <button
+                                                                                onClick={(e) => {
+                                                                                    sendMessage();
+                                                                                    // setMessage('');
+                                                                                    // setStatus('');
+                                                                                }}
+                                                                                type="button"
+                                                                                className="bg-success dark:bg-success-dark-light text-white hover:bg-success-light p-2 hover:text-success flex gap-2 items-center justify-center rounded-xl w-auto sm:w-[150px]">
+                                                                                <IconSend className="w-5 h-5" />
+                                                                                Kirim
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
+                                                                )}
+
+                                                                {([1, 2, 6].includes(CurrentUser?.role_id) && ['draft', 'return', 'reject'].includes(renstra?.status)) && (
+                                                                    <div>
+                                                                        <div className="text-center font-semibold text-slate-500">
+                                                                            Menunggu Permintaan Verifikasi dari Perangkat Daerah
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {(['draft', 'return', 'reject'].includes(renstra?.status) && [1, 2, 9].includes(CurrentUser?.role_id)) && (
+                                                                    <div className="sm:flex w-full justify-center items-start sm:gap-1">
+                                                                        <div className="relative flex-1">
+                                                                            <textarea
+                                                                                value={message}
+                                                                                onChange={(e) => {
+                                                                                    setMessage(e.target.value);
+                                                                                }}
+                                                                                id="textarea-message"
+                                                                                className="form-textarea rounded-xl border-transparent bg-[#f4f4f4] px-5 focus:outline-none focus:border-slate-600 py-2 resize-none"
+                                                                                style={{
+                                                                                    height: message?.split('\n').length > 1 ? 'auto' : '38px',
+                                                                                    minHeight: message?.split('\n').length > 1 ? '50px' ? message?.split('\n').length > 2 ? '75px' : 'unset' : 'unset' : 'unset',
+                                                                                    overflow: message?.split('\n').length > 1 ? 'hidden' : 'hidden',
+                                                                                }}
+                                                                                placeholder="Ketik pesan disini..."
+                                                                            ></textarea>
+                                                                        </div>
+                                                                        <div className="flex flex-col sm:flex-row gap-1 items-center justify-center">
+                                                                            <select
+                                                                                value={status}
+                                                                                onChange={(e) => {
+                                                                                    setStatus(e.target.value)
+                                                                                }}
+                                                                                id="select-status"
+                                                                                className='form-select rounded-xl border-transparent bg-[#f4f4f4] px-6 w-full sm:w-[200px] focus:outline-none focus:border-slate-600'>
+                                                                                <option value="" hidden>Pilih Status</option>
+                                                                                <option value="sent">
+                                                                                    Kirim Ke Verifikator
+                                                                                </option>
+                                                                                <option value="draft">
+                                                                                    Draft
+                                                                                </option>
+                                                                            </select>
+                                                                            <button
+                                                                                onClick={(e) => {
+                                                                                    sendMessage();
+                                                                                    // setMessage('');
+                                                                                    // setStatus('');
+                                                                                }}
+                                                                                type="button"
+                                                                                className="bg-success dark:bg-success-dark-light text-white hover:bg-success-light p-2 hover:text-success flex gap-2 items-center justify-center rounded-xl w-auto sm:w-[150px]">
+                                                                                <IconSend className="w-5 h-5" />
+                                                                                Kirim
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {([1, 2, 9].includes(CurrentUser?.role_id)) && ['sent', 'waiting', 'verified'].includes(renstra?.status) && (
+                                                                    <div>
+                                                                        <div className="text-center font-semibold text-slate-500">
+                                                                            Menunggu Verifikasi dari Verifikator
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
                                                             </div>
 
                                                         </div>

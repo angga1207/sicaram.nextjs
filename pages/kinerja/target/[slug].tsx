@@ -195,23 +195,31 @@ const Index = () => {
 
     const deleteRincianBelanja = (index: any, indexRincian: any, rincianId: any) => {
         setUnsaveStatus(true);
-        DeleteRincianBelanja(rincianId, periode, year, month).then((data: any) => {
-            if (data.status == 'success') {
-                setDatas((prev: any) => {
-                    const updated = [...prev];
-                    updated[index]['rincian_belanja'].splice(indexRincian, 1);
-                    return updated;
-                });
-            }
-            else {
-                showAlert('error', data.message);
-                setDatas((prev: any) => {
-                    const updated = [...prev];
-                    updated[index]['rincian_belanja'].splice(indexRincian, 1);
-                    return updated;
-                });
-            }
-        });
+        if (rincianId) {
+            DeleteRincianBelanja(rincianId, periode, year, month).then((data: any) => {
+                if (data.status == 'success') {
+                    setDatas((prev: any) => {
+                        const updated = [...prev];
+                        updated[index]['rincian_belanja'].splice(indexRincian, 1);
+                        return updated;
+                    });
+                }
+                else {
+                    showAlert('error', data.message);
+                    setDatas((prev: any) => {
+                        const updated = [...prev];
+                        updated[index]['rincian_belanja'].splice(indexRincian, 1);
+                        return updated;
+                    });
+                }
+            });
+        } else {
+            setDatas((prev: any) => {
+                const updated = [...prev];
+                updated[index]['rincian_belanja'].splice(indexRincian, 1);
+                return updated;
+            });
+        }
     }
 
     const confirmSave = () => {
@@ -429,7 +437,7 @@ const Index = () => {
                                                                             </div>
                                                                         </div>
                                                                         <div className="">
-                                                                            {(data.is_detail === true && month === 1) && (
+                                                                            {(data.is_detail == true && month == 1) && (
                                                                                 <>
                                                                                     <Tippy content={`Tambah Rincian Belanja`}>
                                                                                         <button
