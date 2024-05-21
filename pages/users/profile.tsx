@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useEffect, useState, Fragment, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import { IRootState } from '../../store';
 import Dropdown from '../../components/Dropdown';
 import { setPageTitle } from '../../store/themeConfigSlice';
@@ -16,11 +17,11 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBriefcase, faCalendarAlt, faClock, faExclamationTriangle, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
-import { faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { faAngleDoubleLeft, faAngleDoubleRight, faBriefcase, faC, faCalendarAlt, faClock, faExclamationTriangle, faList, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 import { updateUserWithPhoto } from '@/apis/storedata';
-import { fetchUserMe } from '@/apis/fetchdata';
+import { fetchUserMe, fetchLogs, fetchNotif, markNotifAsRead } from '@/apis/fetchdata';
 
 const showAlert = async (icon: any, text: string) => {
     const toast = Swal.mixin({
@@ -39,6 +40,8 @@ const showAlert = async (icon: any, text: string) => {
 const Profile = () => {
     const dispatch = useDispatch();
 
+    const router = useRouter();
+
     useEffect(() => {
         dispatch(setPageTitle('Profil'));
     });
@@ -52,6 +55,11 @@ const Profile = () => {
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     const [data, setData] = useState<any>({});
     const [userLogs, setUserLogs] = useState<any>([]);
+    const [userLogsPage, setUserLogsPage] = useState<number>(1);
+    const [notifications, setNotifications] = useState<any>([]);
+    const [notificationPage, setNotificationPage] = useState<number>(1);
+
+    const [tab, setTab] = useState<number>(1);
 
     useEffect(() => {
         if (window) {
@@ -60,6 +68,12 @@ const Profile = () => {
             }
         }
     }, []);
+
+    useEffect(() => {
+        if (router.query.tab) {
+            setTab(parseInt(router?.query?.tab as string));
+        }
+    }, [router.query.tab]);
 
     useEffect(() => {
         setIsMounted(true)
@@ -94,12 +108,33 @@ const Profile = () => {
                     password: '',
                     password_confirmation: '',
                 })
-
-                setUserLogs(res.data?.userLogs ?? []);
             }
         });
-
     }, []);
+
+    useEffect(() => {
+
+        fetchLogs(userLogsPage).then((res: any) => {
+            if (res.status == 'success') {
+                setUserLogs(res.data?.data ?? []);
+                setUserLogsPage(res.data?.current_page ?? 1);
+            }
+        })
+
+    }, [userLogsPage]);
+
+    useEffect(() => {
+
+        fetchNotif(notificationPage).then((res: any) => {
+            if (res.status == 'success') {
+                setNotifications(res.data.data ?? []);
+                setNotificationPage(res.data?.current_page ?? 1);
+            }
+        })
+
+    }, [notificationPage]);
+
+    console.log(notifications)
 
     const [isEditProfile, setIsEditProfile] = useState(false);
 
@@ -340,59 +375,202 @@ const Profile = () => {
                     </div>
 
                     <div className="panel lg:col-span-2 xl:col-span-3">
-                        <div className="mb-5">
-                            <h5 className="text-lg font-semibold dark:text-white-light">
-                                Aktivitas Terakhir
-                            </h5>
-                        </div>
-                        <div className="mb-5">
-                            <div className="table-responsive font-semibold text-[#515365] dark:text-white-light">
-                                <table className="whitespace-nowrap">
-                                    <thead>
-                                        <tr className='!bg-slate-800 text-white'>
-                                            <th className='!w-[0px] !text-center'>
-                                                <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4 shrink-0" />
-                                            </th>
-                                            <th className="text-center"></th>
-                                            <th className="text-center"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="dark:text-white-dark">
 
-                                        {userLogs?.map((item: any, index: number) => (
-                                            <>
-                                                <tr className='bg-slate-100 dark:bg-slate-700'>
-                                                    <td colSpan={3}>
-                                                        {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                                                    </td>
-                                                </tr>
-                                                {item?.logs?.map((log: any, index: number) => (
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>
-                                                            <div className="flex items-center gap-x-2 text-slate-500">
-                                                                <FontAwesomeIcon icon={faTag} className="w-4 h-4 shrink-0" />
-                                                                <div className="">
-                                                                    {log?.description}
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="text-center">
-                                                            <div className="flex items-center gap-1 text-slate-400">
-                                                                <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
-                                                                <div>
-                                                                    {new Date(log?.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr >
-                                                ))}
-                                            </>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div className="w-full flex items-center mb-5">
+
+                            <button
+                                onClick={(e) => {
+                                    setTab(1)
+                                }}
+                                className={`${tab === 1 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                            >
+                                <FontAwesomeIcon icon={faList} className='w-4 h-4' />
+                                <span className='font-semibold whitespace-nowrap uppercase'>
+                                    Aktivitas Terakhir
+                                </span>
+                            </button>
+
+                            <button
+                                onClick={(e) => {
+                                    setTab(2)
+                                }}
+                                className={`${tab === 2 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                            >
+                                <FontAwesomeIcon icon={faBell} className='w-4 h-4' />
+                                <span className='font-semibold whitespace-nowrap uppercase'>
+                                    Pemberitahuan
+                                </span>
+                            </button>
+
                         </div>
+
+                        {tab === 1 && (
+                            <div className="mb-5">
+                                <div className="table-responsive font-semibold text-[#515365] dark:text-white-light h-[calc(100vh-300px)]">
+                                    <table className="whitespace-nowrap">
+                                        <thead>
+                                            <tr className='!bg-slate-800 text-white'>
+                                                <th className='!w-[0px] !text-center'>
+                                                    <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4 shrink-0" />
+                                                </th>
+                                                <th className="text-center"></th>
+                                                <th className="text-center"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="dark:text-white-dark">
+
+                                            {userLogs?.map((item: any, index: number) => (
+                                                <>
+                                                    <tr className='bg-slate-100 dark:bg-slate-700'>
+                                                        <td colSpan={3}>
+                                                            {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                                        </td>
+                                                    </tr>
+                                                    {item?.logs?.map((log: any, index: number) => (
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                <div className="flex items-center gap-x-2 text-slate-500">
+                                                                    <FontAwesomeIcon icon={faTag} className="w-4 h-4 shrink-0" />
+                                                                    <div className="">
+                                                                        {log?.description}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="text-center">
+                                                                <div className="flex items-center gap-1 text-slate-400">
+                                                                    <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
+                                                                    <div>
+                                                                        {new Date(log?.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr >
+                                                    ))}
+                                                </>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="flex items-center justify-center gap-2 mt-4">
+                                    {userLogsPage > 1 && (
+                                        <button
+                                            onClick={() => {
+                                                setUserLogsPage(userLogsPage - 1);
+                                            }}
+                                            className="btn btn-sm btn-primary"
+                                        >
+                                            <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-3 h-3 shrink-0" />
+                                        </button>
+                                    )}
+
+                                    <button
+                                        className="btn btn-sm btn-primary"
+                                    >
+                                        <span className='text-[10px]'>
+                                            {userLogsPage}
+                                        </span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            setUserLogsPage(userLogsPage + 1);
+                                        }}
+                                        className="btn btn-sm btn-primary"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleDoubleRight} className="w-3 h-3 shrink-0" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {tab === 2 && (
+                            <div className="mb-5">
+                                <div className="table-responsive font-semibold text-[#515365] dark:text-white-light h-[calc(100vh-300px)]">
+                                    <table>
+                                        <tbody>
+                                            {notifications?.length > 0 && (
+                                                <>
+                                                    {notifications?.map((notif: any, index: number) => (
+                                                        <tr>
+                                                            <td className='!w-[250px]'>
+                                                                <div className="flex items-center gap-2">
+                                                                    <img src={notif?.photo} alt="img" className="w-8 h-8 rounded-full object-cover" />
+                                                                    <div className="">
+                                                                        <div>
+                                                                            {notif?.fullname}
+                                                                        </div>
+                                                                        <div className="text-[10px] text-slate-400 font-normal">
+                                                                            {notif?.user_role} |
+                                                                            <span className='mx-1 font-semibold text-slate-600 dark:text-white'>
+                                                                                {notif?.user_instance_alias}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div className="">
+                                                                    {notif?.title}
+                                                                </div>
+                                                                <div className="font-normal">
+                                                                    {notif?.message}
+                                                                </div>
+                                                            </td>
+                                                            <td className='!w-[150px]'>
+                                                                <div className="flex items-center gap-1">
+                                                                    <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
+                                                                    <div className="text-xs whitespace-nowrap">
+                                                                        {/* {notif?.time} */}
+                                                                        {new Date(notif?.date).toLocaleTimeString('id-ID', {
+                                                                            day: '2-digit',
+                                                                            month: '2-digit',
+                                                                            year: 'numeric',
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit'
+                                                                        })} WIB
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="flex items-center justify-center gap-2 mt-4">
+                                    {notificationPage > 1 && (
+                                        <button
+                                            onClick={() => {
+                                                setNotificationPage(notificationPage - 1);
+                                            }}
+                                            className="btn btn-sm btn-primary"
+                                        >
+                                            <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-3 h-3 shrink-0" />
+                                        </button>
+                                    )}
+
+                                    <button
+                                        className="btn btn-sm btn-primary"
+                                    >
+                                        <span className='text-[10px]'>
+                                            {notificationPage}
+                                        </span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            setNotificationPage(notificationPage + 1);
+                                        }}
+                                        className="btn btn-sm btn-primary"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleDoubleRight} className="w-3 h-3 shrink-0" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
 
                     {/* <div className="panel lg:col-span-2 xl:col-span-3">

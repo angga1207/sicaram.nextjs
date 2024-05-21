@@ -69,7 +69,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                 .then((response) => {
                     // response.json();
                     // console.log(response.json());
-                    console.log('FCM token saved');
+                    // console.log('FCM token saved');
                 })
                 .then((data) => {
                     // console.log('FCM token saved');
