@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect, useState, Fragment, FormEvent } from 'react';
+import { useEffect, useState, Fragment, FormEvent, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { IRootState } from '../../store';
@@ -15,13 +15,14 @@ import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleLeft, faAngleDoubleRight, faBriefcase, faC, faCalendarAlt, faClock, faExclamationTriangle, faList, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleLeft, faAngleDoubleRight, faBriefcase, faC, faCalendarAlt, faClock, faExclamationTriangle, faEye, faEyeSlash, faList, faLock, faLockOpen, faPenAlt, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
 import { faBell, faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 import { updateUserWithPhoto } from '@/apis/storedata';
-import { fetchUserMe, fetchLogs, fetchNotif, markNotifAsRead } from '@/apis/fetchdata';
+import { fetchUserMe, fetchLogs, fetchNotif, markNotifAsRead, postSavePassword } from '@/apis/personal_profile';
 
 const showAlert = async (icon: any, text: string) => {
     const toast = Swal.mixin({
@@ -34,6 +35,27 @@ const showAlert = async (icon: any, text: string) => {
         icon: icon,
         title: text,
         padding: '10px 20px',
+    });
+}
+
+const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
+    Swal.fire({
+        icon: icon,
+        title: title,
+        html: text,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+        padding: '2em',
+        customClass: 'sweet-alerts',
+
+        // callback on confirm
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
     });
 }
 
@@ -134,8 +156,6 @@ const Profile = () => {
 
     }, [notificationPage]);
 
-    console.log(notifications)
-
     const [isEditProfile, setIsEditProfile] = useState(false);
 
     const onChangePhotoProfile = (e: any) => {
@@ -219,6 +239,98 @@ const Profile = () => {
         }
     }
 
+    const [isEditPassword, setIsEditPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [inputPassword, setInputPassword] = useState<any>({
+        old_password: '',
+        password: '',
+        password_confirmation: '',
+    });
+    const [submitPasswordLoading, setSubmitPasswordLoading] = useState(false);
+    const [isCanSubmitPassword, setIsCanSubmitPassword] = useState(false);
+    const recaptchaRef = useRef<any>();
+
+    const onReCAPTCHAChange = (captchaCode: any) => {
+        if (captchaCode) {
+            setIsCanSubmitPassword(true);
+            return;
+        }
+        recaptchaRef?.current?.reset();
+    }
+
+    const savePassword = () => {
+        setSubmitPasswordLoading(true);
+
+        Object.keys(inputPassword).map((key: any) => {
+            let element = document.getElementById('error-' + key);
+            if (element) {
+                element.innerHTML = '';
+            }
+        });
+
+        if (!recaptchaRef?.current?.getValue()) {
+            showSweetAlert(
+                'error',
+                'Verifikasi Robot', 'Anda tidak lolos verifikasi robot!',
+                'OK',
+                'Batal',
+                () => {
+                    return;
+                });
+            setSubmitPasswordLoading(false);
+            return;
+        }
+
+        if (inputPassword.old_password != '') {
+            if (inputPassword.old_password != localStorage.getItem('userPassword')) {
+                showSweetAlert(
+                    'error',
+                    'Kata Sandi Lama Salah', 'Kata sandi lama yang Anda masukkan salah!',
+                    'OK',
+                    'Batal',
+                    () => {
+                        return;
+                    });
+                setSubmitPasswordLoading(false);
+                return;
+            }
+        }
+
+        postSavePassword(inputPassword).then((res: any) => {
+            if (res.status == 'success') {
+                showAlert('success', res.message);
+                setInputPassword({
+                    old_password: '',
+                    password: '',
+                    password_confirmation: '',
+                });
+                setIsEditPassword(false);
+                setSubmitPasswordLoading(false);
+            }
+
+            if (res.status == 'error validation') {
+                Object.keys(res.message).map((key: any) => {
+                    let element = document.getElementById('error-' + key);
+                    if (element) {
+                        if (key) {
+                            element.innerHTML = res.message[key];
+                        } else {
+                            element.innerHTML = '';
+                        }
+                    }
+                    // showAlert('error', res?.message[key] ?? 'Data gagal disimpan');
+                });
+                setSubmitPasswordLoading(false);
+            }
+
+            if (res.status == 'error') {
+                showAlert('error', res.message);
+                setSubmitPasswordLoading(false);
+            }
+        });
+    }
+
+
     return (
         <div>
             <div className="pt-5">
@@ -229,114 +341,283 @@ const Profile = () => {
                                 Profil
                             </h5>
 
-                            <Tippy content={isEditProfile == false ? "Ubah Profil" : "Batal Ubah Profil"} >
-                                <button type="button"
-                                    // className="btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto"
-                                    className={isEditProfile == false ? "btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto" : "btn btn-danger rounded-full p-2 ltr:ml-auto rtl:mr-auto"}
-                                    onClick={() => setIsEditProfile(!isEditProfile)}>
-                                    <IconPencilPaper />
-                                </button>
-                            </Tippy>
-                        </div>
-                        {isEditProfile ? (
-                            <>
-                                <div className="mb-5">
-                                    <div className="flex items-center justify-center">
-                                        <div className="relative h-24 w-24">
-                                            <div className='group'>
-                                                <img src={dataInput?.photo != '' ? dataInput?.photo : CurrentUser?.photo} alt="img" className="rounded-full h-24 w-24 object-cover bg-slate-200 p-0.5" />
-                                                <div className='w-full h-full bg-slate-400 bg-opacity-0 group-hover:bg-opacity-80 rounded-full absolute top-0 left-0'>
-                                                    <div className='flex items-center justify-center w-full h-full font-bold text-white opacity-0 group-hover:opacity-100'>
-                                                        Ganti Foto
-                                                    </div>
-                                                </div>
-                                                <input type="file" className='absolute top-0 left-0 w-full h-full cursor-pointer opacity-0'
-                                                    title='Ganti Foto'
-                                                    accept="image/*"
-                                                    onChange={(e) => onChangePhotoProfile(e)}
-                                                />
-                                            </div>
-                                            {dataInput.photo != '' && (
-                                                <>
-                                                    <Tippy content="Hapus Foto">
-                                                        <button type='button' className='absolute top-0 -right-[10px] rounded-full bg-red-200 p-2 cursor-pointer' onClick={(e) => deleteTemporaryImage(e)}>
-                                                            <FontAwesomeIcon icon={faTrashAlt} className="w-3 h-3 shrink-0 text-red-500" />
-                                                        </button>
-                                                    </Tippy>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="m-auto mt-5 flex max-w-[200px] flex-col space-y-1 font-semibold text-white-dark">
-                                        <div>
-                                            <label className='text-xs mb-0.5'>
-                                                Nama Lengkap
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="fullname"
-                                                autoComplete="given-name"
-                                                className="form-input"
-                                                id='fullname'
-                                                placeholder="Nama Lengkap"
-                                                value={dataInput.fullname}
-                                                onChange={(e) => setDataInput({ ...dataInput, fullname: e.target.value })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className='text-xs mb-0.5'>
-                                                Username
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="username"
-                                                autoComplete="given-name"
-                                                className="form-input"
-                                                placeholder="Username"
-                                                id='username'
-                                                value={dataInput.username}
-                                                onChange={(e) => setDataInput({ ...dataInput, username: e.target.value })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className='text-xs mb-0.5'>
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                autoComplete="given-name"
-                                                className="form-input"
-                                                placeholder="Email"
-                                                id='email'
-                                                value={dataInput.email}
-                                                onChange={(e) => setDataInput({ ...dataInput, email: e.target.value })}
-                                            />
-                                        </div>
+                            <div className="flex items-center gap-x-2">
+                                <Tippy content={isEditProfile == false ? "Ubah Profil" : "Batal Ubah Profil"} >
+                                    <button type="button"
+                                        className={isEditProfile == false ? "btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto" : "btn btn-danger rounded-full p-2 ltr:ml-auto rtl:mr-auto"}
+                                        onClick={() => {
+                                            setIsEditProfile(!isEditProfile)
+                                            setIsEditPassword(false)
+                                            setIsCanSubmitPassword(false);
+                                        }}>
+                                        <FontAwesomeIcon icon={faPenAlt} className="w-3 h-3 shrink-0" />
+                                    </button>
+                                </Tippy>
+                                <Tippy content={isEditPassword == false ? "Ubah Kata Sandi" : "Batal Ubah Kata Sandi"} >
+                                    <button type="button"
+                                        className={isEditPassword == false ? "btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto" : "btn btn-danger rounded-full p-2 ltr:ml-auto rtl:mr-auto"}
+                                        onClick={() => {
+                                            setIsEditPassword(!isEditPassword)
+                                            setIsEditProfile(false)
+                                            setIsCanSubmitPassword(false);
+                                        }}>
+                                        <FontAwesomeIcon icon={isEditPassword ? faLockOpen : faLock} className="w-3 h-3 shrink-0" />
+                                    </button>
+                                </Tippy>
 
-                                        {saveLoadingProfile == false ? (
-                                            <>
-                                                <div className="flex justify-center pt-2">
-                                                    <button type="submit" className="btn btn-success" onClick={() => { saveProfile() }}>
-                                                        Simpan
-                                                    </button>
+                            </div>
+                        </div>
+
+                        {isEditProfile && (
+                            <div className="mb-5">
+                                <div className="flex items-center justify-center">
+                                    <div className="relative h-24 w-24">
+                                        <div className='group'>
+                                            <img src={dataInput?.photo != '' ? dataInput?.photo : CurrentUser?.photo} alt="img" className="rounded-full h-24 w-24 object-cover bg-slate-200 p-0.5" />
+                                            <div className='w-full h-full bg-slate-400 bg-opacity-0 group-hover:bg-opacity-80 rounded-full absolute top-0 left-0'>
+                                                <div className='flex items-center justify-center w-full h-full font-bold text-white opacity-0 group-hover:opacity-100'>
+                                                    Ganti Foto
                                                 </div>
-                                            </>
-                                        ) : (
+                                            </div>
+                                            <input type="file" className='absolute top-0 left-0 w-full h-full cursor-pointer opacity-0'
+                                                title='Ganti Foto'
+                                                accept="image/*"
+                                                onChange={(e) => onChangePhotoProfile(e)}
+                                            />
+                                        </div>
+                                        {dataInput.photo != '' && (
                                             <>
-                                                <div className="pt-2 flex justify-center items-center">
-                                                    <button type="button" className="btn btn-success flex justify-center items-center gap-2">
-                                                        <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
-                                                        Menyimpan...
+                                                <Tippy content="Hapus Foto">
+                                                    <button type='button' className='absolute top-0 -right-[10px] rounded-full bg-red-200 p-2 cursor-pointer' onClick={(e) => deleteTemporaryImage(e)}>
+                                                        <FontAwesomeIcon icon={faTrashAlt} className="w-3 h-3 shrink-0 text-red-500" />
                                                     </button>
-                                                </div>
+                                                </Tippy>
                                             </>
                                         )}
                                     </div>
                                 </div>
-                            </>
-                        ) : (
-                            <>
+                                <div className="m-auto mt-5 flex max-w-[200px] flex-col space-y-1 font-semibold text-white-dark">
+                                    <div>
+                                        <label className='text-xs mb-0.5'>
+                                            Nama Lengkap
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="fullname"
+                                            autoComplete="given-name"
+                                            className="form-input"
+                                            id='fullname'
+                                            placeholder="Nama Lengkap"
+                                            value={dataInput.fullname}
+                                            onChange={(e) => setDataInput({ ...dataInput, fullname: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='text-xs mb-0.5'>
+                                            Username
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            autoComplete="given-name"
+                                            className="form-input"
+                                            placeholder="Username"
+                                            id='username'
+                                            value={dataInput.username}
+                                            onChange={(e) => setDataInput({ ...dataInput, username: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='text-xs mb-0.5'>
+                                            Email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            autoComplete="given-name"
+                                            className="form-input"
+                                            placeholder="Email"
+                                            id='email'
+                                            value={dataInput.email}
+                                            onChange={(e) => setDataInput({ ...dataInput, email: e.target.value })}
+                                        />
+                                    </div>
+
+                                    {saveLoadingProfile == false ? (
+                                        <>
+                                            <div className="flex justify-center pt-2">
+                                                <button type="submit" className="btn btn-success" onClick={() => { saveProfile() }}>
+                                                    Simpan
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="pt-2 flex justify-center items-center">
+                                                <button type="button" className="btn btn-success flex justify-center items-center gap-2">
+                                                    <div className="w-4 h-4 border-2 border-transparent border-l-white rounded-full animate-spin"></div>
+                                                    Menyimpan...
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {isEditPassword && (
+                            <div className='space-y-4'>
+
+                                <div className="pb-2 border-b font-semibold text-center">
+                                    Ubah Kata Sandi
+                                </div>
+
+                                <div>
+                                    <label className='text-xs mb-0.5'>
+                                        Kata Sandi Lama
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="old_password"
+                                            autoComplete="off"
+                                            className="form-input"
+                                            id='old_password"'
+                                            placeholder="Kata Sandi Lama"
+                                            value={inputPassword.old_password}
+                                            onChange={(e) => {
+                                                setInputPassword((prev: any) => ({
+                                                    ...prev,
+                                                    old_password: e.target.value
+                                                }))
+                                            }}
+                                        />
+                                        <div className="absolute top-0 right-0 h-full w-10 flex items-center justify-center rounded-r bg-slate-100 border">
+                                            <div
+                                                onClick={() => {
+                                                    setShowPassword(!showPassword)
+                                                }}
+                                                className="cursor-pointer">
+                                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className={`${showPassword ? 'text-green-500' : ''} w-4 h-4 shrink-0`} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="error-old_password" className='text-red-500 text-xs'></div>
+                                </div>
+
+                                <div>
+                                    <label className='text-xs mb-0.5'>
+                                        Kata Sandi Baru
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="password"
+                                            autoComplete="off"
+                                            className="form-input"
+                                            id='password"'
+                                            placeholder="Kata Sandi Baru"
+                                            value={inputPassword.password}
+                                            onChange={(e) => {
+                                                setInputPassword((prev: any) => ({
+                                                    ...prev,
+                                                    password: e.target.value
+                                                }))
+                                            }}
+                                        />
+                                        <div className="absolute top-0 right-0 h-full w-10 flex items-center justify-center rounded-r bg-slate-100 border">
+                                            <div
+                                                onClick={() => {
+                                                    setShowPassword(!showPassword)
+                                                }}
+                                                className="cursor-pointer">
+                                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className={`${showPassword ? 'text-green-500' : ''} w-4 h-4 shrink-0`} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="error-password" className='text-red-500 text-xs'></div>
+                                </div>
+
+                                <div>
+                                    <label className='text-xs mb-0.5'>
+                                        Konfirmasi Kata Sandi Baru
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="password_confirmation"
+                                            autoComplete="off"
+                                            className="form-input"
+                                            id='password_confirmation"'
+                                            placeholder="Konfirmasi Kata Sandi Baru"
+                                            value={inputPassword.password_confirmation}
+                                            onChange={(e) => {
+                                                setInputPassword((prev: any) => ({
+                                                    ...prev,
+                                                    password_confirmation: e.target.value
+                                                }))
+                                            }}
+                                        />
+                                        <div className="absolute top-0 right-0 h-full w-10 flex items-center justify-center rounded-r bg-slate-100 border">
+                                            <div
+                                                onClick={() => {
+                                                    setShowPassword(!showPassword)
+                                                }}
+                                                className="cursor-pointer">
+                                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className={`${showPassword ? 'text-green-500' : ''} w-4 h-4 shrink-0`} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="error-password_confirmation" className='text-red-500 text-xs'></div>
+                                </div>
+
+
+                                <div className='relative'>
+                                    <ReCAPTCHA
+                                        ref={recaptchaRef}
+                                        sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
+                                        onChange={onReCAPTCHAChange}
+                                    />
+                                    <div id="errorCaptcha" className='validation text-red-500 text-sm'>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-center gap-2">
+                                    <button
+                                        type="button"
+                                        className="btn btn-danger"
+                                        onClick={() => {
+                                            setIsEditPassword(false);
+                                            setInputPassword({
+                                                old_password: '',
+                                                password: '',
+                                                password_confirmation: '',
+                                            });
+                                        }}
+                                    >
+                                        Batal
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className={`btn btn-success ${isCanSubmitPassword ? '' : 'cursor-not-allowed'}`}
+                                        disabled={!isCanSubmitPassword}
+                                        onClick={() => {
+                                            isCanSubmitPassword &&
+                                                savePassword();
+                                        }}
+                                    >
+                                        Simpan
+                                    </button>
+                                </div>
+
+                            </div>
+                        )}
+
+                        {(isEditProfile == false && isEditPassword == true) ||
+                            (isEditProfile == true && isEditPassword == false) ||
+                            (isEditProfile == false || isEditPassword == false)
+                            && (
                                 <div className="mb-5">
                                     <div className="flex flex-col items-center justify-center">
                                         <img src={CurrentUser?.photo} alt="img" className="mb-5 h-24 w-24 rounded-full object-cover bg-slate-200 p-0.5" />
@@ -370,8 +651,7 @@ const Profile = () => {
                                     </ul>
 
                                 </div>
-                            </>
-                        )}
+                            )}
                     </div>
 
                     <div className="panel lg:col-span-2 xl:col-span-3">
@@ -407,14 +687,14 @@ const Profile = () => {
                         {tab === 1 && (
                             <div className="mb-5">
                                 <div className="table-responsive font-semibold text-[#515365] dark:text-white-light h-[calc(100vh-300px)]">
-                                    <table className="whitespace-nowrap">
+                                    <table className="">
                                         <thead>
                                             <tr className='!bg-slate-800 text-white'>
                                                 <th className='!w-[0px] !text-center'>
                                                     <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4 shrink-0" />
                                                 </th>
                                                 <th className="text-center"></th>
-                                                <th className="text-center"></th>
+                                                <th className="text-center !w-[150px]"></th>
                                             </tr>
                                         </thead>
                                         <tbody className="dark:text-white-dark">

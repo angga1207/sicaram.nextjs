@@ -24,7 +24,7 @@ import IconBellBing from '../Icon/IconBellBing';
 
 import axios, { AxiosRequestConfig } from "axios";
 import { BaseUri } from '@/apis/serverConfig';
-import { fetchNotifLess, markNotifAsRead } from '@/apis/fetchdata';
+import { fetchNotifLess, markNotifAsRead } from '@/apis/personal_profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckDouble } from '@fortawesome/free-solid-svg-icons';
 

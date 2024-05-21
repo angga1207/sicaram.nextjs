@@ -28,7 +28,8 @@ export async function getMasterData(id: any, year: any, month: any) {
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -50,7 +51,8 @@ export async function getKeteranganSubKegiatan(idRealisasiSubKegiatan: any, year
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -73,7 +75,8 @@ export async function SaveRealisasi(id: any, datas: any, periode: any, year: any
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -96,7 +99,8 @@ export async function SaveRincianRealisasi(id: any, datas: any, periode: any, ye
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -122,7 +126,8 @@ export async function SaveKeterangan(idRealisasiSubKegiatan: any, datas: any, ye
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -140,7 +145,8 @@ export async function DeleteKeteranganImage(id: any) {
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -161,7 +167,8 @@ export async function fetchLogs(id: any, year: any, month: any) {
         return data;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -183,7 +190,8 @@ export async function sendRequestVerification(id: any, data: any, year: any, mon
         return returns;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -205,7 +213,8 @@ export async function sendReplyVerification(id: any, data: any, year: any, month
         return returns;
     } catch (error) {
         return {
-            status: 'no instance'
+            status: 'error',
+            message: error
         }
     }
 }
@@ -226,6 +235,77 @@ export async function getKontrakSPSE(search: any, year: any, kodeSatker: any) {
         });
         const data = await res.data;
         return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+
+export async function getContract(subKegiatanId: any, year: any, month: any) {
+    try {
+        const res = await axios.get(baseUri + '/caram/realisasi-keterangan-get-kontrak', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                subKegiatanId: subKegiatanId,
+                year: year,
+                month: month
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+
+export async function addContract(id: any, data: any, year: any, month: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi-keterangan-add-kontrak', {
+            id: id,
+            data: data,
+            year: year,
+            month: month
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        const returns = await res.data;
+        return returns;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function deleteContract(id: any, year: any, month: any) {
+    try {
+        const res = await axios.delete(baseUri + '/caram/realisasi-keterangan-delete-kontrak/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                id: id,
+                year: year,
+                month: month
+            }
+        });
+        const returns = await res.data;
+        return returns;
     } catch (error) {
         return {
             status: 'error',

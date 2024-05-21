@@ -32,7 +32,10 @@ import {
     sendRequestVerification,
     sendReplyVerification,
     SaveRincianRealisasi,
-    getKontrakSPSE
+    getKontrakSPSE,
+    getContract,
+    addContract,
+    deleteContract
 } from '@/apis/realisasi_apis';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -172,8 +175,10 @@ const Index = () => {
     const deviceSizes = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
 
     const [searchKontrak, setSearchKontrak] = useState<any>(null);
+    const [loadingFetchKontrak, setLoadingFetchKontrak] = useState<boolean>(false);
     const [kontrakSPSEOptions, setKontrakSPSEOptions] = useState<any>([]);
     const [selectedKontrak, setSelectedKontrak] = useState<any>(null);
+    const [activeContracts, setActiveContracts] = useState<any>([]);
 
     useEffect(() => {
         fetchSatuans().then((data) => {
@@ -213,6 +218,14 @@ const Index = () => {
                 if (data.status == 'success') {
                     setDataKeterangan(data.data);
                     setImages(data.data.files);
+                }
+            });
+        }
+
+        if (subKegiatanId && tab == 4) {
+            getContract(subKegiatanId, year, month).then((data: any) => {
+                if (data.status == 'success') {
+                    setActiveContracts(data.data);
                 }
             });
         }
@@ -395,21 +408,70 @@ const Index = () => {
     }
 
     const fetchingKontrak = () => {
-        getKontrakSPSE(searchKontrak, year, subKegiatan.instance_code).then((data: any) => {
-            if (data.status === 'success') {
-                setKontrakSPSEOptions(data.data);
-            }
-            else {
-                setKontrakSPSEOptions([]);
-                showAlert('error', data.message);
-            }
-        });
+        if (loadingFetchKontrak === false) {
+            setLoadingFetchKontrak(true);
+            getKontrakSPSE(searchKontrak, year, subKegiatan.instance_code).then((data: any) => {
+                if (data.status === 'success') {
+                    setKontrakSPSEOptions(data.data);
+                }
+                else {
+                    setKontrakSPSEOptions([]);
+                    showAlert('error', data.message);
+                }
+                setLoadingFetchKontrak(false);
+            });
+        } else {
+            showAlert('info', 'Sedang Memuat Data Kontrak');
+        }
     }
 
     const pickKontrak = (data: any) => {
         setSelectedKontrak(data);
     }
 
+    const AddKontrak = () => {
+        addContract(subKegiatanId, selectedKontrak, year, month).then((data: any) => {
+            if (data.status === 'success') {
+                showAlert('success', data.message)
+                setSelectedKontrak(null);
+                getContract(subKegiatanId, year, month).then((data: any) => {
+                    if (data.status == 'success') {
+                        setActiveContracts(data.data);
+                    }
+                });
+            }
+        });
+    }
+
+    const deleteKontrak = (id: any) => {
+
+        // confirm box
+        Swal.fire({
+            title: 'Hapus Kontrak',
+            text: 'Apakah Anda Yakin Ingin Menghapus Kontrak Ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteContract(id, year, month).then((data: any) => {
+                    if (data.status === 'success') {
+                        showAlert('success', data.message)
+                        getContract(subKegiatanId, year, month).then((data: any) => {
+                            if (data.status == 'success') {
+                                setActiveContracts(data.data);
+                            }
+                        });
+                    }
+
+                    if (data.status === 'error') {
+                        showAlert('error', data.message)
+                    }
+                });
+            }
+        })
+    }
 
     if (subKegiatan && subKegiatan.status_target != 'verified') {
         return (
@@ -2152,6 +2214,7 @@ const Index = () => {
                 {tab === 4 && (
                     <div className="p-5">
                         <div className="grid grid-cols-2 gap-8">
+
                             <div className="col-span-2 md:col-span-1">
                                 <div className="">
                                     <label>Cari Nomor Kontrak</label>
@@ -2170,7 +2233,7 @@ const Index = () => {
                                         className="form-input"
                                     />
                                 </div>
-                                <div className="mt-5 space-y-5 overflow-x-auto h-[calc(100vh-340px)] border rounded">
+                                <div className="mt-5 space-y-5 overflow-x-auto overflow-auto h-[calc(100vh-360px)] border rounded">
 
                                     {kontrakSPSEOptions?.length > 0 && (
                                         <>
@@ -2261,11 +2324,20 @@ const Index = () => {
 
                                 </div>
                             </div>
+
                             <div className="col-span-2 md:col-span-1">
+
                                 {selectedKontrak && (
-                                    <div className="">
-                                        <div className="text-md underline font-semibold">
-                                            Pratinjau Kontrak
+                                    <div className="mb-5">
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-md underline font-semibold">
+                                                Pratinjau Kontrak
+                                            </div>
+                                            <div className="text-xs text-red-500 cursor-pointer" onClick={() => {
+                                                setSelectedKontrak(null);
+                                            }}>
+                                                <FontAwesomeIcon icon={faTimes} className='w-3 h-3 mr-1' />
+                                            </div>
                                         </div>
                                         <div className="table-responsive h-[calc(100vh-360px)] mt-5">
                                             <table className=''>
@@ -2518,21 +2590,304 @@ const Index = () => {
                                             </table>
                                         </div>
                                         <div className="mt-5">
-                                            <div className="text-end">
+                                            <div className="flex justify-end">
                                                 <button
                                                     onClick={() => {
-                                                        // saveKontrak();
+                                                        AddKontrak();
                                                     }}
                                                     type="button"
                                                     className="btn btn-success">
-                                                    <FontAwesomeIcon icon={faSave} className='mr-2 w-4 h-4' />
-                                                    Simpan Kontrak
+                                                    <FontAwesomeIcon icon={faPlus} className='mr-2 w-4 h-4' />
+                                                    Tambah Kontrak
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 )}
+
+                                {activeContracts?.length > 0 && (
+                                    <>
+                                        {!selectedKontrak && (
+                                            <div className="">
+                                                <div className="">
+                                                    <div className="text-md underline font-semibold mb-3">
+                                                        Kontrak Aktif
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-3 overflow-auto h-[calc(100vh-300px)]">
+                                                    {activeContracts?.map((kontrak: any, index: any) => (
+                                                        <div key={`list-kontrak-aktif-${index}`}
+                                                            className={`bg-green-50 p-4 shadow-md cursor-pointer select-none hover:bg-green-100 hover:shadow-green-200 group`}>
+                                                            <div className="flex justify-end">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        // deleteKontrak(kontrak?.id);
+                                                                        deleteKontrak(subKegiatanId)
+                                                                    }}
+                                                                    className='btn btn-sm btn-outline-danger'
+                                                                    type='button'>
+                                                                    <FontAwesomeIcon icon={faTrashAlt} className='w-3 h-3' />
+                                                                </button>
+                                                            </div>
+                                                            <div className="table-responsive mt-5">
+                                                                <table className=''>
+                                                                    <tbody>
+
+                                                                        <tr>
+                                                                            <td className='!w-[200px]'>
+                                                                                Nomor Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                {kontrak?.data_spse?.no_kontrak}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className='!w-[200px]'>
+                                                                                Jenis Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                {kontrak?.data_spse?.jenis_kontrak}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nomor SPPBJ
+                                                                            </td>
+                                                                            <td>
+                                                                                {kontrak?.data_spse?.no_sppbj}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nama Paket
+                                                                            </td>
+                                                                            <td>
+                                                                                {kontrak?.data_spse?.nama_paket}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Tanggal Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                {new Date(kontrak?.data_spse?.tgl_kontrak).toLocaleString('id-ID', { dateStyle: 'full' })}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Tanggal Kontrak Awal
+                                                                            </td>
+                                                                            <td>
+                                                                                {new Date(kontrak?.data_spse?.tgl_kontrak_awal).toLocaleString('id-ID', { dateStyle: 'full' })}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Tanggal Kontrak Akhir
+                                                                            </td>
+                                                                            <td>
+                                                                                {new Date(kontrak?.data_spse?.tgl_kontrak_akhir).toLocaleString('id-ID', { dateStyle: 'full' })}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Status Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                {kontrak?.data_spse?.status_kontrak}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className='!text-center font-semibold' colSpan={2}>
+                                                                                Satuan Kerja
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nama Satuan Kerja
+                                                                            </td>
+                                                                            <td>
+                                                                                {/* {kontrak?.data_spse?.kd_satker_str + ' - ' + kontrak?.data_spse?.nama_satker} */}
+                                                                                {kontrak?.data_spse?.kd_satker_str}
+                                                                                <br />
+                                                                                {kontrak?.data_spse?.nama_satker}
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className='!text-center font-semibold' colSpan={2}>
+                                                                                PPK
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nama PPK
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.nama_ppk}
+                                                                                </div>
+                                                                                <div className="text-xs">
+                                                                                    {kontrak?.data_spse?.nip_ppk}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Jabatan PPK
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.jabatan_ppk}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nomor SK PPK
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.no_sk_ppk}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className='!text-center font-semibold' colSpan={2}>
+                                                                                Penyedia
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nama Penyedia
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.nama_penyedia}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                NPWP Penyedia
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.npwp_penyedia}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Bentuk Usaha Penyedia
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.bentuk_usaha_penyedia}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Wakil Sah Penyedia
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.wakil_sah_penyedia}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Jabatan Wakil Penyedia
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.jabatan_wakil_penyedia}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Jabatan Wakil Penyedia
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    {kontrak?.data_spse?.jabatan_wakil_penyedia}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className='!text-center font-semibold' colSpan={2}>
+                                                                                Nilai Kontrak
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nilai Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(kontrak?.data_spse?.nilai_kontrak)}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nilai PDN Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(kontrak?.data_spse?.nilai_pdn_kontrak)}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td className=''>
+                                                                                Nilai UMK Kontrak
+                                                                            </td>
+                                                                            <td>
+                                                                                <div className="">
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(kontrak?.data_spse?.nilai_umk_kontrak)}
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
                             </div>
+
                         </div>
                     </div>
                 )}

@@ -66,8 +66,8 @@ const Login = () => {
     });
     const router = useRouter();
 
-    const [email, setEmail] = React.useState("");
-    const recaptchaRef = React.createRef<any>();
+    // const recaptchaRef = React.createRef<any>();
+    const recaptchaRef = useRef<any>();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -95,8 +95,6 @@ const Login = () => {
         // document.getElementsByClassName('validation')?.innerHTML = '';
 
         if (!recaptchaRef?.current.getValue()) {
-
-            // document.getElementById('errorCaptcha').innerHTML = 'Please check the captcha';
             showSweetAlert(
                 'error',
                 'Verifikasi Robot', 'Anda tidak lolos verifikasi robot!',
@@ -108,10 +106,6 @@ const Login = () => {
             setSubmitLoading(false);
             return;
         }
-
-        const fcmToken = localStorage.getItem('fcm_token');
-        console.log(fcmToken);
-
 
         const formData = {
             username: e.target.Username.value,
