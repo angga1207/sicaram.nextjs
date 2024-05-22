@@ -110,10 +110,10 @@ const Index = () => {
 
         // Only for Development
         // if (CurrentUser?.role_id == 1) {
-        setCurrentUser((prevState: any) => ({
-            ...prevState,
-            instance_alias: 'PUPR'
-        }));
+        // setCurrentUser((prevState: any) => ({
+        //     ...prevState,
+        //     instance_alias: 'PUPR'
+        // }));
         // }
 
     }, []);
