@@ -46,9 +46,7 @@ const showAlert = async (icon: any, text: any) => {
 const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
     Swal.fire({
         icon: icon,
-        // title: '<i>HTML</i> <u>example</u>',
         title: title,
-        // html: 'You can use <b>bold text</b>, <a href="//github.com">links</a> and other HTML tags',
         html: text,
         showCloseButton: true,
         showCancelButton: true,
@@ -263,6 +261,27 @@ const Header = () => {
         });
     }
 
+    // date time function update every second
+    const [currentTime, setCurrentTime] = useState('');
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const date = new Date();
+            setCurrentTime(date.toLocaleString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+            })
+            );
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+
+
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
             <div className="shadow-sm">
@@ -286,25 +305,19 @@ const Header = () => {
                     <div className="hidden ltr:mr-2 rtl:ml-2 sm:block">
                         <ul className="flex items-center space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]">
                             <li>
-                                <div className="text-base font-bold flex items-center gap-x-3">
+                                <div className="text-base font-bold flex flex-col gap-x-3">
                                     <div>
                                         <span className="hidden sm:inline">SiCaram,</span> Kabupaten Ogan Ilir
                                     </div>
                                     <div className="flex items-center space-x-1.5 text-xs">
                                         <IconCalendar className="h-3.5 w-3.5" />
                                         <span className="font-semibold">
-                                            {new Date().toLocaleDateString(i18n.language, {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                            })}
+                                            {currentTime}
                                         </span>
                                     </div>
                                 </div>
                                 <div>
                                     <span className="text-slate-800 dark:text-[#d0d2d6] text-lg">
-                                        {/* {router.pathname.replace('/', '')} */}
 
                                         {router.pathname.includes('realisasi/anggaran') && (
                                             <span className="flex items-center space-x-1.5">
@@ -553,7 +566,6 @@ const Header = () => {
                         </div>
                     </div>
                 </div>
-
             </div>
         </header>
     );
