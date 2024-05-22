@@ -197,13 +197,13 @@ const Profile = () => {
     const saveProfile = async () => {
         setSaveLoadingProfile(true);
         const data = {
-            id: dataInput?.id,
+            id: CurrentUser?.id,
             fullname: dataInput.fullname,
             username: dataInput.username,
             email: dataInput.email,
             foto: dataInput.photo,
             fotoPath: dataInput.photoFile,
-            role: dataInput?.role_id,
+            role: CurrentUser?.role_id,
             password: dataInput.password ?? '',
             password_confirmation: dataInput.password_confirmation ?? '',
         }

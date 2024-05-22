@@ -3171,7 +3171,7 @@ const Index = () => {
                                                                                     Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.realisasi_anggaran_keterangan)}
                                                                                 </td>
                                                                                 <td>
-                                                                                    <div className="whitespace-nowrap">
+                                                                                    <div className="!whitespace-nowrap">
                                                                                         {new Date(
                                                                                             keterangan?.realisasi_year + '-' + keterangan?.realisasi_month + '-01'
                                                                                         )?.toLocaleDateString('id-ID', {
