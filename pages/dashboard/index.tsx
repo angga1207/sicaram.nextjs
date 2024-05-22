@@ -134,7 +134,8 @@ const Index = () => {
                                     <Player
                                         autoplay
                                         loop
-                                        src="https://lottie.host/57136a3b-aff5-4b0b-99c7-2408199230ad/aneTHQRQbg.json"
+                                        // src="https://lottie.host/57136a3b-aff5-4b0b-99c7-2408199230ad/aneTHQRQbg.json"
+                                        src="/lottie/animation-4.json"
                                         className='w-32 h-32'
                                     >
                                     </Player>
@@ -156,7 +157,8 @@ const Index = () => {
                         </div>
                     </Link>
 
-                    <div className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
+                    <Link href={`/dashboard/capaian-kinerja`}
+                        className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
                         {KinerjaSummary?.length === 0 && (
                             <div className="w-[360px] h-[360px] flex items-center justify-center">
                                 <LoadingSicaram></LoadingSicaram>
@@ -191,7 +193,8 @@ const Index = () => {
                                     <Player
                                         autoplay
                                         loop
-                                        src="https://lottie.host/d24409b0-afb0-445f-be09-884f03bc70a6/Q6WQhrKAkZ.json"
+                                        // src="https://lottie.host/d24409b0-afb0-445f-be09-884f03bc70a6/Q6WQhrKAkZ.json"
+                                        src="/lottie/animation-3.json"
                                         className='w-32 h-32'
                                     >
                                     </Player>
@@ -211,7 +214,7 @@ const Index = () => {
                             <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
                             Klik untuk Melihat Rincian Capaian Kinerja
                         </div>
-                    </div>
+                    </Link>
 
                 </div>
 

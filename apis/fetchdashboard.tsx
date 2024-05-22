@@ -53,13 +53,18 @@ export async function summaryRealisasi(periode: any, year: any) {
     }
 }
 
-export async function getRankInstance(periode: any, year: any) {
+export async function getRankInstance(periode: any, year: any, sortBy: any) {
     try {
-        const res = await axios.get(baseUri + '/dashboard/rank-instance?periode=' + periode + '&year=' + year, {
+        const res = await axios.get(baseUri + '/dashboard/rank-instance?periode', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
+            params: {
+                periode: periode,
+                year: year,
+                sortBy: sortBy
+            }
         });
         const data = await res.data;
         return data;

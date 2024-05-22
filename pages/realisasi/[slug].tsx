@@ -66,7 +66,7 @@ import {
     faExclamationTriangle,
     faAngleDoubleLeft
 } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
 
 import Lightbox from "yet-another-react-lightbox";
@@ -236,7 +236,7 @@ const Index = () => {
         return `${src}?w=${size}&q=75`;
     }
 
-    const slides = images?.map((img: any) => ({
+    const slides = images?.filter((item: any) => item?.mime_type.includes('image/')).map((img: any) => ({
         width: img.width ?? 1080,
         height: img.height ?? 1280,
         src: nextImageUrl(img.file, 1080),
@@ -2128,7 +2128,7 @@ const Index = () => {
                                     <label>Upload Berkas Pendukung</label>
                                     <input
                                         type="file"
-                                        accept="image/*"
+                                        // accept="image/*"
                                         multiple
                                         onChange={(e) => {
                                             setUnsaveKeteranganStatus(true);
@@ -2144,60 +2144,69 @@ const Index = () => {
                             </div>
                             <div className="col-span-10 flex items-center justify-between">
                                 <div className=""></div>
-                                <div className="">
-                                    {unsaveKeteranganStatus === true && (
-                                        <button
-                                            onClick={() => {
-                                                saveKeterangan();
-                                            }}
-                                            type="button"
-                                            className="btn btn-success">
-                                            <FontAwesomeIcon icon={faSave} className='mr-2 w-4 h-4' />
-                                            Unggah Keterangan
-                                        </button>
-                                    )}
-                                </div>
+                                {([1, 2, 9].includes(CurrentUser?.role_id)) && (
+                                    <div className="">
+                                        {unsaveKeteranganStatus === true && (
+                                            <button
+                                                onClick={() => {
+                                                    saveKeterangan();
+                                                }}
+                                                type="button"
+                                                className="btn btn-success">
+                                                <FontAwesomeIcon icon={faSave} className='mr-2 w-4 h-4' />
+                                                Unggah Keterangan
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                             <div className="col-span-10">
-                                <div className="font-semibold underline mb-2">
-                                    Berkas Pendukung
-                                </div>
-                                <div className="grid grid-cols-10 gap-5">
-                                    {images?.map((image: any, index: any) => (
-                                        <div className="col-span-10 md:col-span-1">
-                                            <div className="relative group rounded-lg cursor-pointer overflow-hidden">
-                                                <img
-                                                    onClick={() => {
-                                                        setImagesIndex(index);
-                                                        setOpenLightBox(true);
-                                                    }}
-                                                    src={image?.file}
-                                                    alt="Image"
-                                                    className="w-full h-full border p-1 object-cover rounded-lg grayscale group-hover:grayscale-0 group-hover:scale-125 hover:shadow transition-all duration-300"
-                                                />
-                                                <div className="">
-                                                    <div className="absolute top-0 right-0 bg-white bg-opacity-50 p-1 pr-2 pt-2 rounded-bl-lg">
-                                                        <FontAwesomeIcon icon={faTrashAlt} className='text-red-600 w-4 h-4 cursor-pointer' onClick={() => {
-                                                            Swal.fire({
-                                                                title: 'Peringatan',
-                                                                text: 'Apakah Anda yakin ingin menghapus gambar ini?',
-                                                                icon: 'warning',
-                                                                showCancelButton: true,
-                                                                confirmButtonText: 'Ya, Hapus',
-                                                                cancelButtonText: 'Batal',
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    // setImages(images.filter((item: any, i: any) => i !== index));
-                                                                    deleteKeteranganImage(image?.id);
-                                                                }
-                                                            });
-                                                        }} />
+
+                                {images?.filter((item: any) => item?.mime_type.includes('image/')).length > 0 && (
+                                    <>
+                                        <div className="font-semibold underline mb-2">
+                                            Gambar Pendukung
+                                        </div>
+                                        <div className="grid grid-cols-10 gap-5">
+                                            {images?.filter((item: any) => item?.mime_type.includes('image/')).map((image: any, indexImg: any) => (
+                                                <div className="col-span-10 md:col-span-1">
+                                                    <div className="relative group rounded-lg cursor-pointer overflow-hidden">
+                                                        <img
+                                                            onClick={() => {
+                                                                setImagesIndex(indexImg);
+                                                                setOpenLightBox(true);
+                                                            }}
+                                                            src={image?.file}
+                                                            alt="Image"
+                                                            className="w-full h-full border p-1 object-cover rounded-lg grayscale group-hover:grayscale-0 group-hover:scale-125 hover:shadow transition-all duration-300"
+                                                        />
+                                                        <div className="">
+                                                            {([1, 2, 9].includes(CurrentUser?.role_id)) && (
+                                                                <div className="absolute top-0 right-0 bg-white bg-opacity-50 p-1 pr-2 pt-2 rounded-bl-lg">
+                                                                    <FontAwesomeIcon icon={faTrashAlt} className='text-red-600 w-4 h-4 cursor-pointer' onClick={() => {
+                                                                        Swal.fire({
+                                                                            title: 'Peringatan',
+                                                                            text: 'Apakah Anda yakin ingin menghapus gambar ini?',
+                                                                            icon: 'warning',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus',
+                                                                            cancelButtonText: 'Batal',
+                                                                        }).then((result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                // setImages(images.filter((item: any, i: any) => i !== index));
+                                                                                deleteKeteranganImage(image?.id);
+                                                                            }
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
+                                    </>
+                                )}
 
                                 <Lightbox
                                     index={imagesIndex}
@@ -2206,6 +2215,53 @@ const Index = () => {
                                     slides={slides}
                                     plugins={[Zoom]}
                                 />
+
+                                {images?.filter((item: any) => !item?.mime_type.includes('image/')).length > 0 && (
+                                    <>
+                                        <div className="font-semibold underline mb-2">
+                                            Berkas Pendukung Lainnya
+                                        </div>
+                                        <div className="space-y-2">
+                                            {images?.filter((item: any) => !item?.mime_type.includes('image/')).map((file: any, indexImg: any) => (
+                                                <div className='flex items-center gap-x-2'>
+                                                    <Link
+                                                        href={file?.file}
+                                                        target="_blank"
+                                                        download={file?.filename}
+                                                        className="flex items-center gap-2 group cursor-pointer">
+                                                        <FontAwesomeIcon icon={faFileAlt} className='text-blue-500 w-4 h-4' />
+                                                        <div className="group-hover:underline">
+                                                            {file?.filename}
+                                                        </div>
+                                                    </Link>
+
+                                                    {([1, 2, 9].includes(CurrentUser?.role_id)) && (
+                                                        <Tippy content="Hapus Berkas" theme='danger'>
+                                                            <div className="bg-white bg-opacity-50 rounded-bl-lg group hover:bg-red-200 p-1 rounded-lg">
+                                                                <FontAwesomeIcon icon={faTrashAlt} className='text-red-600 w-3 h-3 cursor-pointer'
+                                                                    onClick={() => {
+                                                                        Swal.fire({
+                                                                            title: 'Peringatan',
+                                                                            text: 'Apakah Anda yakin ingin menghapus gambar ini?',
+                                                                            icon: 'warning',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus',
+                                                                            cancelButtonText: 'Batal',
+                                                                        }).then((result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                deleteKeteranganImage(file?.id);
+                                                                            }
+                                                                        });
+                                                                    }} />
+                                                            </div>
+                                                        </Tippy>
+                                                    )}
+
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </form>
                     </div>

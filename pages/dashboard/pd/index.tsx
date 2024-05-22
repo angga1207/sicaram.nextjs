@@ -1,7 +1,7 @@
 import { IRootState } from '@/store';
 import { useRouter } from 'next/router';
 import { setPageTitle } from '@/store/themeConfigSlice';
-import { faAngleDoubleDown, faBriefcase, faCartArrowDown, faChartLine, faClock, faExclamationTriangle, faGlobeAsia, faPercent, faProjectDiagram, faSackDollar, faShare, faStar, faSuitcase, faTachometerAltAverage, faThumbsUp, faToolbox, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleDown, faBriefcase, faCartArrowDown, faChartLine, faClock, faExclamationTriangle, faExternalLinkAlt, faFileSignature, faGlobeAsia, faPercent, faProjectDiagram, faQuestionCircle, faSackDollar, faShare, faStar, faSuitcase, faTachometerAltAverage, faThumbsUp, faToolbox, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -30,6 +30,12 @@ import { faFacebook, faSuperpowers, faYoutubeSquare } from '@fortawesome/free-br
 import { colors } from 'react-select/dist/declarations/src/theme';
 import IconX from '@/components/Icon/IconX';
 import { format } from 'path';
+import LoadingSicaram from '@/components/LoadingSicaram';
+
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
+import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -74,26 +80,42 @@ const Index = () => {
     const [KinerjaSummary, setKinerjaSummary] = useState<any>([]);
 
     const [dataPrograms, setDataPrograms] = useState<any>([]);
+    const [loadingDataPrograms, setLoadingDataPrograms] = useState<boolean>(false);
     const [selectedProgram, setSelectedProgram] = useState<any>(null);
     const [tabSelectedProgram, setTabSelectedProgram] = useState<any>('anggaran');
     const [AnggaranSeriesProgram, setAnggaranSeriesProgram] = useState<any>([]);
     const [KinerjaSeriesProgram, setKinerjaSeriesProgram] = useState<any>([]);
 
     const [dataKegiatans, setDataKegiatans] = useState<any>([]);
+    const [loadingDataKegiatans, setLoadingDataKegiatans] = useState<boolean>(false);
     const [selectedKegiatan, setSelectedKegiatan] = useState<any>(null);
     const [tabSelectedKegiatan, setTabSelectedKegiatan] = useState<any>('anggaran');
     const [AnggaranSeriesKegiatan, setAnggaranSeriesKegiatan] = useState<any>([]);
     const [KinerjaSeriesKegiatan, setKinerjaSeriesKegiatan] = useState<any>([]);
 
     const [dataSubKegiatans, setDataSubKegiatans] = useState<any>([]);
+    const [loadingDataSubKegiatans, setLoadingDataSubKegiatans] = useState<boolean>(false);
     const [selectedSubKegiatan, setSelectedSubKegiatan] = useState<any>(null);
     const [tabSelectedSubKegiatan, setTabSelectedSubKegiatan] = useState<any>('anggaran');
     const [AnggaranSeriesSubKegiatan, setAnggaranSeriesSubKegiatan] = useState<any>([]);
     const [KinerjaSeriesSubKegiatan, setKinerjaSeriesSubKegiatan] = useState<any>([]);
 
+    const [detailRealisasi, setDetailRealisasi] = useState<any>([]);
+    const [loadingDetailRealisasi, setLoadingDetailRealisasi] = useState<boolean>(false);
+    const [selectedDetailRealisasi, setSelectedDetailRealisasi] = useState<any>(null);
+
     useEffect(() => {
         setYear(router.query.year ?? new Date().getFullYear());
         setMonth(router.query.month ?? new Date().getMonth());
+
+        // Only for Development
+        // if (CurrentUser?.role_id == 1) {
+        setCurrentUser((prevState: any) => ({
+            ...prevState,
+            instance_alias: 'PUPR'
+        }));
+        // }
+
     }, []);
 
     useEffect(() => {
@@ -119,11 +141,13 @@ const Index = () => {
 
     useEffect(() => {
         if (Instance) {
-            getMasterTujuan('', Instance?.id).then((data: any) => {
-                if (data.status === 'success') {
-                    setDataTujuanSasaran(data.data);
-                }
-            });
+            if (dataTujuanSasaran?.length === 0) {
+                getMasterTujuan('', Instance?.id).then((data: any) => {
+                    if (data.status === 'success') {
+                        setDataTujuanSasaran(data.data);
+                    }
+                });
+            }
         }
     }, [Instance]);
 
@@ -606,6 +630,7 @@ const Index = () => {
 
     const pickProgram = (data: any) => {
         setSelectedProgram(data);
+        setLoadingDataKegiatans(true);
         getDetailProgram(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
@@ -616,6 +641,7 @@ const Index = () => {
                 setAnggaranSeriesProgram(res.data.chart_keuangan);
                 setKinerjaSeriesProgram(res.data.chart_kinerja);
             }
+            setLoadingDataKegiatans(false);
         });
     }
 
@@ -881,6 +907,7 @@ const Index = () => {
 
     const pickKegiatan = (data: any) => {
         setSelectedKegiatan(data);
+        setLoadingDataSubKegiatans(true);
         getDetaiKegiatan(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
@@ -891,6 +918,7 @@ const Index = () => {
                 setAnggaranSeriesKegiatan(res.data.chart_keuangan);
                 setKinerjaSeriesKegiatan(res.data.chart_kinerja);
             }
+            setLoadingDataSubKegiatans(false);
         });
     }
 
@@ -1155,6 +1183,7 @@ const Index = () => {
 
     const pickSubKegiatan = (data: any) => {
         setSelectedSubKegiatan(data);
+        setLoadingDetailRealisasi(true);
         getDetailSubKegiatan(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
@@ -1164,7 +1193,9 @@ const Index = () => {
                 }));
                 setAnggaranSeriesSubKegiatan(res.data.chart_keuangan);
                 setKinerjaSeriesSubKegiatan(res.data.chart_kinerja);
+                setDetailRealisasi(res.data.rincian_realisasi)
             }
+            setLoadingDetailRealisasi(false);
         });
     }
 
@@ -1425,6 +1456,32 @@ const Index = () => {
     const unPickSubKegiatan = () => {
         setSelectedSubKegiatan(null);
     }
+
+    const [tabDetail, setTabDetail] = useState(1);
+
+    function nextImageUrl(src: any, size: any) {
+        // return `/_next/image?url=${encodeURIComponent(src)}&w=${size}&q=75`;
+        return `${src}?w=${size}&q=75`;
+    }
+
+    const [imagesIndex, setImagesIndex] = useState<any>(-1)
+    const imageSizes = [16, 32, 48, 64, 96, 128, 256, 384];
+    const deviceSizes = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+    const [openLightBox, setOpenLightBox] = useState(false);
+
+    const slides = detailRealisasi?.files?.filter((item: any) => item?.mime_type.includes('image/')).map((img: any) => ({
+        width: img.width ?? 1080,
+        height: img.height ?? 1280,
+        src: nextImageUrl(img.file, 1080),
+        srcSet: imageSizes
+            .concat(...deviceSizes)
+            .filter((size) => size <= 1080)
+            .map((size) => ({
+                src: nextImageUrl(img.file, size),
+                width: size,
+                height: Math.round((1280 / 1080) * size),
+            })),
+    }));
 
     return (
         <>
@@ -1992,6 +2049,14 @@ const Index = () => {
                         <div className="font-semibold text-lg pb-3 px-4">
                             PROGRAM {Instance?.name}
                         </div>
+
+                        {loadingDataPrograms && (
+                            <div className='flex flex-col items-center justify-center gap-2 p-10'>
+                                <LoadingSicaram />
+                                <div className="dots-loading text-xl">Memuat Data...</div>
+                            </div>
+                        )}
+
                         {!selectedProgram && (
                             <>
                                 {dataPrograms.map((program: any, index: number) => (
@@ -2304,6 +2369,13 @@ const Index = () => {
                                     </div>
                                 </div>
 
+                                {loadingDataKegiatans && (
+                                    <div className='flex flex-col items-center justify-center gap-2 p-10'>
+                                        <LoadingSicaram />
+                                        <div className="dots-loading text-xl">Memuat Data...</div>
+                                    </div>
+                                )}
+
                                 {!selectedKegiatan && (
                                     <>
                                         {selectedProgram?.kegiatans?.map((kegiatan: any, index: number) => (
@@ -2612,6 +2684,14 @@ const Index = () => {
                                                 SUB KEGIATAN
                                             </div>
                                         </div>
+
+                                        {loadingDataSubKegiatans && (
+                                            <div className='flex flex-col items-center justify-center gap-2 p-10'>
+                                                <LoadingSicaram />
+                                                <div className="dots-loading text-xl">Memuat Data...</div>
+                                            </div>
+                                        )}
+
                                         {!selectedSubKegiatan && (
                                             <>
                                                 {selectedKegiatan?.sub_kegiatans?.map((subKegiatan: any, index: number) => (
@@ -2686,7 +2766,7 @@ const Index = () => {
                                                     <div className="text-md font-semibold dark:text-white">
                                                         {selectedSubKegiatan?.code} - {selectedSubKegiatan?.name}
                                                     </div>
-                                                    <Tippy content="Tutup Program">
+                                                    <Tippy content="Tutup Sub Kegiatan">
                                                         <div
                                                             onClick={() => {
                                                                 unPickSubKegiatan();
@@ -2917,6 +2997,646 @@ const Index = () => {
                                 )}
                             </>
                         )}
+
+                        {/* RINCIAN REALISASI OF SUB KEGIATAN START */}
+                        {selectedSubKegiatan && (
+                            <div className="panel">
+                                <div className="mb-3">
+                                    <div className="font-semibold text-lg px-4">
+                                        {selectedSubKegiatan?.code} - {selectedSubKegiatan?.name}
+                                    </div>
+                                    <div className="px-4">
+                                        {/* {new Date(detailRealisasi?.info?.last_update).toLocaleDateString('id-ID', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        })} */}
+                                        Rincian Realisasi
+                                        <span className='ml-1 font-semibold'>
+                                            {detailRealisasi?.info?.month_name} {detailRealisasi?.info?.year}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex">
+
+                                    <button
+                                        onClick={(e) => {
+                                            setTabDetail(1);
+                                        }}
+                                        className={tabDetail === 1 ?
+                                            `w-full rounded-tl-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                            `w-full rounded-tl-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                                        type="button">
+                                        <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2" />
+                                        Rincian Realisasi
+                                    </button>
+
+                                    <button
+                                        onClick={(e) => {
+                                            setTabDetail(2);
+                                        }}
+                                        className={tabDetail === 2 ?
+                                            `w-full bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                            `w-full bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                                        type="button">
+                                        <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2" />
+                                        Sumber Dana
+                                    </button>
+
+                                    <button
+                                        onClick={(e) => {
+                                            setTabDetail(3);
+                                        }}
+                                        className={tabDetail === 3 ?
+                                            `w-full bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                            `w-full bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                                        type="button">
+                                        <FontAwesomeIcon icon={faQuestionCircle} className="w-4 h-4 mr-2" />
+                                        Keterangan
+                                    </button>
+
+                                    <button
+                                        onClick={(e) => {
+                                            setTabDetail(4);
+                                        }}
+                                        className={tabDetail === 4 ?
+                                            `w-full rounded-tr-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                            `w-full rounded-tr-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                                        type="button">
+                                        <FontAwesomeIcon icon={faFileSignature} className="w-4 h-4 mr-2" />
+                                        Kontrak
+                                    </button>
+
+                                </div>
+
+                                {loadingDetailRealisasi == false && (
+                                    <>
+                                        {tabDetail == 1 && (
+                                            <div className="table-responsive">
+                                                <table className=''>
+                                                    <thead className='!bg-slate-800 sticky top-0 left-0 w-full'>
+                                                        <tr>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[150px]'>
+                                                                Kode Rekening
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center'>
+                                                                Uraian
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[120px]'>
+                                                                Koefisien Target
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[120px]'>
+                                                                Koefisien Realisasi
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[120px]'>
+                                                                Harga Satuan
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[200px]'>
+                                                                Anggaran
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[200px]'>
+                                                                Realisasi
+                                                            </th>
+                                                            <th className='!bg-slate-800 !text-white !text-center !w-[100px]'>
+                                                                Data Bulan
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {detailRealisasi?.data_error === true && (
+                                                            <tr>
+                                                                <td colSpan={100}>
+                                                                    <div className="text-md font-semibold flex items-center justify-center gap-2 py-10">
+                                                                        <FontAwesomeIcon icon={faExclamationTriangle} className='w-5 h-5 text-warning' />
+                                                                        <div className="">
+                                                                            {detailRealisasi?.error_message}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        {detailRealisasi?.data?.map((detail: any, indexRincian: number) => (
+                                                            <>
+                                                                <tr className={detail?.type === 'target-kinerja' ? '!bg-blue-50' : ''}>
+                                                                    <td>
+                                                                        {detail?.fullcode}
+                                                                    </td>
+                                                                    <td colSpan={4}>
+                                                                        {detail?.type === 'rekening' && (
+                                                                            <>
+                                                                                {detail?.uraian}
+                                                                            </>
+                                                                        )}
+                                                                        {detail?.type === 'target-kinerja' && (
+                                                                            <span className="font-semibold">
+                                                                                [#] {detail?.nama_paket}
+                                                                            </span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td className='!text-end'>
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.pagu)}
+                                                                    </td>
+                                                                    <td className='!text-end'>
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}
+                                                                    </td>
+                                                                    <td>
+                                                                        {new Date(
+                                                                            detail?.realisasi_year + '-' + detail?.realisasi_month + '-01'
+                                                                        )?.toLocaleDateString('id-ID', {
+                                                                            year: 'numeric',
+                                                                            month: 'long',
+                                                                        })}
+                                                                    </td>
+                                                                </tr>
+                                                                {detail?.rincian_belanja?.map((rincian: any, indexRincianBelanja: number) => (
+                                                                    <>
+                                                                        <tr className='!bg-blue-50'>
+                                                                            <td></td>
+                                                                            <td colSpan={4} className="!font-semibold">
+                                                                                {rincian?.title}
+                                                                            </td>
+                                                                            <td className='!text-end !whitespace-nowrap'>
+                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.pagu)}
+                                                                            </td>
+                                                                            <td className='!text-end !whitespace-nowrap'>
+                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.realisasi_anggaran)}
+                                                                            </td>
+                                                                            <td>
+                                                                                {new Date(
+                                                                                    rincian?.realisasi_year + '-' + rincian?.realisasi_month + '-01'
+                                                                                )?.toLocaleDateString('id-ID', {
+                                                                                    year: 'numeric',
+                                                                                    month: 'long',
+                                                                                })}
+                                                                            </td>
+                                                                        </tr>
+                                                                        {rincian?.keterangan_rincian?.map((keterangan: any, indexKeterangan: number) => (
+                                                                            <tr className='!bg-blue-50'>
+                                                                                <td></td>
+                                                                                <td className="">
+                                                                                    {keterangan?.title}
+                                                                                </td>
+                                                                                <td className="">
+                                                                                    {keterangan?.koefisien + ' ' + keterangan?.satuan_name}
+                                                                                </td>
+                                                                                <td className="">
+                                                                                    {keterangan?.koefisien_realisasi + ' ' + keterangan?.satuan_name}
+                                                                                </td>
+                                                                                <td className="!text-end !whitespace-nowrap">
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.harga_satuan)}
+                                                                                </td>
+                                                                                <td className="!text-end !whitespace-nowrap">
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.pagu)}
+                                                                                </td>
+                                                                                <td className="!text-end !whitespace-nowrap">
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.realisasi_anggaran_keterangan)}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div className="whitespace-nowrap">
+                                                                                        {new Date(
+                                                                                            keterangan?.realisasi_year + '-' + keterangan?.realisasi_month + '-01'
+                                                                                        )?.toLocaleDateString('id-ID', {
+                                                                                            year: 'numeric',
+                                                                                            month: 'long',
+                                                                                        })}
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </>
+                                                                ))}
+                                                            </>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )}
+
+                                        {tabDetail == 2 && (
+                                            <div className='table-responsive'>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                Nama Tag
+                                                            </th>
+                                                            <th>
+                                                                Nominal
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {detailRealisasi?.tags_sumber_dana?.map((tagSumberDana: any, indexTagSumberDana: number) => (
+                                                            <tr>
+                                                                <td>
+                                                                    <div className="font-semibold">
+                                                                        {tagSumberDana?.tag_name}
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div className="font-semibold">
+                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(tagSumberDana?.nominal)}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )}
+
+                                        {tabDetail == 3 && (
+                                            <div className='table-responsive mt-5'>
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td className='!w-[200px] !text-end font-semibold'>
+                                                                Keterangan
+                                                            </td>
+                                                            <td>
+                                                                {detailRealisasi?.keterangan?.keterangan}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className='!text-end font-semibold'>
+                                                                Faktor Penghambat
+                                                            </td>
+                                                            <td>
+                                                                {detailRealisasi?.keterangan?.faktor_penghambat}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className='!text-end font-semibold'>
+                                                                Map
+                                                            </td>
+                                                            <td>
+                                                                {detailRealisasi?.keterangan?.link_map && (
+                                                                    <Tippy content="Klik Untuk Membuka Tautan Map">
+                                                                        <Link
+                                                                            target='_blank'
+                                                                            href={detailRealisasi?.keterangan?.link_map}
+                                                                            className="text-primary hover:underline flex items-center gap-1 font-semibold">
+                                                                            <FontAwesomeIcon icon={faExternalLinkAlt} className='w-3 h-3' />
+                                                                            Tautan Map
+                                                                        </Link>
+                                                                    </Tippy>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className='!text-end font-semibold'>
+                                                                Berkas Pendukung
+                                                            </td>
+                                                            <td>
+                                                                {detailRealisasi?.files?.filter((item: any) => item?.mime_type.includes('image/')).length > 0 && (
+                                                                    <div>
+                                                                        <div className="font-semibold underline mb-2">
+                                                                            Gambar
+                                                                        </div>
+                                                                        <div className="grid grid-cols-10 gap-5">
+                                                                            {detailRealisasi?.files?.filter((item: any) => item?.mime_type.includes('image/')).map((image: any, indexImg: any) => (
+                                                                                <div className="col-span-10 md:col-span-1">
+                                                                                    <div className="relative group rounded-lg cursor-pointer overflow-hidden">
+                                                                                        <img
+                                                                                            onClick={() => {
+                                                                                                setImagesIndex(indexImg);
+                                                                                                setOpenLightBox(true);
+                                                                                            }}
+                                                                                            src={image?.file}
+                                                                                            alt="Image"
+                                                                                            className="w-full h-full border p-1 object-cover rounded-lg grayscale group-hover:grayscale-0 group-hover:scale-125 hover:shadow transition-all duration-300"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                <Lightbox
+                                                                    index={imagesIndex}
+                                                                    open={openLightBox}
+                                                                    close={() => setOpenLightBox(false)}
+                                                                    slides={slides}
+                                                                    plugins={[Zoom]}
+                                                                />
+
+
+                                                                {detailRealisasi?.files?.filter((item: any) => !item?.mime_type.includes('image/')).length > 0 && (
+                                                                    <div>
+                                                                        <div className="font-semibold underline mb-2">
+                                                                            Berkas Pendukung Lainnya
+                                                                        </div>
+                                                                        <div className="space-y-2">
+                                                                            {detailRealisasi?.files?.filter((item: any) => !item?.mime_type.includes('image/')).map((file: any, indexImg: any) => (
+                                                                                <div className='flex items-center gap-x-2'>
+                                                                                    <a
+                                                                                        href={file?.file ?? '/'}
+                                                                                        target="_blank"
+                                                                                        download={file?.filename}
+                                                                                        className="flex items-center gap-2 group cursor-pointer">
+                                                                                        <FontAwesomeIcon icon={faFileAlt} className='text-blue-500 w-4 h-4' />
+                                                                                        <div className="group-hover:underline">
+                                                                                            {file?.filename}
+                                                                                        </div>
+                                                                                    </a>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )}
+
+                                        {tabDetail == 4 && (
+
+                                            <div className="p-4 grid grid-cols-2 gap-4">
+                                                {detailRealisasi?.contracts?.length == 0 && (
+                                                    <div className="col-span-2 bg-red-50 p-4 shadow-md cursor-pointer select-none hover:bg-red-100 hover:shadow-red-200 group">
+                                                        <div className="font-semibold text-lg">
+                                                            Tidak Ada Kontrak
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {detailRealisasi?.contracts?.length > 0 && detailRealisasi?.contracts?.map((kontrak: any, index: any) => (
+                                                    <div key={`list-kontrak-aktif-${index}`}
+                                                        className={`col-span-2 xl:col-span-1 bg-green-50 p-4 shadow-md cursor-pointer select-none hover:bg-green-100 hover:shadow-green-200 group`}>
+                                                        <div className="font-semibold text-lg">
+                                                            {index + 1}
+                                                        </div>
+                                                        <div className="table-responsive mt-5">
+                                                            <table className=''>
+                                                                <tbody>
+
+                                                                    <tr>
+                                                                        <td className='!w-[200px]'>
+                                                                            Nomor Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            {kontrak?.data_spse?.no_kontrak}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className='!w-[200px]'>
+                                                                            Jenis Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            {kontrak?.data_spse?.jenis_kontrak}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nomor SPPBJ
+                                                                        </td>
+                                                                        <td>
+                                                                            {kontrak?.data_spse?.no_sppbj}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nama Paket
+                                                                        </td>
+                                                                        <td>
+                                                                            {kontrak?.data_spse?.nama_paket}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Tanggal Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            {new Date(kontrak?.data_spse?.tgl_kontrak).toLocaleString('id-ID', { dateStyle: 'full' })}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Tanggal Kontrak Awal
+                                                                        </td>
+                                                                        <td>
+                                                                            {new Date(kontrak?.data_spse?.tgl_kontrak_awal).toLocaleString('id-ID', { dateStyle: 'full' })}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Tanggal Kontrak Akhir
+                                                                        </td>
+                                                                        <td>
+                                                                            {new Date(kontrak?.data_spse?.tgl_kontrak_akhir).toLocaleString('id-ID', { dateStyle: 'full' })}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Status Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            {kontrak?.data_spse?.status_kontrak}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className='!text-center font-semibold' colSpan={2}>
+                                                                            Satuan Kerja
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nama Satuan Kerja
+                                                                        </td>
+                                                                        <td>
+                                                                            {/* {kontrak?.data_spse?.kd_satker_str + ' - ' + kontrak?.data_spse?.nama_satker} */}
+                                                                            {kontrak?.data_spse?.kd_satker_str}
+                                                                            <br />
+                                                                            {kontrak?.data_spse?.nama_satker}
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className='!text-center font-semibold' colSpan={2}>
+                                                                            PPK
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nama PPK
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.nama_ppk}
+                                                                            </div>
+                                                                            <div className="text-xs">
+                                                                                {kontrak?.data_spse?.nip_ppk}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Jabatan PPK
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.jabatan_ppk}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nomor SK PPK
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.no_sk_ppk}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className='!text-center font-semibold' colSpan={2}>
+                                                                            Penyedia
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nama Penyedia
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.nama_penyedia}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            NPWP Penyedia
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.npwp_penyedia}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Bentuk Usaha Penyedia
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.bentuk_usaha_penyedia}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Wakil Sah Penyedia
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.wakil_sah_penyedia}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Jabatan Wakil Penyedia
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.jabatan_wakil_penyedia}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Jabatan Wakil Penyedia
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                {kontrak?.data_spse?.jabatan_wakil_penyedia}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className='!text-center font-semibold' colSpan={2}>
+                                                                            Nilai Kontrak
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nilai Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(kontrak?.data_spse?.nilai_kontrak)}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nilai PDN Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(kontrak?.data_spse?.nilai_pdn_kontrak)}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td className=''>
+                                                                            Nilai UMK Kontrak
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="">
+                                                                                Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(kontrak?.data_spse?.nilai_umk_kontrak)}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
+
+                                {loadingDetailRealisasi && (
+                                    <div className='flex flex-col items-center justify-center gap-2 p-10'>
+                                        <LoadingSicaram />
+                                        <div className="dots-loading text-xl">Memuat Data...</div>
+                                    </div>
+                                )}
+
+                            </div>
+                        )}
+                        {/* RINCIAN REALISASI OF SUB KEGIATAN END */}
                     </div>
                 )}
 

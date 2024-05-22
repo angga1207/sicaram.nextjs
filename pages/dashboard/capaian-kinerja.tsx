@@ -1,7 +1,7 @@
 import { IRootState } from '@/store';
 import { useRouter } from 'next/router';
 import { setPageTitle } from '@/store/themeConfigSlice';
-import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faThumbsUp, faToolbox } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -22,15 +22,16 @@ import React from "react";
 // import CountUp from 'react-countup';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
-import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchdashboard';
+import { chartRealisasi, summaryRealisasi, getRankInstance, chartKinerja, summaryKinerja } from '@/apis/fetchdashboard';
 import Link from 'next/link';
 import LoadingSicaram from '@/components/LoadingSicaram';
+
 
 const Index = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     useEffect(() => {
-        dispatch(setPageTitle('Capaian Keuangan'));
+        dispatch(setPageTitle('Capaian Kinerja'));
     });
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -45,8 +46,8 @@ const Index = () => {
     const [periode, setPeriode] = useState<number>(1);
     const [view, setView] = useState<number>(1);
 
-    const [AnggaranSeries, setAnggaranSeries] = useState<any>([]);
-    const [AnggaranSummary, setAnggaranSummary] = useState<any>([]);
+    const [KinerjaSeries, setKinerjaSeries] = useState<any>([]);
+    const [KinerjaSummary, setKinerjaSummary] = useState<any>([]);
     const [RankInstances, setRankInstances] = useState<any>([]);
 
     useEffect(() => {
@@ -61,152 +62,105 @@ const Index = () => {
         router.push('/dashboard');
     }
 
-
     useEffect(() => {
-        setAnggaranSeries([]);
-        chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
+        setKinerjaSeries([]);
+        chartKinerja(periode, new Date().getFullYear(), view).then((data) => {
             if (data.status === 'success') {
-                setAnggaranSeries(data.data);
+                setKinerjaSeries(data.data);
             }
         });
     }, [view]);
 
     useEffect(() => {
-        summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
+        summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
             if (data.status === 'success') {
-                setAnggaranSummary(data.data);
+                setKinerjaSummary(data.data);
             }
         });
-        getRankInstance(periode, new Date().getFullYear(), 'keuangan').then((data) => {
+        getRankInstance(periode, new Date().getFullYear(), 'kinerja').then((data) => {
             if (data.status === 'success') {
                 setRankInstances(data.data);
             }
         });
     }, []);
 
-    // Anggaran Chart
-    const chartAnggaran: any = {
+
+    // Kinerja Chart
+    const apexChartKinerja: any = {
         series: [
             {
-                name: 'Target Anggaran',
-                // data: [168000, 268000, 327000, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                data: AnggaranSeries?.target?.map((item: any) => item.target),
-            },
-            {
-                name: 'Realisasi Anggaran',
-                // data: [165000, 225000, 268000, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                data: AnggaranSeries?.realisasi?.map((item: any) => item.realisasi),
+                name: 'Capaian',
+                data: KinerjaSeries?.realisasi?.map((item: any) => item.realisasi),
             },
         ],
         options: {
             chart: {
                 height: 350,
-                type: 'area',
-                fontFamily: 'Popins, sans-serif',
-                zoom: {
-                    enabled: false,
-                },
+                type: 'bar',
+                fontFamily: 'Nunito, sans-serif',
                 toolbar: {
                     show: false,
                 },
             },
-
             dataLabels: {
                 enabled: false,
             },
             stroke: {
                 show: true,
-                curve: 'smooth',
-                width: 2,
-                lineCap: 'square',
+                width: 0,
             },
-            dropShadow: {
-                enabled: true,
-                opacity: 0.2,
-                blur: 10,
-                left: -7,
-                top: 22,
-            },
-            colors: isDark ? ['cyan', 'green'] : ['blue', 'green'],
-            markers: {
-                discrete: [
-                    {
-                        seriesIndex: 0,
-                        dataPointIndex: new Date().getMonth(),
-                        fillColor: 'blue',
-                        strokeColor: 'transparent',
-                        size: 7,
-                    },
-                    {
-                        seriesIndex: 1,
-                        dataPointIndex: new Date().getMonth(),
-                        fillColor: 'green',
-                        strokeColor: 'transparent',
-                        size: 7,
-                    },
-                ],
-            },
-            // labels: AnggaranSeries?.target?.map((item: any) => item.month_short),
-            labels: AnggaranSeries?.target?.map((item: any) => item.month_name),
+            colors: ['#000080'], // target, capaian
             xaxis: {
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-                crosshairs: {
+                labels: {
                     show: true,
                 },
-                labels: {
-                    offsetX: isRtl ? 2 : 0,
-                    offsetY: 5,
-                    style: {
-                        fontSize: '12px',
-                        cssClass: 'apexcharts-xaxis-title',
-                    },
-                },
+                // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                categories: KinerjaSeries?.realisasi?.map((item: any) => item.month_name) ?? [],
             },
             yaxis: {
-                // show: false,
-                tickAmount: 7,
+                show: true,
                 labels: {
+                    show: true,
                     formatter: (value: number) => {
-                        // return value / 1000000 + 'Jt';
-                        // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-
-                        // return jt / m / t
-                        if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
-                        } else if (value >= 1000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
-                        } else if (value >= 1000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
-                        } else {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-                        }
-                    },
-                    offsetX: isRtl ? -30 : -10,
-                    // offsetX: isRtl ? 0 : 0,
-                    offsetY: 0,
-                    style: {
-                        fontSize: '12px',
-                        cssClass: 'apexcharts-yaxis-title',
+                        return new Intl.NumberFormat('id-ID').format(value ?? 0) + ' %';
                     },
                 },
-                opposite: isRtl ? true : false,
+                max: KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (prev.realisasi > current.realisasi) ? prev : current).realisasi == 0
+                    ? 100
+                    : KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (prev.realisasi > current.realisasi) ? prev : current).realisasi,
+            },
+            fill: {
+                // opacity: 1,
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.5,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 50, 100],
+                    colorStops: []
+                },
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '90%',
+                    borderRadius: 5,
+                    borderRadiusApplication: 'around',
+                    borderRadiusWhenStacked: 'last',
+                },
+            },
+            legend: {
+                show: false,
             },
             grid: {
-                borderColor: isDark ? '#191E3A' : '#E0E6ED',
-                strokeDashArray: 5,
+                show: false,
                 xaxis: {
                     lines: {
                         show: false,
-                    },
-                },
-                yaxis: {
-                    lines: {
-                        show: true,
                     },
                 },
                 padding: {
@@ -216,42 +170,8 @@ const Index = () => {
                     left: 0,
                 },
             },
-            legend: {
-                position: 'top',
-                horizontalAlign: 'right',
-                fontSize: '12px',
-                markers: {
-                    width: 10,
-                    height: 10,
-                    // offsetX: -2,
-                    offsetX: 0,
-                },
-                itemMargin: {
-                    horizontal: 10,
-                    vertical: 5,
-                },
-            },
-            tooltip: {
-                marker: {
-                    show: true,
-                },
-                x: {
-                    show: false,
-                },
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    inverseColors: !1,
-                    opacityFrom: isDark ? 0.19 : 0.28,
-                    opacityTo: 0.05,
-                    stops: isDark ? [100, 100] : [45, 100],
-                },
-            },
         },
     };
-
 
     return (
         <>
@@ -261,7 +181,7 @@ const Index = () => {
                     <div className="col-span-10 lg:col-span-7 relative panel">
                         <div className="flex items-center justify-between">
                             <h5 className="text-lg font-semibold">
-                                Capaian Keuangan Kabupaten Ogan Ilir
+                                Capaian Kinerja Kabupaten Ogan Ilir
                             </h5>
                             <div className="flex items-center gap-x-1">
                                 <div className="relative group">
@@ -332,8 +252,8 @@ const Index = () => {
                             </div>
                         </div>
                         <div className="rounded-lg bg-white dark:bg-black">
-                            {isMounted && AnggaranSeries?.length !== 0 ? (
-                                <ReactApexChart series={chartAnggaran.series} options={chartAnggaran.options} type="area" height={550} width={'100%'} />
+                            {isMounted && KinerjaSeries?.length !== 0 ? (
+                                <ReactApexChart series={apexChartKinerja.series} options={apexChartKinerja.options} type="bar" height={550} width={'100%'} />
                             ) : (
                                 <div className="flex flex-col gap-10 min-h-[550px] items-center justify-center">
                                     <LoadingSicaram></LoadingSicaram>
@@ -347,7 +267,7 @@ const Index = () => {
                         <div className="mb-5 flex items-center justify-between dark:text-white-light">
                             <h5 className="">
                                 <div className="text-base font-semibold">
-                                    Capaian Keuangan
+                                    Capaian Kinerja
                                 </div>
                                 <span className='font-normal text-xs'>
                                     Per 1 Januari hingga Saat Ini
@@ -363,12 +283,12 @@ const Index = () => {
                                     </span>
                                     <div className="flex-1 px-3">
                                         <div>
-                                            Anggaran
+                                            Target
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
-                                            {AnggaranSummary?.target?.updated_at ? (
+                                            {KinerjaSummary?.target?.updated_at ? (
                                                 <>
-                                                    {new Date(AnggaranSummary?.target?.updated_at).toLocaleString('id-ID', {
+                                                    {new Date(KinerjaSummary?.target?.updated_at).toLocaleString('id-ID', {
                                                         month: 'short',
                                                         year: 'numeric',
                                                     })}
@@ -381,9 +301,9 @@ const Index = () => {
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto">
-                                        {AnggaranSummary?.target?.target ? (
+                                        {KinerjaSummary?.target ? (
                                             <>
-                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target?.target)}
+                                                {new Intl.NumberFormat('id-ID').format(KinerjaSummary?.target)} %
                                             </>
                                         ) : (
                                             <>
@@ -395,16 +315,16 @@ const Index = () => {
 
                                 <div className="flex">
                                     <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-success-light text-success dark:bg-success dark:text-success-light">
-                                        <IconCashBanknotes />
+                                        <FontAwesomeIcon icon={faToolbox} className="w-4 h-4" />
                                     </span>
                                     <div className="flex-1 px-3">
                                         <div>
                                             Realisasi
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
-                                            {AnggaranSummary?.realisasi?.updated_at ? (
+                                            {KinerjaSummary?.realisasi?.updated_at ? (
                                                 <>
-                                                    {new Date(AnggaranSummary?.realisasi?.updated_at).toLocaleString('id-ID', {
+                                                    {new Date(KinerjaSummary?.realisasi?.updated_at).toLocaleString('id-ID', {
                                                         month: 'short',
                                                         year: 'numeric',
                                                     })}
@@ -417,9 +337,9 @@ const Index = () => {
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">
-                                        {AnggaranSummary?.realisasi?.realisasi ? (
+                                        {KinerjaSummary?.realisasi ? (
                                             <>
-                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi?.realisasi)}
+                                                {new Intl.NumberFormat('id-ID').format(KinerjaSummary?.realisasi)} %
                                             </>
                                         ) : (
                                             <>
@@ -429,32 +349,11 @@ const Index = () => {
                                     </span>
                                 </div>
 
-                                <div className="flex items-center border-t pt-5">
-                                    <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-warning-light text-warning dark:bg-warning dark:text-warning-light">
-                                        <IconBox />
-                                    </span>
-                                    <div className="flex-1 px-3">
-                                        Capaian Realisasi
-                                    </div>
-                                    <span className="whitespace-pre px-1 text-base text-slate-800 dark:text-white font-semibold ltr:ml-auto rtl:mr-auto">
-                                        {AnggaranSummary?.realisasi?.realisasi ? (
-                                            <>
-                                                {((AnggaranSummary?.realisasi?.realisasi / AnggaranSummary?.target?.target) * 100).toFixed(2)} %
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div className="dots-loading text-sm">..</div>
-                                            </>
-                                        )}
-                                    </span>
-                                </div>
-
                                 <div className="flex items-center justify-center">
                                     <Player
                                         autoplay
                                         loop
-                                        // src="https://lottie.host/c11c5760-37c1-47b2-b155-16e647ea6f00/mzk6sxn6TU.json"
-                                        src="/lottie/animation-5.json"
+                                        src="/lottie/animation-1.json"
                                         style={{ height: '250px', width: '300px' }}
                                     >
                                     </Player>
@@ -465,9 +364,10 @@ const Index = () => {
                     </div>
                 </div>
 
+
                 <div className="grid grid-cols-10 gap-4">
                     <div className="col-span-10 mb-0 text-center font-bold text-xl">
-                        Capaian Keuangan
+                        Capaian Kinerja
                         <br />
                         Perangkat Daerah Kabupaten Ogan Ilir
                     </div>
@@ -507,10 +407,10 @@ const Index = () => {
                             <div className="-mt-12 px-8">
                                 <div className="rounded-md bg-white px-4 py-2.5 shadow dark:bg-[#060818]">
                                     <p className="mb-4 text-center dark:text-white">
-                                        Capaian Anggaran
+                                        Capaian Kinerja
                                     </p>
                                     <div className="btn w-full  border-0 bg-[#ebedf2] py-1 text-base text-[#515365] shadow-none dark:bg-black dark:text-[#bfc9d4]">
-                                        {(RankInstances[0]?.persentase_realisasi_anggaran ?? 0).toFixed(2)} %
+                                        {(RankInstances[0]?.persentase_realisasi_kinerja ?? 0).toFixed(2)} %
                                     </div>
                                 </div>
                             </div>
@@ -523,13 +423,13 @@ const Index = () => {
                                 <div className="mb-5 space-y-1">
                                     <div className="flex items-center justify-between">
                                         <p className="font-semibold text-[#515365]">
-                                            Anggaran
+                                            Target
                                         </p>
                                         <p className="text-base">
-                                            <span>Rp. </span>
                                             <span className="font-semibold">
-                                                {new Intl.NumberFormat('id-ID').format(RankInstances[0]?.target_anggaran)}
+                                                {new Intl.NumberFormat('id-ID').format(RankInstances[0]?.target_kinerja)}
                                             </span>
+                                            <span> %</span>
                                         </p>
                                     </div>
                                     <div className="flex items-center justify-between">
@@ -537,10 +437,10 @@ const Index = () => {
                                             Realisasi
                                         </p>
                                         <p className="text-base">
-                                            <span>Rp. </span>
                                             <span className="font-semibold">
-                                                {new Intl.NumberFormat('id-ID').format(RankInstances[0]?.realisasi_anggaran)}
+                                                {new Intl.NumberFormat('id-ID').format(RankInstances[0]?.realisasi_kinerja)}
                                             </span>
+                                            <span> %</span>
                                         </p>
                                     </div>
 
@@ -613,10 +513,10 @@ const Index = () => {
 
                                                 <div className='w-full text-center'>
                                                     <div className="font-semibold">
-                                                        Capaian Anggaran
+                                                        Capaian Kinerja
                                                     </div>
-                                                    <div className="flex gap-4 items-center">
-                                                        <Tippy content="Capaian Anggaran" theme='success'>
+                                                    <div className="flex gap-4 justify-center items-center">
+                                                        <Tippy content="Capaian Kinerja" theme='primary'>
                                                             <div className="relative w-40 h-40 cursor-pointer">
                                                                 <svg className="w-full h-full" viewBox="0 0 100 100">
                                                                     <circle
@@ -628,7 +528,7 @@ const Index = () => {
                                                                         fill="transparent"
                                                                     ></circle>
                                                                     <circle
-                                                                        className="text-success  progress-ring__circle stroke-current animate-pulse"
+                                                                        className="text-primary  progress-ring__circle stroke-current animate-pulse"
                                                                         stroke-width="20"
                                                                         // stroke-linecap="round"
                                                                         cx="50"
@@ -636,32 +536,18 @@ const Index = () => {
                                                                         r="40"
                                                                         fill="transparent"
                                                                         stroke-dasharray="251.2"
-                                                                        stroke-dashoffset={`calc(251.2 - (251.2 * ${item.persentase_realisasi_anggaran ?? 0}) / 100)`}
+                                                                        stroke-dashoffset={`calc(251.2 - (251.2 * ${item.persentase_realisasi_kinerja ?? 0}) / 100)`}
                                                                     ></circle>
 
                                                                     <text x="50" y="50" font-family="Verdana" font-size="12" text-anchor="middle" alignment-baseline="middle" className="">
-                                                                        {item.persentase_realisasi_anggaran.toFixed(2)}%
+                                                                        {item.persentase_realisasi_kinerja.toFixed(2)}%
                                                                     </text>
 
                                                                 </svg>
                                                             </div>
                                                         </Tippy>
-                                                        <div className="flex flex-col gap-4 justify-start items-start ml-4">
-                                                            <Tippy content="Nilai Anggaran" theme='dark'>
-                                                                <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
-                                                                    <span className="text-slate-800 dark:text-white">Anggaran: </span>
-                                                                    Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
-                                                                </div>
-                                                            </Tippy>
-                                                            <Tippy content="Nilai Realisasi" theme='dark'>
-                                                                <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
-                                                                    <span className="text-slate-800 dark:text-white">Realisasi: </span>
-                                                                    Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
-                                                                </div>
-                                                            </Tippy>
-                                                        </div>
                                                     </div>
-                                                    <div className="flex items-center justify-center gap-4">
+                                                    <div className="flex items-center justify-center gap-4 mt-3">
                                                         <div className="font-semibold">
                                                             ({item?.instance_programs_count})
                                                             <span className='text-xs ml-1'>
@@ -707,6 +593,7 @@ const Index = () => {
 
             </div>
 
+
             <div className="fixed bottom-[110px] z-50 ltr:right-[10px] rtl:left-[10px]">
                 <button
                     onClick={(e) => {
@@ -729,8 +616,9 @@ const Index = () => {
                     </svg>
                 </button>
             </div>
+
         </>
     );
-}
+};
 
 export default Index;
