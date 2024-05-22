@@ -756,7 +756,7 @@ const Index = () => {
                                                                                         <div className="px-2 flex items-center gap-x-1">
                                                                                             {(subkegiatan.renstra_status === 'verified' && subkegiatan.renja_status === 'verified' && subkegiatan.apbd_status === 'verified') ? (
                                                                                                 <Link
-                                                                                                    // target='_blank'
+                                                                                                    target='_blank'
                                                                                                     href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
                                                                                                     className='btn btn-secondary font-normal'>
                                                                                                     Input Rincian Belanja
@@ -781,16 +781,10 @@ const Index = () => {
                                                                                                     )}
                                                                                                 </div>
                                                                                             )}
-                                                                                            {/* <Link
-                                                                                                target='_blank'
-                                                                                                href={`/realisasi/kontrak/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                                                                                                className='btn btn-warning font-normal'>
-                                                                                                Input Kontrak
-                                                                                                <IconArrowForward className='w-4 h-4 ml-2' />
-                                                                                            </Link> */}
+
                                                                                             {subkegiatan.target_status === 'verified' && (
                                                                                                 <Link
-                                                                                                    // target='_blank'
+                                                                                                    target='_blank'
                                                                                                     href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
                                                                                                     className='btn btn-success font-normal'>
                                                                                                     Input Realisasi
