@@ -1634,58 +1634,56 @@ const Index = () => {
                 </div>
 
                 <div className="col-span-12 lg:col-span-8 ">
-                    <div className="">
-                        <div className="mr-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                    <div className="mr-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
 
-                            <button
-                                onClick={(e) => {
-                                    setTab('summary');
-                                }}
-                                className={tab === 'summary' ?
-                                    `w-[150px] rounded-tl-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
-                                    `w-[150px] rounded-tl-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
-                                type="button">
-                                <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2" />
-                                Rangkuman
-                            </button>
+                        <button
+                            onClick={(e) => {
+                                setTab('summary');
+                            }}
+                            className={tab === 'summary' ?
+                                `w-[150px] rounded-tl-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                `w-[150px] rounded-tl-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                            type="button">
+                            <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2" />
+                            Rangkuman
+                        </button>
 
-                            <button
-                                onClick={(e) => {
-                                    setTab('anggaran');
-                                }}
-                                className={tab === 'anggaran' ?
-                                    `w-[150px] bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
-                                    `w-[150px] bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
-                                type="button">
-                                <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2" />
-                                Keuangan
-                            </button>
+                        <button
+                            onClick={(e) => {
+                                setTab('anggaran');
+                            }}
+                            className={tab === 'anggaran' ?
+                                `w-[150px] bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                `w-[150px] bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                            type="button">
+                            <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2" />
+                            Keuangan
+                        </button>
 
-                            <button
-                                onClick={(e) => {
-                                    setTab('kinerja');
-                                }}
-                                className={tab === 'kinerja' ?
-                                    `w-[150px] bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
-                                    `w-[150px] bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
-                                type="button">
-                                <FontAwesomeIcon icon={faToolbox} className="w-4 h-4 mr-2" />
-                                Kinerja
-                            </button>
+                        <button
+                            onClick={(e) => {
+                                setTab('kinerja');
+                            }}
+                            className={tab === 'kinerja' ?
+                                `w-[150px] bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                `w-[150px] bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                            type="button">
+                            <FontAwesomeIcon icon={faToolbox} className="w-4 h-4 mr-2" />
+                            Kinerja
+                        </button>
 
-                            <button
-                                onClick={(e) => {
-                                    setTab('users');
-                                }}
-                                className={tab === 'users' ?
-                                    `w-[150px] rounded-tr-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
-                                    `w-[150px] bg-white dark:bg-slate-900 rounded-tr-lg !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
-                                type="button">
-                                <FontAwesomeIcon icon={faUsers} className="w-4 h-4 mr-2" />
-                                Admin
-                            </button>
+                        <button
+                            onClick={(e) => {
+                                setTab('users');
+                            }}
+                            className={tab === 'users' ?
+                                `w-[150px] rounded-tr-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
+                                `w-[150px] bg-white dark:bg-slate-900 rounded-tr-lg !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
+                            type="button">
+                            <FontAwesomeIcon icon={faUsers} className="w-4 h-4 mr-2" />
+                            Admin
+                        </button>
 
-                        </div>
                     </div>
 
                     {tab === 'summary' && (
@@ -1696,16 +1694,18 @@ const Index = () => {
                                         <div className="">
                                             Capaian Keuangan
                                         </div>
-                                        <div className="text-xs">
-                                            Diperbarui
-                                            <span className='ml-1 font-semibold'>
-                                                {new Date(AnggaranSummary?.anggaran_updated_at).toLocaleDateString('id-ID', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
-                                            </span>
-                                        </div>
+                                        {AnggaranSummary?.anggaran_updated_at && (
+                                            <div className="text-xs">
+                                                Diperbarui
+                                                <span className='ml-1 font-semibold'>
+                                                    {new Date(AnggaranSummary?.anggaran_updated_at).toLocaleDateString('id-ID', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                     {isMounted ? (
                                         <div
@@ -1731,16 +1731,18 @@ const Index = () => {
                                         <div className="">
                                             Capaian Kinerja
                                         </div>
-                                        <div className="text-xs">
-                                            Diperbarui
-                                            <span className='ml-1 font-semibold'>
-                                                {new Date(KinerjaSummary?.realisasi_updated_at).toLocaleDateString('id-ID', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
-                                            </span>
-                                        </div>
+                                        {KinerjaSummary?.realisasi_updated_at && (
+                                            <div className="text-xs">
+                                                Diperbarui
+                                                <span className='ml-1 font-semibold'>
+                                                    {new Date(KinerjaSummary?.realisasi_updated_at).toLocaleDateString('id-ID', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                     {isMounted ? (
                                         <div

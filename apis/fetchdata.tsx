@@ -70,13 +70,18 @@ export async function fetchRole(id: string = '') {
 
 
 // Users Start
-export async function fetchUsers(role: string, search: string = '') {
+export async function fetchUsers(role: string, search: string = '', instance: string = '') {
     try {
-        const res = await axios.get(baseUri + '/users?' + '_fRole=' + role + '&search=' + search, {
+        const res = await axios.get(baseUri + '/users', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
+            params: {
+                _fRole: role,
+                search: search,
+                instance: instance
+            }
         });
         const data = await res.data;
         return data;

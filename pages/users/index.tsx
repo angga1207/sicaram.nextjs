@@ -65,61 +65,55 @@ const Index = () => {
 
     const { t, i18n } = useTranslation();
 
-    const [userType, setUserType] = useState('admin');
+    // const [userType, setUserType] = useState<any>(CurrentUser.role_id == 9 ? 'admin' : 'perangkat_daerah');
+    const [userType, setUserType] = useState<any>(null);
 
     const [roles, setRoles] = useState([]);
     const [instances, setInstances] = useState([]);
     const [datas, setDatas] = useState([]);
-
-    useEffect(() => {
-        try {
-            fetchAllDataUsers(userType)
-                .then((data) => {
-                    if (roles.length == 0) {
-                        if (data.status == 'success') {
-                            setRoles((data?.data?.roles) ?? [])
-                        }
-                    }
-                    if (instances.length == 0) {
-                        if (data.status == 'success') {
-                            setInstances((data?.data?.instances) ?? [])
-                        }
-                    }
-                    if (datas.length == 0) {
-                        if (data.status == 'success') {
-                            setDatas((data?.data?.users) ?? [])
-                        }
-                    }
-                });
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
-
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            reRenderDatas();
-        }, 500);
-        return () => clearTimeout(timer);
-    }, [search]);
-
-    const reRenderDatas = () => {
-        if (search.length >= 3 || search.length == 0) {
-            fetchUsers(userType, search).then((data) => {
-                setDatas((data?.data?.users));
-            });
+        if ([9].includes(CurrentUser?.role_id)) {
+            setUserType('perangkat_daerah');
         }
-    }
+        if ([1, 2, 3, 4, 5].includes(CurrentUser?.role_id)) {
+            setUserType('admin');
+        }
+    }, [isMounted])
+
+    useEffect(() => {
+        fetchAllDataUsers(userType)
+            .then((data: any) => {
+                if (roles.length == 0) {
+                    if (data.status == 'success') {
+                        setRoles((data.data.roles) ?? [])
+                    }
+                }
+                if (instances.length == 0) {
+                    if (data.status == 'success') {
+                        setInstances((data.data.instances) ?? [])
+                    }
+                }
+            });
+    }, []);
+
+    useEffect(() => {
+        if (userType) {
+            if (CurrentUser.role_id == 9) {
+                fetchUsers(userType, search, CurrentUser.instance_id).then((data) => {
+                    setDatas((data?.data?.users));
+                });
+            } else {
+                fetchUsers(userType, search).then((data) => {
+                    setDatas((data?.data?.users));
+                });
+            }
+        }
+    }, [userType, search]);
     const changeUserType = (e: any) => {
         setDatas([]);
         setUserType(e);
-        fetchAllDataUsers(e).then((data) => {
-            if (data.status == 'success') {
-                setDatas((data?.data?.users) ?? [])
-            }
-        });
     }
 
     const [modalInput, setModalInput] = useState(false);
@@ -146,20 +140,37 @@ const Index = () => {
         for (var i = 0; i < elements.length; i++) {
             elements[i].innerHTML = '';
         }
-        setDataInput({
-            inputType: 'create',
-            id: '',
-            fullname: '',
-            username: '',
-            email: '',
-            password: '',
-            password_confirmation: '',
-            role: '',
-            photo: '',
-            instance_id: '',
-            instance_ids: '',
-            instance_type: '',
-        });
+        if (CurrentUser?.role_id == 9) {
+            setDataInput({
+                inputType: 'create',
+                id: '',
+                fullname: '',
+                username: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+                role: 9,
+                photo: '',
+                instance_id: CurrentUser?.instance_id,
+                instance_ids: '',
+                instance_type: '',
+            });
+        } else {
+            setDataInput({
+                inputType: 'create',
+                id: '',
+                fullname: '',
+                username: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
+                role: '',
+                photo: '',
+                instance_id: '',
+                instance_ids: '',
+                instance_type: '',
+            });
+        }
         setModalInput(true);
         setExpandPassword(true);
     }
@@ -201,10 +212,14 @@ const Index = () => {
                     instance_ids: data.data.instance_ids ?? '',
                     instance_type: data.data.instance_type ?? '',
                 });
+                setModalInput(true);
+                setExpandPassword(false);
+            }
+
+            if (data.status == 'error') {
+                showAlert('error', data.message);
             }
         });
-        setModalInput(true);
-        setExpandPassword(false);
     }
 
     const [saveLoading, setSaveLoading] = useState(false);
@@ -219,9 +234,15 @@ const Index = () => {
             storeUser(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchUsers(userType).then((data) => {
-                        setDatas((data?.data?.users));
-                    });
+                    if (CurrentUser.role_id == 9) {
+                        fetchUsers(userType, '', CurrentUser.instance_id).then((data) => {
+                            setDatas((data?.data?.users));
+                        });
+                    } else {
+                        fetchUsers(userType, '').then((data) => {
+                            setDatas((data?.data?.users));
+                        });
+                    }
                     showAlert('success', data.message);
                 }
                 if (data.status == 'error validation') {
@@ -233,7 +254,6 @@ const Index = () => {
                     });
                 }
                 if (data.status == 'error') {
-                    console.log(data.message)
                     showAlert('error', data.message);
                 }
                 setSaveLoading(false);
@@ -242,9 +262,15 @@ const Index = () => {
             updateUser(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchUsers(userType).then((data) => {
-                        setDatas((data?.data?.users));
-                    });
+                    if (CurrentUser.role_id == 9) {
+                        fetchUsers(userType, '', CurrentUser.instance_id).then((data) => {
+                            setDatas((data?.data?.users));
+                        });
+                    } else {
+                        fetchUsers(userType, '').then((data) => {
+                            setDatas((data?.data?.users));
+                        });
+                    }
                     showAlert('success', data.message);
                 }
                 if (data.status == 'error') {
@@ -279,9 +305,15 @@ const Index = () => {
                 if (result.value) {
                     deleteUser(id).then((data) => {
                         if (data.status == 'success') {
-                            fetchUsers(userType).then((data) => {
-                                setDatas((data?.data?.users));
-                            });
+                            if (CurrentUser.role_id == 9) {
+                                fetchUsers(userType, '', CurrentUser.instance_id).then((data) => {
+                                    setDatas((data?.data?.users));
+                                });
+                            } else {
+                                fetchUsers(userType, '').then((data) => {
+                                    setDatas((data?.data?.users));
+                                });
+                            }
                             swalWithBootstrapButtons.fire('Terhapus!', data.message, 'success');
                         }
                         if (data.status == 'error') {
@@ -294,26 +326,28 @@ const Index = () => {
             });
     }
 
-    if (CurrentUser?.role_id && [1, 2, 3, 4, 5].includes(CurrentUser?.role_id)) {
+    if (CurrentUser?.role_id && [1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id)) {
         return (
             <>
-                <div className="flex gap-2 mb-4">
-                    <button type="button" className={userType == 'admin' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
-                        changeUserType('admin');
-                    }}>
-                        Administrator
-                    </button>
-                    <button type="button" className={userType == 'verifikator' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
-                        changeUserType('verifikator');
-                    }}>
-                        Verifikator
-                    </button>
-                    <button type="button" className={userType == 'perangkat_daerah' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
-                        changeUserType('perangkat_daerah');
-                    }}>
-                        Perangkat Daerah
-                    </button>
-                </div>
+                {CurrentUser?.role_id && [1, 2, 3, 4, 5].includes(CurrentUser?.role_id) && (
+                    <div className="flex gap-2 mb-4">
+                        <button type="button" className={userType == 'admin' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
+                            changeUserType('admin');
+                        }}>
+                            Administrator
+                        </button>
+                        <button type="button" className={userType == 'verifikator' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
+                            changeUserType('verifikator');
+                        }}>
+                            Verifikator
+                        </button>
+                        <button type="button" className={userType == 'perangkat_daerah' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
+                            changeUserType('perangkat_daerah');
+                        }}>
+                            Perangkat Daerah
+                        </button>
+                    </div>
+                )}
                 <div className="panel">
                     <div className="mb-5 flex items-center justify-between">
                         <h5 className="text-lg font-semibold dark:text-white-light">
@@ -321,7 +355,6 @@ const Index = () => {
                         </h5>
 
                         <div className="flex items-center justify-center gap-1">
-
                             <div className="relative">
                                 <input type="search"
                                     className="form-input rtl:pl-12 ltr:pr-12"
@@ -333,10 +366,18 @@ const Index = () => {
                                 </div>
                             </div>
 
-                            <button type="button" onClick={() => addUser()} className="btn btn-info whitespace-nowrap gap-1">
-                                <IconPlus></IconPlus>
-                                Tambah Pengguna
-                            </button>
+                            {CurrentUser?.role_id && [1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id) && (
+                                <>
+                                    {(CurrentUser?.role_id == 9 && CurrentUser?.instance_type != 'kepala') ? (
+                                        <></>
+                                    ) : (
+                                        <button type="button" onClick={() => addUser()} className="btn btn-info whitespace-nowrap gap-1">
+                                            <IconPlus></IconPlus>
+                                            Tambah Pengguna
+                                        </button>
+                                    )}
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="table-responsive mb-5">
@@ -589,43 +630,14 @@ const Index = () => {
                                                     </div>
                                                 </div>
 
-                                                <div>
-                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
-                                                        Jenis Pengguna
-                                                        <span className='text-red-600 mx-1'>*</span>
-                                                    </label>
-                                                    {(dataInput.inputType == 'edit' && dataInput.role == null) ? (
-                                                        <>
-                                                            <div className="w-full form-input text-slate-400">
-                                                                <div className="dots-loading">....</div>
-                                                            </div>
-                                                        </>
-                                                    ) : (
-                                                        <>
-
-                                                            <select className="form-select text-white-dark" value={dataInput.role} onChange={(e) => setDataInput({ ...dataInput, role: e.target.value })}>
-                                                                <option hidden value="">Pilih Jenis Pengguna</option>
-                                                                {roles.map((role: any) => {
-                                                                    return (
-                                                                        <option value={role.id}>
-                                                                            {role.display_name}
-                                                                        </option>
-                                                                    )
-                                                                })}
-                                                            </select>
-                                                            <div id="error-role" className='validation-elements text-red-500 text-xs'></div>
-                                                        </>
-                                                    )}
-                                                </div>
-
-                                                {(dataInput.role == 9) && (
+                                                {CurrentUser?.role_id && [1, 2, 3, 4, 5].includes(CurrentUser?.role_id) && (
                                                     <>
                                                         <div>
                                                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
-                                                                Perangkat Daerah
+                                                                Jenis Pengguna
                                                                 <span className='text-red-600 mx-1'>*</span>
                                                             </label>
-                                                            {(dataInput.inputType == 'edit' && dataInput.instance_id == null) ? (
+                                                            {(dataInput.inputType == 'edit' && dataInput.role == null) ? (
                                                                 <>
                                                                     <div className="w-full form-input text-slate-400">
                                                                         <div className="dots-loading">....</div>
@@ -633,20 +645,53 @@ const Index = () => {
                                                                 </>
                                                             ) : (
                                                                 <>
-                                                                    <select className="form-select text-white-dark" value={dataInput.instance_id} onChange={(e) => setDataInput({ ...dataInput, instance_id: e.target.value })}>
+
+                                                                    <select className="form-select text-white-dark" value={dataInput.role} onChange={(e) => setDataInput({ ...dataInput, role: e.target.value })}>
                                                                         <option hidden value="">Pilih Jenis Pengguna</option>
-                                                                        {instances.map((instance: any) => {
+                                                                        {roles.map((role: any) => {
                                                                             return (
-                                                                                <option value={instance.id}>
-                                                                                    {instance.name}
+                                                                                <option value={role.id}>
+                                                                                    {role.display_name}
                                                                                 </option>
                                                                             )
                                                                         })}
                                                                     </select>
-                                                                    <div id="error-instance_id" className='validation-elements text-red-500 text-xs'></div>
+                                                                    <div id="error-role" className='validation-elements text-red-500 text-xs'></div>
                                                                 </>
                                                             )}
                                                         </div>
+
+                                                        {(dataInput.role == 9) && (
+                                                            <>
+                                                                <div>
+                                                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
+                                                                        Perangkat Daerah
+                                                                        <span className='text-red-600 mx-1'>*</span>
+                                                                    </label>
+                                                                    {(dataInput.inputType == 'edit' && dataInput.instance_id == null) ? (
+                                                                        <>
+                                                                            <div className="w-full form-input text-slate-400">
+                                                                                <div className="dots-loading">....</div>
+                                                                            </div>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <select className="form-select text-white-dark" value={dataInput.instance_id} onChange={(e) => setDataInput({ ...dataInput, instance_id: e.target.value })}>
+                                                                                <option hidden value="">Pilih Jenis Pengguna</option>
+                                                                                {instances.map((instance: any) => {
+                                                                                    return (
+                                                                                        <option value={instance.id}>
+                                                                                            {instance.name}
+                                                                                        </option>
+                                                                                    )
+                                                                                })}
+                                                                            </select>
+                                                                            <div id="error-instance_id" className='validation-elements text-red-500 text-xs'></div>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+                                                            </>
+                                                        )}
                                                     </>
                                                 )}
 
