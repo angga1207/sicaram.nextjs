@@ -319,7 +319,7 @@ const Header = () => {
             return;
         }
 
-        if (bookmarks.length >= 2) {
+        if (bookmarks.length >= 5) {
             notify('error', 'Menu Cepat Maksimal 5');
             return;
         }
@@ -432,7 +432,13 @@ const Header = () => {
                         </div>
 
                         <div className="">
-                            <Tippy content="Bookmark" placement="bottom" arrow={false} duration={0} delay={[500, 0]} interactive={true} theme="dark">
+                            <Tippy content={bookmarks.find((item: any) => item.url === window.location.href) ? 'Hapus Dari Menu Cepat' : 'Tambah Ke Menu Cepat'}
+                                placement="bottom"
+                                arrow={false}
+                                duration={0}
+                                delay={[500, 0]}
+                                interactive={true}
+                                theme={bookmarks.find((item: any) => item.url === window.location.href) ? 'warning' : 'dark'}>
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
