@@ -18,6 +18,9 @@ import Select from 'react-select';
 import AnimateHeight from 'react-animate-height';
 import LoadingSicaram from '@/components/LoadingSicaram';
 
+import { getMessaging, onMessage } from 'firebase/messaging';
+import firebaseApp from '@/utils/firebase/firebase';
+
 import IconEdit from '../../components/Icon/IconEdit';
 import IconX from '../../components/Icon/IconX';
 import IconCaretDown from '../../components/Icon/IconCaretDown';
@@ -170,6 +173,19 @@ const Index = () => {
             });
         }
     }, [instance, CurrentUser?.role_id]);
+
+    useEffect(() => {
+        const messaging = getMessaging(firebaseApp);
+        const unsubscribe = onMessage(messaging, (payload: any) => {
+            if (payload.data.title == 'Verifikasi Renstra') {
+                fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
+                    if (data.status == 'success') {
+                        setDataValidating(data.data);
+                    }
+                });
+            }
+        });
+    }, []);
 
 
     const goSearchProgram = (search: any) => {
@@ -538,7 +554,7 @@ const Index = () => {
                 {instance && (
                     <div className="panel">
                         <div className="mb-5 flex flex-col sm:flex-row gap-4">
-                            <div className="w-full sm:w-80 h-[calc(100vh-250px)] overflow-x-auto border-b border-x rounded-t-lg">
+                            <div className="w-full sm:w-80 h-[calc(100vh-250px)] overflow-x-auto border-b border-x rounded-t-lg relative">
                                 {!program && (
                                     <>
                                         <div className="sticky top-0 left-0 z-10">
@@ -617,7 +633,7 @@ const Index = () => {
                                 )}
 
                                 {program && (
-                                    <div className="rounded-t-lg border-t p-4 h-full relative">
+                                    <div className="rounded-t-lg border-t p-4 h-full">
                                         <div className="flex items-center justify-between mb-3 pb-1 border-b">
                                             <div className="text-lg font-semibold">
                                                 Informasi Data
@@ -819,7 +835,7 @@ const Index = () => {
                                                     )}
                                                 </div>
 
-                                                <div className="absolute bottom-0 left-0 w-full p-4 pb-2">
+                                                <div className="sticky bottom-0 left-0 w-full p-4 pb-2">
                                                     <div className="flex flex-wrap items-center justify-center gap-2 relative">
                                                         {viewValidating ? (
                                                             <>

@@ -15,6 +15,9 @@ import Swal from 'sweetalert2';
 import LoadingSicaram from '../../components/LoadingSicaram';
 import AnimateHeight from 'react-animate-height';
 
+import { getMessaging, onMessage } from 'firebase/messaging';
+import firebaseApp from '@/utils/firebase/firebase';
+
 import IconTrashLines from '../../components/Icon/IconTrashLines';
 import IconEdit from '../../components/Icon/IconEdit';
 import IconX from '../../components/Icon/IconX';
@@ -171,6 +174,28 @@ const Index = () => {
         }
     }, [instance, CurrentUser?.role_id]);
 
+    useEffect(() => {
+        const messaging = getMessaging(firebaseApp);
+        const unsubscribe = onMessage(messaging, (payload: any) => {
+            console.log(payload)
+            if (payload.data.title == 'Verifikasi Renstra Perubahan') {
+                fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
+                    if (data.status == 'success') {
+                        setDataValidating(data.data);
+                    }
+                });
+
+                fetchRenja(periode, instance, program).then((data) => {
+                    if (data.status == 'success') {
+                        setRenjas(data.data.datas);
+                        setRenstra(data.data.renstra);
+                        setRenja(data.data.renja);
+                        setRange(data.data.range);
+                    }
+                });
+            }
+        });
+    }, []);
 
     const goSearchProgram = (search: any) => {
         setSearchProgram(search);
@@ -436,8 +461,6 @@ const Index = () => {
 
         if (message && status) {
             postRenjaNotes(periode, instance, program, renja?.id, message, status).then((data) => {
-                setMessage('');
-                setStatus('');
                 if (data.status == 'success') {
                     showAlert('success', data.message);
                     fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
@@ -445,15 +468,24 @@ const Index = () => {
                             setDataValidating(data.data);
                         }
                     });
-                    fetchRenja(periode, instance, program).then((data) => {
-                        if (data.status == 'success') {
-                            setRenjas(data.data.datas);
-                            setRenstra(data.data.renstra);
-                            setRenja(data.data.renja);
-                            setRange(data.data.range);
-                        }
+
+                    setRenja((prevState: any) => {
+                        return {
+                            ...prevState,
+                            status: status,
+                        };
                     });
+                    // fetchRenja(periode, instance, program).then((data) => {
+                    //     if (data.status == 'success') {
+                    //         setRenjas(data.data.datas);
+                    //         setRenstra(data.data.renstra);
+                    //         setRenja(data.data.renja);
+                    //         setRange(data.data.range);
+                    //     }
+                    // });
                 }
+                setMessage('');
+                setStatus('');
             });
         }
     }
@@ -828,7 +860,7 @@ const Index = () => {
                                                     )}
                                                 </div>
 
-                                                <div className="absolute bottom-0 left-0 w-full p-4 pb-2">
+                                                <div className="sticky bottom-0 left-0 w-full p-4 pb-2">
                                                     <div className="flex flex-wrap items-center justify-center gap-2 relative">
                                                         {viewValidating ? (
                                                             <>
@@ -851,7 +883,7 @@ const Index = () => {
                                                                     }}
                                                                     className='btn btn-primary gap-1'>
                                                                     <FontAwesomeIcon icon={faEnvelopeCircleCheck} className="w-4 h-4" />
-                                                                    Verifikasi Renstra Perubahan
+                                                                    Verifikasi
                                                                 </button>
                                                             </>
                                                         )}

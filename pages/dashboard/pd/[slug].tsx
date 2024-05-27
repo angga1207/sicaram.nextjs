@@ -1691,16 +1691,18 @@ const Index = () => {
                                         <div className="">
                                             Capaian Keuangan
                                         </div>
-                                        <div className="text-xs">
-                                            Diperbarui
-                                            <span className='ml-1 font-semibold'>
-                                                {new Date(AnggaranSummary?.anggaran_updated_at).toLocaleDateString('id-ID', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
-                                            </span>
-                                        </div>
+                                        {AnggaranSummary.anggaran_updated_at && (
+                                            <div className="text-xs">
+                                                Diperbarui
+                                                <span className='ml-1 font-semibold'>
+                                                    {new Date(AnggaranSummary?.anggaran_updated_at).toLocaleDateString('id-ID', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                     {isMounted ? (
                                         <div
@@ -1726,16 +1728,18 @@ const Index = () => {
                                         <div className="">
                                             Capaian Kinerja
                                         </div>
-                                        <div className="text-xs">
-                                            Diperbarui
-                                            <span className='ml-1 font-semibold'>
-                                                {new Date(KinerjaSummary?.realisasi_updated_at).toLocaleDateString('id-ID', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                })}
-                                            </span>
-                                        </div>
+                                        {KinerjaSummary.realisasi_updated_at && (
+                                            <div className="text-xs">
+                                                Diperbarui
+                                                <span className='ml-1 font-semibold'>
+                                                    {new Date(KinerjaSummary?.realisasi_updated_at).toLocaleDateString('id-ID', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                    })}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                     {isMounted ? (
                                         <div

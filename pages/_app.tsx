@@ -21,14 +21,16 @@ import firebaseApp from '@/utils/firebase/firebase';
 import useFcmToken from '@/utils/hooks/useFcmToken';
 import Swal from 'sweetalert2';
 import { BaseUri } from '@/apis/serverConfig';
+import IconX from '@/components/Icon/IconX';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
         toast: true,
-        position: 'top-end',
+        position: 'top',
         showConfirmButton: false,
         showCloseButton: true,
-        timer: 3000,
+        timer: 5000,
+        timerProgressBar: true,
     });
     toast.fire({
         icon: icon,
@@ -52,7 +54,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     const baseUri = BaseUri();
 
     useEffect(() => {
-        // if (window && fcmToken) {
         const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
         const currentToken = localStorage.getItem('token') ?? null;
         if (currentUser && currentToken) {
@@ -67,12 +68,8 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                 }),
             })
                 .then((response) => {
-                    // response.json();
-                    // console.log(response.json());
-                    // console.log('FCM token saved');
                 })
                 .then((data) => {
-                    // console.log('FCM token saved');
                 })
                 .catch((error) => {
                 });
@@ -80,7 +77,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         if (notificationPermissionStatus === 'denied') {
             showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
         }
-        // }
     }, [fcmToken]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -88,13 +84,55 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
             const messaging = getMessaging(firebaseApp);
             const unsubscribe = onMessage(messaging, (payload) => {
-                showAlert('info', payload?.notification?.body);
+                // showAlert('info', payload?.notification?.body);
             });
             return () => {
                 unsubscribe(); // Unsubscribe from the onMessage event
             };
         }
     }, []);
+
+
+    const [notifications, setNotifications] = useState<any>([]);
+
+    useEffect(() => {
+
+        if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+            const messaging = getMessaging(firebaseApp);
+            const saveNotif = onMessage(messaging, (payload: any) => {
+                const newMessage = {
+                    title: payload.notification.title,
+                    body: payload.notification.body,
+                };
+                if (notifications?.length > 5) {
+                    setNotifications((notifications: any) => [...notifications.slice(1), newMessage]);
+                }
+                else {
+                    setNotifications((notifications: any) => [...notifications, newMessage]);
+                }
+
+                // play sound
+                const audio = new Audio('/assets/audio/notification.mp3');
+                audio.volume = 1;
+                audio.play();
+
+
+                // remove notification after 5 seconds popup
+                // setTimeout(() => {
+                //     removeNotif(notifications.length - 1);
+                // }, 5000);
+            });
+            return () => {
+                saveNotif(); // triggerNotif from the onMessage event
+            };
+        }
+    }, []);
+
+    const removeNotif = (index: any) => {
+        const newNotif = [...notifications];
+        newNotif.splice(index, 1);
+        setNotifications(newNotif);
+    }
 
     return (
         <Provider store={store}>
@@ -118,6 +156,34 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                     `}
                 </style>
             </Head>
+
+            <div className="fixed bottom-[20px] right-[30px] z-[61] bg-transparent w-[350px]">
+                <div className="w-full h-full flex flex-col-reverse justify-end gap-y-3">
+
+                    {notifications?.map((notif: any, index: any) => (
+                        <div key={`notif-${index}`} className="panel px-3 py-2">
+                            <div className="flex items-center justify-between">
+                                <div className="">
+                                    <div className="text-sm font-semibold dark:text-white">
+                                        {notif.title}
+                                    </div>
+                                    <div className="text-xs text-gray-500 dark:text-slate-500">
+                                        {notif.body}
+                                    </div>
+                                </div>
+                                <div
+                                    onClick={() => {
+                                        removeNotif(index)
+                                    }}
+                                    className="cursor-pointer dark:text-white hover:text-danger dark:hover:text-danger">
+                                    <IconX className="w-5 h-5" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                </div>
+            </div>
 
             <NextNProgress color="#29D" startPosition={0.3} stopDelayMs={200} height={3} showOnShallow={true} />
             {getLayout(<Component {...pageProps} />)}

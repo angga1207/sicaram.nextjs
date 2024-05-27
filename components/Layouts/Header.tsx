@@ -27,6 +27,8 @@ import { BaseUri } from '@/apis/serverConfig';
 import { fetchNotifLess, markNotifAsRead } from '@/apis/personal_profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckDouble } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark } from '@fortawesome/free-regular-svg-icons';
+import IconBookmark from '../Icon/IconBookmark';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -42,6 +44,22 @@ const showAlert = async (icon: any, text: any) => {
         padding: '10px 20px',
     });
 };
+
+const notify = async (icon: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+    });
+    toast.fire({
+        icon: icon,
+        title: text,
+        // text: text,
+        padding: '10px 20px',
+    });
+}
 
 const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
     Swal.fire({
@@ -67,6 +85,11 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
 
 const Header = () => {
     const router = useRouter();
+    const [isClient, setIsClient] = useState(false)
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
 
     const [CurrentUser, setCurrentUser] = useState<any>(null);
     const [CurrentToken, setCurrentToken] = useState<any>([]);
@@ -213,11 +236,11 @@ const Header = () => {
     ]);
 
     const removeMessage = (value: any) => {
-
         setMessages(messages.filter((item) => item.id !== value));
     };
 
     const [notifications, setNotifications] = useState<any>([]);
+    const [newNotification, setNewNotification] = useState<boolean>(true);
 
     useEffect(() => {
         refreshNotificationLess();
@@ -227,6 +250,11 @@ const Header = () => {
         fetchNotifLess().then((res) => {
             if (res.status == 'success') {
                 setNotifications(res.data);
+                if (res.data.filter((item: any) => item.read === false).length > 0) {
+                    setNewNotification(true);
+                } else {
+                    setNewNotification(false);
+                }
             }
         })
     }
@@ -248,6 +276,12 @@ const Header = () => {
                 return item;
             });
         });
+
+        if (notifications.filter((item: any) => item.read === false).length > 0) {
+            setNewNotification(true);
+        } else {
+            setNewNotification(false);
+        }
     };
 
     const [search, setSearch] = useState(false);
@@ -259,6 +293,56 @@ const Header = () => {
             localStorage.setItem('locked', 'true');
             window.location.href = '/lockscreen';
         });
+    }
+
+
+    const [bookmarks, setBookmars] = useState<any>([]);
+
+    useEffect(() => {
+        // clear local storage
+        // localStorage.removeItem('bookmarks');
+        const localBookmarks = JSON.parse(localStorage.getItem('bookmarks') ?? '[]');
+        setBookmars(localBookmarks);
+    }, [])
+
+    const addToBookmark = () => {
+        const pageTitle = document.title.split('|')[0].trim();
+        const url = window.location.href;
+        const newBookmark = {
+            title: pageTitle,
+            url: url,
+        };
+
+        const isExist = bookmarks.find((item: any) => item.url === newBookmark.url);
+        if (isExist) {
+            removeBookmark(bookmarks.findIndex((item: any) => item.url === newBookmark.url));
+            return;
+        }
+
+        if (bookmarks.length >= 2) {
+            notify('error', 'Menu Cepat Maksimal 5');
+            return;
+        }
+
+        setBookmars((prev: any) => {
+            return [...prev, newBookmark];
+        });
+
+        const newBookmarks = [...bookmarks, newBookmark];
+
+        const jsonBookmarks = JSON.stringify(newBookmarks ?? []);
+        localStorage.setItem('bookmarks', jsonBookmarks);
+    };
+
+    const removeBookmark = (index: number) => {
+        setBookmars((prev: any) => {
+            return prev.filter((item: any, i: number) => i !== index);
+        });
+
+        const newBookmarks = bookmarks.filter((item: any, i: number) => i !== index);
+
+        const jsonBookmarks = JSON.stringify(newBookmarks ?? []);
+        localStorage.setItem('bookmarks', jsonBookmarks);
     }
 
     // date time function update every second
@@ -347,6 +431,86 @@ const Header = () => {
                         <div className="sm:ltr:mr-auto sm:rtl:ml-auto">
                         </div>
 
+                        <div className="">
+                            <Tippy content="Bookmark" placement="bottom" arrow={false} duration={0} delay={[500, 0]} interactive={true} theme="dark">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        addToBookmark();
+                                    }}
+                                    type="button"
+                                    className="btn btn-sm rounded-full shadow-none px-2 py-1.5 my-4 w-10 h-10 group hover:bg-slate-900 dark:hover:bg-slate-100">
+                                    <FontAwesomeIcon
+                                        icon={faBookmark}
+                                        className={`w-4.5 h-4.5 ${bookmarks.find((item: any) => item.url === window.location.href) ? 'text-yellow-500' : 'group-hover:text-white dark:group-hover:text-dark'}`} />
+                                </button>
+                            </Tippy>
+                        </div>
+
+                        <div className="dropdown shrink-0">
+                            <Dropdown
+                                offset={[0, 8]}
+                                placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
+                                btnClassName="relative group block"
+                                button={
+                                    <div className="btn btn-sm rounded-xl shadow-none px-2 py-1.5 my-4">
+                                        Menu Cepat
+                                        {bookmarks?.length > 0 ? (
+                                            <div className="w-6 h-6 rounded-xl my-0 bg-white-light text-black flex items-center justify-center ml-3">
+                                                {bookmarks?.length}
+                                            </div>
+                                        ) : (
+                                            <div className='w-2 h-6'></div>
+                                        )}
+                                    </div>
+                                }
+                            >
+                                <ul className="!min-w-[230px] max-w-[400px] relative !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
+
+                                    {bookmarks?.length > 0 && (
+                                        <>
+                                            {bookmarks?.map((item: any, index: number) => (
+                                                <li key={`bookmark-${index}`}>
+                                                    <div className="w-full flex justify-between p-2 hover:bg-slate-100 dark:hover:bg-slate-700 group">
+                                                        <Link href={item?.url} className="dark:hover:text-white w-full flex items-center justify-start group-hover:text-yellow-500 dark:group-hover:text-yellow-700">
+                                                            <IconBookmark className="h-4.5 w-4.5 shrink-0 mr-2" />
+                                                            <span className='whitespace-nowrap truncate'>
+                                                                {item?.title}
+                                                            </span>
+                                                        </Link>
+                                                        <Tippy content="Hapus" placement="top" arrow={false} duration={0} delay={[500, 0]} interactive={true} theme="danger">
+                                                            <button
+                                                                type="button"
+                                                                className="text-danger ltr:ml-2 rtl:mr-2"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    removeBookmark(index);
+                                                                }}
+                                                            >
+                                                                <IconXCircle className="h-4.5 w-4.5 shrink-0" />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </>
+                                    )}
+
+                                    {bookmarks?.length == 0 && (
+                                        <li>
+                                            <button type="button" className="!grid min-h-[200px] place-content-center text-lg hover:!bg-transparent">
+                                                <div className="mx-auto mb-4 rounded-full ring-4 ring-primary/30">
+                                                    <IconInfoCircle fill={true} className="h-10 w-10 text-primary" />
+                                                </div>
+                                                Tidak ada menu cepat
+                                            </button>
+                                        </li>
+                                    )}
+
+                                </ul>
+                            </Dropdown>
+                        </div>
+
                         <div>
                             {themeConfig.theme === 'light' ? (
                                 <button
@@ -390,15 +554,19 @@ const Header = () => {
                                 button={
                                     <span>
                                         <IconBellBing />
-                                        <span className="absolute top-0 flex h-3 w-3 ltr:right-0 rtl:left-0">
-                                            <span className="absolute -top-[3px] inline-flex h-full w-full animate-ping rounded-full bg-success/50 opacity-75 ltr:-left-[3px] rtl:-right-[3px]"></span>
-                                            <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-success"></span>
-                                        </span>
+                                        {newNotification && (
+                                            <span className="absolute top-0 flex h-3 w-3 ltr:right-0 rtl:left-0">
+                                                <span className="absolute -top-[3px] inline-flex h-full w-full animate-ping rounded-full bg-success/50 opacity-75 ltr:-left-[3px] rtl:-right-[3px]"></span>
+                                                <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-success"></span>
+                                            </span>
+                                        )}
                                     </span>
                                 }
                             >
                                 <ul className="w-[300px] divide-y !py-0 text-dark dark:divide-white/10 dark:text-white-dark sm:w-[350px]">
-                                    <li onClick={(e) => e.stopPropagation()}>
+                                    <li onClick={(e) => {
+                                        e.stopPropagation()
+                                    }}>
                                         <div className="flex items-center justify-between px-4 py-2 font-semibold">
                                             <h4 className="text-lg">
                                                 Pemberitahuan
@@ -462,7 +630,7 @@ const Header = () => {
                                                 <div className="mx-auto mb-4 rounded-full ring-4 ring-primary/30">
                                                     <IconInfoCircle fill={true} className="h-10 w-10 text-primary" />
                                                 </div>
-                                                No data available.
+                                                Tidak ada pemberitahuan
                                             </button>
                                         </li>
                                     )}
@@ -480,7 +648,7 @@ const Header = () => {
                                 <ul className="grid w-[280px] grid-cols-2 gap-2 !px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
                                     {themeConfig.languageList.map((item: any) => {
                                         return (
-                                            <li key={item.code}>
+                                            <li key={'lang' + item.code}>
                                                 <button
                                                     type="button"
                                                     className={`flex w-full hover:text-primary ${i18n.language === item.code ? 'bg-primary/10 text-primary' : ''}`}
