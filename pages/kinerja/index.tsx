@@ -278,16 +278,20 @@ const Index = () => {
                         {!instance ? (
                             <>
                                 <div className="flex items-center gap-1">
-                                    <div className="btn btn-warning whitespace-nowrap relative cursor-pointer" onClick={(e) => {
-                                        e.preventDefault();
-                                        setModalImport(true);
-                                        setUploadMessages(null);
-                                    }}>
-                                        <FontAwesomeIcon icon={faFileUpload} className="w-4 h-4 mr-2" />
-                                        <span className="ltr:ml-2 rtl:mr-2">
-                                            Import Excel
-                                        </span>
-                                    </div>
+
+                                    {[1, 2].includes(CurrentUser?.role_id) && (
+                                        <div className="btn btn-warning whitespace-nowrap relative cursor-pointer" onClick={(e) => {
+                                            e.preventDefault();
+                                            setModalImport(true);
+                                            setUploadMessages(null);
+                                        }}>
+                                            <FontAwesomeIcon icon={faFileUpload} className="w-4 h-4 mr-2" />
+                                            <span className="ltr:ml-2 rtl:mr-2">
+                                                Import Excel
+                                            </span>
+                                        </div>
+                                    )}
+
                                     <button
                                         onClick={() => {
                                             setViewType('grid')

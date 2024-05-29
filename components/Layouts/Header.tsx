@@ -29,6 +29,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckDouble } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import IconBookmark from '../Icon/IconBookmark';
+import IconPlus from '../Icon/IconPlus';
+import IconMinus from '../Icon/IconMinus';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -431,7 +433,7 @@ const Header = () => {
                         <div className="sm:ltr:mr-auto sm:rtl:ml-auto">
                         </div>
 
-                        <div className="">
+                        <div className="hidden lg:block">
                             <Tippy content={bookmarks.find((item: any) => item.url === window.location.href) ? 'Hapus Dari Menu Cepat' : 'Tambah Ke Menu Cepat'}
                                 placement="bottom"
                                 arrow={false}
@@ -453,9 +455,9 @@ const Header = () => {
                             </Tippy>
                         </div>
 
-                        <div className="dropdown shrink-0">
+                        <div className="hidden lg:block dropdown shrink-0">
                             <Dropdown
-                                offset={[0, 8]}
+                                offset={[0, -15]}
                                 placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
                                 btnClassName="relative group block"
                                 button={
@@ -477,7 +479,7 @@ const Header = () => {
                                         <>
                                             {bookmarks?.map((item: any, index: number) => (
                                                 <li key={`bookmark-${index}`}>
-                                                    <div className="w-full flex justify-between p-2 hover:bg-slate-100 dark:hover:bg-slate-700 group">
+                                                    <div className="w-full flex justify-between p-3 hover:bg-slate-100 dark:hover:bg-slate-700 group">
                                                         <Link href={item?.url} className="dark:hover:text-white w-full flex items-center justify-start group-hover:text-yellow-500 dark:group-hover:text-yellow-700">
                                                             <IconBookmark className="h-4.5 w-4.5 shrink-0 mr-2" />
                                                             <span className='whitespace-nowrap truncate'>
@@ -510,6 +512,23 @@ const Header = () => {
                                                 </div>
                                                 Tidak ada menu cepat
                                             </button>
+                                        </li>
+                                    )}
+
+                                    {!bookmarks.find((item: any) => item.url === window.location.href) && (
+                                        <li
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                addToBookmark();
+                                            }}>
+                                            <div className="w-full flex justify-between p-3 hover:bg-slate-100 dark:hover:bg-slate-700 group cursor-pointer mt-2 border-t">
+                                                <div className="dark:hover:text-white w-full flex items-center justify-start group-hover:text-yellow-500 dark:group-hover:text-yellow-700 text-xs">
+                                                    <IconPlus className="h-4 w-4 shrink-0 mr-2" />
+                                                    <span className='whitespace-nowrap truncate'>
+                                                        Tambahkan Halaman Ini
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </li>
                                     )}
 

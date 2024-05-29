@@ -52,7 +52,7 @@ const Login = () => {
             // console.log(localStorage.getItem('token'))
             if (localStorage.getItem('token')) {
                 // setUserToken(localStorage.getItem('token'));
-                router.push('/');
+                // router.push('/');
                 // return;
             } else {
                 localStorage.removeItem('token');
@@ -160,6 +160,14 @@ const Login = () => {
                 setUserToken(data.token);
             }
 
+            if (localStorage.getItem('token')) {
+                if (localStorage.user.role_id === 9) {
+                    router.push('/dashboard/pd');
+                } else {
+                    router.push('/dashboard');
+                }
+            }
+
             // router push to latest url
             // router.push(router.query.next ? router.query.next.toString() : '/');
 
@@ -194,13 +202,13 @@ const Login = () => {
 
 
     useEffect(() => {
-        if (localStorage.getItem('token')) {
-            if (localStorage.user.role_id === 9) {
-                router.push('/dashboard/pd');
-            } else {
-                router.push('/dashboard');
-            }
-        }
+        // if (localStorage.getItem('token')) {
+        //     if (localStorage.user.role_id === 9) {
+        //         router.push('/dashboard/pd');
+        //     } else {
+        //         router.push('/dashboard');
+        //     }
+        // }
     }, [userToken]);
 
     const { t, i18n } = useTranslation();

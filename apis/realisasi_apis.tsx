@@ -291,7 +291,7 @@ export async function addContract(id: any, data: any, year: any, month: any) {
     }
 }
 
-export async function deleteContract(id: any, year: any, month: any) {
+export async function deleteContract(id: any, no_kontrak:any, year: any, month: any) {
     try {
         const res = await axios.delete(baseUri + '/caram/realisasi-keterangan-delete-kontrak/' + id, {
             headers: {
@@ -300,6 +300,7 @@ export async function deleteContract(id: any, year: any, month: any) {
             },
             params: {
                 id: id,
+                no_kontrak: no_kontrak,
                 year: year,
                 month: month
             }

@@ -24,7 +24,7 @@ import { getMasterData, Save, fetchLogs, sendRequestVerification, sendReplyVerif
 import { fetchPeriodes, fetchSatuans } from '@/apis/fetchdata';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
 import LoadingSicaram from '@/components/LoadingSicaram';
@@ -270,7 +270,9 @@ const Index = () => {
         });
     }
 
+    const [loadingRequestVerification, setLoadingRequestVerification] = useState(false);
     const sendReqVerification = () => {
+        setLoadingRequestVerification(true);
         sendRequestVerification(subKegiatanId, requestVerificationData, year, month).then((data: any) => {
             if (data.status == 'success') {
                 showAlert('success', 'Permintaan Verifikasi berhasil dikirim');
@@ -295,6 +297,7 @@ const Index = () => {
             else {
                 showAlert('error', data.message);
             }
+            setLoadingRequestVerification(false);
         });
     }
 
@@ -306,8 +309,9 @@ const Index = () => {
             message: null,
         });
     }
-
+    const [loadingReplyVerification, setLoadingReplyVerification] = useState(false);
     const sentRepVerification = () => {
+        setLoadingReplyVerification(true);
         sendReplyVerification(subKegiatanId, replyVerificationData, year, month).then((data: any) => {
             if (data.status == 'success') {
                 showAlert('success', 'Balasan Verifikasi berhasil dikirim');
@@ -332,6 +336,7 @@ const Index = () => {
             else {
                 showAlert('error', data.message);
             }
+            setLoadingReplyVerification(false);
         });
     }
 
@@ -1317,7 +1322,7 @@ const Index = () => {
                                         </div>
 
                                         <div className="flex flex-wrap items-center justify-end border-t pt-1 gap-2">
-                                            {(CurrentUser?.role_id === 9 || CurrentUser?.role_id === 1) && (
+                                            {[1, 2, 9].includes(CurrentUser?.role_id) && (
                                                 <div>
                                                     <button
                                                         onClick={() => requestVerification()}
@@ -1328,15 +1333,19 @@ const Index = () => {
                                                     </button>
                                                 </div>
                                             )}
-                                            <div>
-                                                <button
-                                                    onClick={() => replyVerification()}
-                                                    type="button"
-                                                    className="btn btn-outline-success text-xs w-full">
-                                                    <IconSend className="w-4 h-4 mr-1" />
-                                                    Tanggapi Permintaan
-                                                </button>
-                                            </div>
+
+                                            {[1, 2, 3, 4, 5, 6, 7, 8].includes(CurrentUser?.role_id) && (
+                                                <div>
+                                                    <button
+                                                        onClick={() => replyVerification()}
+                                                        type="button"
+                                                        className="btn btn-outline-success text-xs w-full">
+                                                        <IconSend className="w-4 h-4 mr-1" />
+                                                        Tanggapi Permintaan
+                                                    </button>
+                                                </div>
+                                            )}
+
                                             <div>
                                                 <button
                                                     onClick={() => {
@@ -1411,13 +1420,25 @@ const Index = () => {
                                             placeholder='Tulis pesan permintaan verifikasi disini...'
                                             className="form-textarea resize-none"></textarea>
                                         <div className="flex items-center justify-end gap-2">
-                                            <button
-                                                onClick={() => sendReqVerification()}
-                                                type="button"
-                                                className="btn btn-success text-xs">
-                                                <IconSend className="w-4 h-4 mr-1" />
-                                                Ajukan Verifikasi
-                                            </button>
+
+                                            {loadingRequestVerification == false ? (
+                                                <button
+                                                    onClick={() => sendReqVerification()}
+                                                    type="button"
+                                                    className="btn btn-success text-xs">
+                                                    <IconSend className="w-4 h-4 mr-1" />
+                                                    Ajukan Verifikasi
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    type="button"
+                                                    className="btn btn-success text-xs">
+                                                    <FontAwesomeIcon icon={faSpinner} className='w-4 h-4 animate-spin' />
+                                                    <span className='ml-2'>Loading</span>
+                                                </button>
+                                            )}
+
                                             <button
                                                 onClick={() => {
                                                     openLogsModal()
@@ -1513,13 +1534,25 @@ const Index = () => {
                                             </select>
                                         </div>
                                         <div className="flex items-center justify-end gap-2 mt-5">
-                                            <button
-                                                onClick={() => sentRepVerification()}
-                                                type="button"
-                                                className="btn btn-success text-xs">
-                                                <IconSend className="w-4 h-4 mr-1" />
-                                                Kirim
-                                            </button>
+
+                                            {loadingReplyVerification == false ? (
+                                                <button
+                                                    onClick={() => sentRepVerification()}
+                                                    type="button"
+                                                    className="btn btn-success text-xs">
+                                                    <IconSend className="w-4 h-4 mr-1" />
+                                                    Kirim
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    type="button"
+                                                    className="btn btn-success text-xs">
+                                                    <FontAwesomeIcon icon={faSpinner} className='w-4 h-4 animate-spin' />
+                                                    <span className='ml-2'>Loading</span>
+                                                </button>
+                                            )}
+
                                             <button
                                                 onClick={() => {
                                                     openLogsModal()

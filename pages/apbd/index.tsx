@@ -493,16 +493,18 @@ const Index = () => {
                         </h2>
                         <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
 
-                            <div className="">
-                                <button
-                                    type='button'
-                                    onClick={() => {
-                                        setModalUploadExcel(true)
-                                    }}
-                                    className='btn btn-sm btn-warning'>
-                                    Upload Rekap 5
-                                </button>
-                            </div>
+                            {[1, 2].includes(CurrentUser?.role_id) && (
+                                <div className="">
+                                    <button
+                                        type='button'
+                                        onClick={() => {
+                                            setModalUploadExcel(true)
+                                        }}
+                                        className='btn btn-sm btn-warning'>
+                                        Upload Rekap 5
+                                    </button>
+                                </div>
+                            )}
 
                             {!instance ? (
                                 <>
