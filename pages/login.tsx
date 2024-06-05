@@ -230,10 +230,13 @@ const Login = () => {
                     <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(23,121,21,1)_0%,rgba(1,233,132,1)_100%)] bg-opacity-30 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
                         <div className="absolute inset-y-0 w-8 from-primary/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
                         <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
-                            <Link href="/" className="ms-10 block w-48 lg:w-72">
-                                <img src="/assets/images/logo-oi.png" alt="Logo" className="w-full h-40 object-contain" />
-                            </Link>
-                            <div className="mt-24 hidden w-full max-w-[430px] lg:block">
+                            <div className="flex items-center">
+                                <Link href="/" className="ms-10 block w-full h-40">
+                                    <img src="/assets/images/logo-oi.png" alt="Logo" className="w-full h-40 object-contain" />
+                                </Link>
+                            </div>
+
+                            <div className="mt-0 hidden w-full lg:block">
                                 {/* <img src="/assets/images/auth/login.svg" alt="Cover Image" className="w-full" /> */}
                                 <Player
                                     autoplay
@@ -243,6 +246,10 @@ const Login = () => {
                                     style={{ height: '450px', width: '450px' }}
                                 >
                                 </Player>
+                            </div>
+
+                            <div className="">
+                                <img src='/assets/images/badge_1771-sicaram.png' alt="Serifikat Kemenkominfo Nomor 1771" className="w-full h-10 object-contain" />
                             </div>
                         </div>
                     </div>
