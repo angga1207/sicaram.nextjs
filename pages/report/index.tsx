@@ -100,6 +100,12 @@ const Index = () => {
     const [satuans, setSatuans] = useState<any>([]);
 
     useEffect(() => {
+        if ([9].includes(CurrentUser?.role_id)) {
+            setInstance((router.query.instance ?? null) ?? CurrentUser?.instance_id);
+        }
+    }, [CurrentUser]);
+
+    useEffect(() => {
         setInstance((router.query.instance ?? null) ?? CurrentUser?.instance_id);
     }, [CurrentUser, router.query.instance]);
 
@@ -155,8 +161,13 @@ const Index = () => {
                         <Select placeholder="Pilih Perangkat Daerah"
                             className='w-full'
                             onChange={(e: any) => {
-                                setInstance(e?.value);
+                                if ([9].includes(CurrentUser?.role_id)) {
+                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                } else {
+                                    setInstance(e?.value);
+                                }
                             }}
+                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
                             value={
                                 instances?.map((data: any, index: number) => {
                                     if (data.id == instance) {
