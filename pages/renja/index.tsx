@@ -35,6 +35,7 @@ import IconSend from '@/components/Icon/IconSend';
 import IconUser from '@/components/Icon/IconUser';
 import IconSave from '@/components/Icon/IconSave';
 import Page403 from '@/components/Layouts/Page403';
+import { useRouter } from 'next/router';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -70,6 +71,7 @@ const Index = () => {
     }, []);
 
     const { t, i18n } = useTranslation();
+    const router = useRouter();
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
@@ -206,6 +208,12 @@ const Index = () => {
         }).filter((item: any) => item != undefined));
     }
 
+    useEffect(() => {
+        setInstance(router.query.instance)
+        setProgram(router.query.program)
+        setYear(router.query.year)
+    }, [router.query])
+
     const backToInstances = () => {
         if (unsave) {
             Swal.fire({
@@ -241,19 +249,34 @@ const Index = () => {
         setSearchProgram('');
         resetDataInput();
         setViewValidating(false);
+
+        if (router.query) {
+            router.query.instance = '';
+            router.query.program = '';
+            router.query.year = '';
+        }
+        router.push(router)
     }
 
     const pickInstance = (id: any) => {
         setInstance(id);
-        fetchPrograms(periode, id).then((data) => {
-            const prgs = data.data.map((item: any) => {
-                if (item.type == 'program') {
-                    return item;
-                }
-            }).filter((item: any) => item != undefined);
-            setPrograms(prgs);
-        });
+        setViewValidating(false);
+        router.query.instance = id;
+        router.push(router)
     }
+
+    useEffect(() => {
+        if (periode && instance) {
+            fetchPrograms(periode, instance).then((data) => {
+                const prgs = data.data.map((item: any) => {
+                    if (item.type == 'program') {
+                        return item;
+                    }
+                }).filter((item: any) => item != undefined);
+                setPrograms(prgs);
+            });
+        }
+    }, [instance]);
 
     const pickProgram = (id: any) => {
         if (unsave) {
@@ -270,14 +293,6 @@ const Index = () => {
                     setProgram(id);
                     setYear(new Date().getFullYear());
                     setFetchLoading(true);
-                    fetchRenja(periode, instance, id).then((data) => {
-                        if (data.status == 'success') {
-                            setRenjas(data.data.datas);
-                            setRenja(data.data.renja)
-                            setRenstra(data.data.renstra);
-                            setRange(data.data.range);
-                        }
-                    });
                     setFetchLoading(false);
                 }
             });
@@ -286,16 +301,24 @@ const Index = () => {
         setProgram(id);
         setYear(new Date().getFullYear());
         setFetchLoading(true);
-        fetchRenja(periode, instance, id).then((data) => {
-            if (data.status == 'success') {
-                setRenjas(data.data.datas);
-                setRenja(data.data.renja)
-                setRenstra(data.data.renstra);
-                setRange(data.data.range);
-            }
-        });
         setFetchLoading(false);
+
+        router.query.program = id;
+        router.push(router)
     }
+
+    useEffect(() => {
+        if (periode && instance && program) {
+            fetchRenja(periode, instance, program).then((data) => {
+                if (data.status == 'success') {
+                    setRenjas(data.data.datas);
+                    setRenja(data.data.renja)
+                    setRenstra(data.data.renstra);
+                    setRange(data.data.range);
+                }
+            });
+        }
+    }, [program])
 
     const goVerification = () => {
 
@@ -354,6 +377,11 @@ const Index = () => {
         setRenja(null)
         resetDataInput();
         setViewValidating(false);
+
+        if (router.query) {
+            router.query.program = '';
+        }
+        router.push(router)
     }
 
     const editData = (id: any, type: any) => {
@@ -918,7 +946,13 @@ const Index = () => {
                                                                 return (
                                                                     <>
                                                                         <button type='button'
-                                                                            onClick={(e) => setYear(data)}
+                                                                            onClick={(e) => {
+                                                                                setYear(data)
+                                                                                if (router.query) {
+                                                                                    router.query.year = data;
+                                                                                }
+                                                                                router.push(router)
+                                                                            }}
                                                                             className={year == data ? 'px-4 py-2 grow bg-secondary-light font-bold text-secondary' : 'px-4 py-2 grow'}>
                                                                             {data}
                                                                         </button>

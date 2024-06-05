@@ -102,10 +102,19 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
             const audio = new Audio('/assets/audio/notification.mp3');
             const messaging = getMessaging(firebaseApp);
             const saveNotif = onMessage(messaging, (payload: any) => {
+                const unRaw = JSON.parse(payload.data.datas);
+                let uri = null;
+                if (unRaw.type == 'renstra') {
+                    uri = `/renstra?instance=${unRaw.instance_id}&program=${unRaw.program_id}`
+                }
+                if (unRaw.type == 'renja') {
+                    uri = `/renja?instance=${unRaw.instance_id}&program=${unRaw.program_id}`
+                }
                 const newMessage = {
                     id: payload.messageId,
                     title: payload.notification.title,
                     body: payload.notification.body,
+                    link: uri,
                 };
 
                 setNotifications((notifications: any) => [...notifications, newMessage]);
@@ -125,6 +134,9 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                         audio.play();
                     }
                 }
+
+                // console.log(payload);
+                // console.log(JSON.parse(payload?.data?.datas));
 
             });
             return () => {
@@ -180,7 +192,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
                     {notifications?.map((notif: any, index: any) => (
                         <Link
-                            href="#"
+                            href={notif?.link ?? '#'}
                             key={`notif-${index}`}
                             className="panel px-3 py-2 cursor-pointer hover:bg-slate-50">
                             <div className="flex items-center justify-between">
