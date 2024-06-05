@@ -22,6 +22,7 @@ import useFcmToken from '@/utils/hooks/useFcmToken';
 import Swal from 'sweetalert2';
 import { BaseUri } from '@/apis/serverConfig';
 import IconX from '@/components/Icon/IconX';
+import Link from 'next/link';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -98,29 +99,33 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     useEffect(() => {
 
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+            const audio = new Audio('/assets/audio/notification.mp3');
             const messaging = getMessaging(firebaseApp);
             const saveNotif = onMessage(messaging, (payload: any) => {
                 const newMessage = {
+                    id: payload.messageId,
                     title: payload.notification.title,
                     body: payload.notification.body,
                 };
-                if (notifications?.length > 5) {
-                    setNotifications((notifications: any) => [...notifications.slice(1), newMessage]);
+
+                setNotifications((notifications: any) => [...notifications, newMessage]);
+
+                // show notification
+                if (Notification.permission === 'granted') {
+                    const notification = new Notification(payload.notification.title, {
+                        body: payload.notification.body,
+                    });
+                    notification.onshow = () => {
+                        setTimeout(() => {
+                            setNotifications((notifications: any) => notifications.filter((notif: any) => notif.id !== newMessage?.id));
+                        }, 5000);
+
+                        // play sound
+                        audio.volume = 1;
+                        audio.play();
+                    }
                 }
-                else {
-                    setNotifications((notifications: any) => [...notifications, newMessage]);
-                }
 
-                // play sound
-                const audio = new Audio('/assets/audio/notification.mp3');
-                audio.volume = 1;
-                audio.play();
-
-
-                // remove notification after 5 seconds popup
-                // setTimeout(() => {
-                //     removeNotif(notifications.length - 1);
-                // }, 5000);
             });
             return () => {
                 saveNotif(); // triggerNotif from the onMessage event
@@ -128,11 +133,24 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         }
     }, []);
 
-    const removeNotif = (index: any) => {
+    useEffect(() => {
+        if (notifications.length > 5) {
+            removeNotifByIndex(0);
+        }
+    }, [notifications]);
+
+    const removeNotifByIndex = (index: any) => {
         const newNotif = [...notifications];
         newNotif.splice(index, 1);
         setNotifications(newNotif);
     }
+
+    const removeNotifById = (index: any) => {
+        const newNotif = notifications.filter((notif: any) => notif.id !== index);
+        setNotifications(newNotif);
+    }
+
+    // console.log(notifications)
 
     return (
         <Provider store={store}>
@@ -161,7 +179,10 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                 <div className="w-full h-full flex flex-col-reverse justify-end gap-y-3">
 
                     {notifications?.map((notif: any, index: any) => (
-                        <div key={`notif-${index}`} className="panel px-3 py-2">
+                        <Link
+                            href="#"
+                            key={`notif-${index}`}
+                            className="panel px-3 py-2 cursor-pointer hover:bg-slate-50">
                             <div className="flex items-center justify-between">
                                 <div className="">
                                     <div className="text-sm font-semibold dark:text-white">
@@ -173,13 +194,13 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                                 </div>
                                 <div
                                     onClick={() => {
-                                        removeNotif(index)
+                                        removeNotifById(notif?.id)
                                     }}
                                     className="cursor-pointer dark:text-white hover:text-danger dark:hover:text-danger">
                                     <IconX className="w-5 h-5" />
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
 
                 </div>

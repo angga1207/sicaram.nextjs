@@ -23,6 +23,7 @@ import { faBell, faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-ic
 
 import { updateUserWithPhoto } from '@/apis/storedata';
 import { fetchUserMe, fetchLogs, fetchNotif, markNotifAsRead, postSavePassword } from '@/apis/personal_profile';
+import { faApple, faBrave, faChrome, faFirefox, faOpera, faSafari, faUbuntu, faWindows } from '@fortawesome/free-brands-svg-icons';
 
 const showAlert = async (icon: any, text: string) => {
     const toast = Swal.mixin({
@@ -77,9 +78,9 @@ const Profile = () => {
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     const [data, setData] = useState<any>({});
     const [userLogs, setUserLogs] = useState<any>([]);
-    const [userLogsPage, setUserLogsPage] = useState<number>(1);
+    const [userLogsPage, setUserLogsPage] = useState<number>(0);
     const [notifications, setNotifications] = useState<any>([]);
-    const [notificationPage, setNotificationPage] = useState<number>(1);
+    const [notificationPage, setNotificationPage] = useState<number>(0);
 
     const [tab, setTab] = useState<number>(1);
 
@@ -89,6 +90,8 @@ const Profile = () => {
                 setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
             }
         }
+        setUserLogsPage(1);
+        setNotificationPage(1);
     }, []);
 
     useEffect(() => {
@@ -703,7 +706,82 @@ const Profile = () => {
                                                 <>
                                                     <tr className='bg-slate-100 dark:bg-slate-700'>
                                                         <td colSpan={3}>
-                                                            {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                                            <div className="flex items-center gap-2">
+                                                                <div>
+                                                                    {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                                                </div>
+
+                                                                {/* display OS from item?.user_agent */}
+                                                                <div className='flex items-center gap-2'>
+                                                                    <div>
+                                                                        |
+                                                                    </div>
+                                                                    {item?.device == 'Macintosh' && (
+                                                                        <Tippy content="Macintosh">
+                                                                            <FontAwesomeIcon icon={faApple} className="w-4.5 h-4.5 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {item?.device == 'Windows' && (
+                                                                        <Tippy content="Windows">
+                                                                            <FontAwesomeIcon icon={faWindows} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {item?.device == 'Linux' && (
+                                                                        <Tippy content="Linux">
+                                                                            <FontAwesomeIcon icon={faUbuntu} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {!['Macintosh', 'Windows', 'Linux'].includes(item?.device) && (
+                                                                        <>
+                                                                            {item?.device}
+                                                                        </>
+                                                                    )}
+                                                                </div>
+
+                                                                <div className='flex items-center gap-2'>
+                                                                    <div>
+                                                                        |
+                                                                    </div>
+                                                                    {item?.browser == 'Chrome' && (
+                                                                        <Tippy content="Chrome">
+                                                                            <FontAwesomeIcon icon={faChrome} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {item?.browser == 'Firefox' && (
+                                                                        <Tippy content="Firefox">
+                                                                            <FontAwesomeIcon icon={faFirefox} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {item?.browser == 'Safari' && (
+                                                                        <Tippy content="Safari">
+                                                                            <FontAwesomeIcon icon={faSafari} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {item?.browser == 'Opera' && (
+                                                                        <Tippy content="Opera">
+                                                                            <FontAwesomeIcon icon={faOpera} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+                                                                    {item?.browser == 'Brave' && (
+                                                                        <Tippy content="Brave">
+                                                                            <FontAwesomeIcon icon={faBrave} className="w-4 h-4 shrink-0" />
+                                                                        </Tippy>
+                                                                    )}
+
+
+                                                                    {!['Chrome', 'Firefox', 'Safari', 'Opera', 'Brave'].includes(item?.browser) && (
+                                                                        <>
+                                                                            {item?.browser}
+                                                                        </>
+                                                                    )}
+                                                                </div>
+
+                                                                <div>
+                                                                    | &nbsp;
+                                                                    {item?.ip_address}
+                                                                </div>
+
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     {item?.logs?.map((log: any, index: number) => (

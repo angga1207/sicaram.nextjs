@@ -949,7 +949,7 @@ const Index = () => {
                             <div className="">
                                 Bulan &nbsp;
                                 <span className='font-semibold'>
-                                    {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
+                                    {new Date(year, month - 1).toLocaleString('id-ID', { month: 'long' })}
                                 </span>
                                 &nbsp; Tahun &nbsp;
                                 <span className='font-semibold'>

@@ -18,6 +18,8 @@ import { setCookie } from 'cookies-next';
 import ReCAPTCHA from "react-google-recaptcha";
 
 import Swal from 'sweetalert2';
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
+import LoadingSicaram from '@/components/LoadingSicaram';
 
 const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
     Swal.fire({
@@ -214,24 +216,33 @@ const Login = () => {
     const { t, i18n } = useTranslation();
 
     return (
-        <div>
+        <div className=''>
             <div className="absolute inset-0">
-                <img src="/assets/images/auth/bg-gradient.png" alt="image" className="h-full w-full object-cover" />
+                {/* <img src="/assets/images/auth/bg-gradient.png" alt="image" className="h-full w-full object-cover" /> */}
+                <img src="/assets/images/bg-login.png" alt="image" className="h-full w-full object-cover" />
             </div>
-            <div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
+            <div className="relative flex h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
                 <img src="/assets/images/auth/coming-soon-object1.png" alt="image" className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2" />
                 <img src="/assets/images/auth/coming-soon-object2.png" alt="image" className="absolute left-24 top-0 h-40 md:left-[30%]" />
                 <img src="/assets/images/auth/coming-soon-object3.png" alt="image" className="absolute right-0 top-0 h-[300px]" />
                 <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
-                <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
-                    <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(21,84,121,1)_0%,rgba(1,162,233,1)_100%)] p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
+                <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
+                    <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(23,121,21,1)_0%,rgba(1,233,132,1)_100%)] bg-opacity-30 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
                         <div className="absolute inset-y-0 w-8 from-primary/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
                         <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
                             <Link href="/" className="ms-10 block w-48 lg:w-72">
-                                <img src="/assets/images/logo-caram.png" alt="Logo" className="w-full" />
+                                <img src="/assets/images/logo-oi.png" alt="Logo" className="w-full h-40 object-contain" />
                             </Link>
                             <div className="mt-24 hidden w-full max-w-[430px] lg:block">
-                                <img src="/assets/images/auth/login.svg" alt="Cover Image" className="w-full" />
+                                {/* <img src="/assets/images/auth/login.svg" alt="Cover Image" className="w-full" /> */}
+                                <Player
+                                    autoplay
+                                    loop
+                                    className='w-full'
+                                    src="/lottie/animation-login-2.json"
+                                    style={{ height: '450px', width: '450px' }}
+                                >
+                                </Player>
                             </div>
                         </div>
                     </div>
@@ -242,84 +253,91 @@ const Login = () => {
                             </Link>
                         </div>
                         <div className="w-full max-w-[440px] lg:mt-16">
-                            <div className="mb-10">
-                                <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
-                                    Masuk
+                            <div className="mb-0">
+                                <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
+                            </div>
+                            <div className="mb-5 text-center">
+                                <h1 className="text-lg font-extrabold uppercase !leading-snug text-blue-600 mb-3">
+                                    Selamat Datang di Aplikasi SiCaram Kabupaten Ogan Ilir
                                 </h1>
-                                <p className="text-base font-bold leading-normal text-white-dark">
-                                    Ketikan username dan password Anda untuk masuk ke aplikasi
+                                <p className="text-sm font-bold leading-normal text-white-dark">
+                                    Ketikan username dan password Anda
+                                    <br />
+                                    untuk masuk ke aplikasi
                                 </p>
                             </div>
                             <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
-                                <div>
-                                    <label htmlFor="Username">
-                                        Username
-                                    </label>
-                                    <div className="relative text-white-dark">
-                                        <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark"
-                                        // value={'developer'}
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconUser fill={true} />
-                                        </span>
-                                    </div>
-                                    <div id="error-username" className='validation text-red-500 text-sm'>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="Password">Password</label>
-                                    <div className="relative text-white-dark">
-                                        <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 placeholder:text-white-dark"
-                                            type={showPassword ? 'text' : 'password'}
-                                            // value={'oganilir123'}
-                                            onChange={(e) => {
-                                                setShowPassword(false);
-                                            }}
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconLockDots fill={true} />
-                                        </span>
-
-                                        <div className="absolute end-4 top-1/2 -translate-y-1/2">
-                                            <button type="button" className="btn btn-outline-primary p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
-                                                <IconEye />
-                                            </button>
+                                {submitLoading == false ? (
+                                    <>
+                                        <div>
+                                            <label htmlFor="Username">
+                                                Username
+                                            </label>
+                                            <div className="relative text-white-dark">
+                                                <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark"
+                                                // value={'developer'}
+                                                />
+                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                    <IconUser fill={true} />
+                                                </span>
+                                            </div>
+                                            <div id="error-username" className='validation text-red-500 text-sm'>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div id="error-password" className='validation text-red-500 text-sm'>
-                                    </div>
-                                </div>
-                                <div className='hidden'>
-                                    <label className="flex cursor-pointer items-center">
-                                        <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
-                                        <span className="text-white-dark">
-                                            Tetap Login
-                                        </span>
-                                    </label>
-                                </div>
-                                <div className='relative'>
-                                    <ReCAPTCHA
-                                        ref={recaptchaRef}
-                                        // size="invisible"
-                                        // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-                                        sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
-                                        onChange={onReCAPTCHAChange}
-                                    />
-                                    <div id="errorCaptcha" className='validation text-red-500 text-sm'>
-                                    </div>
-                                </div>
+                                        <div>
+                                            <label htmlFor="Password">Password</label>
+                                            <div className="relative text-white-dark">
+                                                <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 placeholder:text-white-dark"
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    // value={'oganilir123'}
+                                                    onChange={(e) => {
+                                                        setShowPassword(false);
+                                                    }}
+                                                />
+                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                    <IconLockDots fill={true} />
+                                                </span>
+
+                                                <div className="absolute end-4 top-1/2 -translate-y-1/2">
+                                                    <button type="button" className="btn btn-outline-success p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
+                                                        <IconEye />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="error-password" className='validation text-red-500 text-sm'>
+                                            </div>
+                                        </div>
+                                        <div className='relative'>
+                                            <ReCAPTCHA
+                                                className='flex items-center justify-center'
+                                                ref={recaptchaRef}
+                                                sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
+                                                onChange={onReCAPTCHAChange}
+                                            />
+                                            <div id="errorCaptcha" className='validation text-red-500 text-sm'>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <LoadingSicaram />
+                                    </>
+                                )}
+
                                 {submitLoading ? (
                                     <>
-                                        <button type="button" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                        <button type="button" className="btn bg-gradient-to-r from-green-500 from-40% via-lime-500 via-75% to-lime-600 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
                                             <div className="flex items-center justify-center">
                                                 <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
-                                                <span className="ltr:ml-3 rtl:mr-3">Loading...</span>
+                                                <span className="ltr:ml-3 rtl:mr-3">
+                                                    Loading...
+                                                </span>
                                             </div>
                                         </button>
                                     </>
                                 ) : (
                                     <>
-                                        <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                        <button type="submit" className="btn bg-gradient-to-r from-green-500 from-10% via-lime-500 via-30% to-emerald-500 to-90% hover:from-40% hover:via-75% hover:to-lime-600 hover:to-100% transition duration-900 border-0 text-white !mt-6 w-full uppercase cursor-pointer">
                                             Masuk
                                         </button>
                                     </>
