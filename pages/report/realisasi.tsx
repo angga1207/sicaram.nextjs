@@ -60,8 +60,8 @@ const Index = () => {
     const [triwulan, setTriwulan] = useState<any>(null);
     const [arrTujuanSasaran, setArrTujuanSasaran] = useState<any>([]);
     const [showTujuanSasaran, setShowTujuanSasaran] = useState<boolean>(false);
-    const [showProgram, setShowProgram] = useState<any>(8);
-    const [showKegiatan, setShowKegiatan] = useState<any>(0);
+    const [showProgram, setShowProgram] = useState<any>(null);
+    const [showKegiatan, setShowKegiatan] = useState<any>(null);
     const [showSubKegiatan, setShowSubKegiatan] = useState<any>(null);
 
     const [triwulans, setTriwulans] = useState<any>([
