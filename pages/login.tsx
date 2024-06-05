@@ -219,16 +219,29 @@ const Login = () => {
         <div className=''>
             <div className="absolute inset-0">
                 {/* <img src="/assets/images/auth/bg-gradient.png" alt="image" className="h-full w-full object-cover" /> */}
-                <img src="/assets/images/bg-login.png" alt="image" className="h-full w-full object-cover" />
+                {/* <img src="/assets/images/bg-login.png" alt="image" className="h-full w-full object-cover" /> */}
+                {/* video background */}
+                <video
+                autoPlay
+                muted
+                loop
+                // reverse
+                //
+                playsInline
+                className="h-full w-full object-cover">
+                    <source src="/assets/videos/bg-login.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
             </div>
             <div className="relative flex h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
-                <img src="/assets/images/auth/coming-soon-object1.png" alt="image" className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2" />
+                {/* <img src="/assets/images/auth/coming-soon-object1.png" alt="image" className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2" />
                 <img src="/assets/images/auth/coming-soon-object2.png" alt="image" className="absolute left-24 top-0 h-40 md:left-[30%]" />
                 <img src="/assets/images/auth/coming-soon-object3.png" alt="image" className="absolute right-0 top-0 h-[300px]" />
-                <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
-                <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
-                    <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(23,121,21,1)_0%,rgba(1,233,132,1)_100%)] bg-opacity-30 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
-                        <div className="absolute inset-y-0 w-8 from-primary/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
+                <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" /> */}
+                <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-sm dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
+                    {/* <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(23,121,21,1)_0%,rgba(1,233,132,1)_100%)] bg-opacity-30 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]"> */}
+                    <div className="relative hidden w-full items-center justify-center bg-opacity-100 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
+                        <div className="absolute inset-y-0 w-8 from-dark/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
                         <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
                             <div className="flex items-center">
                                 <Link href="/" className="ms-10 block w-full h-40">
@@ -264,10 +277,10 @@ const Login = () => {
                                 <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
                             </div>
                             <div className="mb-5 text-center">
-                                <h1 className="text-lg font-extrabold uppercase !leading-snug text-blue-600 mb-3">
+                                <h1 className="text-lg font-extrabold uppercase !leading-snug text-slate-900 dark:text-white mb-3">
                                     Selamat Datang di Aplikasi SiCaram Kabupaten Ogan Ilir
                                 </h1>
-                                <p className="text-sm font-bold leading-normal text-white-dark">
+                                <p className="text-sm font-bold leading-normal text-white">
                                     Ketikan username dan password Anda
                                     <br />
                                     untuk masuk ke aplikasi
@@ -333,7 +346,7 @@ const Login = () => {
 
                                 {submitLoading ? (
                                     <>
-                                        <button type="button" className="btn bg-gradient-to-r from-green-500 from-40% via-lime-500 via-75% to-lime-600 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
+                                        <button type="button" className="btn bg-gradient-to-r from-slate-300 from-40% via-slate-500 via-75% to-slate-300 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
                                             <div className="flex items-center justify-center">
                                                 <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
                                                 <span className="ltr:ml-3 rtl:mr-3">
@@ -344,14 +357,14 @@ const Login = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <button type="submit" className="btn bg-gradient-to-r from-green-500 from-10% via-lime-500 via-30% to-emerald-500 to-90% hover:from-40% hover:via-75% hover:to-lime-600 hover:to-100% transition duration-900 border-0 text-white !mt-6 w-full uppercase cursor-pointer">
+                                        <button type="submit" className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
                                             Masuk
                                         </button>
                                     </>
                                 )}
                             </form>
                         </div>
-                        <p className="absolute bottom-6 w-full text-center dark:text-white">
+                        <p className="absolute bottom-6 w-full text-center text-white">
                             © {new Date().getFullYear() == 2022 ? 2022 : '2022 - ' + new Date().getFullYear()}.
                             SiCaram Kabupaten Ogan Ilir.
                         </p>
