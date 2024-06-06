@@ -218,15 +218,10 @@ const Login = () => {
     return (
         <div className=''>
             <div className="absolute inset-0">
-                {/* <img src="/assets/images/auth/bg-gradient.png" alt="image" className="h-full w-full object-cover" /> */}
-                {/* <img src="/assets/images/bg-login.png" alt="image" className="h-full w-full object-cover" /> */}
-                {/* video background */}
                 <video
                     autoPlay
                     muted
                     loop
-                    // reverse
-                    //
                     playsInline
                     className="h-full w-full object-cover">
                     <source src="/assets/videos/bg-login.mp4" type="video/mp4" />
@@ -234,12 +229,7 @@ const Login = () => {
                 </video>
             </div>
             <div className="relative flex h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
-                {/* <img src="/assets/images/auth/coming-soon-object1.png" alt="image" className="absolute left-0 top-1/2 h-full max-h-[893px] -translate-y-1/2" />
-                <img src="/assets/images/auth/coming-soon-object2.png" alt="image" className="absolute left-24 top-0 h-40 md:left-[30%]" />
-                <img src="/assets/images/auth/coming-soon-object3.png" alt="image" className="absolute right-0 top-0 h-[300px]" />
-                <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" /> */}
                 <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-sm dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
-                    {/* <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(23,121,21,1)_0%,rgba(1,233,132,1)_100%)] bg-opacity-30 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]"> */}
                     <div className="relative hidden w-full items-center justify-center bg-opacity-100 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
                         <div className="absolute inset-y-0 w-8 from-dark/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
                         <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
@@ -266,109 +256,96 @@ const Login = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="relative flex w-full flex-col items-center justify-center gap-6 px-4 pb-16 pt-6 sm:px-6 lg:max-w-[667px]">
-                        <div className="flex w-full max-w-[440px] items-center gap-2 lg:absolute lg:end-6 lg:top-6 lg:max-w-full">
-                            <Link href="/" className="block w-8 lg:hidden">
-                                <img src="/assets/images/logo.svg" alt="Logo" className="mx-auto w-10" />
-                            </Link>
-                        </div>
-                        <div className="w-full max-w-[440px] lg:mt-16">
-                            <div className="mb-0">
-                                <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
-                            </div>
+                    <div className="relative flex w-full flex-col items-center justify-between gap-6 px-4 pb-16 pt-16 sm:px-6 lg:max-w-[667px]">
+                        <div className="mb-0">
+                            <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
                             <div className="mb-2 text-center">
-                                {/* <h1 className="text-lg font-extrabold uppercase !leading-snug text-slate-900 dark:text-white mb-3">
-                                    Selamat Datang di Aplikasi SiCaram Kabupaten Ogan Ilir
-                                </h1> */}
                                 <h1 className="text-base font-bold !leading-snug text-white mb-3">
                                     <span className='text-cyan-300'>S</span>istem <span className='text-cyan-300'>I</span>nformasi <span className='text-cyan-300'>CA</span>paian <span className='text-cyan-300'>R</span>ealisasi Pe<span className='text-cyan-300'>M</span>bangunan
                                 </h1>
-                                {/* <p className="text-xs font-bold leading-normal text-white">
-                                    Masukkan username dan password Anda
-                                </p> */}
                             </div>
-                            <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
-                                {submitLoading == false ? (
-                                    <>
-                                        <div>
-                                            <label className='text-white' htmlFor="Username">
-                                                Username
-                                            </label>
-                                            <div className="relative text-white-dark">
-                                                <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 !bg-transparent text-white outline-white ring-0 focus:outline-white focus:ring-0 focus:border-white placeholder:text-white autofill:bg-transparent autofill:ring-0 autofill:border-white autofill:text-white"
-                                                    autoFocus
-                                                    autoComplete={'new-'+Math.random().toString(36).substring(7)}
-                                                // value={'developer'}
-                                                />
-                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                                    <IconUser fill={true} className='text-white' />
-                                                </span>
-                                            </div>
-                                            <div id="error-username" className='validation text-red-500 text-sm'>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className='text-white' htmlFor="Password">Password</label>
-                                            <div className="relative text-white-dark">
-                                                <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 !bg-transparent text-white outline-white ring-0 focus:outline-white focus:ring-0 focus:border-white placeholder:text-white"
-                                                    type={showPassword ? 'text' : 'password'}
-                                                    // value={'oganilir123'}
-                                                    autoComplete={'new-'+Math.random().toString(36).substring(7)}
-                                                    onChange={(e) => {
-                                                        setShowPassword(false);
-                                                    }}
-                                                />
-                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                                    <IconLockDots fill={true} className='text-white' />
-                                                </span>
-
-                                                <div className="absolute end-4 top-1/2 -translate-y-1/2">
-                                                    <button type="button" className="btn btn-outline-dark p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
-                                                        <IconEye />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div id="error-password" className='validation text-red-500 text-sm'>
-                                            </div>
-                                        </div>
-                                        <div className='relative'>
-                                            <ReCAPTCHA
-                                                className='flex items-center justify-center'
-                                                ref={recaptchaRef}
-                                                sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
-                                                onChange={onReCAPTCHAChange}
-                                            />
-                                            <div id="errorCaptcha" className='validation text-red-500 text-sm'>
-                                            </div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <LoadingSicaram />
-                                    </>
-                                )}
-
-                                {submitLoading ? (
-                                    <>
-                                        <button type="button" className="btn bg-gradient-to-r from-slate-300 from-40% via-slate-500 via-75% to-slate-300 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
-                                            <div className="flex items-center justify-center">
-                                                <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
-                                                <span className="ltr:ml-3 rtl:mr-3">
-                                                    Loading...
-                                                </span>
-                                            </div>
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button type="submit" className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
-                                            Masuk
-                                        </button>
-                                    </>
-                                )}
-                            </form>
                         </div>
-                        <p className="absolute bottom-6 w-full text-center text-white">
+                        <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
+                            {submitLoading == false ? (
+                                <>
+                                    <div>
+                                        <label className='text-white' htmlFor="Username">
+                                            Username
+                                        </label>
+                                        <div className="relative text-white-dark">
+                                            <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 !bg-transparent text-white outline-white ring-0 focus:outline-white focus:ring-0 focus:border-white placeholder:text-white autofill:bg-transparent autofill:ring-0 autofill:border-white autofill:text-white"
+                                                autoFocus
+                                                autoComplete={'new-' + Math.random().toString(36).substring(7)}
+                                            // value={'developer'}
+                                            />
+                                            <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                <IconUser fill={true} className='text-white' />
+                                            </span>
+                                        </div>
+                                        <div id="error-username" className='validation text-red-500 text-sm'>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className='text-white' htmlFor="Password">Password</label>
+                                        <div className="relative text-white-dark">
+                                            <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 !bg-transparent text-white outline-white ring-0 focus:outline-white focus:ring-0 focus:border-white placeholder:text-white"
+                                                type={showPassword ? 'text' : 'password'}
+                                                // value={'oganilir123'}
+                                                autoComplete={'new-' + Math.random().toString(36).substring(7)}
+                                                onChange={(e) => {
+                                                    setShowPassword(false);
+                                                }}
+                                            />
+                                            <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                <IconLockDots fill={true} className='text-white' />
+                                            </span>
+
+                                            <div className="absolute end-4 top-1/2 -translate-y-1/2">
+                                                <button type="button" className="btn btn-outline-dark p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
+                                                    <IconEye />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="error-password" className='validation text-red-500 text-sm'>
+                                        </div>
+                                    </div>
+                                    <div className='relative'>
+                                        <ReCAPTCHA
+                                            className='flex items-center justify-center'
+                                            ref={recaptchaRef}
+                                            sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
+                                            onChange={onReCAPTCHAChange}
+                                        />
+                                        <div id="errorCaptcha" className='validation text-red-500 text-sm'>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <LoadingSicaram />
+                                </>
+                            )}
+
+                            {submitLoading ? (
+                                <>
+                                    <button type="button" className="btn bg-gradient-to-r from-slate-300 from-40% via-slate-500 via-75% to-slate-300 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
+                                        <div className="flex items-center justify-center">
+                                            <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
+                                            <span className="ltr:ml-3 rtl:mr-3">
+                                                Loading...
+                                            </span>
+                                        </div>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button type="submit" className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
+                                        Masuk
+                                    </button>
+                                </>
+                            )}
+                        </form>
+                        <p className="w-full text-center text-white">
                             © {new Date().getFullYear() == 2022 ? 2022 : '2022 - ' + new Date().getFullYear()}.
                             SiCaram Kabupaten Ogan Ilir | Hak Cipta Diskominfo Ogan Ilir.
                         </p>
