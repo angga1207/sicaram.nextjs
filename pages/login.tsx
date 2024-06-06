@@ -222,13 +222,13 @@ const Login = () => {
                 {/* <img src="/assets/images/bg-login.png" alt="image" className="h-full w-full object-cover" /> */}
                 {/* video background */}
                 <video
-                autoPlay
-                muted
-                loop
-                // reverse
-                //
-                playsInline
-                className="h-full w-full object-cover">
+                    autoPlay
+                    muted
+                    loop
+                    // reverse
+                    //
+                    playsInline
+                    className="h-full w-full object-cover">
                     <source src="/assets/videos/bg-login.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
@@ -276,50 +276,54 @@ const Login = () => {
                             <div className="mb-0">
                                 <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
                             </div>
-                            <div className="mb-5 text-center">
-                                <h1 className="text-lg font-extrabold uppercase !leading-snug text-slate-900 dark:text-white mb-3">
+                            <div className="mb-2 text-center">
+                                {/* <h1 className="text-lg font-extrabold uppercase !leading-snug text-slate-900 dark:text-white mb-3">
                                     Selamat Datang di Aplikasi SiCaram Kabupaten Ogan Ilir
+                                </h1> */}
+                                <h1 className="text-base font-bold !leading-snug text-white mb-3">
+                                    <span className='text-cyan-300'>S</span>istem <span className='text-cyan-300'>I</span>nformasi <span className='text-cyan-300'>CA</span>paian <span className='text-cyan-300'>R</span>ealisasi Pe<span className='text-cyan-300'>M</span>bangunan
                                 </h1>
-                                <p className="text-sm font-bold leading-normal text-white">
-                                    Ketikan username dan password Anda
-                                    <br />
-                                    untuk masuk ke aplikasi
-                                </p>
+                                {/* <p className="text-xs font-bold leading-normal text-white">
+                                    Masukkan username dan password Anda
+                                </p> */}
                             </div>
                             <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
                                 {submitLoading == false ? (
                                     <>
                                         <div>
-                                            <label htmlFor="Username">
+                                            <label className='text-white' htmlFor="Username">
                                                 Username
                                             </label>
                                             <div className="relative text-white-dark">
-                                                <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 placeholder:text-white-dark"
+                                                <input id="Username" type="text" placeholder="Masukkan Username..." className="form-input ps-10 !bg-transparent text-white outline-white ring-0 focus:outline-white focus:ring-0 focus:border-white placeholder:text-white autofill:bg-transparent autofill:ring-0 autofill:border-white autofill:text-white"
+                                                    autoFocus
+                                                    autoComplete={'new-'+Math.random().toString(36).substring(7)}
                                                 // value={'developer'}
                                                 />
                                                 <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                                    <IconUser fill={true} />
+                                                    <IconUser fill={true} className='text-white' />
                                                 </span>
                                             </div>
                                             <div id="error-username" className='validation text-red-500 text-sm'>
                                             </div>
                                         </div>
                                         <div>
-                                            <label htmlFor="Password">Password</label>
+                                            <label className='text-white' htmlFor="Password">Password</label>
                                             <div className="relative text-white-dark">
-                                                <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 placeholder:text-white-dark"
+                                                <input id="Password" placeholder="Masukkan Password..." className="form-input ps-10 !bg-transparent text-white outline-white ring-0 focus:outline-white focus:ring-0 focus:border-white placeholder:text-white"
                                                     type={showPassword ? 'text' : 'password'}
                                                     // value={'oganilir123'}
+                                                    autoComplete={'new-'+Math.random().toString(36).substring(7)}
                                                     onChange={(e) => {
                                                         setShowPassword(false);
                                                     }}
                                                 />
                                                 <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                                    <IconLockDots fill={true} />
+                                                    <IconLockDots fill={true} className='text-white' />
                                                 </span>
 
                                                 <div className="absolute end-4 top-1/2 -translate-y-1/2">
-                                                    <button type="button" className="btn btn-outline-success p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
+                                                    <button type="button" className="btn btn-outline-dark p-2 rounded-full" onClick={() => setShowPassword(!showPassword)}>
                                                         <IconEye />
                                                     </button>
                                                 </div>
@@ -366,7 +370,7 @@ const Login = () => {
                         </div>
                         <p className="absolute bottom-6 w-full text-center text-white">
                             © {new Date().getFullYear() == 2022 ? 2022 : '2022 - ' + new Date().getFullYear()}.
-                            SiCaram Kabupaten Ogan Ilir.
+                            SiCaram Kabupaten Ogan Ilir | Hak Cipta Diskominfo Ogan Ilir.
                         </p>
                     </div>
                 </div>
