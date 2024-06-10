@@ -109,7 +109,7 @@ const Index = () => {
     ]);
 
     const [month, setMonth] = useState<any>(null);
-    const [instance, setInstance] = useState<any>((router.query.instance ?? null) ?? CurrentUser?.instance_id);
+    const [instance, setInstance] = useState<any>(null);
     const [instances, setInstances] = useState<any>([]);
     const [searchInstance, setSearchInstance] = useState('');
     const [satuans, setSatuans] = useState<any>([]);
@@ -122,31 +122,17 @@ const Index = () => {
     const [uploadMessages, setUploadMessages] = useState<any>(null);
 
     useEffect(() => {
-        setInstance((router.query.instance ?? null) ?? CurrentUser?.instance_id);
-    }, [CurrentUser, router.query.instance]);
+        if ([9].includes(CurrentUser?.role_id)) {
+            setInstance(CurrentUser?.instance_id);
+        }
+    }, [CurrentUser]);
 
-    // useEffect(() => {
-    //     if (!router.query.year) {
-    //         if (instance) {
-    //             // prevent default instance
-    //             router.push({
-    //                 pathname: '/realisasi/kinerja',
-    //                 query: {
-    //                     year: new Date().getFullYear(),
-    //                     instance: instance,
-    //                 },
-    //             });
-    //         } else {
-    //             router.push({
-    //                 pathname: '/realisasi/kinerja',
-    //                 query: {
-    //                     year: new Date().getFullYear(),
-    //                 },
-    //             });
-    //         }
-    //     }
-    //     setYear(router.query.year ?? new Date().getFullYear());
-    // }, [router.query.year]);
+    useEffect(() => {
+        setYear(router.query.year);
+        setInstance(router.query.instance);
+        setYear(router.query.year);
+        setMonth(router.query.month);
+    }, [router.query]);
 
     useEffect(() => {
         fetchPeriodes().then((data) => {
@@ -185,6 +171,11 @@ const Index = () => {
             fetchProgramsSubKegiatan(instance, year).then((data) => {
                 setDatas(data.data);
             });
+            if (router.query) {
+                router.query.year = year;
+                router.query.instance = instance;
+                router.push(router);
+            }
         }
     }, [instance, year]);
 
@@ -199,6 +190,13 @@ const Index = () => {
         setShowPrograms([]);
         setShowKegiatans([]);
         setShowSubKegiatans([]);
+
+        if (router.query) {
+            router.query.year = '';
+            router.query.month = '';
+            router.query.instance = '';
+            router.push(router);
+        }
     }
 
     const togglePrograms = (id: any) => {
@@ -511,6 +509,7 @@ const Index = () => {
                     <div className="font-semibold text-lg mb-4">
                         Program
                     </div>
+
                     <div className="grid grid-cols-12 gap-4">
                         {datas?.map((program: any, index: number) => (
                             <>
@@ -744,6 +743,8 @@ const Index = () => {
                                                                                                         className='form-select rw-[130px] border-indigo-400 bg-transparent font-normal mr-2'
                                                                                                         onChange={(e) => {
                                                                                                             setMonth(e.target.value);
+                                                                                                            router.query.month = e.target.value;
+                                                                                                            router.push(router);
                                                                                                         }}
                                                                                                         value={month}>
                                                                                                         <option value="" >Pilih Bulan</option>
@@ -825,328 +826,12 @@ const Index = () => {
                         ))}
                     </div>
 
-
-
-
                     {datas?.length == 0 && (
                         <div className="w-full h-[calc(100vh-300px)] flex flex-col items-center justify-center">
                             <div className="dots-loading text-xl">Memuat Program {instances?.[instance - 1]?.alias ?? '\u00A0'}...</div>
                         </div>
                     )}
                 </>
-
-                // <div className="space-y-2" ref={ref}>
-                //     {datas?.map((program: any, index: number) => {
-                //         return (
-                //             <div
-                //                 className={showPrograms.includes(program?.id)
-                //                     ? 'pb-3'
-                //                     : ''}>
-                //                 <div
-                //                     onClick={(e) => {
-                //                         e.preventDefault();
-                //                         togglePrograms(program.id);
-                //                     }}
-                //                     className={showPrograms.includes(program?.id)
-                //                         ? 'panel cursor-pointer bg-blue-100 dark:bg-blue-900 mb-2 font-semibold'
-                //                         : 'panel cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600'}>
-                //                     <div className="flex gap-x-4">
-                //                         <div className="w-[70px] text-right">
-                //                             {program?.fullcode}
-                //                         </div>
-                //                         <div className="grow">
-                //                             {program?.name}
-                //                         </div>
-                //                         <div className="flex-none w-[30px]">
-                //                             <IconCaretDown className={showPrograms.includes(program?.id)
-                //                                 ? 'w-4 h-4 transform rotate-0 transition duration-500'
-                //                                 : 'w-4 h-4 transform rotate-180 transition duration-500'} />
-                //                         </div>
-                //                     </div>
-                //                 </div>
-
-                //                 {showPrograms.includes(program?.id) && (
-
-                //                     <div className="space-y-2">
-                //                         {program?.kegiatans?.map((kegiatan: any, index: number) => {
-                //                             return (
-                //                                 <div
-                //                                     className='ml-5'>
-                //                                     <div
-                //                                         onClick={(e) => {
-                //                                             e.preventDefault();
-                //                                             toggleKegiatans(kegiatan.id);
-                //                                         }}
-                //                                         className={showKegiatans.includes(kegiatan?.id)
-                //                                             ? 'panel cursor-pointer bg-blue-100 dark:bg-blue-900 mb-2 font-semibold'
-                //                                             : 'panel cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600'}>
-                //                                         <div className="flex gap-x-4">
-                //                                             <div className="w-[100px] text-right">
-                //                                                 {kegiatan?.fullcode}
-                //                                             </div>
-                //                                             <div className="">
-                //                                                 {kegiatan?.name}
-                //                                             </div>
-                //                                         </div>
-                //                                     </div>
-
-                //                                     {showKegiatans.includes(kegiatan?.id) && (
-                //                                         <div className="space-y-2">
-                //                                             {kegiatan?.sub_kegiatans?.map((subkegiatan: any, index: number) => {
-                //                                                 return (
-                //                                                     <div
-                //                                                         className='ml-5'>
-                //                                                         <div
-                //                                                             onClick={(e) => {
-                //                                                                 e.preventDefault();
-                //                                                                 toggleSubKegiatans(subkegiatan.id);
-                //                                                             }}
-                //                                                             className={showSubKegiatans.includes(subkegiatan?.id)
-                //                                                                 ? 'panel cursor-pointer bg-blue-100 dark:bg-blue-900 font-semibold  rounded-b-none'
-                //                                                                 : 'panel cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600'}>
-                //                                                             <div
-                //                                                                 className="flex gap-x-4">
-                //                                                                 <div className="w-[110px] text-right">
-                //                                                                     {subkegiatan?.fullcode}
-                //                                                                 </div>
-                //                                                                 <div className="">
-                //                                                                     {subkegiatan?.name}
-                //                                                                 </div>
-                //                                                             </div>
-                //                                                         </div>
-
-                //                                                         {showSubKegiatans.includes(subkegiatan?.id) && (
-                //                                                             <div className="mt-0 mb-5 panel p-3 pt-1 bg-blue-100 dark:bg-blue-900 rounded-t-none">
-                //                                                                 <div className="flex items-center gap-2">
-                //                                                                     <div className="text-center">
-                //                                                                         <div className="text-xs mb-1">
-                //                                                                             Target
-                //                                                                         </div>
-                //                                                                         {subkegiatan?.target_status == 'draft' && (
-                //                                                                             <span className="badge bg-primary">
-                //                                                                                 Draft
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.target_status == 'verified' && (
-                //                                                                             <span className="badge bg-success">
-                //                                                                                 Terverifikasi
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.target_status == 'return' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Dikembalikan
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.target_status == 'waiting' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Menunggu
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.target_status == 'sent' && (
-                //                                                                             <span className="badge bg-info">
-                //                                                                                 Dikirim
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.target_status == 'reject' && (
-                //                                                                             <span className="badge bg-danger">
-                //                                                                                 Ditolak
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                     </div>
-                //                                                                     <div className="text-center">
-                //                                                                         <div className="text-xs mb-1">
-                //                                                                             Renstra
-                //                                                                         </div>
-                //                                                                         {subkegiatan?.renstra_status == 'draft' && (
-                //                                                                             <span className="badge bg-primary">
-                //                                                                                 Draft
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renstra_status == 'verified' && (
-                //                                                                             <span className="badge bg-success">
-                //                                                                                 Terverifikasi
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renstra_status == 'return' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Dikembalikan
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renstra_status == 'waiting' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Menunggu
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renstra_status == 'sent' && (
-                //                                                                             <span className="badge bg-info">
-                //                                                                                 Dikirim
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renstra_status == 'reject' && (
-                //                                                                             <span className="badge bg-danger">
-                //                                                                                 Ditolak
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                     </div>
-                //                                                                     <div className="text-center">
-                //                                                                         <div className="text-xs mb-1">
-                //                                                                             Renja
-                //                                                                         </div>
-                //                                                                         {subkegiatan?.renja_status == 'draft' && (
-                //                                                                             <span className="badge bg-primary">
-                //                                                                                 Draft
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renja_status == 'verified' && (
-                //                                                                             <span className="badge bg-success">
-                //                                                                                 Terverifikasi
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renja_status == 'return' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Dikembalikan
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renja_status == 'waiting' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Menunggu
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renja_status == 'sent' && (
-                //                                                                             <span className="badge bg-info">
-                //                                                                                 Dikirim
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.renja_status == 'reject' && (
-                //                                                                             <span className="badge bg-danger">
-                //                                                                                 Ditolak
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                     </div>
-                //                                                                     <div className="text-center">
-                //                                                                         <div className="text-xs mb-1">
-                //                                                                             APBD
-                //                                                                         </div>
-                //                                                                         {subkegiatan?.apbd_status == 'draft' && (
-                //                                                                             <span className="badge bg-primary">
-                //                                                                                 Draft
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.apbd_status == 'verified' && (
-                //                                                                             <span className="badge bg-success">
-                //                                                                                 Terverifikasi
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.apbd_status == 'return' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Dikembalikan
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.apbd_status == 'waiting' && (
-                //                                                                             <span className="badge bg-warning">
-                //                                                                                 Menunggu
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.apbd_status == 'sent' && (
-                //                                                                             <span className="badge bg-info">
-                //                                                                                 Dikirim
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                         {subkegiatan?.apbd_status == 'reject' && (
-                //                                                                             <span className="badge bg-danger">
-                //                                                                                 Ditolak
-                //                                                                             </span>
-                //                                                                         )}
-                //                                                                     </div>
-                //                                                                 </div>
-                //                                                                 <div className="flex gap-2 mt-4">
-                //                                                                     <div className="text-xs font-normal mb-1">
-                //                                                                         Input Realisasi Tahun {year}
-                //                                                                     </div>
-                //                                                                 </div>
-                //                                                                 <div className="flex items-center justify-start gap-2 divide-x divide-indigo-500 overflow-x-auto pb-3 lg:pb-0">
-                //                                                                     <div className="px-0">
-                //                                                                         <select
-                //                                                                             className='form-select rw-[130px] border-indigo-400 bg-transparent font-normal mr-2'
-                //                                                                             onChange={(e) => {
-                //                                                                                 setMonth(e.target.value);
-                //                                                                             }}
-                //                                                                             value={month}>
-                //                                                                             <option value="" >Pilih Bulan</option>
-                //                                                                             {months?.map((item: any, index: number) => {
-                //                                                                                 return (
-                //                                                                                     <option
-                //                                                                                         key={'select-month-' + index}
-                //                                                                                         disabled={item?.id > new Date().getMonth() + 1}
-                //                                                                                         value={item?.id}>
-                //                                                                                         {item?.name}
-                //                                                                                     </option>
-                //                                                                                 )
-                //                                                                             })}
-                //                                                                         </select>
-                //                                                                     </div>
-                //                                                                     {(periode && year && month) && (
-                //                                                                         <div className="px-2 flex items-center gap-x-1">
-                //                                                                             {(subkegiatan.renstra_status === 'verified' && subkegiatan.renja_status === 'verified' && subkegiatan.apbd_status === 'verified') ? (
-                //                                                                                 <Link
-                //                                                                                     target='_blank'
-                //                                                                                     href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                //                                                                                     className='btn btn-secondary font-normal'>
-                //                                                                                     Input Rincian Belanja
-                //                                                                                     <IconArrowForward className='w-4 h-4 ml-2' />
-                //                                                                                 </Link>
-                //                                                                             ) : (
-                //                                                                                 <div className="flex items-center gap-2">
-                //                                                                                     {subkegiatan.renstra_status !== 'verified' && (
-                //                                                                                         <span className="badge bg-danger">
-                //                                                                                             Renstra Belum Terverifikasi
-                //                                                                                         </span>
-                //                                                                                     )}
-                //                                                                                     {subkegiatan.renja_status !== 'verified' && (
-                //                                                                                         <span className="badge bg-danger">
-                //                                                                                             Renja Belum Terverifikasi
-                //                                                                                         </span>
-                //                                                                                     )}
-                //                                                                                     {subkegiatan.apbd_status !== 'verified' && (
-                //                                                                                         <span className="badge bg-danger">
-                //                                                                                             APBD Belum Terverifikasi
-                //                                                                                         </span>
-                //                                                                                     )}
-                //                                                                                 </div>
-                //                                                                             )}
-
-                //                                                                             {subkegiatan.target_status === 'verified' && (
-                //                                                                                 <Link
-                //                                                                                     target='_blank'
-                //                                                                                     href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                //                                                                                     className='btn btn-success font-normal'>
-                //                                                                                     Input Realisasi
-                //                                                                                     <IconArrowForward className='w-4 h-4 ml-2' />
-                //                                                                                 </Link>
-                //                                                                             )}
-                //                                                                         </div>
-                //                                                                     )}
-                //                                                                 </div>
-                //                                                             </div>
-                //                                                         )
-                //                                                         }
-                //                                                     </div>
-                //                                                 )
-                //                                             })}
-                //                                         </div>
-                //                                     )
-                //                                     }
-
-                //                                 </div>
-                //                             )
-                //                         })}
-                //                     </div>
-                //                 )}
-                //             </div>
-                //         )
-                //     })}
-
-                // </div >
             )}
 
 

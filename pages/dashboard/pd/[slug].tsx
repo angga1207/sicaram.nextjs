@@ -3123,12 +3123,14 @@ const Index = () => {
                                                                         Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}
                                                                     </td>
                                                                     <td>
-                                                                        {new Date(
-                                                                            detail?.realisasi_year + '-' + detail?.realisasi_month + '-01'
-                                                                        )?.toLocaleDateString('id-ID', {
-                                                                            year: 'numeric',
-                                                                            month: 'long',
-                                                                        })}
+                                                                        <div className="!whitespace-nowrap">
+                                                                            {new Date(
+                                                                                detail?.realisasi_year + '-' + detail?.realisasi_month + '-01'
+                                                                            )?.toLocaleDateString('id-ID', {
+                                                                                year: 'numeric',
+                                                                                month: 'long',
+                                                                            })}
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                                 {detail?.rincian_belanja?.map((rincian: any, indexRincianBelanja: number) => (
@@ -3145,12 +3147,14 @@ const Index = () => {
                                                                                 Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.realisasi_anggaran)}
                                                                             </td>
                                                                             <td>
-                                                                                {new Date(
-                                                                                    rincian?.realisasi_year + '-' + rincian?.realisasi_month + '-01'
-                                                                                )?.toLocaleDateString('id-ID', {
-                                                                                    year: 'numeric',
-                                                                                    month: 'long',
-                                                                                })}
+                                                                                <div className="!whitespace-nowrap">
+                                                                                    {new Date(
+                                                                                        rincian?.realisasi_year + '-' + rincian?.realisasi_month + '-01'
+                                                                                    )?.toLocaleDateString('id-ID', {
+                                                                                        year: 'numeric',
+                                                                                        month: 'long',
+                                                                                    })}
+                                                                                </div>
                                                                             </td>
                                                                         </tr>
                                                                         {rincian?.keterangan_rincian?.map((keterangan: any, indexKeterangan: number) => (

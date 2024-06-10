@@ -252,7 +252,9 @@ const Login = () => {
                             </div>
 
                             <div className="">
-                                <img src='/assets/images/badge_1771-sicaram.png' alt="Serifikat Kemenkominfo Nomor 1771" className="w-full h-10 object-contain" />
+                                <Link href="https://pse.layanan.go.id/sealid/1771" className="block w-full h-10">
+                                    <img src='/assets/images/badge_1771-sicaram.png' alt="Serifikat Kemenkominfo Nomor 1771" className="w-full h-10 object-contain" />
+                                </Link>
                             </div>
                         </div>
                     </div>
