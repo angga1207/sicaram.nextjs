@@ -68,13 +68,8 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
         icon: icon,
         title: title,
         html: text,
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
         confirmButtonText: confirmButtonText,
         cancelButtonText: cancelButtonText,
-        padding: '2em',
-        customClass: 'sweet-alerts',
 
         // callback on confirm
     }).then((result) => {

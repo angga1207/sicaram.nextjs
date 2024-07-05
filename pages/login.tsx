@@ -91,8 +91,10 @@ const Login = () => {
         e.preventDefault();
         setSubmitLoading(true);
 
-        const elements = document.getElementsByClassName('validation');
-        while (elements.length > 0) elements[0].remove();
+        const elements = document?.getElementsByClassName('validation');
+        if (elements.length > 0) {
+            while (elements.length > 0) elements[0].remove();
+        }
 
         // document.getElementsByClassName('validation')?.innerHTML = '';
 
@@ -125,7 +127,7 @@ const Login = () => {
 
             if (json?.status === 'error validation') {
                 Object.keys(json.message).map((key: any, index: any) => {
-                    let element = document.getElementById('error-' + key);
+                    let element = document?.getElementById('error-' + key);
                     if (element) {
                         element.innerHTML = json.message[key][0];
                     }

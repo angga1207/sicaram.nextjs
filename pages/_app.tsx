@@ -97,7 +97,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     const [notifications, setNotifications] = useState<any>([]);
 
     useEffect(() => {
-
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
             const audio = new Audio('/assets/audio/notification.mp3');
             const messaging = getMessaging(firebaseApp);
@@ -134,9 +133,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
                         audio.play();
                     }
                 }
-
-                // console.log(payload);
-                // console.log(JSON.parse(payload?.data?.datas));
 
             });
             return () => {

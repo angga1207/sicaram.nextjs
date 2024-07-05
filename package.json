@@ -17,7 +17,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.7.8",
-    "@lottiefiles/react-lottie-player": "^3.5.3",
+    "@lottiefiles/react-lottie-player": "^3.5.4",
     "@next/font": "13.1.2",
     "@reduxjs/toolkit": "^1.9.1",
     "@tippyjs/react": "^4.2.6",

@@ -176,7 +176,6 @@ const Profile = () => {
                 'photoFile': file,
                 'password': dataInput.password,
                 'password_confirmation': dataInput.password_confirmation,
-
             })
         }
     }
