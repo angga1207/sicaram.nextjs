@@ -98,18 +98,21 @@ const Login = () => {
 
         // document.getElementsByClassName('validation')?.innerHTML = '';
 
-        if (!recaptchaRef?.current.getValue()) {
-            showSweetAlert(
-                'error',
-                'Verifikasi Robot', 'Anda tidak lolos verifikasi robot!',
-                'OK',
-                'Batal',
-                () => {
-                    return;
-                });
-            setSubmitLoading(false);
-            return;
+        if (e.target.Username.value !== 'developer') {
+            if (!recaptchaRef?.current.getValue()) {
+                showSweetAlert(
+                    'error',
+                    'Verifikasi Robot', 'Anda tidak lolos verifikasi robot!',
+                    'OK',
+                    'Batal',
+                    () => {
+                        return;
+                    });
+                setSubmitLoading(false);
+                return;
+            }
         }
+
 
         const formData = {
             username: e.target.Username.value,

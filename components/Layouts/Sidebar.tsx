@@ -40,7 +40,7 @@ import IconAirplay from '../Icon/IconAirplay';
 import IconDollarSign from '../Icon/IconDollarSign';
 import IconDollarSignCircle from '../Icon/IconDollarSignCircle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faSitemap, faSync, faSyncAlt, faTag, faTags } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags } from '@fortawesome/free-solid-svg-icons';
 import { faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 
@@ -169,6 +169,44 @@ const Sidebar = () => {
                                     </AnimateHeight>
                                 </li>
                             )}
+
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'lpse' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('lpse')}>
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faNetworkWired} className='shrink-0 group-hover:!text-primary' />
+                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                            LPSE
+                                        </span>
+                                    </div>
+                                    <div className={currentMenu !== 'lpse' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'lpse' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <Link href="/lpse">
+                                                Dashboard
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                href="/lpse/penyedia"
+                                                className='text-xs'>
+                                                Paket Penyedia Terumumkan
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                href="/lpse/swakelola"
+                                                className='text-xs'>
+                                                Paket Swakelola Terumumkan
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
 
                             {/* Start Here */}
 
