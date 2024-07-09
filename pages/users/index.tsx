@@ -750,29 +750,34 @@ const Index = () => {
                                                                     />
 
                                                                     {/* pick all */}
-                                                                    <div className="flex items-center gap-2 mt-2">
-                                                                        <input type="checkbox" id="all" name="all" value="all" onChange={(e) => {
-                                                                            if (e.target.checked) {
-                                                                                setDataInput({
-                                                                                    ...dataInput,
-                                                                                    instance_ids: instances.map((instance: any) => {
-                                                                                        return {
-                                                                                            value: instance.id,
-                                                                                            label: instance.name,
-                                                                                        }
-                                                                                    })
+                                                                    <div className="flex items-center justify-between gap-2 mt-2">
+                                                                        <button type="button" className="btn btn-outline-primary px-2 py-1 text-xs" onClick={() => {
+                                                                            setDataInput({
+                                                                                ...dataInput,
+                                                                                instance_ids: instances.map((instance: any) => {
+                                                                                    return {
+                                                                                        value: instance.id,
+                                                                                        label: instance.name,
+                                                                                    }
                                                                                 })
-                                                                            } else {
-                                                                                setDataInput({
-                                                                                    ...dataInput,
-                                                                                    instance_ids: []
-                                                                                })
-                                                                            }
-                                                                        }} />
-                                                                        <label htmlFor="all" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                                            })
+                                                                        }} >
                                                                             Pilih Semua
-                                                                        </label>
+                                                                        </button>
+
+                                                                        <button type="button" className="btn btn-outline-danger px-2 py-1 text-xs" onClick={() => {
+                                                                            setDataInput({
+                                                                                ...dataInput,
+                                                                                instance_ids: []
+                                                                            })
+                                                                        }}
+                                                                        >
+                                                                            Hapus Semua
+                                                                        </button>
                                                                     </div>
+
+                                                                    {/* unpick all */}
+
                                                                     <div id="error-instance_ids" className='validation-elements text-red-500 text-xs'></div>
                                                                 </>
                                                             )}
