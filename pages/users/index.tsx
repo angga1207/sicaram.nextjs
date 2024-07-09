@@ -83,20 +83,20 @@ const Index = () => {
     }, [isMounted])
 
     useEffect(() => {
-        fetchAllDataUsers(userType)
-            .then((data: any) => {
-                if (roles.length == 0) {
+        if (userType) {
+            fetchAllDataUsers(userType)
+                .then((data: any) => {
                     if (data.status == 'success') {
-                        setRoles((data.data.roles) ?? [])
+                        setRoles((data?.data?.roles) ?? [])
                     }
-                }
-                if (instances.length == 0) {
                     if (data.status == 'success') {
                         setInstances((data.data.instances) ?? [])
                     }
-                }
-            });
-    }, []);
+                });
+        }
+    }, [isMounted, userType]);
+
+    // console.log(roles)
 
     useEffect(() => {
         if (userType) {
@@ -173,6 +173,7 @@ const Index = () => {
         }
         setModalInput(true);
         setExpandPassword(true);
+        console.log(roles)
     }
 
     const getDataById = (id: string) => {
@@ -638,23 +639,21 @@ const Index = () => {
                                                                 <span className='text-red-600 mx-1'>*</span>
                                                             </label>
                                                             {(dataInput.inputType == 'edit' && dataInput.role == null) ? (
-                                                                <>
-                                                                    <div className="w-full form-input text-slate-400">
-                                                                        <div className="dots-loading">....</div>
-                                                                    </div>
-                                                                </>
+                                                                <div className="w-full form-input text-slate-400">
+                                                                    <div className="dots-loading">....</div>
+                                                                </div>
                                                             ) : (
                                                                 <>
-
-                                                                    <select className="form-select text-white-dark" value={dataInput.role} onChange={(e) => setDataInput({ ...dataInput, role: e.target.value })}>
+                                                                    <select
+                                                                        className="form-select text-white-dark"
+                                                                        value={dataInput.role}
+                                                                        onChange={(e) => setDataInput({ ...dataInput, role: e.target.value })}>
                                                                         <option hidden value="">Pilih Jenis Pengguna</option>
-                                                                        {roles.map((role: any) => {
-                                                                            return (
-                                                                                <option value={role.id}>
-                                                                                    {role.display_name}
-                                                                                </option>
-                                                                            )
-                                                                        })}
+                                                                        {roles?.map((role: any) => (
+                                                                            <option value={role.id} key={role.id}>
+                                                                                {role.display_name}
+                                                                            </option>
+                                                                        ))}
                                                                     </select>
                                                                     <div id="error-role" className='validation-elements text-red-500 text-xs'></div>
                                                                 </>

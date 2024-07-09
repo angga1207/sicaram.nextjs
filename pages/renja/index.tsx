@@ -421,7 +421,7 @@ const Index = () => {
         if (dataInput?.type == 'kegiatan') {
             saveRenjaKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
-                    showAlert('success', 'Data berhasil disimpan');
+                    showAlert('success', data.message);
                     setUnsave(false);
                     fetchRenja(periode, instance, program).then((data) => {
                         if (data.status == 'success') {
@@ -434,12 +434,15 @@ const Index = () => {
 
                     setModalInput(false);
                 }
+                if (data.status == 'error') {
+                    showAlert('error', data.message)
+                }
             });
         }
         if (dataInput?.type == 'sub-kegiatan') {
             saveRenjaSubKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
-                    showAlert('success', 'Data berhasil disimpan');
+                    showAlert('success', data.message);
                     setUnsave(false);
                     fetchRenja(periode, instance, program).then((data) => {
                         if (data.status == 'success') {
@@ -451,6 +454,9 @@ const Index = () => {
                     });
 
                     setModalInput(false);
+                }
+                if (data.status == 'error') {
+                    showAlert('error', data.message)
                 }
             });
         }

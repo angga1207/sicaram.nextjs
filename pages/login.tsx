@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import IconEye from '../components/Icon/IconEye';
 import IconUser from '../components/Icon/IconUser';
 import IconLockDots from '../components/Icon/IconLockDots';
-import { BaseUri } from '@/apis/serverConfig';
+import { BaseUri, serverCheck } from '@/apis/serverConfig';
 import axios from "axios";
 
 import React from "react";
@@ -46,6 +46,37 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
 
 const Login = () => {
 
+    const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [serverStatus, setServerStatus] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (isMounted) {
+            const res = axios.post(BaseUri() + '/bdsm', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            }).then((res) => {
+                const data = res.data;
+                if (data.status == 'success') {
+                    if (data.message == 'Server is running') {
+                        setServerStatus(true);
+                    }
+                }
+            }
+            ).catch((error) => {
+                return {
+                    status: 'error',
+                    message: error
+                }
+            });
+        }
+    }, [isMounted]);
+
     const [userToken, setUserToken] = useState<string | null>(null);
 
     useEffect(() => {
@@ -75,7 +106,19 @@ const Login = () => {
 
     const submitForm = (e: any) => {
         e.preventDefault();
-        AttempLogin(e);
+        if (serverStatus === false) {
+            showSweetAlert(
+                'error',
+                'Server Offline', 'Server tidak merespon! <br /> Silahkan untuk reload halaman?',
+                'Reload',
+                'Batal',
+                () => {
+                    window.location.reload();
+                });
+            return;
+        } else {
+            AttempLogin(e);
+        }
     };
 
     const onReCAPTCHAChange = (captchaCode: any) => {
@@ -117,7 +160,6 @@ const Login = () => {
         const formData = {
             username: e.target.Username.value,
             password: e.target.Password.value,
-            // fcm_token: 'fcm_token',
         };
         const uri = BaseUri() + '/login';
         try {
@@ -245,7 +287,6 @@ const Login = () => {
                             </div>
 
                             <div className="mt-0 hidden w-full lg:block">
-                                {/* <img src="/assets/images/auth/login.svg" alt="Cover Image" className="w-full" /> */}
                                 <Player
                                     autoplay
                                     loop
@@ -272,7 +313,9 @@ const Login = () => {
                                 </h1>
                             </div>
                         </div>
-                        <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
+                        <form
+                            className="space-y-5 dark:text-white"
+                            onSubmit={submitForm}>
                             {submitLoading == false ? (
                                 <>
                                     <div>
@@ -286,7 +329,7 @@ const Login = () => {
                                             // value={'developer'}
                                             />
                                             <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                                <IconUser fill={true} className='text-white' />
+                                                <IconUser fill={true} className='text-slate-700' />
                                             </span>
                                         </div>
                                         <div id="error-username" className='validation text-red-500 text-sm'>
@@ -304,7 +347,7 @@ const Login = () => {
                                                 }}
                                             />
                                             <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                                <IconLockDots fill={true} className='text-white' />
+                                                <IconLockDots fill={true} className='text-slate-700' />
                                             </span>
 
                                             <div className="absolute end-4 top-1/2 -translate-y-1/2">
@@ -333,22 +376,32 @@ const Login = () => {
                                 </>
                             )}
 
-                            {submitLoading ? (
+                            <div className={`${serverStatus ? 'text-green-400' : 'text-red-400'} text-center font-semibold text-lg`}>
+                                {serverStatus ? 'Server Online' : 'Server Offline'}
+                            </div>
+
+                            {serverStatus === true && (
                                 <>
-                                    <button type="button" className="btn bg-gradient-to-r from-slate-300 from-40% via-slate-500 via-75% to-slate-300 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
-                                        <div className="flex items-center justify-center">
-                                            <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
-                                            <span className="ltr:ml-3 rtl:mr-3">
-                                                Loading...
-                                            </span>
-                                        </div>
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button type="submit" className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
-                                        Masuk
-                                    </button>
+                                    {submitLoading ? (
+                                        <>
+                                            <button type="button" className="btn bg-gradient-to-r from-slate-300 from-40% via-slate-500 via-75% to-slate-300 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
+                                                <div className="flex items-center justify-center">
+                                                    <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
+                                                    <span className="ltr:ml-3 rtl:mr-3">
+                                                        Loading...
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button
+                                                type="submit"
+                                                className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
+                                                Masuk
+                                            </button>
+                                        </>
+                                    )}
                                 </>
                             )}
                         </form>

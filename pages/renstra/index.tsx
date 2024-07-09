@@ -411,7 +411,7 @@ const Index = () => {
         if (dataInput?.type == 'kegiatan') {
             saveRenstraKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
-                    showAlert('success', 'Data berhasil disimpan');
+                    showAlert('success', data.message);
                     setUnsave(false);
                     fetchRenstra(periode, instance, program).then((data) => {
                         if (data.status == 'success') {
@@ -423,13 +423,16 @@ const Index = () => {
 
                     setModalInput(false);
                 }
+                if (data.status == 'error') {
+                    showAlert('error', data.message)
+                }
             });
         }
 
         if (dataInput?.type == 'sub-kegiatan') {
             saveRenstraSubKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
-                    showAlert('success', 'Data berhasil disimpan');
+                    showAlert('success', data.message);
                     setUnsave(false);
                     fetchRenstra(periode, instance, program).then((data) => {
                         if (data.status == 'success') {
@@ -439,6 +442,9 @@ const Index = () => {
                         }
                     });
                     setModalInput(false);
+                }
+                if (data.status == 'error') {
+                    showAlert('error', data.message)
                 }
             });
         }
@@ -1390,13 +1396,13 @@ const Index = () => {
                                                                                                 </div>
                                                                                                 <div className="mt-8 text-slate-800 dark:text-slate-200 group-hover:text-slate-700 border-b py-1 border-slate-600 group-hover:border-slate-600 dark:border-slate-600">
                                                                                                     <div className="w-full">
-                                                                                                        <span className='font-semibold pl-4 underline'>
+                                                                                                        {/* <span className='font-semibold pl-4 underline'>
                                                                                                             Anggaran :
-                                                                                                        </span>
+                                                                                                        </span> */}
                                                                                                         <div className="space-y-1 mt-1 w-full pl-4">
                                                                                                             {(data?.indicators.length > 0) && (
                                                                                                                 <>
-                                                                                                                    <div className="grid sm:grid-cols-2 gap-y-4 divide-slate-300">
+                                                                                                                    {/* <div className="grid sm:grid-cols-2 gap-y-4 divide-slate-300">
 
                                                                                                                         <div className="">
                                                                                                                             <div className="text-xs">
@@ -1434,7 +1440,7 @@ const Index = () => {
                                                                                                                             </div>
                                                                                                                         </div>
 
-                                                                                                                    </div>
+                                                                                                                    </div> */}
 
                                                                                                                     <div className="mt-2 pt-2 border-t border-slate-600 group-hover:border-slate-600">
                                                                                                                         <div className="">
@@ -2025,7 +2031,7 @@ const Index = () => {
 
                                                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
 
-                                                            <div>
+                                                            {/* <div>
                                                                 <label className='text-sm text-slate-500 font-normal'>
                                                                     Anggaran Belanja Operasional
                                                                 </label>
@@ -2183,11 +2189,11 @@ const Index = () => {
                                                                         placeholder="Anggaran Belanja Transfer"
                                                                         className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-indigo-400 cursor-pointer" />
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
 
-                                                            <div className=""></div>
+                                                            {/* <div className=""></div> */}
 
-                                                            <div>
+                                                            <div className='col-span-2'>
                                                                 <label className='text-sm text-slate-800 font-normal'>
                                                                     Total Anggaran
                                                                 </label>
@@ -2203,10 +2209,24 @@ const Index = () => {
                                                                                 e.preventDefault();
                                                                             }
                                                                         }}
-                                                                        readOnly={true}
+                                                                        onChange={(e) => {
+                                                                            let value: any = e.target.value ?? 0;
+                                                                            if (value > 0) {
+                                                                                value = value.replace(/^0+/, '');
+                                                                            }
+                                                                            if (value == '') value = 0;
+                                                                            setDataInput((prev: any) => {
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    total_anggaran: value
+                                                                                }
+                                                                            });
+                                                                            setUnsave(true);
+                                                                        }}
+                                                                        // readOnly={true}
                                                                         value={dataInput?.total_anggaran ?? 0}
                                                                         placeholder="Anggaran Belanja Transfer"
-                                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none group-focus-within:border-slate-400 bg-slate-200 cursor-text" />
+                                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none cursor-text" />
                                                                 </div>
                                                             </div>
 
@@ -2257,7 +2277,9 @@ const Index = () => {
 
                                                 {saveLoading == false ? (
                                                     <>
-                                                        <button type="button" className="btn btn-success ltr:ml-4 rtl:mr-4" onClick={() => save()}>
+                                                        <button type="button"
+                                                            className="btn btn-success ltr:ml-4 rtl:mr-4"
+                                                            onClick={() => save()}>
                                                             Simpan
                                                         </button>
                                                     </>

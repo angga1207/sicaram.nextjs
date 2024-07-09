@@ -659,6 +659,9 @@ const Index = () => {
                                         <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Anggaran
                                         </th>
+                                        <th className='hidden !text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                            Realisasi Terakhir
+                                        </th>
                                         <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Realisasi
                                         </th>
@@ -737,6 +740,16 @@ const Index = () => {
                                                                     }).format(data?.pagu ?? 0)}
                                                                 </div>
 
+                                                            </td>
+
+                                                            <td className='hidden border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
+                                                                {/* Realisasi Terakhir */}
+                                                                <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                                    {new Intl.NumberFormat('id-ID', {
+                                                                        style: 'decimal',
+                                                                        minimumFractionDigits: 0,
+                                                                    }).format(data?.realisasi_anggaran ?? 0)}
+                                                                </div>
                                                             </td>
 
                                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
@@ -1184,6 +1197,15 @@ const Index = () => {
                                                                                         }).format(rincian?.pagu ?? 0)}
                                                                                     </div>
                                                                                 </td>
+                                                                                <td className='hidden border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
+                                                                                    {/* realisasi terakhir */}
+                                                                                    <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
+                                                                                        {new Intl.NumberFormat('id-ID', {
+                                                                                            style: 'decimal',
+                                                                                            minimumFractionDigits: 0,
+                                                                                        }).format(rincian?.realisasi_anggaran ?? 0)}
+                                                                                    </div>
+                                                                                </td>
                                                                                 <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
                                                                                     <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
                                                                                         {new Intl.NumberFormat('id-ID', {
@@ -1474,6 +1496,15 @@ const Index = () => {
                                                                                                         style: 'decimal',
                                                                                                         minimumFractionDigits: 0,
                                                                                                     }).format(keterangan?.pagu ?? 0)}
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4 hidden'>
+                                                                                                {/* realisasi terakhir */}
+                                                                                                <div className='text-xs font-normal whitespace-nowrap text-end px-2'>
+                                                                                                    {new Intl.NumberFormat('id-ID', {
+                                                                                                        style: 'decimal',
+                                                                                                        minimumFractionDigits: 0,
+                                                                                                    }).format(keterangan?.realisasi_anggaran_keterangan ?? 0)}
                                                                                                 </div>
                                                                                             </td>
                                                                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
