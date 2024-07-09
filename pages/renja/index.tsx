@@ -176,28 +176,28 @@ const Index = () => {
         }
     }, [instance, CurrentUser?.role_id]);
 
-    useEffect(() => {
-        const messaging = getMessaging(firebaseApp);
-        const unsubscribe = onMessage(messaging, (payload: any) => {
-            console.log(payload)
-            if (payload.data.title == 'Verifikasi Renstra Perubahan') {
-                fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
-                    if (data.status == 'success') {
-                        setDataValidating(data.data);
-                    }
-                });
+    // useEffect(() => {
+    //     const messaging = getMessaging(firebaseApp);
+    //     const unsubscribe = onMessage(messaging, (payload: any) => {
+    //         console.log(payload)
+    //         if (payload.data.title == 'Verifikasi Renstra Perubahan') {
+    //             fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
+    //                 if (data.status == 'success') {
+    //                     setDataValidating(data.data);
+    //                 }
+    //             });
 
-                fetchRenja(periode, instance, program).then((data) => {
-                    if (data.status == 'success') {
-                        setRenjas(data.data.datas);
-                        setRenstra(data.data.renstra);
-                        setRenja(data.data.renja);
-                        setRange(data.data.range);
-                    }
-                });
-            }
-        });
-    }, []);
+    //             fetchRenja(periode, instance, program).then((data) => {
+    //                 if (data.status == 'success') {
+    //                     setRenjas(data.data.datas);
+    //                     setRenstra(data.data.renstra);
+    //                     setRenja(data.data.renja);
+    //                     setRange(data.data.range);
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }, []);
 
     const goSearchProgram = (search: any) => {
         setSearchProgram(search);

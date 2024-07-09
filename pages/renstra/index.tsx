@@ -176,18 +176,18 @@ const Index = () => {
         }
     }, [instance, CurrentUser?.role_id]);
 
-    useEffect(() => {
-        const messaging = getMessaging(firebaseApp);
-        const unsubscribe = onMessage(messaging, (payload: any) => {
-            if (payload.data.title == 'Verifikasi Renstra') {
-                fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
-                    if (data.status == 'success') {
-                        setDataValidating(data.data);
-                    }
-                });
-            }
-        });
-    }, []);
+    // useEffect(() => {
+    //     const messaging = getMessaging(firebaseApp);
+    //     const unsubscribe = onMessage(messaging, (payload: any) => {
+    //         if (payload.data.title == 'Verifikasi Renstra') {
+    //             fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
+    //                 if (data.status == 'success') {
+    //                     setDataValidating(data.data);
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }, []);
 
 
 
