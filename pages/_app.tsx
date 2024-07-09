@@ -96,50 +96,50 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
     const [notifications, setNotifications] = useState<any>([]);
 
-    useEffect(() => {
-        if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-            const audio = new Audio('/assets/audio/notification.mp3');
-            const messaging = getMessaging(firebaseApp);
-            const saveNotif = onMessage(messaging, (payload: any) => {
-                const unRaw = JSON.parse(payload?.data?.datas ?? {});
-                let uri = null;
-                if (unRaw.type == 'renstra') {
-                    uri = `/renstra?instance=${unRaw.instance_id}&program=${unRaw.program_id}`
-                }
-                if (unRaw.type == 'renja') {
-                    uri = `/renja?instance=${unRaw.instance_id}&program=${unRaw.program_id}`
-                }
-                const newMessage = {
-                    id: payload.messageId,
-                    title: payload.notification.title,
-                    body: payload.notification.body,
-                    link: uri,
-                };
+    // useEffect(() => {
+    //     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+    //         const audio = new Audio('/assets/audio/notification.mp3');
+    //         const messaging = getMessaging(firebaseApp);
+    //         const saveNotif = onMessage(messaging, (payload: any) => {
+    //             const unRaw = JSON.parse(payload?.data?.datas ?? {});
+    //             let uri = null;
+    //             if (unRaw.type == 'renstra') {
+    //                 uri = `/renstra?instance=${unRaw.instance_id}&program=${unRaw.program_id}`
+    //             }
+    //             if (unRaw.type == 'renja') {
+    //                 uri = `/renja?instance=${unRaw.instance_id}&program=${unRaw.program_id}`
+    //             }
+    //             const newMessage = {
+    //                 id: payload.messageId,
+    //                 title: payload.notification.title,
+    //                 body: payload.notification.body,
+    //                 link: uri,
+    //             };
 
-                setNotifications((notifications: any) => [...notifications, newMessage]);
+    //             setNotifications((notifications: any) => [...notifications, newMessage]);
 
-                // show notification
-                if (Notification.permission === 'granted') {
-                    const notification = new Notification(payload.notification.title, {
-                        body: payload.notification.body,
-                    });
-                    notification.onshow = () => {
-                        setTimeout(() => {
-                            setNotifications((notifications: any) => notifications.filter((notif: any) => notif.id !== newMessage?.id));
-                        }, 5000);
+    //             // show notification
+    //             if (Notification.permission === 'granted') {
+    //                 const notification = new Notification(payload.notification.title, {
+    //                     body: payload.notification.body,
+    //                 });
+    //                 notification.onshow = () => {
+    //                     setTimeout(() => {
+    //                         setNotifications((notifications: any) => notifications.filter((notif: any) => notif.id !== newMessage?.id));
+    //                     }, 5000);
 
-                        // play sound
-                        audio.volume = 1;
-                        audio.play();
-                    }
-                }
+    //                     // play sound
+    //                     audio.volume = 1;
+    //                     audio.play();
+    //                 }
+    //             }
 
-            });
-            return () => {
-                saveNotif(); // triggerNotif from the onMessage event
-            };
-        }
-    }, []);
+    //         });
+    //         return () => {
+    //             saveNotif(); // triggerNotif from the onMessage event
+    //         };
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (notifications.length > 5) {
