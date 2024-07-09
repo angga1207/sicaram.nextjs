@@ -748,6 +748,31 @@ const Index = () => {
                                                                             })
                                                                         }}
                                                                     />
+
+                                                                    {/* pick all */}
+                                                                    <div className="flex items-center gap-2 mt-2">
+                                                                        <input type="checkbox" id="all" name="all" value="all" onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                setDataInput({
+                                                                                    ...dataInput,
+                                                                                    instance_ids: instances.map((instance: any) => {
+                                                                                        return {
+                                                                                            value: instance.id,
+                                                                                            label: instance.name,
+                                                                                        }
+                                                                                    })
+                                                                                })
+                                                                            } else {
+                                                                                setDataInput({
+                                                                                    ...dataInput,
+                                                                                    instance_ids: []
+                                                                                })
+                                                                            }
+                                                                        }} />
+                                                                        <label htmlFor="all" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                                            Pilih Semua
+                                                                        </label>
+                                                                    </div>
                                                                     <div id="error-instance_ids" className='validation-elements text-red-500 text-xs'></div>
                                                                 </>
                                                             )}
