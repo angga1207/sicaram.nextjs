@@ -178,7 +178,7 @@ const Setting = () => {
                         </div>
                     </div>
 
-                    {/* <div className="mb-3 rounded-md border border-dashed border-white-light p-3 dark:border-[#1b2e4b]">
+                    <div className="mb-3 rounded-md border border-dashed border-white-light p-3 dark:border-[#1b2e4b]">
                         <h5 className="mb-1 text-base leading-none dark:text-white">Router Transition</h5>
                         <p className="text-xs text-white-dark">Animation of main content.</p>
                         <div className="mt-3">
@@ -195,7 +195,7 @@ const Setting = () => {
                                 <option value="animate__zoomIn">Zoom In</option>
                             </select>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </nav>
         </div>

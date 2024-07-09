@@ -4,7 +4,7 @@ const themeConfig = {
     menu: 'collapsible-vertical', // vertical, collapsible-vertical, horizontal
     layout: 'full', // full, boxed-layout
     rtlClass: 'ltr', // rtl, ltr
-    animation: 'animate__zoomIn', // animate__fadeIn, animate__fadeInDown, animate__fadeInUp, animate__fadeInLeft, animate__fadeInRight, animate__slideInDown, animate__slideInLeft, animate__slideInRight, animate__zoomIn
+    animation: 'animate__fadeIn', // animate__fadeIn, animate__fadeInDown, animate__fadeInUp, animate__fadeInLeft, animate__fadeInRight, animate__slideInDown, animate__slideInLeft, animate__slideInRight, animate__zoomIn
     navbar: 'navbar-floating', // navbar-sticky, navbar-floating, navbar-static
     semidark: true
 };
