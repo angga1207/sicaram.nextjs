@@ -129,6 +129,9 @@ const Index = () => {
                     setDataBackEndError(data.data.data_error);
                     setDataBackEndMessage(data.data.message_error);
                 }
+                if(data.status == 'error') {
+                    showAlert('error', data.message);
+                }
             });
         }
         setIsMounted(true);

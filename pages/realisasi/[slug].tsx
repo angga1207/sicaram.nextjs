@@ -209,6 +209,9 @@ const Index = () => {
                     setDataBackEndError(data.data.data_error);
                     setDataBackEndMessage(data.data.error_message);
                 }
+                if(data.status === 'error'){
+                    showAlert('error', data.message);
+                }
             });
         }
         setIsMounted(true);
@@ -255,35 +258,37 @@ const Index = () => {
     }));
 
     const confirmSave = () => {
-        Swal.fire({
-            title: 'Simpan Realisasi',
-            text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Simpan',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                SaveRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
-                    if (data.status == 'success') {
-                        showAlertBox('success', 'Berhasil', data.message);
-                        setUnsaveStatus(false);
-                    }
-                    else {
-                        showAlertBox('error', 'Error', data.message);
-                    }
-                });
-                SaveRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
-                    if (data.status == 'success') {
-                        showAlertBox('success', 'Berhasil', data.message);
-                        setUnsaveStatus(false);
-                    }
-                    else {
-                        showAlertBox('error', 'Error', data.message);
-                    }
-                });
-            }
-        });
+        if ([1, 2, 3, 4, 5, 9].includes(CurrentUser.role_id)) {
+            Swal.fire({
+                title: 'Simpan Realisasi',
+                text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    SaveRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
+                        if (data.status == 'success') {
+                            showAlertBox('success', 'Berhasil', data.message);
+                            setUnsaveStatus(false);
+                        }
+                        else {
+                            showAlertBox('error', 'Error', data.message);
+                        }
+                    });
+                    SaveRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
+                        if (data.status == 'success') {
+                            showAlertBox('success', 'Berhasil', data.message);
+                            setUnsaveStatus(false);
+                        }
+                        else {
+                            showAlertBox('error', 'Error', data.message);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     const openLogsModal = () => {

@@ -169,7 +169,13 @@ const Index = () => {
     useEffect(() => {
         if (instance && year) {
             fetchProgramsSubKegiatan(instance, year).then((data) => {
-                setDatas(data.data);
+                if(data.status === 'success'){
+                    setDatas(data.data);
+                }
+
+                if(data.status === 'error'){
+                    showAlert('error', data.message);
+                }
             });
             if (router.query) {
                 router.query.year = year;
@@ -768,7 +774,7 @@ const Index = () => {
                                                                                                                 target='_blank'
                                                                                                                 href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
                                                                                                                 className='btn btn-secondary font-normal'>
-                                                                                                                Input Rincian Belanja
+                                                                                                                {CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}
                                                                                                                 <IconArrowForward className='w-4 h-4 ml-2' />
                                                                                                             </Link>
                                                                                                         ) : (
@@ -796,7 +802,7 @@ const Index = () => {
                                                                                                                 target='_blank'
                                                                                                                 href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
                                                                                                                 className='btn btn-success font-normal'>
-                                                                                                                Input Realisasi
+                                                                                                                {CurrentUser?.role_id === 6 ? 'Lihat Realisasi' : 'Input Realisasi'}
                                                                                                                 <IconArrowForward className='w-4 h-4 ml-2' />
                                                                                                             </Link>
                                                                                                         )}

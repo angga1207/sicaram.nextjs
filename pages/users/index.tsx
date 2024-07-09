@@ -22,6 +22,9 @@ import IconSearch from '../../components/Icon/IconSearch';
 import { fetchRoles, fetchUsers, fetchUser, fetchAllDataUsers } from '../../apis/fetchdata';
 import { storeUser, updateUser, deleteUser } from '../../apis/storedata';
 import Page403 from '@/components/Layouts/Page403';
+import Select from 'react-select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -385,12 +388,20 @@ const Index = () => {
                         <table className="table-hover align-middle">
                             <thead>
                                 <tr>
-                                    <th className=''>
+                                    <th className='min-w-[500px]'>
                                         Nama Lengkap
                                     </th>
+                                    {userType == 'verifikator' ? (
+                                        <th className='!text-center'>Verifikator Untuk</th>
+                                    ) : (
+                                        <th className='w-[200px] !text-center'>Jenis Pengguna</th>
+                                    )}
                                     <th className='w-[200px]'>Username</th>
-                                    <th className='w-[200px] !text-center'>Jenis Pengguna</th>
-                                    <th className="!text-center w-[100px]">Action</th>
+                                    <th className="!text-center w-[100px]">
+                                        <div className="flex items-center justify-center">
+                                            <FontAwesomeIcon icon={faCog} className="h-4 w-4 text-slate-400" />
+                                        </div>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -407,14 +418,26 @@ const Index = () => {
                                                     </div>
                                                 </div>
                                             </td>
+                                            {userType == 'verifikator' ? (
+                                                <td>
+                                                    <div className="flex items-center flex-wrap gap-1">
+                                                        {data?.instance_ids?.map((instance: any) => (
+                                                            <div className='bg-sky-200 rounded px-2 py-1 text-xs'>
+                                                                {instance}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </td>
+                                            ) : (
+                                                <td>
+                                                    <div className="text-center">
+                                                        {data?.role_name ? data?.role_name : ''}
+                                                    </div>
+                                                </td>
+                                            )}
                                             <td>
                                                 <div className="hover:text-primary cursor-pointer">
                                                     @{data?.username}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="text-center">
-                                                    {data?.role_name ? data?.role_name : ''}
                                                 </div>
                                             </td>
                                             <td className="text-center">
@@ -691,6 +714,44 @@ const Index = () => {
                                                                 </div>
                                                             </>
                                                         )}
+                                                    </>
+                                                )}
+
+                                                {(dataInput.role == 6) && (
+                                                    <>
+                                                        <div>
+                                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
+                                                                Verifikator Untuk
+                                                                <span className='text-red-600 mx-1'>*</span>
+                                                            </label>
+                                                            {(dataInput.inputType == 'edit' && dataInput.instance_ids == null) ? (
+                                                                <>
+                                                                    <div className="w-full form-input text-slate-400">
+                                                                        <div className="dots-loading">....</div>
+                                                                    </div>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <Select
+                                                                        isMulti
+                                                                        options={instances.map((instance: any) => {
+                                                                            return {
+                                                                                value: instance.id,
+                                                                                label: instance.name,
+                                                                            }
+                                                                        })}
+                                                                        value={dataInput.instance_ids}
+                                                                        onChange={(e) => {
+                                                                            setDataInput({
+                                                                                ...dataInput,
+                                                                                instance_ids: e
+                                                                            })
+                                                                        }}
+                                                                    />
+                                                                    <div id="error-instance_ids" className='validation-elements text-red-500 text-xs'></div>
+                                                                </>
+                                                            )}
+                                                        </div>
                                                     </>
                                                 )}
 
