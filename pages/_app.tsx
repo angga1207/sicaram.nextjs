@@ -101,7 +101,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
             const audio = new Audio('/assets/audio/notification.mp3');
             const messaging = getMessaging(firebaseApp);
             const saveNotif = onMessage(messaging, (payload: any) => {
-                const unRaw = JSON.parse(payload.data.datas);
+                const unRaw = JSON.parse(payload?.data?.datas);
                 let uri = null;
                 if (unRaw.type == 'renstra') {
                     uri = `/renstra?instance=${unRaw.instance_id}&program=${unRaw.program_id}`

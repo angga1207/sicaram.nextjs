@@ -211,6 +211,7 @@ const Index = () => {
         } else {
             setShowPrograms([...showPrograms, id]);
         }
+        setShowKegiatans([]);
     }
 
     const toggleKegiatans = (id: any) => {
@@ -219,6 +220,7 @@ const Index = () => {
         } else {
             setShowKegiatans([...showKegiatans, id]);
         }
+        setShowSubKegiatans([]);
     }
 
     const toggleSubKegiatans = (id: any) => {

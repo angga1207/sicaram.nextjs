@@ -340,7 +340,7 @@ const Index = () => {
                                     <div className="relative">
                                         <input type="search"
                                             className="form-input rtl:pl-12 ltr:pr-12"
-                                            placeholder='Cari Program...'
+                                            placeholder='Cari Sub Kegiatan...'
                                             onChange={(e) => setSearch(e.target.value)}
                                         />
                                         <div className="absolute rtl:left-0 ltr:right-0 top-0 bottom-0 flex items-center justify-center w-12 h-full">

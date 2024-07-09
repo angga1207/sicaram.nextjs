@@ -33,6 +33,15 @@ const Page = () => {
         dispatch(setPageTitle(`Paket Swakelola Terumumkan`));
     });
 
+    const [CurrentUser, setCurrentUser] = useState<any>([]);
+    useEffect(() => {
+        if (window) {
+            if (localStorage.getItem('user')) {
+                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
+            }
+        }
+    }, []);
+
     const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
     const [arrYear, setArrYear] = useState<number[]>([]);
 
@@ -92,6 +101,34 @@ const Page = () => {
             fetchSwakelola();
         }
     }, [year, isMounted]);
+
+
+    if (CurrentUser?.role_id >= 9) {
+        return (
+            <>
+                <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="text-5xl font-bold text-slate-500 dark:text-slate-400">
+                            403
+                        </div>
+                        <div className="text-2xl font-medium text-slate-600 dark:text-slate-400">
+                            Forbidden
+                        </div>
+                        <div className="text-slate-600 dark:text-slate-400">
+                            You are not allowed to access this page!
+                        </div>
+                        <div className="mt-5">
+                            <Link href="/">
+                                <div className="btn btn-outline-primary">
+                                    Back to Home
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
+    }
 
     return (
         <>
