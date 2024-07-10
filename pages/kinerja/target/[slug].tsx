@@ -24,7 +24,7 @@ import { getMasterData, Save, fetchLogs, sendRequestVerification, sendReplyVerif
 import { fetchPeriodes, fetchSatuans } from '@/apis/fetchdata';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle, faSpinner, faCaretUp, faAngleDoubleUp } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
 import LoadingSicaram from '@/components/LoadingSicaram';
@@ -129,7 +129,7 @@ const Index = () => {
                     setDataBackEndError(data.data.data_error);
                     setDataBackEndMessage(data.data.message_error);
                 }
-                if(data.status == 'error') {
+                if (data.status == 'error') {
                     showAlert('error', data.message);
                 }
             });
@@ -1034,47 +1034,51 @@ const Index = () => {
                                 <button
                                     type='button'
                                     disabled={dataBackEndError === true ? true : false}
+                                    className='relative'
                                     onClick={
                                         (e) => {
                                             dataBackEndError === false &&
                                                 openLogsModal()
                                         }}>
                                     {subKegiatan?.status == 'draft' && (
-                                        <div className="btn btn-primary btn-sm">
+                                        <div className="btn btn-primary btn-sm pr-8">
                                             <FontAwesomeIcon icon={faBriefcaseClock} className='mr-2 w-4 h-4' />
                                             Draft
                                         </div>
                                     )}
                                     {subKegiatan?.status == 'verified' && (
-                                        <div className="btn btn-success btn-sm">
+                                        <div className="btn btn-success btn-sm pr-8">
                                             <FontAwesomeIcon icon={faCheck} className='mr-2 w-4 h-4' />
                                             Terverifikasi
                                         </div>
                                     )}
                                     {subKegiatan?.status == 'reject' && (
-                                        <div className="btn btn-danger btn-sm">
+                                        <div className="btn btn-danger btn-sm pr-8">
                                             <FontAwesomeIcon icon={faTimes} className='mr-2 w-4 h-4' />
                                             Ditolak
                                         </div>
                                     )}
                                     {subKegiatan?.status == 'return' && (
-                                        <div className="btn btn-warning btn-sm">
+                                        <div className="btn btn-warning btn-sm pr-8">
                                             <FontAwesomeIcon icon={faSyncAlt} className='mr-2 w-4 h-4' />
                                             Dikembalikan
                                         </div>
                                     )}
                                     {subKegiatan?.status == 'sent' && (
-                                        <div className="btn btn-info btn-sm">
+                                        <div className="btn btn-info btn-sm pr-8">
                                             <FontAwesomeIcon icon={faShare} className='mr-2 w-4 h-4' />
                                             Dikirim
                                         </div>
                                     )}
                                     {subKegiatan?.status == 'waiting' && (
-                                        <div className="btn btn-dark btn-sm">
+                                        <div className="btn btn-dark btn-sm pr-8">
                                             <FontAwesomeIcon icon={faHourglassHalf} className='mr-2 w-4 h-4' />
                                             Menunggu
                                         </div>
                                     )}
+                                    <div className="flex items-center justify-center w-8 h-full absolute top-0 right-0">
+                                        <FontAwesomeIcon icon={faAngleDoubleUp} className='border-l pl-1 w-5 h-5 text-white dark:text-white-dark' />
+                                    </div>
                                 </button>
                             </Tippy>
                             <div className="border-r-2 border-slate-400 h-[35px] w-2"></div>

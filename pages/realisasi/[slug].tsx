@@ -65,7 +65,10 @@ import {
     faAngleDoubleRight,
     faExclamationTriangle,
     faAngleDoubleLeft,
-    faSpinner
+    faSpinner,
+    faAngleDoubleUp,
+    faLink,
+    faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
@@ -74,6 +77,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import LoadingSicaram from '@/components/LoadingSicaram';
+import Dropdown from '@/components/Dropdown';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -209,7 +213,7 @@ const Index = () => {
                     setDataBackEndError(data.data.data_error);
                     setDataBackEndMessage(data.data.error_message);
                 }
-                if(data.status === 'error'){
+                if (data.status === 'error') {
                     showAlert('error', data.message);
                 }
             });
@@ -258,6 +262,10 @@ const Index = () => {
     }));
 
     const confirmSave = () => {
+        if (subKegiatan?.status === 'verified') {
+            showAlert('info', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
+            return;
+        }
         if ([1, 2, 3, 4, 5, 9].includes(CurrentUser.role_id)) {
             Swal.fire({
                 title: 'Simpan Realisasi',
@@ -664,9 +672,6 @@ const Index = () => {
                                         <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Anggaran
                                         </th>
-                                        <th className='hidden !text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
-                                            Realisasi Terakhir
-                                        </th>
                                         <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Realisasi
                                         </th>
@@ -745,16 +750,6 @@ const Index = () => {
                                                                     }).format(data?.pagu ?? 0)}
                                                                 </div>
 
-                                                            </td>
-
-                                                            <td className='hidden border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
-                                                                {/* Realisasi Terakhir */}
-                                                                <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
-                                                                    {new Intl.NumberFormat('id-ID', {
-                                                                        style: 'decimal',
-                                                                        minimumFractionDigits: 0,
-                                                                    }).format(data?.realisasi_anggaran ?? 0)}
-                                                                </div>
                                                             </td>
 
                                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
@@ -1202,15 +1197,6 @@ const Index = () => {
                                                                                         }).format(rincian?.pagu ?? 0)}
                                                                                     </div>
                                                                                 </td>
-                                                                                <td className='hidden border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
-                                                                                    {/* realisasi terakhir */}
-                                                                                    <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
-                                                                                        {new Intl.NumberFormat('id-ID', {
-                                                                                            style: 'decimal',
-                                                                                            minimumFractionDigits: 0,
-                                                                                        }).format(rincian?.realisasi_anggaran ?? 0)}
-                                                                                    </div>
-                                                                                </td>
                                                                                 <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
                                                                                     <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
                                                                                         {new Intl.NumberFormat('id-ID', {
@@ -1221,6 +1207,7 @@ const Index = () => {
                                                                                 </td>
                                                                             </tr>
 
+                                                                            {/* Keterangan Rincian Start */}
                                                                             {rincian?.keterangan_rincian?.map((keterangan: any, indexKeterangan: any) => {
                                                                                 return (
                                                                                     <>
@@ -1245,8 +1232,6 @@ const Index = () => {
                                                                                                     <input
                                                                                                         className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1  disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
                                                                                                         type='text'
-                                                                                                        // value={keterangan?.koefisien_realisasi}
-                                                                                                        // change dot to comma
                                                                                                         value={keterangan?.koefisien_realisasi.toString().replace(/\./g, ',')}
                                                                                                         onKeyDown={(e) => {
                                                                                                             if (!(
@@ -1503,21 +1488,12 @@ const Index = () => {
                                                                                                     }).format(keterangan?.pagu ?? 0)}
                                                                                                 </div>
                                                                                             </td>
-                                                                                            <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4 hidden'>
-                                                                                                {/* realisasi terakhir */}
-                                                                                                <div className='text-xs font-normal whitespace-nowrap text-end px-2'>
-                                                                                                    {new Intl.NumberFormat('id-ID', {
-                                                                                                        style: 'decimal',
-                                                                                                        minimumFractionDigits: 0,
-                                                                                                    }).format(keterangan?.realisasi_anggaran_keterangan ?? 0)}
-                                                                                                </div>
-                                                                                            </td>
                                                                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
 
                                                                                                 <div className='flex items-center gap-x-1'>
                                                                                                     <input type='text'
                                                                                                         className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
-                                                                                                        value={keterangan?.realisasi_anggaran_keterangan}
+                                                                                                        value={keterangan?.realisasi_anggaran_keterangan ?? 0}
                                                                                                         onKeyDown={(e: any) => {
                                                                                                             if (!(
                                                                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1802,6 +1778,7 @@ const Index = () => {
                                                                                     </>
                                                                                 )
                                                                             })}
+                                                                            {/* Keterangan Rincian End */}
                                                                             <tr>
                                                                                 <td colSpan={100} className='!p-0 !pt-0.5 bg-slate-300 dark:bg-slate-500'></td>
                                                                             </tr>
@@ -3023,7 +3000,7 @@ const Index = () => {
 
             {isMounted && (
                 <div className="fixed bottom-0 left-0 w-full bg-slate-100 dark:bg-slate-800 sm:h-[70px] py-1 pr-16 pl-0 lg:pl-16">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 overflow-auto gap-y-2">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 gap-y-2">
                         <div className="">
                             <div className="font-semibold">
                                 Input Realisasi
@@ -3056,49 +3033,54 @@ const Index = () => {
                                         <button
                                             type='button'
                                             disabled={dataBackEndError === true ? true : false}
+                                            className='relative'
                                             onClick={
                                                 (e) => {
                                                     dataBackEndError === false &&
                                                         openLogsModal()
                                                 }}>
                                             {subKegiatan?.status == 'draft' && (
-                                                <div className="btn btn-primary btn-sm">
+                                                <div className="btn btn-primary btn-sm pr-8">
                                                     <FontAwesomeIcon icon={faBriefcaseClock} className='mr-2 w-4 h-4' />
                                                     Draft
                                                 </div>
                                             )}
                                             {subKegiatan?.status == 'verified' && (
-                                                <div className="btn btn-success btn-sm">
+                                                <div className="btn btn-success btn-sm pr-8">
                                                     <FontAwesomeIcon icon={faCheck} className='mr-2 w-4 h-4' />
                                                     Terverifikasi
                                                 </div>
                                             )}
                                             {subKegiatan?.status == 'reject' && (
-                                                <div className="btn btn-danger btn-sm">
+                                                <div className="btn btn-danger btn-sm pr-8">
                                                     <FontAwesomeIcon icon={faTimes} className='mr-2 w-4 h-4' />
                                                     Ditolak
                                                 </div>
                                             )}
                                             {subKegiatan?.status == 'return' && (
-                                                <div className="btn btn-warning btn-sm">
+                                                <div className="btn btn-warning btn-sm pr-8">
                                                     <FontAwesomeIcon icon={faSyncAlt} className='mr-2 w-4 h-4' />
                                                     Dikembalikan
                                                 </div>
                                             )}
                                             {subKegiatan?.status == 'sent' && (
-                                                <div className="btn btn-info btn-sm">
+                                                <div className="btn btn-info btn-sm pr-8">
                                                     <FontAwesomeIcon icon={faShare} className='mr-2 w-4 h-4' />
                                                     Dikirim
                                                 </div>
                                             )}
                                             {subKegiatan?.status == 'waiting' && (
-                                                <div className="btn btn-dark btn-sm">
+                                                <div className="btn btn-dark btn-sm pr-8">
                                                     <FontAwesomeIcon icon={faHourglassHalf} className='mr-2 w-4 h-4' />
                                                     Menunggu
                                                 </div>
                                             )}
+                                            <div className="flex items-center justify-center w-8 h-full absolute top-0 right-0">
+                                                <FontAwesomeIcon icon={faAngleDoubleUp} className='border-l pl-1 w-5 h-5 text-white dark:text-white-dark' />
+                                            </div>
                                         </button>
                                     </Tippy>
+
                                     <div className="border-r-2 border-slate-400 h-[35px] w-2"></div>
                                     {unsaveStatus && (
                                         <div
@@ -3135,7 +3117,8 @@ const Index = () => {
                                             Muat Ulang
                                         </div>
                                     )}
-                                    <div
+
+                                    {/* <div
                                         onClick={(e) => {
                                             if (unsaveStatus) {
                                                 e.preventDefault();
@@ -3172,7 +3155,62 @@ const Index = () => {
                                         className='btn btn-sm flex whitespace-nowrap dark:border-cyan-900 dark:shadow-black-dark-light bg-cyan-600 dark:bg-cyan-700 hover:bg-cyan-500 dark:hover:bg-cyan-800 text-white cursor-pointer'>
                                         <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 -scale-x-100' />
                                         Buka Target
+                                    </div> */}
+
+                                    <div className="dropdown">
+                                        <Dropdown
+                                            placement={`top-end`}
+                                            btnClassName="btn btn-sm flex whitespace-nowrap dark:border-cyan-900 dark:shadow-black-dark-light bg-cyan-600 dark:bg-cyan-700 hover:bg-cyan-500 dark:hover:bg-cyan-800 text-white cursor-pointer dropdown-toggle"
+                                            button={
+                                                <>
+                                                    Menu
+                                                    <FontAwesomeIcon icon={faBars} className='ml-2 w-3 h-3' />
+                                                </>
+                                            }
+                                        >
+                                            <ul className="!min-w-[200px]">
+                                                <li>
+                                                    <Link href={`/kinerja/target/${subKegiatanId}`} className='flex items-center'>
+                                                        <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
+                                                        <span>
+                                                            Buka Target
+                                                        </span>
+                                                    </Link>
+                                                </li>
+                                                {month > 1 && (
+                                                    <li>
+                                                        <Link
+                                                            href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) - 1}`}
+                                                            onClick={(e) => {
+                                                                setMonth(parseInt(month) - 1);
+                                                            }}
+                                                            className='flex items-center'>
+                                                            <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
+                                                            <span>
+                                                                Bulan {new Date(year, month - 2).toLocaleString('id-ID', { month: 'long' })}
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                )}
+                                                {month < 12 && (
+                                                    <li>
+                                                        <Link
+                                                            href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) + 1}`}
+                                                            onClick={(e) => {
+                                                                setMonth(parseInt(month) + 1);
+                                                            }}
+                                                            className='flex items-center'>
+                                                            <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 flex-none' />
+                                                            <span>
+                                                                Bulan {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </Dropdown>
                                     </div>
+
                                     {dataBackEndError === false ? (
                                         <button
                                             type='button'

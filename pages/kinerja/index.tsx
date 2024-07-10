@@ -599,7 +599,7 @@ const Index = () => {
                                                                                     {showSubKegiatans.includes(subkegiatan?.id) && (
                                                                                         <>
                                                                                             <div className="flex items-center gap-2 border-t border-slate-500 pt-3 mt-3">
-                                                                                                <div className="text-center">
+                                                                                                {/* <div className="text-center">
                                                                                                     <div className="text-xs mb-1">
                                                                                                         Target
                                                                                                     </div>
@@ -633,7 +633,7 @@ const Index = () => {
                                                                                                             Ditolak
                                                                                                         </span>
                                                                                                     )}
-                                                                                                </div>
+                                                                                                </div> */}
 
                                                                                                 <div className="text-center">
                                                                                                     <div className="text-xs mb-1">

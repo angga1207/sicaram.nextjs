@@ -239,6 +239,8 @@ const Header = () => {
     const [notifications, setNotifications] = useState<any>([]);
     const [newNotification, setNewNotification] = useState<boolean>(true);
 
+    // console.log(notifications)
+
     useEffect(() => {
         refreshNotificationLess();
     }, []);
@@ -613,11 +615,24 @@ const Header = () => {
                                                             </div>
                                                             <div className="flex flex-auto ltr:pl-3 rtl:pr-3">
                                                                 <div className="ltr:pr-3 rtl:pl-3">
-                                                                    <h6
-                                                                        dangerouslySetInnerHTML={{
-                                                                            __html: notification.message,
-                                                                        }}
-                                                                    ></h6>
+                                                                    {notification.uri ? (
+                                                                        <Link
+                                                                            href={notification.uri}
+                                                                            className="font-semibold dark:hover:text-white" >
+                                                                            <h6
+                                                                                dangerouslySetInnerHTML={{
+                                                                                    __html: notification.message,
+                                                                                }}
+                                                                            ></h6>
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <h6
+                                                                            dangerouslySetInnerHTML={{
+                                                                                __html: notification.message,
+                                                                            }}
+                                                                        ></h6>
+                                                                    )}
+                                                                    {/* <p>{notification.uri}</p> */}
                                                                     <span className="block text-xs font-normal dark:text-gray-500">{notification.time}</span>
                                                                 </div>
                                                                 <Tippy content="Tandai sudah dibaca" placement="top" arrow={false} duration={0} delay={[500, 0]} interactive={true} theme="primary">
