@@ -277,6 +277,14 @@ const Index = () => {
                     }
                     showAlert('success', data.message);
                 }
+                if (data.status == 'error validation') {
+                    Object.keys(data.message).map((key: any, index: any) => {
+                        let element = document.getElementById('error-' + key);
+                        if (element) {
+                            element.innerHTML = data.message[key][0];
+                        }
+                    });
+                }
                 if (data.status == 'error') {
                     showAlert('error', data.message);
                 }

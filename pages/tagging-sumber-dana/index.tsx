@@ -154,13 +154,22 @@ const Index = () => {
     useEffect(() => {
         if (instance) {
             IndexTaggingSumberDana(instance).then((data) => {
-                setDatas(data.data.data);
-                setOptionTags(data.data.options.map((item: any) => {
-                    return {
-                        value: item.id,
-                        label: item.name
-                    }
-                }));
+                if (data.status === 'success') {
+                    setDatas(data.data.data);
+                    setOptionTags(data.data.options.map((item: any) => {
+                        return {
+                            value: item.id,
+                            label: item.name
+                        }
+                    }));
+                }
+                if (data.status === 'error validation'){
+                    showAlert('error', data.message)
+                }
+
+                if(data.status === 'error'){
+                    showAlert('error', data.message)
+                }
             });
         }
     }, [instance]);
