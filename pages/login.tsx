@@ -101,6 +101,7 @@ const Login = () => {
 
     // const recaptchaRef = React.createRef<any>();
     const recaptchaRef = useRef<any>();
+    const [recaptchaChecked, setRecaptchaChecked] = useState<boolean>(false);
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -123,9 +124,11 @@ const Login = () => {
 
     const onReCAPTCHAChange = (captchaCode: any) => {
         if (captchaCode) {
+            setRecaptchaChecked(true);
             return;
         }
         recaptchaRef?.current?.reset();
+        setRecaptchaChecked(false);
     }
 
     const [submitLoading, setSubmitLoading] = useState(false);
@@ -145,7 +148,7 @@ const Login = () => {
             if (!recaptchaRef?.current.getValue()) {
                 showSweetAlert(
                     'error',
-                    'Verifikasi Robot', 'Anda tidak lolos verifikasi robot!',
+                    'Verifikasi Robot', 'Centang Verifikasi Robot!',
                     'OK',
                     'Batal',
                     () => {
@@ -264,7 +267,7 @@ const Login = () => {
 
     return (
         <div className=''>
-            <div className="absolute inset-0">
+            {/* <div className="absolute inset-0">
                 <video
                     autoPlay
                     muted
@@ -274,8 +277,8 @@ const Login = () => {
                     <source src="/assets/videos/bg-login.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
-            </div>
-            <div className="relative flex h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
+            </div> */}
+            <div className="relative flex h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 bg-sky-400 dark:bg-[#060818] sm:px-16">
                 <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-sm dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
                     <div className="relative hidden w-full items-center justify-center bg-opacity-100 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
                         <div className="absolute inset-y-0 w-8 from-dark/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
@@ -308,8 +311,8 @@ const Login = () => {
                         <div className="mb-0">
                             <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
                             <div className="mb-2 text-center">
-                                <h1 className="text-base font-bold !leading-snug text-white mb-3">
-                                    <span className='text-cyan-300'>S</span>istem <span className='text-cyan-300'>I</span>nformasi <span className='text-cyan-300'>CA</span>paian <span className='text-cyan-300'>R</span>ealisasi Pe<span className='text-cyan-300'>M</span>bangunan
+                                <h1 className="text-xl font-bold !leading-snug tracking-widest text-white mb-3">
+                                    <span className='text-blue-600'>S</span>istem <span className='text-blue-600'>I</span>nformasi <span className='text-blue-600'>CA</span>paian <span className='text-blue-600'>R</span>ealisasi Pe<span className='text-blue-600'>M</span>bangunan
                                 </h1>
                             </div>
                         </div>
@@ -376,7 +379,7 @@ const Login = () => {
                                 </>
                             )}
 
-                            <div className={`${serverStatus ? 'text-green-400' : 'text-red-400'} text-center font-semibold text-lg`}>
+                            <div className={`${serverStatus ? 'text-green-700' : 'text-red-700'} text-center font-semibold text-lg`}>
                                 {serverStatus ? 'Server Online' : 'Server Offline'}
                             </div>
 
@@ -397,6 +400,7 @@ const Login = () => {
                                         <>
                                             <button
                                                 type="submit"
+                                                disabled={recaptchaChecked ? false : true}
                                                 className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
                                                 Masuk
                                             </button>
