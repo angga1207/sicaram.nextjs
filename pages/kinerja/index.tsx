@@ -123,9 +123,13 @@ const Index = () => {
 
     useEffect(() => {
         if ([9].includes(CurrentUser?.role_id)) {
+            if (router.query.instance !== CurrentUser?.instance_id) {
+                router.query.instance = CurrentUser?.instance_id;
+                router.push(router);
+            }
             setInstance(CurrentUser?.instance_id);
         }
-    }, [CurrentUser]);
+    }, [CurrentUser, router.query]);
 
     useEffect(() => {
         setYear(router.query.year);
@@ -169,11 +173,11 @@ const Index = () => {
     useEffect(() => {
         if (instance && year) {
             fetchProgramsSubKegiatan(instance, year).then((data) => {
-                if(data.status === 'success'){
+                if (data.status === 'success') {
                     setDatas(data.data);
                 }
 
-                if(data.status === 'error'){
+                if (data.status === 'error') {
                     showAlert('error', data.message);
                 }
             });
