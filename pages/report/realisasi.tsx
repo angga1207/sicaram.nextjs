@@ -48,12 +48,26 @@ const showBoxAlert = async (icon: any, title: any, text: any) => {
 
 const Index = () => {
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const [CurrentUser, setCurrentUser] = useState<any>([]);
+    useEffect(() => {
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
+        }
+    }, [isMounted]);
+
     const route = useRouter();
     const dispatch = useDispatch();
 
     const [loaded, setLoaded] = useState<number>(0);
     const [datas, setDatas] = useState<any>([]);
-    const [isMounted, setIsMounted] = useState(false);
     const [instanceId, setInstanceId] = useState<any>(null);
     const [instance, setInstance] = useState<any>(null);
     const [year, setYear] = useState<any>(new Date().getFullYear());

@@ -56,14 +56,20 @@ const Index = () => {
         dispatch(setPageTitle('Tagging Sumber Dana'));
     });
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
-        if (window) {
-            if (localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
         }
-    }, []);
+    }, [isMounted]);
 
     const { t, i18n } = useTranslation();
 
@@ -163,11 +169,11 @@ const Index = () => {
                         }
                     }));
                 }
-                if (data.status === 'error validation'){
+                if (data.status === 'error validation') {
                     showAlert('error', data.message)
                 }
 
-                if(data.status === 'error'){
+                if (data.status === 'error') {
                     showAlert('error', data.message)
                 }
             });

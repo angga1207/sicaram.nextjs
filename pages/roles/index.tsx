@@ -54,33 +54,20 @@ const Index = () => {
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
     const [isMounted, setIsMounted] = useState(false);
-    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
-    const [CurrentToken, setCurrentToken] = useState<any>([]);
-    const [Locked, setLocked] = useState<any>([]);
     useEffect(() => {
-        if (window) {
-            setCurrentToken(localStorage.getItem('token') ?? '');
-            setLocked(localStorage.getItem('locked') ?? '');
-            if (CurrentToken && localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
         }
-    }, []);
+    }, [isMounted]);
 
-    if (CurrentUser.length == 0 && !CurrentToken && isClient) {
-        window.location.href = '/auth/login';
-    }
-
-    if (Locked == 'true' && isClient) {
-        window.location.href = '/auth/lockscreen';
-    }
-
-    useEffect(() => {
-        setIsMounted(true)
-        setIsClient(true)
-    }, []);
     const { t, i18n } = useTranslation();
 
     const [datas, setDatas] = useState<any>([]);

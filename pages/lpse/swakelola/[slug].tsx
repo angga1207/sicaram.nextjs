@@ -37,12 +37,12 @@ const Page = () => {
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
-        if (window) {
-            if (localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
         }
-    }, []);
+    }, [isMounted]);
 
     const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
     const [slug, setSlug] = useState<any>(null);

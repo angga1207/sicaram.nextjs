@@ -42,7 +42,6 @@ const Index = () => {
     });
 
 
-    const [CurrentUser, setCurrentUser] = useState<any>([]);
     const [periode, setPeriode] = useState<number>(1);
     const [view, setView] = useState<number>(1);
 
@@ -50,13 +49,15 @@ const Index = () => {
     const [KinerjaSummary, setKinerjaSummary] = useState<any>([]);
     const [RankInstances, setRankInstances] = useState<any>([]);
 
+
+    const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
-        if (window) {
-            if (localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
         }
-    }, []);
+    }, [isMounted]);
 
     if (CurrentUser?.role_id === 9) {
         router.push('/dashboard');

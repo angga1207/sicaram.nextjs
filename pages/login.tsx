@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, FormEventHandler } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setPageTitle, toggleRTL } from '../store/themeConfigSlice';
@@ -12,6 +12,7 @@ import IconUser from '../components/Icon/IconUser';
 import IconLockDots from '../components/Icon/IconLockDots';
 import { BaseUri, serverCheck } from '@/apis/serverConfig';
 import axios from "axios";
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 import React from "react";
 import { setCookie } from 'cookies-next';
@@ -24,9 +25,7 @@ import LoadingSicaram from '@/components/LoadingSicaram';
 const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
     Swal.fire({
         icon: icon,
-        // title: '<i>HTML</i> <u>example</u>',
         title: title,
-        // html: 'You can use <b>bold text</b>, <a href="//github.com">links</a> and other HTML tags',
         html: text,
         showCloseButton: true,
         showCancelButton: true,
@@ -35,8 +34,6 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
         cancelButtonText: cancelButtonText,
         padding: '2em',
         customClass: 'sweet-alerts',
-
-        // callback on confirm
     }).then((result) => {
         if (result.isConfirmed) {
             callback();
@@ -48,13 +45,17 @@ const Login = () => {
 
     const [isMounted, setIsMounted] = useState<boolean>(false);
     const [serverStatus, setServerStatus] = useState<boolean>(false);
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
+    const mySession = useSession();
+
     useEffect(() => {
         if (isMounted) {
+            // signOut();
             const res = axios.post(BaseUri() + '/bdsm', {}, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,8 +75,44 @@ const Login = () => {
                     message: error
                 }
             });
+
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('userPassword');
+            localStorage.removeItem('locked');
+
+
+            if (document.cookie) {
+                let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
+
+                let cookieUser = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+                cookieUser = cookieUser ? JSON.parse(cookieUser) : null;
+                setUser(cookieUser);
+
+                let locked = document.cookie.split(';').find((row) => row.trim().startsWith('locked='))?.split('=')[1];
+                let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
+
+                if (mySession.status == 'authenticated') {
+                    if (user?.role_id === 9) {
+                        router.push('/dashboard/pd');
+                    } else {
+                        router.push('/dashboard');
+                    }
+                }
+            } else {
+                document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                if(mySession.status == 'authenticated') {
+                    signOut();
+                }
+            }
         }
     }, [isMounted]);
+    // console.log(mySession);
+    // console.log(user)
 
     const [userToken, setUserToken] = useState<string | null>(null);
 
@@ -133,7 +170,7 @@ const Login = () => {
 
     const [submitLoading, setSubmitLoading] = useState(false);
 
-    const AttempLogin = async (e: any) => {
+    const AttempLogin: FormEventHandler<HTMLFormElement> = async (e: any) => {
         e.preventDefault();
         setSubmitLoading(true);
 
@@ -141,8 +178,6 @@ const Login = () => {
         if (elements.length > 0) {
             while (elements.length > 0) elements[0].remove();
         }
-
-        // document.getElementsByClassName('validation')?.innerHTML = '';
 
         if (e.target.Username.value !== 'developer') {
             if (!recaptchaRef?.current.getValue()) {
@@ -159,81 +194,92 @@ const Login = () => {
             }
         }
 
-
         const formData = {
             username: e.target.Username.value,
             password: e.target.Password.value,
         };
+
         const uri = BaseUri() + '/login';
-        try {
-            const res = await axios.post(uri, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
+        // try {
+        const res = await axios.post(uri, formData, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        const json = await res?.data;
+
+        if (json?.status === 'error validation') {
+            Object.keys(json.message).map((key: any, index: any) => {
+                let element = document?.getElementById('error-' + key);
+                if (element) {
+                    element.innerHTML = json.message[key][0];
                 }
             });
-            const json = await res?.data;
-
-            if (json?.status === 'error validation') {
-                Object.keys(json.message).map((key: any, index: any) => {
-                    let element = document?.getElementById('error-' + key);
-                    if (element) {
-                        element.innerHTML = json.message[key][0];
-                    }
-                });
-                if (json?.message?.username) {
-                    showSweetAlert('error', 'Error', json?.message?.username, 'OK', 'Batal', () => {
-                        return;
-                    })
-                }
-                if (json?.message?.password) {
-                    // document?.getElementById('error-password')?.innerHTML = json?.message?.password;
-                    showSweetAlert('error', 'Error', json?.message?.password, 'OK', 'Batal', () => {
-                        return;
-                    })
-                }
-                setSubmitLoading(false);
-                return;
+            if (json?.message?.username) {
+                showSweetAlert('error', 'Error', json?.message?.username, 'OK', 'Batal', () => {
+                    return;
+                })
             }
-
-            const data = await json.data;
-
-            if (!data) {
-                alert('Login failed');
-                setSubmitLoading(false);
-                return;
+            if (json?.message?.password) {
+                // document?.getElementById('error-password')?.innerHTML = json?.message?.password;
+                showSweetAlert('error', 'Error', json?.message?.password, 'OK', 'Batal', () => {
+                    return;
+                })
             }
-
-            if (json.status == 'success') {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('userPassword', formData.password);
-                localStorage.setItem('locked', 'false');
-                setCookie('token', data.token);
-                setUserToken(data.token);
-            }
-
-            if (localStorage.getItem('token')) {
-                if (localStorage.user.role_id === 9) {
-                    router.push('/dashboard/pd');
-                } else {
-                    router.push('/dashboard');
-                }
-            }
-
-            // router push to latest url
-            // router.push(router.query.next ? router.query.next.toString() : '/');
-
-        } catch (error) {
-            showSweetAlert(
-                'error',
-                'Terjadi Kesalahan Server', 'Server tidak merespon! <br /> Silahkan untuk reload halaman?',
-                'Reload',
-                'Batal',
-                () => {
-                    window.location.reload();
-                });
-            return error;
+            setSubmitLoading(false);
+            return;
         }
+
+        const data = await json.data;
+
+        if (!data) {
+            showSweetAlert('error', 'Error', 'Username atau Password salah!', 'OK', 'Batal', () => { });
+            setSubmitLoading(false);
+            return;
+        }
+
+        if (json.status == 'success') {
+            // save to cookie
+            document.cookie = `token=${data.token}; path=/; max-age=86400`;
+            document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=86400`;
+            document.cookie = `ups=${formData.password}; path=/; max-age=86400`;
+            document.cookie = `locked=false; path=/; max-age=86400`;
+
+            let callbackUrl = '/dashboard';
+
+            if (data.user.role_id === 9) {
+                callbackUrl = '/dashboard/pd';
+            } else {
+                callbackUrl = '/dashboard';
+            }
+
+            const auth = await signIn("credentials", {
+                id: data.user.id,
+                username: data.user.username,
+                fullname: data.user.fullname,
+                token: data.token,
+                // redirect: false,
+                callbackUrl: callbackUrl,
+            });
+
+            // setCookie('token', data.token);
+            // setUserToken(data.token);
+        }
+
+        // router push to latest url
+        // router.push(router.query.next ? router.query.next.toString() : '/');
+
+        // } catch (error: any) {
+        //     showSweetAlert(
+        //         'error',
+        //         'Terjadi Kesalahan Server', 'Server tidak merespon! <br /> Silahkan untuk reload halaman?',
+        //         'Reload',
+        //         'Batal',
+        //         () => {
+        //             window.location.reload();
+        //         });
+        //     return error;
+        // }
     }
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -398,7 +444,7 @@ const Login = () => {
                                             {serverStatus && (
                                                 <button
                                                     type="submit"
-                                                    disabled={recaptchaChecked ? false : true}
+                                                    // disabled={recaptchaChecked ? false : true}
                                                     className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
                                                     Masuk
                                                 </button>

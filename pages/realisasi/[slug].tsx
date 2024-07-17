@@ -123,16 +123,19 @@ const Index = () => {
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
     const [isMounted, setIsMounted] = useState(false);
-    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
-        if (window) {
-            if (localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
         }
-    }, []);
+    }, [isMounted]);
 
     const { t, i18n } = useTranslation();
 

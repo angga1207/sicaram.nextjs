@@ -75,17 +75,20 @@ const Index = () => {
     const [isClient, setIsClient] = useState(false);
     const ref = useRef<any>(null);
 
-    const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
-        if (window) {
-            if (localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
-        }
+        setIsMounted(true);
     }, []);
 
-    const { t, i18n } = useTranslation();
+    const [CurrentUser, setCurrentUser] = useState<any>([]);
+    useEffect(() => {
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
+        }
+    }, [isMounted]);
 
+    const { t, i18n } = useTranslation();
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);

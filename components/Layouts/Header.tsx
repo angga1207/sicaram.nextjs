@@ -31,6 +31,7 @@ import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import IconBookmark from '../Icon/IconBookmark';
 import IconPlus from '../Icon/IconPlus';
 import IconMinus from '../Icon/IconMinus';
+import { signOut, useSession } from 'next-auth/react';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -91,36 +92,27 @@ const Header = () => {
     const [CurrentUser, setCurrentUser] = useState<any>(null);
     const [CurrentToken, setCurrentToken] = useState<any>([]);
     const [Locked, setLocked] = useState<any>([]);
+    const mySession = useSession();
+
+    if (mySession.status == 'unauthenticated') {
+        window.location.href = '/login';
+    }
 
     useEffect(() => {
         if (window) {
             if (isMounted) {
-                setCurrentToken(localStorage.getItem('token') ?? '');
-                setLocked(localStorage.getItem('locked') ?? '');
-                if (CurrentToken && localStorage.getItem('user')) {
-                    setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-                }
-                if (!CurrentUser) {
-                    serverCheck().then((res) => {
-                        if (res.status == 'error') {
-                            window.location.href = '/login';
-                            // Swal.fire({
-                            //     title: 'Terjadi Kesalahan Server',
-                            //     text: 'Server tidak merespon! Silahkan untuk reload halaman?',
-                            //     icon: 'error',
-                            //     showCancelButton: true,
-                            //     confirmButtonText: 'Login Ulang',
-                            //     cancelButtonText: 'Reload',
-                            // }).then((result) => {
-                            //     if (result.isConfirmed) {
-                            //         window.location.href = '/login';
-                            //     }
-                            //     if (result.isDismissed) {
-                            //         // window.location.reload();
-                            //     }
-                            // });
-                        }
-                    });
+
+                if (document.cookie) {
+                    let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
+                    setCurrentToken(token);
+
+                    let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+                    user = user ? JSON.parse(user) : null;
+                    setCurrentUser(user);
+
+                    let locked = document.cookie.split(';').find((row) => row.trim().startsWith('locked='))?.split('=')[1];
+                    setLocked(locked);
+                    let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
                 }
 
                 if (Locked == 'true') {
@@ -185,16 +177,22 @@ const Header = () => {
                 }
             }).then((response) => {
                 if (response.status == 200) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    localStorage.removeItem('locked');
+                    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    signOut();
                     window.location.href = '/login';
                 }
             }).catch((error) => {
                 if (error.response.status == 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    localStorage.removeItem('locked');
+                    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    signOut();
                     window.location.href = '/login';
                 }
             });
@@ -293,7 +291,7 @@ const Header = () => {
 
     const kunciLayar = () => {
         showSweetAlert('warning', 'Kunci Layar', 'Apakah anda yakin ingin mengunci layar?', 'Ya', 'Tidak', () => {
-            localStorage.setItem('locked', 'true');
+            document.cookie = 'locked=true; path=/';
             window.location.href = '/lockscreen';
         });
     }

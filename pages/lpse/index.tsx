@@ -22,17 +22,32 @@ import Dropdown from '@/components/Dropdown';
 const Index = () => {
 
     const dispatch = useDispatch();
-    const [isMounted, setIsMounted] = useState<boolean>(false);
+
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
+    const [CurrentUser, setCurrentUser] = useState<any>([]);
+    const [CurrentToken, setCurrentToken] = useState<any>([]);
+
+    useEffect(() => {
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
+
+            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
+            setCurrentToken(token);
+        }
+    }, [isMounted]);
+
     useEffect(() => {
         dispatch(setPageTitle('Dashboard LPSE'));
     });
 
-    const CurrentToken = getCookie('token');
+    // const CurrentToken = getCookie('token');
     const baseUri = BaseUri();
 
     const [year, setYear] = useState<number>(new Date().getFullYear());

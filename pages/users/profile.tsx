@@ -84,15 +84,20 @@ const Profile = () => {
 
     const [tab, setTab] = useState<number>(1);
 
+
     useEffect(() => {
-        if (window) {
-            if (localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
-        }
-        setUserLogsPage(1);
-        setNotificationPage(1);
+        setIsMounted(true);
     }, []);
+
+    useEffect(() => {
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
+            setUserLogsPage(1);
+            setNotificationPage(1);
+        }
+    }, [isMounted]);
 
     useEffect(() => {
         if (router.query.tab) {

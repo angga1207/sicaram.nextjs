@@ -16,6 +16,7 @@ import { setCookie, getCookie, hasCookie, deleteCookie } from 'cookies-next';
 
 
 import Swal from 'sweetalert2';
+import { signOut } from 'next-auth/react';
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
         toast: true,
@@ -44,16 +45,33 @@ const UnlockBox = () => {
         setIsClient(true)
     });
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     const [CurrentToken, setCurrentToken] = useState<any>([]);
+    const [lockedPassword, setLockedPassword] = useState<any>([]);
     const [Locked, setLocked] = useState<any>([]);
+
     useEffect(() => {
-        if (window) {
-            setCurrentToken(localStorage.getItem('token') ?? '');
-            setLocked(localStorage.getItem('locked') ?? '');
-            setCurrentUser(JSON.parse(localStorage.getItem('user') ?? ''));
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
+
+            let locked = document.cookie.split(';').find((row) => row.trim().startsWith('locked='))?.split('=')[1];
+            setLocked(locked);
+
+            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
+            setCurrentToken(token);
+
+            let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
+            setLockedPassword(ups);
         }
-    }, []);
+    }, [isMounted]);
 
     if (CurrentUser.length == 0 && !CurrentToken && isClient) {
         window.location.href = '/login';
@@ -70,18 +88,24 @@ const UnlockBox = () => {
                 headers: {
                     'Authorization': 'Bearer ' + CurrentToken
                 }
-            }).then((response: any) => {
+            }).then((response) => {
                 if (response.status == 200) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    localStorage.removeItem('locked');
+                    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    signOut();
                     window.location.href = '/login';
                 }
             }).catch((error) => {
                 if (error.response.status == 401) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    localStorage.removeItem('locked');
+                    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    signOut();
                     window.location.href = '/login';
                 }
             });
@@ -103,9 +127,9 @@ const UnlockBox = () => {
             return;
         }
 
-        if (password === localStorage.getItem('userPassword')) {
+        if (password === lockedPassword) {
             document.getElementById('passwordValidation')?.classList.add('hidden');
-            localStorage.setItem('locked', 'false');
+            document.cookie = 'locked=false';
             router.push('/');
         } else {
             e.target.password.value = '';
