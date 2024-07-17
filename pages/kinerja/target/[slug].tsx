@@ -24,10 +24,11 @@ import { getMasterData, Save, fetchLogs, sendRequestVerification, sendReplyVerif
 import { fetchPeriodes, fetchSatuans } from '@/apis/fetchdata';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle, faSpinner, faCaretUp, faAngleDoubleUp } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faMinus, faMinusCircle, faPlus, faPlusCircle, faArrowRightToBracket, faBriefcaseClock, faCheck, faTimes, faSyncAlt, faForward, faHourglassHalf, faShare, faUserAlt, faExclamationCircle, faSpinner, faCaretUp, faAngleDoubleUp, faBars, faLink } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
 import LoadingSicaram from '@/components/LoadingSicaram';
+import Dropdown from '@/components/Dropdown';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -938,7 +939,7 @@ const Index = () => {
 
             {isMounted && (
                 <div className="fixed bottom-0 left-0 w-full bg-slate-100 dark:bg-slate-800 sm:h-[70px] py-1 pr-16 pl-0 lg:pl-16">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 overflow-auto gap-y-2">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 gap-y-2">
                         <div className="">
                             <div className="font-semibold">
                                 Input Target
@@ -1114,7 +1115,8 @@ const Index = () => {
                                     Muat Ulang
                                 </div>
                             )}
-                            {subKegiatan?.status === 'verified' && (
+
+                            {/* {subKegiatan?.status === 'verified' && (
                                 <div
                                     onClick={(e) => {
                                         if (unsaveStatus) {
@@ -1153,7 +1155,65 @@ const Index = () => {
                                     <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4' />
                                     Buka Realisasi
                                 </div>
-                            )}
+                            )} */}
+
+
+
+                            <div className="dropdown">
+                                <Dropdown
+                                    placement={`top-end`}
+                                    btnClassName="btn btn-sm flex whitespace-nowrap dark:border-cyan-900 dark:shadow-black-dark-light bg-cyan-600 dark:bg-cyan-700 hover:bg-cyan-500 dark:hover:bg-cyan-800 text-white cursor-pointer dropdown-toggle"
+                                    button={
+                                        <>
+                                            Menu
+                                            <FontAwesomeIcon icon={faBars} className='ml-2 w-3 h-3' />
+                                        </>
+                                    }
+                                >
+                                    <ul className="!min-w-[200px]">
+                                        {/* {month > 1 && (
+                                            <li>
+                                                <a
+                                                    href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) - 1}`}
+                                                    onClick={(e) => {
+                                                        setMonth(parseInt(month) - 1);
+                                                    }}
+                                                    className='flex items-center'>
+                                                    <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
+                                                    <span>
+                                                        Target {new Date(year, month - 2).toLocaleString('id-ID', { month: 'long' })}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        )}
+                                        {month < 12 && (
+                                            <li>
+                                                <a
+                                                    href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) + 1}`}
+                                                    onClick={(e) => {
+                                                        setMonth(parseInt(month) + 1);
+                                                    }}
+                                                    className='flex items-center'>
+                                                    <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 flex-none' />
+                                                    <span>
+                                                        Target {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        )} */}
+                                        {subKegiatan?.status === 'verified' && (
+                                            <li>
+                                                <a href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
+                                                    <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
+                                                    <span>
+                                                        Buka Realisasi
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        )}
+                                    </ul>
+                                </Dropdown>
+                            </div>
 
                             {dataBackEndError === false ? (
                                 <button

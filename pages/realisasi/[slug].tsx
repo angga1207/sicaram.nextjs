@@ -3169,17 +3169,9 @@ const Index = () => {
                                             }
                                         >
                                             <ul className="!min-w-[200px]">
-                                                <li>
-                                                    <Link href={`/kinerja/target/${subKegiatanId}`} className='flex items-center'>
-                                                        <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
-                                                        <span>
-                                                            Buka Target
-                                                        </span>
-                                                    </Link>
-                                                </li>
-                                                {month > 1 && (
+                                                {/* {month > 1 && (
                                                     <li>
-                                                        <Link
+                                                        <a
                                                             href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) - 1}`}
                                                             onClick={(e) => {
                                                                 setMonth(parseInt(month) - 1);
@@ -3189,12 +3181,12 @@ const Index = () => {
                                                             <span>
                                                                 Bulan {new Date(year, month - 2).toLocaleString('id-ID', { month: 'long' })}
                                                             </span>
-                                                        </Link>
+                                                        </a>
                                                     </li>
                                                 )}
                                                 {month < 12 && (
                                                     <li>
-                                                        <Link
+                                                        <a
                                                             href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) + 1}`}
                                                             onClick={(e) => {
                                                                 setMonth(parseInt(month) + 1);
@@ -3204,9 +3196,17 @@ const Index = () => {
                                                             <span>
                                                                 Bulan {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
                                                             </span>
-                                                        </Link>
+                                                        </a>
                                                     </li>
-                                                )}
+                                                )} */}
+                                                <li>
+                                                    <a href={`/kinerja/target/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
+                                                        <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
+                                                        <span>
+                                                            Buka Target
+                                                        </span>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </Dropdown>
                                     </div>

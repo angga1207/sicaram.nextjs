@@ -40,7 +40,7 @@ import IconAirplay from '../Icon/IconAirplay';
 import IconDollarSign from '../Icon/IconDollarSign';
 import IconDollarSignCircle from '../Icon/IconDollarSignCircle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags } from '@fortawesome/free-solid-svg-icons';
 import { faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 
@@ -528,6 +528,29 @@ const Sidebar = () => {
                                             </div>
                                         </Link>
                                     </li>
+
+                                    {([1, 2, 4].includes(CurrentUser?.role_id)) && (
+                                        <>
+                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                                <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <span>
+                                                    BPKAD
+                                                </span>
+                                            </h2>
+
+                                            <li className="menu nav-item">
+                                                <Link href="/bpkad/import" className="group">
+                                                    <div className="flex items-center">
+                                                        <FontAwesomeIcon icon={faCloudUploadAlt} className='shrink-0 group-hover:!text-primary' />
+                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                            Import SIPD
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
+
 
                                     {([1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id)) && (
                                         <>

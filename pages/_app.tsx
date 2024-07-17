@@ -50,35 +50,44 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const { fcmToken, notificationPermissionStatus } = useFcmToken();
 
     const baseUri = BaseUri();
 
     useEffect(() => {
-        const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
-        const currentToken = localStorage.getItem('token') ?? null;
-        if (currentUser && currentToken) {
-            fetch(baseUri + '/users/' + currentUser?.id + '/fcm', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${currentToken}`,
-                },
-                body: JSON.stringify({
-                    fcmToken: fcmToken,
-                }),
-            })
-                .then((response) => {
+        if (isMounted) {
+            const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '{[]}') : [];
+            const currentToken = localStorage.getItem('token') ?? null;
+            if (currentUser && currentToken) {
+                fetch(baseUri + '/users/' + currentUser?.id + '/fcm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${currentToken}`,
+                    },
+                    body: JSON.stringify({
+                        fcmToken: fcmToken,
+                    }),
                 })
-                .then((data) => {
-                })
-                .catch((error) => {
-                });
+                    .then((response) => {
+                    })
+                    .then((data) => {
+                    })
+                    .catch((error) => {
+                    });
+            }
+            if (notificationPermissionStatus === 'denied') {
+                showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
+            }
         }
-        if (notificationPermissionStatus === 'denied') {
-            showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
-        }
-    }, [fcmToken]);
+    }, [isMounted]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {

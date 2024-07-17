@@ -82,11 +82,11 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
 
 const Header = () => {
     const router = useRouter();
-    const [isClient, setIsClient] = useState(false)
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        setIsClient(true)
-    }, [])
+        setIsMounted(true);
+    }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>(null);
     const [CurrentToken, setCurrentToken] = useState<any>([]);
@@ -94,39 +94,41 @@ const Header = () => {
 
     useEffect(() => {
         if (window) {
-            setCurrentToken(localStorage.getItem('token') ?? '');
-            setLocked(localStorage.getItem('locked') ?? '');
-            if (CurrentToken && localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
-            if (!CurrentUser) {
-                serverCheck().then((res) => {
-                    if (res.status == 'error') {
-                        window.location.href = '/login';
-                        // Swal.fire({
-                        //     title: 'Terjadi Kesalahan Server',
-                        //     text: 'Server tidak merespon! Silahkan untuk reload halaman?',
-                        //     icon: 'error',
-                        //     showCancelButton: true,
-                        //     confirmButtonText: 'Login Ulang',
-                        //     cancelButtonText: 'Reload',
-                        // }).then((result) => {
-                        //     if (result.isConfirmed) {
-                        //         window.location.href = '/login';
-                        //     }
-                        //     if (result.isDismissed) {
-                        //         // window.location.reload();
-                        //     }
-                        // });
-                    }
-                });
-            }
+            if (isMounted) {
+                setCurrentToken(localStorage.getItem('token') ?? '');
+                setLocked(localStorage.getItem('locked') ?? '');
+                if (CurrentToken && localStorage.getItem('user')) {
+                    setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
+                }
+                if (!CurrentUser) {
+                    serverCheck().then((res) => {
+                        if (res.status == 'error') {
+                            window.location.href = '/login';
+                            // Swal.fire({
+                            //     title: 'Terjadi Kesalahan Server',
+                            //     text: 'Server tidak merespon! Silahkan untuk reload halaman?',
+                            //     icon: 'error',
+                            //     showCancelButton: true,
+                            //     confirmButtonText: 'Login Ulang',
+                            //     cancelButtonText: 'Reload',
+                            // }).then((result) => {
+                            //     if (result.isConfirmed) {
+                            //         window.location.href = '/login';
+                            //     }
+                            //     if (result.isDismissed) {
+                            //         // window.location.reload();
+                            //     }
+                            // });
+                        }
+                    });
+                }
 
-            if (Locked == 'true') {
-                window.location.href = '/lockscreen';
+                if (Locked == 'true') {
+                    window.location.href = '/lockscreen';
+                }
             }
         }
-    }, [CurrentToken]);
+    }, [CurrentToken, isMounted]);
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
@@ -242,8 +244,10 @@ const Header = () => {
     // console.log(notifications)
 
     useEffect(() => {
-        refreshNotificationLess();
-    }, []);
+        if (isMounted) {
+            refreshNotificationLess();
+        }
+    }, [isMounted]);
 
     const refreshNotificationLess = () => {
         fetchNotifLess().then((res) => {

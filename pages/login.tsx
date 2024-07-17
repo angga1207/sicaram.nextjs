@@ -379,7 +379,7 @@ const Login = () => {
                                 </>
                             )}
 
-                            {serverStatus === true && (
+                            {serverStatus === true ? (
                                 <div className='relative'>
                                     <div className={`${serverStatus ? 'bg-green-500' : 'bg-red-500'} absolute top-[2px] right-[2px] z-10 rounded-full w-4 h-4 animate-pulse`}></div>
                                     {submitLoading ? (
@@ -405,6 +405,13 @@ const Login = () => {
                                             )}
                                         </>
                                     )}
+                                </div>
+                            ) : (
+                                <div className='relative'>
+                                    <div className={`${serverStatus ? 'bg-green-500' : 'bg-red-500'} absolute top-[2px] right-[2px] z-10 rounded-full w-4 h-4 animate-pulse`}></div>
+                                    <button type="button" className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
+                                        Server Offline
+                                    </button>
                                 </div>
                             )}
                         </form>
