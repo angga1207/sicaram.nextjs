@@ -292,7 +292,7 @@ const Index = () => {
                             <>
                                 <div className="flex items-center gap-1">
 
-                                    {[1, 2].includes(CurrentUser?.role_id) && (
+                                    {/* {[1, 2].includes(CurrentUser?.role_id) && (
                                         <div className="btn btn-warning whitespace-nowrap relative cursor-pointer" onClick={(e) => {
                                             e.preventDefault();
                                             setModalImport(true);
@@ -303,7 +303,7 @@ const Index = () => {
                                                 Import Excel
                                             </span>
                                         </div>
-                                    )}
+                                    )} */}
 
                                     <button
                                         onClick={() => {

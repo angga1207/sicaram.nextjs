@@ -477,7 +477,7 @@ const Sidebar = () => {
                                         </li>
                                     )}
 
-                                    {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <Link href="/apbd" className="group">
                                                 <div className="flex items-center">
@@ -488,7 +488,7 @@ const Sidebar = () => {
                                                 </div>
                                             </Link>
                                         </li>
-                                    )}
+                                    )} */}
 
                                     {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
