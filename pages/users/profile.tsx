@@ -874,6 +874,7 @@ const Profile = () => {
                                                             <td>
                                                                 <Link
                                                                     href={notif?.uri}
+                                                                    className='hover:text-blue-500'
                                                                 >
                                                                     <div className="">
                                                                         {notif?.title}
