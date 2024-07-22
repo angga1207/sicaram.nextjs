@@ -368,7 +368,7 @@ const Page = () => {
                     <div className="text-lg font-semibold mb-5">
                         Daftar Program yang menggunakan Sumber Dana
                     </div>
-                    <div className="table-responsive">
+                    <div className="table-responsive h-[500px]">
                         <table>
                             <thead>
                                 <tr>
@@ -442,7 +442,7 @@ const Page = () => {
                     <div className="text-lg font-semibold mb-5">
                         Daftar Kegiatan yang menggunakan Sumber Dana
                     </div>
-                    <div className="table-responsive">
+                    <div className="table-responsive h-[500px]">
                         <table>
                             <thead>
                                 <tr>
@@ -516,7 +516,7 @@ const Page = () => {
                     <div className="text-lg font-semibold mb-5">
                         Daftar Sub Kegiatan yang menggunakan Sumber Dana
                     </div>
-                    <div className="table-responsive">
+                    <div className="table-responsive h-[500px]">
                         <table>
                             <thead>
                                 <tr>

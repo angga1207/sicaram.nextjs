@@ -132,7 +132,7 @@ const Index = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-around flex-wrap lg:h-[calc(100vh-400px)]">
+                <div className="flex items-center justify-around flex-wrap lg:h-[calc(100vh-400px)s]">
 
                     <Link href={`/dashboard/capaian-keuangan`}
                         className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>

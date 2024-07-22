@@ -479,7 +479,8 @@ const Index = () => {
                         <br />
                         Perangkat Daerah Kabupaten Ogan Ilir
                     </div>
-                    <div className="col-span-10 lg:col-span-4 relative h-full">
+
+                    {/* <div className="col-span-10 lg:col-span-4 relative h-full">
                         <div className="panel h-full overflow-hidden border-0 p-0">
                             <div className="min-h-[280px] bg-gradient-to-r from-[#49ee43] to-[#206b0f] p-6">
                                 <div className="flex gap-x-2 items-center justify-between text-white">
@@ -592,10 +593,11 @@ const Index = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-span-10 lg:col-span-6">
+                    </div> */}
 
-                        <div className='space-y-2 h-full lg:h-[calc(100vh-200px)] overflow-x-auto'>
+                    <div className="col-span-10 lg:col-span-10">
+
+                        <div className='space-y-2 h-full lg:h-[calc(100vh-200px)qwe] overflow-x-auto'>
                             {RankInstances?.length === 0 && (
                                 <div className='panel h-full shadow-xl'>
                                     <LoadingSicaram></LoadingSicaram>
@@ -617,14 +619,13 @@ const Index = () => {
                                                 </div>
                                                 <div className="text-md uppercase">{item.instance_name}</div>
                                             </div>
-                                            <div className='mt-2 pt-2 flex items-center border-t'>
-
-                                                <div className='w-full text-center'>
-                                                    <div className="font-semibold">
-                                                        Capaian Anggaran
-                                                    </div>
-                                                    <div className="flex gap-4 items-center">
-                                                        <Tippy content="Capaian Anggaran" theme='success'>
+                                            <div className='mt-2 pt-2 border-t'>
+                                                <div className="font-semibold text-center mb-5">
+                                                    Capaian Keuangan
+                                                </div>
+                                                <div className='w-full text-center flex flex-col md:flex-row gap-y-10'>
+                                                    <div className="flex flex-col md:flex-row gap-4 items-center">
+                                                        <Tippy content="Capaian Keuangan" theme='success'>
                                                             <div className="relative w-40 h-40 cursor-pointer">
                                                                 <svg className="w-full h-full" viewBox="0 0 100 100">
                                                                     <circle
@@ -667,26 +668,26 @@ const Index = () => {
                                                                     Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
                                                                 </div>
                                                             </Tippy>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex items-center justify-center gap-4">
-                                                        <div className="font-semibold">
-                                                            ({item?.instance_programs_count})
-                                                            <span className='text-xs ml-1'>
-                                                                Program
-                                                            </span>
-                                                        </div>
-                                                        <div className="font-semibold">
-                                                            ({item?.instance_kegiatans_count})
-                                                            <span className='text-xs ml-1'>
-                                                                Kegiatan
-                                                            </span>
-                                                        </div>
-                                                        <div className="font-semibold">
-                                                            ({item?.instance_sub_kegiatans_count})
-                                                            <span className='text-xs ml-1'>
-                                                                Sub Kegiatan
-                                                            </span>
+                                                            <div className="flex items-center justify-center gap-4">
+                                                                <div className="font-semibold">
+                                                                    ({item?.instance_programs_count})
+                                                                    <span className='text-xs ml-1'>
+                                                                        Program
+                                                                    </span>
+                                                                </div>
+                                                                <div className="font-semibold">
+                                                                    ({item?.instance_kegiatans_count})
+                                                                    <span className='text-xs ml-1'>
+                                                                        Kegiatan
+                                                                    </span>
+                                                                </div>
+                                                                <div className="font-semibold">
+                                                                    ({item?.instance_sub_kegiatans_count})
+                                                                    <span className='text-xs ml-1'>
+                                                                        Sub Kegiatan
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -694,9 +695,16 @@ const Index = () => {
                                             </div>
                                         </div>
 
-                                        <div className="w-32">
-                                            <div className="w-32 h-32 relative rounded-full">
-                                                <img src={item.instance_logo} alt={item.instance_name} className='w-full h-full p-1 rounded-full object-contain' />
+                                        <div className="w-32 md:w-60 hidden md:block">
+                                            <div className="w-32 md:w-60 h-32 md:h-60 relative rounded-full">
+                                                <img
+                                                    src={item.instance_logo}
+                                                    alt={item.instance_name}
+                                                    onError={(e: any) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = '/assets/images/logo-oi.png';
+                                                    }}
+                                                    className='w-full h-full p-1 rounded-full object-contain' />
                                             </div>
                                             <div className="mt-4 text-[10px] flex items-center justify-center text-lime-700 opacity-0 group-hover:opacity-100 transition-all duration-500">
                                                 <FontAwesomeIcon icon={faAngleDoubleRight} className="w-2 h-2 mr-1" />
