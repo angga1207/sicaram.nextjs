@@ -872,12 +872,16 @@ const Profile = () => {
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <div className="">
-                                                                    {notif?.title}
-                                                                </div>
-                                                                <div className="font-normal">
-                                                                    {notif?.message}
-                                                                </div>
+                                                                <Link
+                                                                    href={notif?.uri}
+                                                                >
+                                                                    <div className="">
+                                                                        {notif?.title}
+                                                                    </div>
+                                                                    <div className="font-normal">
+                                                                        {notif?.message}
+                                                                    </div>
+                                                                </Link>
                                                             </td>
                                                             <td className='!w-[150px]'>
                                                                 <div className="flex items-center gap-1">
