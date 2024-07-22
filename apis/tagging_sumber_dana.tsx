@@ -26,12 +26,13 @@ export async function IndexTaggingSumberDana(instance: number) {
     }
 }
 
-export async function DetailTaggingSumberDana(id: number, instance: number) {
+export async function DetailTaggingSumberDana(id: number, instance: number, year: number) {
     try {
         const res = await axios.get(`${baseUri}/caram/tagging-sumber-dana/${id}`, {
             headers: { 'Authorization': `Bearer ${CurrentToken}` },
             params: {
-                instance: instance
+                instance: instance,
+                year: year
             }
         });
         return await res.data;
@@ -48,7 +49,8 @@ export async function SaveTaggingSumberDana(id: number, data: any, instance: num
         const res = await axios.post(`${baseUri}/caram/tagging-sumber-dana/${id}`, data, {
             headers: { 'Authorization': `Bearer ${CurrentToken}` },
             params: {
-                instance: instance
+                instance: instance,
+                year: data.year
             }
         });
         return await res.data;

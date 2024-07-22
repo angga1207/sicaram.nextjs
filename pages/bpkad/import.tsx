@@ -85,10 +85,8 @@ const Page = () => {
     const [CurrentToken, setCurrentToken] = useState<any>(null);
     useEffect(() => {
         if (isMounted) {
-            setCurrentToken(localStorage.getItem('token') ?? '');
-            if (CurrentToken && localStorage.getItem('user')) {
-                setCurrentUser(JSON.parse(localStorage.getItem('user') ?? '{[]}') ?? []);
-            }
+            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
+            setCurrentToken(token);
         }
     }, [isMounted]);
 

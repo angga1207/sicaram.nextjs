@@ -66,16 +66,25 @@ const Index = () => {
         chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
             if (data.status === 'success') {
                 setAnggaranSeries(data.data);
+
+                const target = Math.max(...data.data?.target?.map((item: any) => item.target));
+                const realisasi = Math.max(...data.data?.realisasi?.map((item: any) => item.realisasi));
+                const percent = target > 0 ? ((realisasi / target) * 100).toFixed(2) : 0;
+                setAnggaranSummary({
+                    'target': target,
+                    'realisasi': realisasi,
+                    'percent': percent,
+                });
             }
         });
     }, [view]);
 
     useEffect(() => {
-        summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
-            if (data.status === 'success') {
-                setAnggaranSummary(data.data);
-            }
-        });
+        // summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
+        //     if (data.status === 'success') {
+        //         setAnggaranSummary(data.data);
+        //     }
+        // });
         getRankInstance(periode, new Date().getFullYear(), 'keuangan').then((data) => {
             if (data.status === 'success') {
                 setRankInstances(data.data);
@@ -380,9 +389,9 @@ const Index = () => {
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto">
-                                        {AnggaranSummary?.target?.target ? (
+                                        {AnggaranSummary?.target ? (
                                             <>
-                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target?.target)}
+                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target)}
                                             </>
                                         ) : (
                                             <>
@@ -416,9 +425,9 @@ const Index = () => {
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">
-                                        {AnggaranSummary?.realisasi?.realisasi ? (
+                                        {AnggaranSummary?.realisasi ? (
                                             <>
-                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi?.realisasi)}
+                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi)}
                                             </>
                                         ) : (
                                             <>
@@ -436,9 +445,9 @@ const Index = () => {
                                         Capaian Realisasi
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-slate-800 dark:text-white font-semibold ltr:ml-auto rtl:mr-auto">
-                                        {AnggaranSummary?.realisasi?.realisasi ? (
+                                        {AnggaranSummary?.percent ? (
                                             <>
-                                                {((AnggaranSummary?.realisasi?.realisasi / AnggaranSummary?.target?.target) * 100).toFixed(2)} %
+                                                {AnggaranSummary.percent} %
                                             </>
                                         ) : (
                                             <>

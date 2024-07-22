@@ -42,3 +42,20 @@ export async function getRealisasi(instance: any, year: any, triwulan: any) {
     const data = await res.data;
     return data;
 }
+
+
+export async function getReportTagSumberDana(instance: any, year: any, tag: any) {
+    const res = await axios.get(baseUri + '/report/tag-sumber-dana', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${CurrentToken}`,
+        },
+        params: {
+            instance: instance,
+            year: year,
+            tag: tag
+        }
+    });
+    const data = await res.data;
+    return data;
+}

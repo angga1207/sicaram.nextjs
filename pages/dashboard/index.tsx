@@ -25,6 +25,7 @@ import { chartRealisasi, summaryRealisasi, getRankInstance, chartKinerja, summar
 import Link from 'next/link';
 import LoadingSicaram from '@/components/LoadingSicaram';
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -65,21 +66,56 @@ const Index = () => {
     }
 
     useEffect(() => {
-        summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
-            if (data.status === 'success') {
-                setKinerjaSummary(data.data);
-            }
-        });
+        if (isMounted) {
+            summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
+                if (data?.message?.response?.status === 401) {
+                    signOut();
+                }
+                if (data.status === 'success') {
+                    setKinerjaSummary(data.data);
+                }
+            });
+        }
     }, [view]);
 
     useEffect(() => {
-        summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
-            if (data.status === 'success') {
-                setAnggaranSummary(data?.data);
-                setPercentageAnggaranSummary(data?.data?.realisasi?.realisasi / data?.data?.target?.target * 100);
-            }
-        });
-    }, []);
+        if (isMounted) {
+            // summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
+            //     if (data.status === 'success') {
+            //         if (data?.message?.response?.status === 401) {
+            //             signOut();
+            //         }
+            //         setAnggaranSummary(data?.data);
+            //         setPercentageAnggaranSummary(data?.data?.realisasi?.realisasi / data?.data?.target?.target * 100);
+            //     }
+            // });
+
+            chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
+                if (data.status === 'success') {
+                    setAnggaranSeries(data.data);
+
+                    const target = Math.max(...data.data?.target?.map((item: any) => item.target));
+                    const realisasi = Math.max(...data.data?.realisasi?.map((item: any) => item.realisasi));
+                    const percent = target > 0 ? ((realisasi / target) * 100) : 0;
+                    setAnggaranSummary({
+                        'target': target,
+                        'realisasi': realisasi,
+                        'percent': percent,
+                    });
+                    setPercentageAnggaranSummary(percent);
+                }
+            });
+
+            summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
+                if (data?.message?.response?.status === 401) {
+                    signOut();
+                }
+                if (data.status === 'success') {
+                    setKinerjaSummary(data.data);
+                }
+            });
+        }
+    }, [isMounted]);
 
     return (
         <>
@@ -106,6 +142,7 @@ const Index = () => {
                             </div>
                         )}
                         {AnggaranSummary?.length !== 0 && (
+                            <>
                             <div className="flex items-center justify-center cursor-pointer">
                                 <svg className="transform -rotate-90 w-[360px] h-[360px]">
                                     <circle
@@ -147,6 +184,7 @@ const Index = () => {
                                     <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
                                 </div>
                             </div>
+                            </>
                         )}
                         <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-500'>
                             Capaian Keuangan

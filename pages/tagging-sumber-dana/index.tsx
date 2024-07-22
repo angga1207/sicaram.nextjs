@@ -188,17 +188,32 @@ const Index = () => {
     const selectSubKegiatan = (data: any, index: any) => {
         setSelectedSubKegiatan(data);
         toggleSubKgtActive(`${index + 1}`)
-        DetailTaggingSumberDana(data.id, instance).then((data) => {
+        DetailTaggingSumberDana(data.id, instance, year).then((data) => {
             if (data.status == 'success') {
                 setDataInput(data.data);
             }
         });
     }
 
+    useEffect(() => {
+        if (selectedSubKegiatan) {
+            DetailTaggingSumberDana(selectedSubKegiatan.id, instance, year).then((data) => {
+                if (data.status == 'success') {
+                    setDataInput(data.data);
+                }
+            });
+        }
+    }, [year]);
+
     const save = () => {
         SaveTaggingSumberDana(selectedSubKegiatan.id, dataInput, instance).then((data) => {
             if (data.status == 'success') {
                 showAlert('success', 'Data berhasil disimpan');
+            } else if (data.status == 'error validation') {
+                Object.keys(data.message).map((key: any) => {
+                    showAlert('error', data.message[key])
+                });
+                // showAlert('error', data.message)
             } else {
                 showAlert('error', 'Data gagal disimpan');
             }
@@ -515,6 +530,40 @@ const Index = () => {
                                             })
                                         }}
                                         options={optionTags} />
+                                </div>
+                                <div className="">
+                                    <label htmlFor="year">
+                                        Tahun
+                                    </label>
+                                    <Select placeholder="Pilih Tahun"
+                                        className='w-full'
+                                        onChange={(e: any) => {
+                                            setDataInput((prev: any) => {
+                                                return {
+                                                    ...prev,
+                                                    year: e.value
+                                                }
+                                            })
+                                            setYear(e.value);
+                                        }}
+                                        value={
+                                            years?.map((data: any, index: number) => {
+                                                if (data == dataInput?.year) {
+                                                    return {
+                                                        value: data,
+                                                        label: data,
+                                                    }
+                                                }
+                                            })
+                                        }
+                                        options={
+                                            years?.map((data: any, index: number) => {
+                                                return {
+                                                    value: data,
+                                                    label: data,
+                                                }
+                                            })
+                                        } />
                                 </div>
                                 <div className='pt-5'>
                                     {dataInput?.tags?.length > 0 && (

@@ -66,6 +66,11 @@ const Index = () => {
     const route = useRouter();
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(setPageTitle('Laporan Program'));
+    });
+
+
     const [loaded, setLoaded] = useState<number>(0);
     const [datas, setDatas] = useState<any>([]);
     const [instanceId, setInstanceId] = useState<any>(null);
@@ -101,8 +106,6 @@ const Index = () => {
     ]);
 
     useEffect(() => {
-        dispatch(setPageTitle('Laporan Realisasi'));
-        // Get Query Params
         if (route.query) {
             const { instance, year, triwulan } = route.query;
             setInstanceId(instance);
