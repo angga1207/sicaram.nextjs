@@ -155,6 +155,7 @@ const Index = () => {
     const [year, setYear] = useState<any>(null);
     const [month, setMonth] = useState<any>(null);
     const [datas, setDatas] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [dataRealisasiSubKegiatan, setDataRealisasiSubKegiatan] = useState<any>([]);
     const [dataKeterangan, setDataKeterangan] = useState<any>([]);
     const [unsaveStatus, setUnsaveStatus] = useState<boolean>(false);
@@ -190,12 +191,14 @@ const Index = () => {
     const [activeContracts, setActiveContracts] = useState<any>([]);
 
     useEffect(() => {
-        fetchSatuans().then((data) => {
-            if (data.status == 'success') {
-                setSatuans(data.data);
-            }
-        });
-    }, [CurrentUser]);
+        if (isMounted) {
+            fetchSatuans().then((data) => {
+                if (data.status == 'success') {
+                    setSatuans(data.data);
+                }
+            });
+        }
+    }, [isMounted]);
 
     useEffect(() => {
         if (route.query.slug) {
@@ -206,6 +209,17 @@ const Index = () => {
     }, [route.query.slug]);
 
     useEffect(() => {
+        setIsLoading(true);
+        setDatas(null);
+        setDataRealisasiSubKegiatan([]);
+        setSubKegiatan(null);
+        setDataRincian([]);
+        setDataBackEndError(null);
+        setDataBackEndMessage(null);
+
+        setDataKeterangan([]);
+        setActiveContracts([]);
+
         if (subKegiatanId) {
             getMasterData(subKegiatanId, year, month).then((data: any) => {
                 if (data.status == 'success') {
@@ -219,29 +233,34 @@ const Index = () => {
                 if (data.status === 'error') {
                     showAlert('error', data.message);
                 }
+                setIsLoading(false);
             });
         }
         setIsMounted(true);
-    }, [subKegiatanId]);
+    }, [subKegiatanId, year, month]);
 
     useEffect(() => {
         if (dataRealisasiSubKegiatan.id && tab == 3) {
-            getKeteranganSubKegiatan(dataRealisasiSubKegiatan.id, year, month).then((data: any) => {
-                if (data.status == 'success') {
-                    setDataKeterangan(data.data);
-                    setImages(data.data.files);
-                }
-            });
+            if (dataKeterangan?.length == 0) {
+                getKeteranganSubKegiatan(dataRealisasiSubKegiatan.id, year, month).then((data: any) => {
+                    if (data.status == 'success') {
+                        setDataKeterangan(data.data);
+                        setImages(data.data.files);
+                    }
+                });
+            }
         }
 
         if (subKegiatanId && tab == 4) {
-            setLoadingFetchKontrak(true);
-            getContract(subKegiatanId, year, month).then((data: any) => {
-                if (data.status == 'success') {
-                    setActiveContracts(data.data);
-                }
-                setLoadingFetchKontrak(false);
-            });
+            if (activeContracts.length == 0) {
+                setLoadingFetchKontrak(true);
+                getContract(subKegiatanId, year, month).then((data: any) => {
+                    if (data.status == 'success') {
+                        setActiveContracts(data.data);
+                    }
+                    setLoadingFetchKontrak(false);
+                });
+            }
         }
     }, [tab]);
 
@@ -281,7 +300,7 @@ const Index = () => {
                 if (result.isConfirmed) {
                     SaveRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
                         if (data.status == 'success') {
-                            showAlertBox('success', 'Berhasil', data.message);
+                            // showAlertBox('success', 'Berhasil', data.message);
                             setUnsaveStatus(false);
                         }
                         else {
@@ -391,7 +410,13 @@ const Index = () => {
     }
 
     const updateTotalRealisasi = () => {
-        let total = datas[0]?.realisasi_anggaran;
+        let total = 0;
+        if (month == 1) {
+            total = datas[0]?.realisasi_anggaran_bulan_ini;
+        }
+        if (month > 1 && month < 13) {
+            total = datas[0]?.realisasi_anggaran + datas[0]?.realisasi_anggaran_bulan_ini;
+        }
         setDataRincian((prev: any) => {
             const updated = prev;
             updated.indicators[0].realisasi = total;
@@ -660,7 +685,7 @@ const Index = () => {
                                             className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Harga (Rp)
                                         </th>
-                                        <th rowSpan={1} colSpan={2}
+                                        <th rowSpan={1} colSpan={(month > 1 && month < 13) ? 3 : 2}
                                             className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Jumlah (Rp)
                                         </th>
@@ -675,8 +700,13 @@ const Index = () => {
                                         <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
                                             Anggaran
                                         </th>
+                                        {month > 1 && month < 13 && (
+                                            <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                                                Realisasi Terakhir
+                                            </th>
+                                        )}
                                         <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
-                                            Realisasi
+                                            Realisasi Bulan Ini
                                         </th>
                                     </tr>
                                 </thead>
@@ -755,426 +785,269 @@ const Index = () => {
 
                                                             </td>
 
+                                                            {month > 1 && month < 13 && (
+                                                                <td className='border !border-slate-400 dark:!border-slate-100 !px-1'>
+
+                                                                    {data?.type == 'rekening' && (
+                                                                        <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                                            {new Intl.NumberFormat('id-ID', {
+                                                                                style: 'decimal',
+                                                                                minimumFractionDigits: 0,
+                                                                            }).format(data?.realisasi_anggaran ?? 0)}
+                                                                        </div>
+                                                                    )}
+
+                                                                    {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length > 0) && (
+                                                                        <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                                            {new Intl.NumberFormat('id-ID', {
+                                                                                style: 'decimal',
+                                                                                minimumFractionDigits: 0,
+                                                                            }).format(data?.realisasi_anggaran ?? 0)}
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* REALISASI ANGGARAN RINCIAN */}
+                                                                    {/* REALISASI BULAN KEMAREN */}
+                                                                    {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length == 0) && (
+                                                                        <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                                            {new Intl.NumberFormat('id-ID', {
+                                                                                style: 'decimal',
+                                                                                minimumFractionDigits: 0,
+                                                                            }).format(data?.realisasi_anggaran ?? 0)}
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* REALISASI ANGGARAN RINCIAN */}
+                                                                    {/* REALISASI BULAN KEMAREN */}
+                                                                    {(data?.type == 'target-kinerja' && data?.is_detail === false) && (
+                                                                        <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                                            {new Intl.NumberFormat('id-ID', {
+                                                                                style: 'decimal',
+                                                                                minimumFractionDigits: 0,
+                                                                            }).format(data?.realisasi_anggaran ?? 0)}
+                                                                        </div>
+                                                                    )}
+
+                                                                </td>
+                                                            )}
+
                                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
+                                                                {/* REALISASI BULAN INI */}
 
-                                                                {data?.type == 'rekening' && (
-                                                                    <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                                {data?.type === 'rekening' && (
+                                                                    <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
                                                                         {new Intl.NumberFormat('id-ID', {
                                                                             style: 'decimal',
                                                                             minimumFractionDigits: 0,
-                                                                        }).format(data?.realisasi_anggaran ?? 0)}
+                                                                        }).format(data?.realisasi_anggaran_bulan_ini ?? 0)}
                                                                     </div>
                                                                 )}
 
-                                                                {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length > 0) && (
-                                                                    <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
-                                                                        {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(data?.realisasi_anggaran ?? 0)}
-                                                                    </div>
+                                                                {data?.type === 'target-kinerja' && (
+                                                                    <input
+                                                                        type='text'
+                                                                        className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:bg-slate-200 dark:disabled:bg-slate-700 text-end'
+                                                                        value={data?.realisasi_anggaran_bulan_ini}
+                                                                        onKeyDown={(e) => {
+                                                                            if (!(
+                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                                e.keyCode == 8 ||
+                                                                                e.keyCode == 46 ||
+                                                                                e.keyCode == 37 ||
+                                                                                e.keyCode == 39 ||
+                                                                                e.keyCode == 188 ||
+                                                                                e.keyCode == 9 ||
+                                                                                // copy & paste
+                                                                                (e.keyCode == 67 && e.ctrlKey) ||
+                                                                                (e.keyCode == 86 && e.ctrlKey) ||
+                                                                                // command + c & command + v
+                                                                                (e.keyCode == 67 && e.metaKey) ||
+                                                                                (e.keyCode == 86 && e.metaKey) ||
+                                                                                // command + a
+                                                                                (e.keyCode == 65 && e.metaKey) ||
+                                                                                (e.keyCode == 65 && e.ctrlKey)
+                                                                            )) {
+                                                                                e.preventDefault();
+                                                                            }
+                                                                        }}
+                                                                        disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
+                                                                        onChange={(e) => {
+                                                                            if (subKegiatan?.status === 'verified') {
+                                                                                showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
+                                                                                return;
+                                                                            }
+                                                                            if (subKegiatan?.status_target !== 'verified') {
+                                                                                showAlert('error', 'Target Belum Terverifikasi');
+                                                                                return;
+                                                                            }
+                                                                            setUnsaveStatus(true);
+                                                                            let value = e.target.value ? parseFloat(e.target.value.toString().replace(/,/g, '.')) : 0;
+                                                                            setDatas((prev: any) => {
+                                                                                const updated = [...prev];
+                                                                                let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+                                                                                let isPaguMatch = sumRealisasiAnggaran == data.pagu ? true : false;
+                                                                                let isRealisasiMatch = value == data.pagu ? true : false;
+                                                                                updated[index] = {
+                                                                                    editable: data?.editable,
+                                                                                    long: data?.long,
+                                                                                    type: data?.type,
+                                                                                    id: data?.id,
+                                                                                    id_rek_1: data?.id_rek_1,
+                                                                                    id_rek_2: data?.id_rek_2,
+                                                                                    id_rek_3: data?.id_rek_3,
+                                                                                    id_rek_4: data?.id_rek_4,
+                                                                                    id_rek_5: data?.id_rek_5,
+                                                                                    id_rek_6: data?.id_rek_6,
+                                                                                    parent_id: data?.parent_id,
+                                                                                    year: data?.year,
+                                                                                    jenis: data?.jenis,
+                                                                                    sumber_dana_id: data?.sumber_dana_id,
+                                                                                    sumber_dana_fullcode: data?.sumber_dana_fullcode,
+                                                                                    sumber_dana_name: data?.sumber_dana_name,
+                                                                                    nama_paket: data?.nama_paket,
+                                                                                    pagu: data?.pagu,
+                                                                                    realisasi_anggaran: data?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: value,
+                                                                                    temp_pagu: data?.temp_pagu,
+                                                                                    is_pagu_match: isPaguMatch,
+                                                                                    is_detail: data?.is_detail,
+                                                                                    created_by: data?.created_by,
+                                                                                    created_by_name: data?.created_by_name,
+                                                                                    updated_by: data?.updated_by,
+                                                                                    updated_by_name: data?.updated_by_name,
+                                                                                    rincian_belanja: data?.rincian_belanja,
+                                                                                };
+
+                                                                                const Rekening6 = updated.find((item: any) => item.id == data.parent_id);
+                                                                                const Rekening6Index = updated.findIndex((item: any) => item.id == data.parent_id);
+                                                                                const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.parent_id == data.parent_id);
+                                                                                let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+
+                                                                                updated[Rekening6Index] = {
+                                                                                    editable: Rekening6?.editable,
+                                                                                    long: Rekening6?.long,
+                                                                                    type: Rekening6?.type,
+                                                                                    rek: Rekening6?.rek,
+                                                                                    id: Rekening6?.id,
+                                                                                    parent_id: Rekening6?.parent_id,
+                                                                                    uraian: Rekening6?.uraian,
+                                                                                    fullcode: Rekening6?.fullcode,
+                                                                                    pagu: Rekening6?.pagu,
+                                                                                    rincian_belanja: Rekening6?.rincian_belanja,
+                                                                                    realisasi_anggaran: Rekening6?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: RincianSumAnggaran,
+                                                                                };
+
+                                                                                const Rekening5 = updated.find((item: any) => item.id == data.id_rek_5);
+                                                                                const Rekening5Index = updated.findIndex((item: any) => item.id == data.id_rek_5);
+                                                                                const updatedRekening6 = updated.filter((item: any) => item.rek == 6 && item.parent_id == data.id_rek_5);
+                                                                                let SumAnggaranRekening5 = updatedRekening6.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+
+                                                                                updated[Rekening5Index] = {
+                                                                                    editable: Rekening5?.editable,
+                                                                                    long: Rekening5?.long,
+                                                                                    type: Rekening5?.type,
+                                                                                    rek: Rekening5?.rek,
+                                                                                    id: Rekening5?.id,
+                                                                                    parent_id: Rekening5?.parent_id,
+                                                                                    uraian: Rekening5?.uraian,
+                                                                                    fullcode: Rekening5?.fullcode,
+                                                                                    pagu: Rekening5?.pagu,
+                                                                                    rincian_belanja: Rekening5?.rincian_belanja,
+                                                                                    realisasi_anggaran: Rekening5?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening5,
+                                                                                };
+
+                                                                                const Rekening4 = updated.find((item: any) => item.id == data.id_rek_4);
+                                                                                const Rekening4Index = updated.findIndex((item: any) => item.id == data.id_rek_4);
+                                                                                const updatedRekening5 = updated.filter((item: any) => item.rek === 5 && item.parent_id == data.id_rek_4);
+                                                                                let SumAnggaranRekening4 = updatedRekening5.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+
+                                                                                updated[Rekening4Index] = {
+                                                                                    editable: Rekening4?.editable,
+                                                                                    long: Rekening4?.long,
+                                                                                    type: Rekening4?.type,
+                                                                                    rek: Rekening4?.rek,
+                                                                                    id: Rekening4?.id,
+                                                                                    parent_id: Rekening4?.parent_id,
+                                                                                    uraian: Rekening4?.uraian,
+                                                                                    fullcode: Rekening4?.fullcode,
+                                                                                    pagu: Rekening4?.pagu,
+                                                                                    rincian_belanja: Rekening4?.rincian_belanja,
+                                                                                    realisasi_anggaran: Rekening4?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening4,
+                                                                                };
+
+                                                                                const Rekening3 = updated.find((item: any) => item.id == data.id_rek_3);
+                                                                                const Rekening3Index = updated.findIndex((item: any) => item.id == data.id_rek_3);
+                                                                                const updatedRekening4 = updated.filter((item: any) => item.rek === 4 && item.parent_id == data.id_rek_3);
+                                                                                let SumAnggaranRekening3 = updatedRekening4.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+
+                                                                                updated[Rekening3Index] = {
+                                                                                    editable: Rekening3?.editable,
+                                                                                    long: Rekening3?.long,
+                                                                                    type: Rekening3?.type,
+                                                                                    rek: Rekening3?.rek,
+                                                                                    id: Rekening3?.id,
+                                                                                    parent_id: Rekening3?.parent_id,
+                                                                                    uraian: Rekening3?.uraian,
+                                                                                    fullcode: Rekening3?.fullcode,
+                                                                                    pagu: Rekening3?.pagu,
+                                                                                    rincian_belanja: Rekening3?.rincian_belanja,
+                                                                                    realisasi_anggaran: Rekening3?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening3,
+                                                                                };
+
+                                                                                const Rekening2 = updated.find((item: any) => item.id == data.id_rek_2);
+                                                                                const Rekening2Index = updated.findIndex((item: any) => item.id == data.id_rek_2);
+                                                                                const updatedRekening3 = updated.filter((item: any) => item.rek === 3 && item.parent_id == data.id_rek_2);
+                                                                                let SumAnggaranRekening2 = updatedRekening3.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+
+                                                                                updated[Rekening2Index] = {
+                                                                                    editable: Rekening2?.editable,
+                                                                                    long: Rekening2?.long,
+                                                                                    type: Rekening2?.type,
+                                                                                    rek: Rekening2?.rek,
+                                                                                    id: Rekening2?.id,
+                                                                                    parent_id: Rekening2?.parent_id,
+                                                                                    uraian: Rekening2?.uraian,
+                                                                                    fullcode: Rekening2?.fullcode,
+                                                                                    pagu: Rekening2?.pagu,
+                                                                                    rincian_belanja: Rekening2?.rincian_belanja,
+                                                                                    realisasi_anggaran: Rekening2?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening2,
+                                                                                };
+
+                                                                                const Rekening1 = updated.find((item: any) => item.id == data.id_rek_1);
+                                                                                const Rekening1Index = updated.findIndex((item: any) => item.id == data.id_rek_1);
+                                                                                const updatedRekening2 = updated.filter((item: any) => item.rek === 2 && item.parent_id == data.id_rek_1);
+                                                                                let SumAnggaranRekening1 = updatedRekening2.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
+
+                                                                                updated[Rekening1Index] = {
+                                                                                    editable: Rekening1?.editable,
+                                                                                    long: Rekening1?.long,
+                                                                                    type: Rekening1?.type,
+                                                                                    rek: Rekening1?.rek,
+                                                                                    id: Rekening1?.id,
+                                                                                    parent_id: Rekening1?.parent_id,
+                                                                                    uraian: Rekening1?.uraian,
+                                                                                    fullcode: Rekening1?.fullcode,
+                                                                                    pagu: Rekening1?.pagu,
+                                                                                    rincian_belanja: Rekening1?.rincian_belanja,
+                                                                                    realisasi_anggaran: Rekening1?.realisasi_anggaran,
+                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening1,
+                                                                                };
+
+                                                                                return updated;
+                                                                            })
+                                                                            updateTotalRealisasi();
+                                                                        }}
+                                                                        onBlur={(e) => {
+                                                                            updateTotalRealisasi();
+                                                                        }}
+                                                                    />
                                                                 )}
-
-                                                                {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length == 0) && (
-                                                                    <div>
-                                                                        <input type='text'
-                                                                            className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
-                                                                            value={data?.realisasi_anggaran}
-                                                                            onKeyDown={(e: any) => {
-                                                                                if (!(
-                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                    e.keyCode == 8 ||
-                                                                                    e.keyCode == 46 ||
-                                                                                    e.keyCode == 37 ||
-                                                                                    e.keyCode == 39 ||
-                                                                                    e.keyCode == 188 ||
-                                                                                    e.keyCode == 9 ||
-                                                                                    // copy & paste
-                                                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                                                    // command + c & command + v
-                                                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                                                    // command + a
-                                                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                                                )) {
-                                                                                    e.preventDefault();
-                                                                                }
-                                                                            }}
-                                                                            disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
-                                                                            onChange={(e) => {
-                                                                                if (subKegiatan?.status === 'verified') {
-                                                                                    showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
-                                                                                    return;
-                                                                                }
-                                                                                if (subKegiatan?.status_target !== 'verified') {
-                                                                                    showAlert('error', 'Target Belum Terverifikasi');
-                                                                                    return;
-                                                                                }
-                                                                                setUnsaveStatus(true);
-                                                                                let value = e.target.value ? parseFloat(e.target.value.toString().replace(/,/g, '.')) : 0;
-                                                                                setDatas((prev: any) => {
-                                                                                    const updated = [...prev];
-                                                                                    let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-                                                                                    let isPaguMatch = sumRealisasiAnggaran == data.pagu ? true : false;
-                                                                                    let isRealisasiMatch = value == data.pagu ? true : false;
-                                                                                    updated[index] = {
-                                                                                        editable: data?.editable,
-                                                                                        long: data?.long,
-                                                                                        type: data?.type,
-                                                                                        id: data?.id,
-                                                                                        id_rek_1: data?.id_rek_1,
-                                                                                        id_rek_2: data?.id_rek_2,
-                                                                                        id_rek_3: data?.id_rek_3,
-                                                                                        id_rek_4: data?.id_rek_4,
-                                                                                        id_rek_5: data?.id_rek_5,
-                                                                                        id_rek_6: data?.id_rek_6,
-                                                                                        parent_id: data?.parent_id,
-                                                                                        year: data?.year,
-                                                                                        jenis: data?.jenis,
-                                                                                        sumber_dana_id: data?.sumber_dana_id,
-                                                                                        sumber_dana_fullcode: data?.sumber_dana_fullcode,
-                                                                                        sumber_dana_name: data?.sumber_dana_name,
-                                                                                        nama_paket: data?.nama_paket,
-                                                                                        pagu: data?.pagu,
-                                                                                        realisasi_anggaran: value,
-                                                                                        temp_pagu: data?.temp_pagu,
-                                                                                        is_pagu_match: isPaguMatch,
-                                                                                        is_detail: data?.is_detail,
-                                                                                        created_by: data?.created_by,
-                                                                                        created_by_name: data?.created_by_name,
-                                                                                        updated_by: data?.updated_by,
-                                                                                        updated_by_name: data?.updated_by_name,
-                                                                                        rincian_belanja: data?.rincian_belanja,
-                                                                                    };
-
-                                                                                    const Rekening6 = updated.find((item: any) => item.id == data.parent_id);
-                                                                                    const Rekening6Index = updated.findIndex((item: any) => item.id == data.parent_id);
-                                                                                    const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.parent_id == data.parent_id);
-                                                                                    let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening6Index] = {
-                                                                                        editable: Rekening6?.editable,
-                                                                                        long: Rekening6?.long,
-                                                                                        type: Rekening6?.type,
-                                                                                        rek: Rekening6?.rek,
-                                                                                        id: Rekening6?.id,
-                                                                                        parent_id: Rekening6?.parent_id,
-                                                                                        uraian: Rekening6?.uraian,
-                                                                                        fullcode: Rekening6?.fullcode,
-                                                                                        pagu: Rekening6?.pagu,
-                                                                                        rincian_belanja: Rekening6?.rincian_belanja,
-                                                                                        realisasi_anggaran: RincianSumAnggaran,
-                                                                                    };
-
-                                                                                    const Rekening5 = updated.find((item: any) => item.id == data.id_rek_5);
-                                                                                    const Rekening5Index = updated.findIndex((item: any) => item.id == data.id_rek_5);
-                                                                                    const updatedRekening6 = updated.filter((item: any) => item.rek == 6 && item.parent_id == data.id_rek_5);
-                                                                                    let SumAnggaranRekening5 = updatedRekening6.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening5Index] = {
-                                                                                        editable: Rekening5?.editable,
-                                                                                        long: Rekening5?.long,
-                                                                                        type: Rekening5?.type,
-                                                                                        rek: Rekening5?.rek,
-                                                                                        id: Rekening5?.id,
-                                                                                        parent_id: Rekening5?.parent_id,
-                                                                                        uraian: Rekening5?.uraian,
-                                                                                        fullcode: Rekening5?.fullcode,
-                                                                                        pagu: Rekening5?.pagu,
-                                                                                        rincian_belanja: Rekening5?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening5,
-                                                                                    };
-
-                                                                                    const Rekening4 = updated.find((item: any) => item.id == data.id_rek_4);
-                                                                                    const Rekening4Index = updated.findIndex((item: any) => item.id == data.id_rek_4);
-                                                                                    const updatedRekening5 = updated.filter((item: any) => item.rek === 5 && item.parent_id == data.id_rek_4);
-                                                                                    let SumAnggaranRekening4 = updatedRekening5.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening4Index] = {
-                                                                                        editable: Rekening4?.editable,
-                                                                                        long: Rekening4?.long,
-                                                                                        type: Rekening4?.type,
-                                                                                        rek: Rekening4?.rek,
-                                                                                        id: Rekening4?.id,
-                                                                                        parent_id: Rekening4?.parent_id,
-                                                                                        uraian: Rekening4?.uraian,
-                                                                                        fullcode: Rekening4?.fullcode,
-                                                                                        pagu: Rekening4?.pagu,
-                                                                                        rincian_belanja: Rekening4?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening4,
-                                                                                    };
-
-                                                                                    const Rekening3 = updated.find((item: any) => item.id == data.id_rek_3);
-                                                                                    const Rekening3Index = updated.findIndex((item: any) => item.id == data.id_rek_3);
-                                                                                    const updatedRekening4 = updated.filter((item: any) => item.rek === 4 && item.parent_id == data.id_rek_3);
-                                                                                    let SumAnggaranRekening3 = updatedRekening4.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening3Index] = {
-                                                                                        editable: Rekening3?.editable,
-                                                                                        long: Rekening3?.long,
-                                                                                        type: Rekening3?.type,
-                                                                                        rek: Rekening3?.rek,
-                                                                                        id: Rekening3?.id,
-                                                                                        parent_id: Rekening3?.parent_id,
-                                                                                        uraian: Rekening3?.uraian,
-                                                                                        fullcode: Rekening3?.fullcode,
-                                                                                        pagu: Rekening3?.pagu,
-                                                                                        rincian_belanja: Rekening3?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening3,
-                                                                                    };
-
-                                                                                    const Rekening2 = updated.find((item: any) => item.id == data.id_rek_2);
-                                                                                    const Rekening2Index = updated.findIndex((item: any) => item.id == data.id_rek_2);
-                                                                                    const updatedRekening3 = updated.filter((item: any) => item.rek === 3 && item.parent_id == data.id_rek_2);
-                                                                                    let SumAnggaranRekening2 = updatedRekening3.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening2Index] = {
-                                                                                        editable: Rekening2?.editable,
-                                                                                        long: Rekening2?.long,
-                                                                                        type: Rekening2?.type,
-                                                                                        rek: Rekening2?.rek,
-                                                                                        id: Rekening2?.id,
-                                                                                        parent_id: Rekening2?.parent_id,
-                                                                                        uraian: Rekening2?.uraian,
-                                                                                        fullcode: Rekening2?.fullcode,
-                                                                                        pagu: Rekening2?.pagu,
-                                                                                        rincian_belanja: Rekening2?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening2,
-                                                                                    };
-
-                                                                                    const Rekening1 = updated.find((item: any) => item.id == data.id_rek_1);
-                                                                                    const Rekening1Index = updated.findIndex((item: any) => item.id == data.id_rek_1);
-                                                                                    const updatedRekening2 = updated.filter((item: any) => item.rek === 2 && item.parent_id == data.id_rek_1);
-                                                                                    let SumAnggaranRekening1 = updatedRekening2.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening1Index] = {
-                                                                                        editable: Rekening1?.editable,
-                                                                                        long: Rekening1?.long,
-                                                                                        type: Rekening1?.type,
-                                                                                        rek: Rekening1?.rek,
-                                                                                        id: Rekening1?.id,
-                                                                                        parent_id: Rekening1?.parent_id,
-                                                                                        uraian: Rekening1?.uraian,
-                                                                                        fullcode: Rekening1?.fullcode,
-                                                                                        pagu: Rekening1?.pagu,
-                                                                                        rincian_belanja: Rekening1?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening1,
-                                                                                    };
-
-                                                                                    return updated;
-                                                                                })
-                                                                                updateTotalRealisasi();
-                                                                            }}
-                                                                            onBlur={(e) => {
-                                                                                updateTotalRealisasi();
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                )}
-
-                                                                {(data?.type == 'target-kinerja' && data?.is_detail === false) && (
-                                                                    <div>
-                                                                        <input type='text'
-                                                                            className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
-                                                                            value={data?.realisasi_anggaran}
-                                                                            onKeyDown={(e: any) => {
-                                                                                if (!(
-                                                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                    e.keyCode == 8 ||
-                                                                                    e.keyCode == 46 ||
-                                                                                    e.keyCode == 37 ||
-                                                                                    e.keyCode == 39 ||
-                                                                                    e.keyCode == 188 ||
-                                                                                    e.keyCode == 9 ||
-                                                                                    // copy & paste
-                                                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                                                    // command + c & command + v
-                                                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                                                    // command + a
-                                                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                                                )) {
-                                                                                    e.preventDefault();
-                                                                                }
-                                                                            }}
-                                                                            disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
-                                                                            onChange={(e) => {
-                                                                                if (subKegiatan?.status === 'verified') {
-                                                                                    showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
-                                                                                    return;
-                                                                                }
-                                                                                if (subKegiatan?.status_target !== 'verified') {
-                                                                                    showAlert('error', 'Target Belum Terverifikasi');
-                                                                                    return;
-                                                                                }
-                                                                                setUnsaveStatus(true);
-                                                                                let value = e.target.value ? parseFloat(e.target.value.toString().replace(/,/g, '.')) : 0;
-                                                                                setDatas((prev: any) => {
-                                                                                    const updated = [...prev];
-                                                                                    let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-                                                                                    let isPaguMatch = sumRealisasiAnggaran == data.pagu ? true : false;
-                                                                                    let isRealisasiMatch = value == data.pagu ? true : false;
-                                                                                    updated[index] = {
-                                                                                        editable: data?.editable,
-                                                                                        long: data?.long,
-                                                                                        type: data?.type,
-                                                                                        id: data?.id,
-                                                                                        id_rek_1: data?.id_rek_1,
-                                                                                        id_rek_2: data?.id_rek_2,
-                                                                                        id_rek_3: data?.id_rek_3,
-                                                                                        id_rek_4: data?.id_rek_4,
-                                                                                        id_rek_5: data?.id_rek_5,
-                                                                                        id_rek_6: data?.id_rek_6,
-                                                                                        parent_id: data?.parent_id,
-                                                                                        year: data?.year,
-                                                                                        jenis: data?.jenis,
-                                                                                        sumber_dana_id: data?.sumber_dana_id,
-                                                                                        sumber_dana_fullcode: data?.sumber_dana_fullcode,
-                                                                                        sumber_dana_name: data?.sumber_dana_name,
-                                                                                        nama_paket: data?.nama_paket,
-                                                                                        pagu: data?.pagu,
-                                                                                        realisasi_anggaran: value,
-                                                                                        temp_pagu: data?.temp_pagu,
-                                                                                        is_pagu_match: isPaguMatch,
-                                                                                        is_detail: data?.is_detail,
-                                                                                        created_by: data?.created_by,
-                                                                                        created_by_name: data?.created_by_name,
-                                                                                        updated_by: data?.updated_by,
-                                                                                        updated_by_name: data?.updated_by_name,
-                                                                                        rincian_belanja: data?.rincian_belanja,
-                                                                                    };
-
-                                                                                    const Rekening6 = updated.find((item: any) => item.id == data.parent_id);
-                                                                                    const Rekening6Index = updated.findIndex((item: any) => item.id == data.parent_id);
-                                                                                    const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.parent_id == data.parent_id);
-                                                                                    let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening6Index] = {
-                                                                                        editable: Rekening6?.editable,
-                                                                                        long: Rekening6?.long,
-                                                                                        type: Rekening6?.type,
-                                                                                        rek: Rekening6?.rek,
-                                                                                        id: Rekening6?.id,
-                                                                                        parent_id: Rekening6?.parent_id,
-                                                                                        uraian: Rekening6?.uraian,
-                                                                                        fullcode: Rekening6?.fullcode,
-                                                                                        pagu: Rekening6?.pagu,
-                                                                                        rincian_belanja: Rekening6?.rincian_belanja,
-                                                                                        realisasi_anggaran: RincianSumAnggaran,
-                                                                                    };
-
-                                                                                    const Rekening5 = updated.find((item: any) => item.id == data.id_rek_5);
-                                                                                    const Rekening5Index = updated.findIndex((item: any) => item.id == data.id_rek_5);
-                                                                                    const updatedRekening6 = updated.filter((item: any) => item.rek == 6 && item.parent_id == data.id_rek_5);
-                                                                                    let SumAnggaranRekening5 = updatedRekening6.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening5Index] = {
-                                                                                        editable: Rekening5?.editable,
-                                                                                        long: Rekening5?.long,
-                                                                                        type: Rekening5?.type,
-                                                                                        rek: Rekening5?.rek,
-                                                                                        id: Rekening5?.id,
-                                                                                        parent_id: Rekening5?.parent_id,
-                                                                                        uraian: Rekening5?.uraian,
-                                                                                        fullcode: Rekening5?.fullcode,
-                                                                                        pagu: Rekening5?.pagu,
-                                                                                        rincian_belanja: Rekening5?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening5,
-                                                                                    };
-
-                                                                                    const Rekening4 = updated.find((item: any) => item.id == data.id_rek_4);
-                                                                                    const Rekening4Index = updated.findIndex((item: any) => item.id == data.id_rek_4);
-                                                                                    const updatedRekening5 = updated.filter((item: any) => item.rek === 5 && item.parent_id == data.id_rek_4);
-                                                                                    let SumAnggaranRekening4 = updatedRekening5.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening4Index] = {
-                                                                                        editable: Rekening4?.editable,
-                                                                                        long: Rekening4?.long,
-                                                                                        type: Rekening4?.type,
-                                                                                        rek: Rekening4?.rek,
-                                                                                        id: Rekening4?.id,
-                                                                                        parent_id: Rekening4?.parent_id,
-                                                                                        uraian: Rekening4?.uraian,
-                                                                                        fullcode: Rekening4?.fullcode,
-                                                                                        pagu: Rekening4?.pagu,
-                                                                                        rincian_belanja: Rekening4?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening4,
-                                                                                    };
-
-                                                                                    const Rekening3 = updated.find((item: any) => item.id == data.id_rek_3);
-                                                                                    const Rekening3Index = updated.findIndex((item: any) => item.id == data.id_rek_3);
-                                                                                    const updatedRekening4 = updated.filter((item: any) => item.rek === 4 && item.parent_id == data.id_rek_3);
-                                                                                    let SumAnggaranRekening3 = updatedRekening4.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening3Index] = {
-                                                                                        editable: Rekening3?.editable,
-                                                                                        long: Rekening3?.long,
-                                                                                        type: Rekening3?.type,
-                                                                                        rek: Rekening3?.rek,
-                                                                                        id: Rekening3?.id,
-                                                                                        parent_id: Rekening3?.parent_id,
-                                                                                        uraian: Rekening3?.uraian,
-                                                                                        fullcode: Rekening3?.fullcode,
-                                                                                        pagu: Rekening3?.pagu,
-                                                                                        rincian_belanja: Rekening3?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening3,
-                                                                                    };
-
-                                                                                    const Rekening2 = updated.find((item: any) => item.id == data.id_rek_2);
-                                                                                    const Rekening2Index = updated.findIndex((item: any) => item.id == data.id_rek_2);
-                                                                                    const updatedRekening3 = updated.filter((item: any) => item.rek === 3 && item.parent_id == data.id_rek_2);
-                                                                                    let SumAnggaranRekening2 = updatedRekening3.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening2Index] = {
-                                                                                        editable: Rekening2?.editable,
-                                                                                        long: Rekening2?.long,
-                                                                                        type: Rekening2?.type,
-                                                                                        rek: Rekening2?.rek,
-                                                                                        id: Rekening2?.id,
-                                                                                        parent_id: Rekening2?.parent_id,
-                                                                                        uraian: Rekening2?.uraian,
-                                                                                        fullcode: Rekening2?.fullcode,
-                                                                                        pagu: Rekening2?.pagu,
-                                                                                        rincian_belanja: Rekening2?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening2,
-                                                                                    };
-
-                                                                                    const Rekening1 = updated.find((item: any) => item.id == data.id_rek_1);
-                                                                                    const Rekening1Index = updated.findIndex((item: any) => item.id == data.id_rek_1);
-                                                                                    const updatedRekening2 = updated.filter((item: any) => item.rek === 2 && item.parent_id == data.id_rek_1);
-                                                                                    let SumAnggaranRekening1 = updatedRekening2.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-
-                                                                                    updated[Rekening1Index] = {
-                                                                                        editable: Rekening1?.editable,
-                                                                                        long: Rekening1?.long,
-                                                                                        type: Rekening1?.type,
-                                                                                        rek: Rekening1?.rek,
-                                                                                        id: Rekening1?.id,
-                                                                                        parent_id: Rekening1?.parent_id,
-                                                                                        uraian: Rekening1?.uraian,
-                                                                                        fullcode: Rekening1?.fullcode,
-                                                                                        pagu: Rekening1?.pagu,
-                                                                                        rincian_belanja: Rekening1?.rincian_belanja,
-                                                                                        realisasi_anggaran: SumAnggaranRekening1,
-                                                                                    };
-
-                                                                                    return updated;
-                                                                                })
-                                                                                updateTotalRealisasi();
-                                                                            }}
-                                                                            onBlur={(e) => {
-                                                                                updateTotalRealisasi();
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                )}
-
                                                             </td>
 
                                                         </tr>
@@ -1200,12 +1073,28 @@ const Index = () => {
                                                                                         }).format(rincian?.pagu ?? 0)}
                                                                                     </div>
                                                                                 </td>
+
+                                                                                {month > 1 && month < 13 && (
+                                                                                    <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
+                                                                                        {/* RINCIAN BELANJA */}
+                                                                                        {/* REALISASI BULAN KEMAREN */}
+                                                                                        <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
+                                                                                            {new Intl.NumberFormat('id-ID', {
+                                                                                                style: 'decimal',
+                                                                                                minimumFractionDigits: 0,
+                                                                                            }).format(rincian?.realisasi_anggaran ?? 0)}
+                                                                                        </div>
+                                                                                    </td>
+                                                                                )}
+
                                                                                 <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
+                                                                                    {/* RINCIAN BELANJA */}
+                                                                                    {/* REALISASI BULAN INI */}
                                                                                     <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
                                                                                         {new Intl.NumberFormat('id-ID', {
                                                                                             style: 'decimal',
                                                                                             minimumFractionDigits: 0,
-                                                                                        }).format(rincian?.realisasi_anggaran ?? 0)}
+                                                                                        }).format(rincian?.realisasi_anggaran_bulan_ini ?? 0)}
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -1278,7 +1167,7 @@ const Index = () => {
                                                                                                                     let hargaSatuan = keterangan?.harga_satuan && keterangan?.harga_satuan.toString().replace(/\./g, '.');
                                                                                                                     let calculateRealisasiAnggaran = value * parseFloat(hargaSatuan);
                                                                                                                     calculateRealisasiAnggaran = parseFloat(calculateRealisasiAnggaran.toFixed(0));
-                                                                                                                    let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['keterangan_rincian'][indexKeterangan]?.realisasi_anggaran_keterangan || 0), 0);
+                                                                                                                    let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['keterangan_rincian'][indexKeterangan]?.realisasi_anggaran_bulan_ini || 0), 0);
                                                                                                                     let isPaguMatch = sumRealisasiAnggaran == data.pagu ? true : false;
                                                                                                                     let isRealisasiMatch = calculateRealisasiAnggaran == keterangan?.pagu ? true : false;
                                                                                                                     updated[index] = {
@@ -1300,7 +1189,8 @@ const Index = () => {
                                                                                                                         sumber_dana_name: data?.sumber_dana_name,
                                                                                                                         nama_paket: data?.nama_paket,
                                                                                                                         pagu: data?.pagu,
-                                                                                                                        realisasi_anggaran: sumRealisasiAnggaran,
+                                                                                                                        realisasi_anggaran: data?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: sumRealisasiAnggaran,
                                                                                                                         temp_pagu: data?.temp_pagu,
                                                                                                                         is_pagu_match: isPaguMatch,
                                                                                                                         is_detail: data?.is_detail,
@@ -1321,7 +1211,8 @@ const Index = () => {
                                                                                                                         keterangan_rincian: rincian?.keterangan_rincian,
                                                                                                                         title: rincian?.title,
                                                                                                                         pagu: rincian?.pagu,
-                                                                                                                        realisasi_anggaran: calculateRealisasiAnggaran,
+                                                                                                                        realisasi_anggaran: rincian?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: calculateRealisasiAnggaran,
                                                                                                                     };
                                                                                                                     updated[index]['rincian_belanja'][indexRincian]['keterangan_rincian'][indexKeterangan] = {
                                                                                                                         editable: keterangan?.editable,
@@ -1338,7 +1229,8 @@ const Index = () => {
                                                                                                                         ppn: keterangan?.ppn,
                                                                                                                         pagu: keterangan?.pagu,
                                                                                                                         is_realisasi_match: isRealisasiMatch,
-                                                                                                                        realisasi_anggaran_keterangan: calculateRealisasiAnggaran,
+                                                                                                                        realisasi_anggaran_keterangan: keterangan?.realisasi_anggaran_keterangan,
+                                                                                                                        realisasi_anggaran_bulan_ini: calculateRealisasiAnggaran,
                                                                                                                         target_persentase_kinerja: keterangan?.target_persentase_kinerja,
                                                                                                                         persentase_kinerja: keterangan?.persentase_kinerja,
                                                                                                                     };
@@ -1346,7 +1238,7 @@ const Index = () => {
                                                                                                                     const Rekening6 = updated.find((item: any) => item.id == rincian.id_rek_6);
                                                                                                                     const Rekening6Index = updated.findIndex((item: any) => item.id == rincian.id_rek_6);
                                                                                                                     const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.parent_id == rincian.id_rek_6);
-                                                                                                                    let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                    let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                     updated[Rekening6Index] = {
                                                                                                                         editable: Rekening6?.editable,
@@ -1359,13 +1251,14 @@ const Index = () => {
                                                                                                                         fullcode: Rekening6?.fullcode,
                                                                                                                         pagu: Rekening6?.pagu,
                                                                                                                         rincian_belanja: Rekening6?.rincian_belanja,
-                                                                                                                        realisasi_anggaran: RincianSumAnggaran,
+                                                                                                                        realisasi_anggaran: Rekening6?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: RincianSumAnggaran,
                                                                                                                     };
 
                                                                                                                     const Rekening5 = updated.find((item: any) => item.id == rincian.id_rek_5);
                                                                                                                     const Rekening5Index = updated.findIndex((item: any) => item.id == rincian.id_rek_5);
                                                                                                                     const updatedRekenings6 = updated.filter((item: any) => item.rek === 6 && item.parent_id == rincian.id_rek_5);
-                                                                                                                    let SumAnggaranRekening5 = updatedRekenings6.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                    let SumAnggaranRekening5 = updatedRekenings6.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                     updated[Rekening5Index] = {
                                                                                                                         editable: Rekening5?.editable,
@@ -1378,13 +1271,14 @@ const Index = () => {
                                                                                                                         fullcode: Rekening5?.fullcode,
                                                                                                                         pagu: Rekening5?.pagu,
                                                                                                                         rincian_belanja: Rekening5?.rincian_belanja,
-                                                                                                                        realisasi_anggaran: SumAnggaranRekening5,
+                                                                                                                        realisasi_anggaran: Rekening5?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: SumAnggaranRekening5,
                                                                                                                     };
 
                                                                                                                     const Rekening4 = updated.find((item: any) => item.id == rincian.id_rek_4);
                                                                                                                     const Rekening4Index = updated.findIndex((item: any) => item.id == rincian.id_rek_4);
                                                                                                                     const updatedRekenings5 = updated.filter((item: any) => item.rek === 5 && item.parent_id == rincian.id_rek_4);
-                                                                                                                    let SumAnggaranRekening4 = updatedRekenings5.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                    let SumAnggaranRekening4 = updatedRekenings5.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                     updated[Rekening4Index] = {
                                                                                                                         editable: Rekening4?.editable,
@@ -1397,13 +1291,14 @@ const Index = () => {
                                                                                                                         fullcode: Rekening4?.fullcode,
                                                                                                                         pagu: Rekening4?.pagu,
                                                                                                                         rincian_belanja: Rekening4?.rincian_belanja,
-                                                                                                                        realisasi_anggaran: SumAnggaranRekening4,
+                                                                                                                        realisasi_anggaran: Rekening4?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: SumAnggaranRekening4,
                                                                                                                     };
 
                                                                                                                     const Rekening3 = updated.find((item: any) => item.id == rincian.id_rek_3);
                                                                                                                     const Rekening3Index = updated.findIndex((item: any) => item.id == rincian.id_rek_3);
                                                                                                                     const updatedRekenings4 = updated.filter((item: any) => item.rek === 4 && item.parent_id == rincian.id_rek_3);
-                                                                                                                    let SumAnggaranRekening3 = updatedRekenings4.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                    let SumAnggaranRekening3 = updatedRekenings4.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                     updated[Rekening3Index] = {
                                                                                                                         editable: Rekening3?.editable,
@@ -1416,13 +1311,14 @@ const Index = () => {
                                                                                                                         fullcode: Rekening3?.fullcode,
                                                                                                                         pagu: Rekening3?.pagu,
                                                                                                                         rincian_belanja: Rekening3?.rincian_belanja,
-                                                                                                                        realisasi_anggaran: SumAnggaranRekening3,
+                                                                                                                        realisasi_anggaran: Rekening3?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: SumAnggaranRekening3,
                                                                                                                     };
 
                                                                                                                     const Rekening2 = updated.find((item: any) => item.id == rincian.id_rek_2);
                                                                                                                     const Rekening2Index = updated.findIndex((item: any) => item.id == rincian.id_rek_2);
                                                                                                                     const updatedRekenings3 = updated.filter((item: any) => item.rek === 3 && item.parent_id == rincian.id_rek_2);
-                                                                                                                    let SumAnggaranRekening2 = updatedRekenings3.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                    let SumAnggaranRekening2 = updatedRekenings3.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                     updated[Rekening2Index] = {
                                                                                                                         editable: Rekening2?.editable,
@@ -1435,14 +1331,15 @@ const Index = () => {
                                                                                                                         fullcode: Rekening2?.fullcode,
                                                                                                                         pagu: Rekening2?.pagu,
                                                                                                                         rincian_belanja: Rekening2?.rincian_belanja,
-                                                                                                                        realisasi_anggaran: SumAnggaranRekening2,
+                                                                                                                        realisasi_anggaran: Rekening2?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: SumAnggaranRekening2,
                                                                                                                     };
 
                                                                                                                     const Rekening1 = updated.find((item: any) => item.id == rincian.id_rek_1);
                                                                                                                     const Rekening1Index = updated.findIndex((item: any) => item.id == rincian.id_rek_1);
                                                                                                                     const updatedRekenings2 = updated.filter((item: any) => item.rek === 2 && item.parent_id == rincian.id_rek_1);
                                                                                                                     // let SumAnggaranRekening1 = updatedRekenings2.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
-                                                                                                                    let SumAnggaranRekening1 = updatedRekenings2.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                    let SumAnggaranRekening1 = updatedRekenings2.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                     updated[Rekening1Index] = {
                                                                                                                         editable: Rekening1?.editable,
@@ -1455,7 +1352,8 @@ const Index = () => {
                                                                                                                         fullcode: Rekening1?.fullcode,
                                                                                                                         pagu: Rekening1?.pagu,
                                                                                                                         rincian_belanja: Rekening1?.rincian_belanja,
-                                                                                                                        realisasi_anggaran: SumAnggaranRekening1,
+                                                                                                                        realisasi_anggaran: Rekening1?.realisasi_anggaran,
+                                                                                                                        realisasi_anggaran_bulan_ini: SumAnggaranRekening1,
                                                                                                                     };
 
                                                                                                                     return updated;
@@ -1491,12 +1389,23 @@ const Index = () => {
                                                                                                     }).format(keterangan?.pagu ?? 0)}
                                                                                                 </div>
                                                                                             </td>
+                                                                                            {month > 1 && month < 13 && (
+                                                                                                <td className='border !border-slate-400 dark:!border-slate-100 !px-1'>
+                                                                                                    {/* REALISASI BULAN KEMAREN */}
+                                                                                                    <div className='text-xs font-normal whitespace-nowrap text-end px-2'>
+                                                                                                        {new Intl.NumberFormat('id-ID', {
+                                                                                                            style: 'decimal',
+                                                                                                            minimumFractionDigits: 0,
+                                                                                                        }).format(keterangan?.realisasi_anggaran_keterangan ?? 0)}
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            )}
                                                                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
-
+                                                                                                {/* REALISASI BULAN INI */}
                                                                                                 <div className='flex items-center gap-x-1'>
                                                                                                     <input type='text'
-                                                                                                        className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:text-end disabled:bg-slate-200 dark:disabled:bg-slate-700'
-                                                                                                        value={keterangan?.realisasi_anggaran_keterangan ?? 0}
+                                                                                                        className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:bg-slate-200 dark:disabled:bg-slate-700 text-end'
+                                                                                                        value={keterangan?.realisasi_anggaran_bulan_ini ?? 0}
                                                                                                         onKeyDown={(e: any) => {
                                                                                                             if (!(
                                                                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1537,7 +1446,7 @@ const Index = () => {
                                                                                                                 // realisasi_anggaran_keterangan
                                                                                                                 let calculateRealisasiAnggaran = value;
                                                                                                                 calculateRealisasiAnggaran = parseFloat(calculateRealisasiAnggaran.toFixed(0));
-                                                                                                                let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['keterangan_rincian'][indexKeterangan]?.realisasi_anggaran_keterangan || 0), 0);
+                                                                                                                let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['keterangan_rincian'][indexKeterangan]?.realisasi_anggaran_bulan_ini || 0), 0);
 
                                                                                                                 let isPaguMatch = sumRealisasiAnggaran == data.pagu ? true : false;
 
@@ -1562,7 +1471,8 @@ const Index = () => {
                                                                                                                     sumber_dana_name: data?.sumber_dana_name,
                                                                                                                     nama_paket: data?.nama_paket,
                                                                                                                     pagu: data?.pagu,
-                                                                                                                    realisasi_anggaran: sumRealisasiAnggaran,
+                                                                                                                    realisasi_anggaran: data?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: sumRealisasiAnggaran,
                                                                                                                     temp_pagu: data?.temp_pagu,
                                                                                                                     is_pagu_match: isPaguMatch,
                                                                                                                     is_detail: data?.is_detail,
@@ -1584,7 +1494,8 @@ const Index = () => {
                                                                                                                     keterangan_rincian: rincian?.keterangan_rincian,
                                                                                                                     title: rincian?.title,
                                                                                                                     pagu: rincian?.pagu,
-                                                                                                                    realisasi_anggaran: calculateRealisasiAnggaran,
+                                                                                                                    realisasi_anggaran: rincian?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: calculateRealisasiAnggaran,
                                                                                                                 };
 
                                                                                                                 updated[index]['rincian_belanja'][indexRincian]['keterangan_rincian'][indexKeterangan] = {
@@ -1602,7 +1513,8 @@ const Index = () => {
                                                                                                                     ppn: keterangan?.ppn,
                                                                                                                     pagu: keterangan?.pagu,
                                                                                                                     is_realisasi_match: isRealisasiMatch,
-                                                                                                                    realisasi_anggaran_keterangan: value,
+                                                                                                                    realisasi_anggaran_keterangan: keterangan?.realisasi_anggaran_keterangan,
+                                                                                                                    realisasi_anggaran_bulan_ini: value,
                                                                                                                     target_persentase_kinerja: keterangan?.target_persentase_kinerja,
                                                                                                                     persentase_kinerja: keterangan?.persentase_kinerja,
                                                                                                                 };
@@ -1610,7 +1522,7 @@ const Index = () => {
                                                                                                                 const Rekening6 = updated.find((item: any) => item.id == rincian.id_rek_6);
                                                                                                                 const Rekening6Index = updated.findIndex((item: any) => item.id == rincian.id_rek_6);
                                                                                                                 const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.parent_id == rincian.id_rek_6);
-                                                                                                                let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                 updated[Rekening6Index] = {
                                                                                                                     editable: Rekening6?.editable,
@@ -1623,13 +1535,14 @@ const Index = () => {
                                                                                                                     fullcode: Rekening6?.fullcode,
                                                                                                                     pagu: Rekening6?.pagu,
                                                                                                                     rincian_belanja: Rekening6?.rincian_belanja,
-                                                                                                                    realisasi_anggaran: RincianSumAnggaran,
+                                                                                                                    realisasi_anggaran: Rekening6?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: RincianSumAnggaran,
                                                                                                                 };
 
                                                                                                                 const Rekening5 = updated.find((item: any) => item.id == rincian.id_rek_5);
                                                                                                                 const Rekening5Index = updated.findIndex((item: any) => item.id == rincian.id_rek_5);
                                                                                                                 const updatedRekenings6 = updated.filter((item: any) => item.rek === 6 && item.parent_id == rincian.id_rek_5);
-                                                                                                                let SumAnggaranRekening5 = updatedRekenings6.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                let SumAnggaranRekening5 = updatedRekenings6.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                 updated[Rekening5Index] = {
                                                                                                                     editable: Rekening5?.editable,
@@ -1642,13 +1555,14 @@ const Index = () => {
                                                                                                                     fullcode: Rekening5?.fullcode,
                                                                                                                     pagu: Rekening5?.pagu,
                                                                                                                     rincian_belanja: Rekening5?.rincian_belanja,
-                                                                                                                    realisasi_anggaran: SumAnggaranRekening5,
+                                                                                                                    realisasi_anggaran: Rekening5?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening5,
                                                                                                                 };
 
                                                                                                                 const Rekening4 = updated.find((item: any) => item.id == rincian.id_rek_4);
                                                                                                                 const Rekening4Index = updated.findIndex((item: any) => item.id == rincian.id_rek_4);
                                                                                                                 const updatedRekenings5 = updated.filter((item: any) => item.rek === 5 && item.parent_id == rincian.id_rek_4);
-                                                                                                                let SumAnggaranRekening4 = updatedRekenings5.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                let SumAnggaranRekening4 = updatedRekenings5.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                 updated[Rekening4Index] = {
                                                                                                                     editable: Rekening4?.editable,
@@ -1661,13 +1575,14 @@ const Index = () => {
                                                                                                                     fullcode: Rekening4?.fullcode,
                                                                                                                     pagu: Rekening4?.pagu,
                                                                                                                     rincian_belanja: Rekening4?.rincian_belanja,
-                                                                                                                    realisasi_anggaran: SumAnggaranRekening4,
+                                                                                                                    realisasi_anggaran: Rekening4?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening4,
                                                                                                                 };
 
                                                                                                                 const Rekening3 = updated.find((item: any) => item.id == rincian.id_rek_3);
                                                                                                                 const Rekening3Index = updated.findIndex((item: any) => item.id == rincian.id_rek_3);
                                                                                                                 const updatedRekenings4 = updated.filter((item: any) => item.rek === 4 && item.parent_id == rincian.id_rek_3);
-                                                                                                                let SumAnggaranRekening3 = updatedRekenings4.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                let SumAnggaranRekening3 = updatedRekenings4.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                 updated[Rekening3Index] = {
                                                                                                                     editable: Rekening3?.editable,
@@ -1680,13 +1595,14 @@ const Index = () => {
                                                                                                                     fullcode: Rekening3?.fullcode,
                                                                                                                     pagu: Rekening3?.pagu,
                                                                                                                     rincian_belanja: Rekening3?.rincian_belanja,
-                                                                                                                    realisasi_anggaran: SumAnggaranRekening3,
+                                                                                                                    realisasi_anggaran: Rekening3?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening3,
                                                                                                                 };
 
                                                                                                                 const Rekening2 = updated.find((item: any) => item.id == rincian.id_rek_2);
                                                                                                                 const Rekening2Index = updated.findIndex((item: any) => item.id == rincian.id_rek_2);
                                                                                                                 const updatedRekenings3 = updated.filter((item: any) => item.rek === 3 && item.parent_id == rincian.id_rek_2);
-                                                                                                                let SumAnggaranRekening2 = updatedRekenings3.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                let SumAnggaranRekening2 = updatedRekenings3.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                 updated[Rekening2Index] = {
                                                                                                                     editable: Rekening2?.editable,
@@ -1699,13 +1615,14 @@ const Index = () => {
                                                                                                                     fullcode: Rekening2?.fullcode,
                                                                                                                     pagu: Rekening2?.pagu,
                                                                                                                     rincian_belanja: Rekening2?.rincian_belanja,
-                                                                                                                    realisasi_anggaran: SumAnggaranRekening2,
+                                                                                                                    realisasi_anggaran: Rekening2?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening2,
                                                                                                                 };
 
                                                                                                                 const Rekening1 = updated.find((item: any) => item.id == rincian.id_rek_1);
                                                                                                                 const Rekening1Index = updated.findIndex((item: any) => item.id == rincian.id_rek_1);
                                                                                                                 const updatedRekenings2 = updated.filter((item: any) => item.rek === 2 && item.parent_id == rincian.id_rek_1);
-                                                                                                                let SumAnggaranRekening1 = updatedRekenings2.reduce((a: any, b: any) => a + (b['realisasi_anggaran'] || 0), 0);
+                                                                                                                let SumAnggaranRekening1 = updatedRekenings2.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
 
                                                                                                                 updated[Rekening1Index] = {
                                                                                                                     editable: Rekening1?.editable,
@@ -1718,7 +1635,8 @@ const Index = () => {
                                                                                                                     fullcode: Rekening1?.fullcode,
                                                                                                                     pagu: Rekening1?.pagu,
                                                                                                                     rincian_belanja: Rekening1?.rincian_belanja,
-                                                                                                                    realisasi_anggaran: SumAnggaranRekening1,
+                                                                                                                    realisasi_anggaran: Rekening1?.realisasi_anggaran,
+                                                                                                                    realisasi_anggaran_bulan_ini: SumAnggaranRekening1,
                                                                                                                 };
 
                                                                                                                 return updated;
@@ -1730,49 +1648,6 @@ const Index = () => {
                                                                                                             updateTotalRealisasi();
                                                                                                         }}
                                                                                                     />
-
-                                                                                                    {(keterangan?.pagu < keterangan?.realisasi_anggaran_keterangan && keterangan?.realisasi_anggaran_keterangan !== 0) && (
-                                                                                                        <Tippy content="Melebihi Target">
-                                                                                                            <div className="flex justify-end items-center gap-x-1 px-2 cursor-pointer">
-                                                                                                                <FontAwesomeIcon icon={faCaretUp} className='text-red-600 w-3 h-3' />
-                                                                                                                {/* <div className={keterangan?.is_realisasi_match === true ? 'text-green-700 text-xs font-normal whitespace-nowrap text-end' : 'text-red-600 text-xs font-normal whitespace-nowrap text-end'}>
-                                                                                                                {new Intl.NumberFormat('id-ID', {
-                                                                                                                    style: 'decimal',
-                                                                                                                    minimumFractionDigits: 0,
-                                                                                                                }).format(keterangan?.realisasi_anggaran_keterangan ?? 0)}
-                                                                                                            </div> */}
-                                                                                                            </div>
-                                                                                                        </Tippy>
-                                                                                                    )}
-
-                                                                                                    {(keterangan?.pagu > keterangan?.realisasi_anggaran_keterangan && keterangan?.realisasi_anggaran_keterangan !== 0) && (
-                                                                                                        <Tippy content="Belum Tercapai">
-                                                                                                            <div className="flex justify-end items-center gap-x-1 px-2 cursor-pointer">
-                                                                                                                <FontAwesomeIcon icon={faCaretDown} className='text-red-600 w-3 h-3' />
-                                                                                                                {/* <div className={keterangan?.is_realisasi_match === true ? 'text-green-700 text-xs font-normal whitespace-nowrap text-end' : 'text-red-600 text-xs font-normal whitespace-nowrap text-end'}>
-                                                                                                                {new Intl.NumberFormat('id-ID', {
-                                                                                                                    style: 'decimal',
-                                                                                                                    minimumFractionDigits: 0,
-                                                                                                                }).format(keterangan?.realisasi_anggaran_keterangan ?? 0)}
-                                                                                                            </div> */}
-                                                                                                            </div>
-                                                                                                        </Tippy>
-                                                                                                    )}
-
-                                                                                                    {(
-                                                                                                        keterangan?.pagu == keterangan?.realisasi_anggaran_keterangan ||
-                                                                                                        keterangan?.realisasi_anggaran_keterangan == 0 ||
-                                                                                                        !keterangan?.realisasi_anggaran_keterangan
-                                                                                                    ) && (
-                                                                                                            <div className="flex justify-end items-center gap-x-1 px-2 cursor-pointer">
-                                                                                                                {/* <div className={keterangan?.is_realisasi_match === true ? 'text-green-700 text-xs font-normal whitespace-nowrap text-end' : 'text-red-600 text-xs font-normal whitespace-nowrap text-end'}>
-                                                                                                                {new Intl.NumberFormat('id-ID', {
-                                                                                                                    style: 'decimal',
-                                                                                                                    minimumFractionDigits: 0,
-                                                                                                                }).format(keterangan?.realisasi_anggaran_keterangan ?? 0)}
-                                                                                                            </div> */}
-                                                                                                            </div>
-                                                                                                        )}
                                                                                                 </div>
 
 
@@ -3172,10 +3047,9 @@ const Index = () => {
                                             }
                                         >
                                             <ul className="!min-w-[200px]">
-                                                {/* {month > 1 && (
+                                                {month > 1 && (
                                                     <li>
-                                                        <a
-                                                            href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) - 1}`}
+                                                        <button
                                                             onClick={(e) => {
                                                                 setMonth(parseInt(month) - 1);
                                                             }}
@@ -3184,24 +3058,23 @@ const Index = () => {
                                                             <span>
                                                                 Bulan {new Date(year, month - 2).toLocaleString('id-ID', { month: 'long' })}
                                                             </span>
-                                                        </a>
+                                                        </button>
                                                     </li>
                                                 )}
                                                 {month < 12 && (
                                                     <li>
-                                                        <a
-                                                            href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) + 1}`}
+                                                        <button
                                                             onClick={(e) => {
                                                                 setMonth(parseInt(month) + 1);
                                                             }}
                                                             className='flex items-center'>
-                                                            <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 flex-none' />
+                                                            <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4' />
                                                             <span>
                                                                 Bulan {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
                                                             </span>
-                                                        </a>
+                                                        </button>
                                                     </li>
-                                                )} */}
+                                                )}
                                                 <li>
                                                     <a href={`/kinerja/target/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
                                                         <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />

@@ -125,6 +125,10 @@ const Index = () => {
     }, [route.query.slug]);
 
     useEffect(() => {
+        setDatas(null);
+        setSubKegiatan(null);
+        setDataBackEndError(null);
+        setDataBackEndMessage(null);
         if (subKegiatanId) {
             getMasterData(subKegiatanId, year, month).then((data) => {
                 if (data.status == 'success') {
@@ -138,7 +142,7 @@ const Index = () => {
                 }
             });
         }
-    }, [subKegiatanId]);
+    }, [subKegiatanId, year, month]);
 
     const addRincianBelanja = (index: any) => {
         if (subKegiatan?.status == 'verified') {
@@ -349,7 +353,7 @@ const Index = () => {
     return (
         <>
             <div className="panel">
-                <div className="table-responsive h-[calc(100vh-210px)] border !border-slate-400 dark:!border-slate-100">
+                <div className="table-responsive h-[calc(100vh-280px)] pr-3.5 border !border-slate-400 dark:!border-slate-100">
                     <table className=''>
                         <thead className='sticky top-0 left-0 z-[1]'>
                             <tr>
@@ -471,6 +475,7 @@ const Index = () => {
 
                                                     <td className='border !border-slate-400 dark:!border-slate-100 !px-1 !pr-4'>
 
+
                                                         {data?.type !== 'target-kinerja' && (
                                                             <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
                                                                 {new Intl.NumberFormat('id-ID', {
@@ -480,7 +485,7 @@ const Index = () => {
                                                             </div>
                                                         )}
 
-                                                        {(data?.type === 'target-kinerja' && data?.is_detail === true) && (
+                                                        {/* {(data?.type === 'target-kinerja' && data?.is_detail === true) && (
                                                             <div className={data?.is_pagu_match === true ?
                                                                 'text-green-700 text-xs font-semibold whitespace-nowrap text-end px-2' :
                                                                 'text-red-600 text-xs font-semibold whitespace-nowrap text-end px-2'}>
@@ -498,6 +503,49 @@ const Index = () => {
                                                                     minimumFractionDigits: 0,
                                                                 }).format(data?.pagu ?? 0)}
                                                             </div>
+                                                        )} */}
+
+                                                        {data?.type === 'target-kinerja' && (
+                                                            <>
+                                                                <input
+                                                                    type='text'
+                                                                    value={data?.pagu}
+                                                                    readOnly={subKegiatan?.status == 'verified' ? true : false}
+                                                                    disabled={month == 1 ? false : true}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            if (subKegiatan?.status == 'verified') {
+                                                                                showAlert('error', 'Data tidak dapat diubah karena Status Target Sudah "Terverifikasi"');
+                                                                                return;
+                                                                            }
+                                                                            setUnsaveStatus(true);
+                                                                            setDatas((prev: any) => {
+                                                                                const updated = [...prev];
+                                                                                updated[index] = {
+                                                                                    editable: data?.editable,
+                                                                                    long: data?.long,
+                                                                                    type: data?.type,
+                                                                                    id: data?.id,
+                                                                                    year: data?.year,
+                                                                                    jenis: data?.jenis,
+                                                                                    sumber_dana_id: data?.sumber_dana_id,
+                                                                                    sumber_dana_fullcode: data?.sumber_dana_fullcode,
+                                                                                    sumber_dana_name: data?.sumber_dana_name,
+                                                                                    nama_paket: data?.nama_paket,
+                                                                                    pagu: parseInt(e.target.value),
+                                                                                    temp_pagu: data?.temp_pagu,
+                                                                                    is_pagu_match: data?.is_pagu_match,
+                                                                                    is_detail: data?.is_detail,
+                                                                                    rincian_belanja: data?.rincian_belanja,
+                                                                                };
+
+                                                                                return updated;
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                    className='form-input w-full border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 resize-none leading-tight disabled:opacity-50 text-end'
+                                                                    placeholder='Pagu' />
+                                                            </>
                                                         )}
 
                                                     </td>
@@ -1173,10 +1221,9 @@ const Index = () => {
                                     }
                                 >
                                     <ul className="!min-w-[200px]">
-                                        {/* {month > 1 && (
+                                        {month > 1 && (
                                             <li>
-                                                <a
-                                                    href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) - 1}`}
+                                                <button
                                                     onClick={(e) => {
                                                         setMonth(parseInt(month) - 1);
                                                     }}
@@ -1185,13 +1232,12 @@ const Index = () => {
                                                     <span>
                                                         Target {new Date(year, month - 2).toLocaleString('id-ID', { month: 'long' })}
                                                     </span>
-                                                </a>
+                                                </button>
                                             </li>
                                         )}
                                         {month < 12 && (
                                             <li>
-                                                <a
-                                                    href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${parseInt(month) + 1}`}
+                                                <button
                                                     onClick={(e) => {
                                                         setMonth(parseInt(month) + 1);
                                                     }}
@@ -1200,9 +1246,9 @@ const Index = () => {
                                                     <span>
                                                         Target {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
                                                     </span>
-                                                </a>
+                                                </button>
                                             </li>
-                                        )} */}
+                                        )}
                                         {subKegiatan?.status === 'verified' && (
                                             <li>
                                                 <a href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>

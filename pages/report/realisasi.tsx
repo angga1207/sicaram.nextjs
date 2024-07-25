@@ -41,8 +41,7 @@ const showBoxAlert = async (icon: any, title: any, text: any) => {
         icon: icon,
         title: title,
         text: text,
-        padding: '2em',
-        customClass: 'sweet-alerts',
+        padding: '10px 20px',
     });
 }
 

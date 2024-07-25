@@ -27,13 +27,15 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
         icon: icon,
         title: title,
         html: text,
-        showCloseButton: true,
         showCancelButton: true,
-        focusConfirm: false,
         confirmButtonText: confirmButtonText,
         cancelButtonText: cancelButtonText,
-        padding: '2em',
-        customClass: 'sweet-alerts',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        reverseButtons: true,
     }).then((result) => {
         if (result.isConfirmed) {
             callback();
