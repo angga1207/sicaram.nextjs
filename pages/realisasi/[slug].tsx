@@ -35,7 +35,9 @@ import {
     getKontrakSPSE,
     getContract,
     addContract,
-    deleteContract
+    deleteContract,
+    SyncRincianRealisasi,
+    SyncRealisasi
 } from '@/apis/realisasi_apis';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -291,7 +293,7 @@ const Index = () => {
         if ([1, 2, 3, 4, 5, 9].includes(CurrentUser.role_id)) {
             Swal.fire({
                 title: 'Simpan Realisasi',
-                text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya',
+                text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya yang belum Diverifikasi',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Simpan',
@@ -315,6 +317,45 @@ const Index = () => {
                         else {
                             showAlertBox('error', 'Error', data.message);
                         }
+                    });
+                }
+            });
+        }
+    }
+
+    const [syncLoading, setSyncLoading] = useState(false);
+
+    const confirmSync = () => {
+        if ([1, 2, 3, 4, 5].includes(CurrentUser.role_id)) {
+            Swal.fire({
+                title: 'Singkronisasi Realisasi',
+                text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya yang belum Diverifikasi',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Singkronkan',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setSyncLoading(true);
+                    SyncRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
+                        if (data.status == 'success') {
+                            // showAlertBox('success', 'Berhasil', data.message);
+                            setUnsaveStatus(false);
+                        }
+                        else {
+                            showAlertBox('error', 'Error', data.message);
+                        }
+                        setSyncLoading(false);
+                    });
+                    SyncRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
+                        if (data.status == 'success') {
+                            showAlertBox('success', 'Berhasil', 'Data Realisasi Berhasil Singkronkan');
+                            setUnsaveStatus(false);
+                        }
+                        else {
+                            showAlertBox('error', 'Error', data.message);
+                        }
+                        setSyncLoading(false);
                     });
                 }
             });
@@ -525,36 +566,50 @@ const Index = () => {
         })
     }
 
-    if (subKegiatan && subKegiatan.status_target != 'verified') {
-        return (
-            <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
-                <div className="flex items-center justify-center gap-2">
-                    <FontAwesomeIcon icon={faExclamationTriangle} className='w-8 h-8 text-cyan-500' />
-                    <div className="text-[40px] font-semibold text-cyan-500">
-                        Mohon Maaf,
-                    </div>
-                </div>
-                <div className="text-xl font-semibold text-cyan-500">
-                    Anda Tidak Dapat Mengakses Halaman Ini
-                </div>
-                <div className="text-lg font-semibold text-orange-500 mt-2">
-                    Dikarenakan Target Belum Terverifikasi
-                </div>
-                {/* back button */}
-                <div className="mt-4">
-                    <button
-                        onClick={() => {
-                            closeWindow();
-                        }}
-                        className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center"
-                    >
-                        <FontAwesomeIcon icon={faAngleDoubleLeft} className='w-4 h-4 mr-2' />
-                        Kembali
-                    </button>
-                </div>
-            </div>
-        );
-    }
+
+    // DEBUG TOOLS ANGGA
+    // useEffect(() => {
+    //     // if (subKegiatan?.status == 'verified' || subKegiatan?.status_target == 'verified') {
+    //     setSubKegiatan((prev: any) => {
+    //         const updated = { ...prev };
+    //         updated.status = 'draft';
+    //         updated.status_target = 'verified';
+    //         return updated;
+    //     });
+    //     // }
+    // }, [subKegiatan?.status]);
+    // DEBUG TOOLS ANGGA
+
+    // if (subKegiatan && subKegiatan.status != 'verified') {
+    //     return (
+    //         <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
+    //             <div className="flex items-center justify-center gap-2">
+    //                 <FontAwesomeIcon icon={faExclamationTriangle} className='w-8 h-8 text-cyan-500' />
+    //                 <div className="text-[40px] font-semibold text-cyan-500">
+    //                     Mohon Maaf,
+    //                 </div>
+    //             </div>
+    //             <div className="text-xl font-semibold text-cyan-500">
+    //                 Anda Tidak Dapat Mengakses Halaman Ini
+    //             </div>
+    //             <div className="text-lg font-semibold text-orange-500 mt-2">
+    //                 Dikarenakan Target Belum Terverifikasi
+    //             </div>
+    //             {/* back button */}
+    //             <div className="mt-4">
+    //                 <button
+    //                     onClick={() => {
+    //                         closeWindow();
+    //                     }}
+    //                     className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center"
+    //                 >
+    //                     <FontAwesomeIcon icon={faAngleDoubleLeft} className='w-4 h-4 mr-2' />
+    //                     Kembali
+    //                 </button>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     return (
         <>
@@ -871,7 +926,7 @@ const Index = () => {
                                                                                 e.preventDefault();
                                                                             }
                                                                         }}
-                                                                        disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
+                                                                        // disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
                                                                         onChange={(e) => {
                                                                             if (subKegiatan?.status === 'verified') {
                                                                                 showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
@@ -1429,7 +1484,7 @@ const Index = () => {
                                                                                                                 e.preventDefault();
                                                                                                             }
                                                                                                         }}
-                                                                                                        disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
+                                                                                                        // disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
                                                                                                         onChange={(e) => {
                                                                                                             if (subKegiatan?.status === 'verified') {
                                                                                                                 showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
@@ -2996,45 +3051,6 @@ const Index = () => {
                                         </div>
                                     )}
 
-                                    {/* <div
-                                        onClick={(e) => {
-                                            if (unsaveStatus) {
-                                                e.preventDefault();
-                                                Swal.fire({
-                                                    title: 'Peringatan',
-                                                    text: 'Data yang belum disimpan akan hilang. Apakah Anda yakin ingin meninggalkan halaman ini?',
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonText: 'Ya, Keluar',
-                                                    cancelButtonText: 'Batal',
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        route.push({
-                                                            pathname: `/kinerja/target/${subKegiatanId}`,
-                                                            query: {
-                                                                periode: periode,
-                                                                year: year,
-                                                                month: month,
-                                                            },
-                                                        });
-                                                    }
-                                                });
-                                            } else {
-                                                route.push({
-                                                    pathname: `/kinerja/target/${subKegiatanId}`,
-                                                    query: {
-                                                        periode: periode,
-                                                        year: year,
-                                                        month: month,
-                                                    },
-                                                });
-                                            }
-                                        }}
-                                        className='btn btn-sm flex whitespace-nowrap dark:border-cyan-900 dark:shadow-black-dark-light bg-cyan-600 dark:bg-cyan-700 hover:bg-cyan-500 dark:hover:bg-cyan-800 text-white cursor-pointer'>
-                                        <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 -scale-x-100' />
-                                        Buka Target
-                                    </div> */}
-
                                     <div className="dropdown">
                                         <Dropdown
                                             placement={`top-end`}
@@ -3086,6 +3102,22 @@ const Index = () => {
                                             </ul>
                                         </Dropdown>
                                     </div>
+
+                                    {(dataBackEndError === false && [1, 2, 3, 4, 5].includes(CurrentUser.role_id)) && (
+                                        <button
+                                            type='button'
+                                            className='btn btn-sm dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white'
+                                            onClick={(e) => {
+                                                if (syncLoading === false) {
+                                                    confirmSync();
+                                                } else {
+                                                    showAlert('info', 'Sedang Melakukan Singkron Data');
+                                                }
+                                            }}>
+                                            <FontAwesomeIcon icon={faSyncAlt} className='mr-2 w-4 h-4' />
+                                            {syncLoading ? 'Sedang Melakukan Singkron Data' : 'Singkron Data'}
+                                        </button>
+                                    )}
 
                                     {dataBackEndError === false ? (
                                         <button

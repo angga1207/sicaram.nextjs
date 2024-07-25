@@ -105,6 +105,54 @@ export async function SaveRincianRealisasi(id: any, datas: any, periode: any, ye
     }
 }
 
+export async function SyncRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/sync', {
+            data: datas,
+            periode: periode,
+            year: year,
+            month: month
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function SyncRincianRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
+    try {
+        const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/detail/sync', {
+            data: datas,
+            periode: periode,
+            year: year,
+            month: month
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
 export async function SaveKeterangan(idRealisasiSubKegiatan: any, datas: any, year: any, month: any) {
     try {
         const res = await axios.post(baseUri + '/caram/realisasi-keterangan/' + idRealisasiSubKegiatan + '/save', {
@@ -291,7 +339,7 @@ export async function addContract(id: any, data: any, year: any, month: any) {
     }
 }
 
-export async function deleteContract(id: any, no_kontrak:any, year: any, month: any) {
+export async function deleteContract(id: any, no_kontrak: any, year: any, month: any) {
     try {
         const res = await axios.delete(baseUri + '/caram/realisasi-keterangan-delete-kontrak/' + id, {
             headers: {
