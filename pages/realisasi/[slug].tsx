@@ -767,6 +767,16 @@ const Index = () => {
                                 </thead>
                                 <tbody className='dark:text-white'>
 
+                                    {isLoading && (
+                                        <tr>
+                                            <td colSpan={8} className='text-center'>
+                                                <div className="w-full h-[calc(100vh-200px)] flex items-center justify-center">
+                                                    <LoadingSicaram />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
+
                                     {(datas && datas?.length > 0) && (
                                         <>
                                             {datas?.map((data: any, index: any) => {
@@ -1725,6 +1735,7 @@ const Index = () => {
                                             })}
                                         </>
                                     )}
+
                                 </tbody>
                             </table>
                         </div>
