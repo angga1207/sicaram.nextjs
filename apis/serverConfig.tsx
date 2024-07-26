@@ -30,10 +30,10 @@ export async function serverCheck() {
 
         if (data.status == 'success') {
             if (data.data.user === null) {
-                localStorage.removeItem('token');
+                document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 window.location.href = '/login';
             }
-            localStorage.setItem('user', JSON.stringify(data?.data?.user));
+            document.cookie = `user=${JSON.stringify(data?.data?.user)}; path=/`;
         }
         return data;
     } catch (error) {

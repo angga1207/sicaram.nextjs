@@ -21,6 +21,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faCloudDownloadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faFileExcel, faFilePdf, faFolder, faFolderOpen, faTimesCircle, faTimesRectangle } from '@fortawesome/free-regular-svg-icons';
 import { randomInt } from 'crypto';
+import IconX from '@/components/Icon/IconX';
+import { BaseUri } from '@/apis/serverConfig';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -197,14 +199,34 @@ const Index = () => {
         }
     }, [loaded == 1]);
 
-    if (!instanceId) {
-        return <LoadingSicaram />;
-    }
 
-    const downloadRekap = (type: any, fileType: any, id: any) => {
+    const [modalDownloadPdf, setModalDownloadPdf] = useState(false);
+    const [dataPDF, setDataPDF] = useState<any>(null);
+
+    const downloadRekap = (fileType: any, type: any, data: any) => {
+
+        if (fileType == 'pdf') {
+            setDataPDF({
+                'instance': instance,
+                'year': year,
+                'triwulan': triwulan,
+                'kind': type,
+                'model_id': data.id,
+                'fullcode': data.fullcode,
+                'name': data.name,
+                'uri': `${BaseUri()}/report/pdf/realisasi?instance=${instanceId}&year=${year}&triwulan=${triwulan}&kind=${type}&model_id=${data.id}`,
+            });
+            setModalDownloadPdf(true);
+
+            return;
+        }
         showBoxAlert('info', 'Mohon Maaf', 'Fitur ini sedang dipersiapkan...');
     }
 
+
+    if (!instanceId) {
+        return <LoadingSicaram />;
+    }
     return (
         <>
             <div className="">
@@ -362,7 +384,7 @@ const Index = () => {
                                     <Tippy content='Unduh Rekap PDF Program' arrow={true} theme='default'>
                                         <button
                                             onClick={() => {
-                                                downloadRekap('pdf', 'program', data?.id);
+                                                downloadRekap('pdf', 'program', data);
                                             }}
                                             className='group flex items-center gap-2'>
                                             <FontAwesomeIcon icon={faFilePdf} className="w-5 h-4.5 text-[#3b3f5c] dark:text-white-light group-hover:hidden" />
@@ -376,7 +398,7 @@ const Index = () => {
                                     <Tippy content='Unduh Rekap Excel Program' arrow={true} theme='default'>
                                         <button
                                             onClick={() => {
-                                                downloadRekap('excel', 'program', data?.id);
+                                                downloadRekap('excel', 'program', data);
                                             }}
                                             className='group flex items-center gap-2'>
                                             <FontAwesomeIcon icon={faFileExcel} className="w-5 h-4.5 text-[#3b3f5c] dark:text-white-light group-hover:hidden" />
@@ -600,7 +622,7 @@ const Index = () => {
                                                     <Tippy content='Unduh Rekap PDF Kegiatan' arrow={true} theme='default'>
                                                         <button
                                                             onClick={() => {
-                                                                downloadRekap('pdf', 'kegiatan', kegiatan?.id);
+                                                                downloadRekap('pdf', 'kegiatan', kegiatan);
                                                             }}
                                                             className='group flex items-center gap-2'>
                                                             <FontAwesomeIcon icon={faFilePdf} className="w-5 h-4.5 text-[#3b3f5c] dark:text-white-light group-hover:hidden" />
@@ -614,7 +636,7 @@ const Index = () => {
                                                     <Tippy content='Unduh Rekap Excel Kegiatan' arrow={true} theme='default'>
                                                         <button
                                                             onClick={() => {
-                                                                downloadRekap('excel', 'kegiatan', kegiatan?.id);
+                                                                downloadRekap('excel', 'kegiatan', kegiatan);
                                                             }}
                                                             className='group flex items-center gap-2'>
                                                             <FontAwesomeIcon icon={faFileExcel} className="w-5 h-4.5 text-[#3b3f5c] dark:text-white-light group-hover:hidden" />
@@ -846,7 +868,7 @@ const Index = () => {
                                                                 <Tippy content='Unduh Rekap PDF Sub Kegiatan' arrow={true} theme='default'>
                                                                     <button
                                                                         onClick={() => {
-                                                                            downloadRekap('pdf', 'sub-kegiatan', subKegiatan?.id);
+                                                                            downloadRekap('pdf', 'sub-kegiatan', subKegiatan);
                                                                         }}
                                                                         className='group flex items-center gap-2'>
                                                                         <FontAwesomeIcon icon={faFilePdf} className="w-5 h-4.5 text-[#3b3f5c] dark:text-white-light group-hover:hidden" />
@@ -860,7 +882,7 @@ const Index = () => {
                                                                 <Tippy content='Unduh Rekap Excel Sub Kegiatan' arrow={true} theme='default'>
                                                                     <button
                                                                         onClick={() => {
-                                                                            downloadRekap('excel', 'sub-kegiatan', subKegiatan?.id);
+                                                                            downloadRekap('excel', 'sub-kegiatan', subKegiatan);
                                                                         }}
                                                                         className='group flex items-center gap-2'>
                                                                         <FontAwesomeIcon icon={faFileExcel} className="w-5 h-4.5 text-[#3b3f5c] dark:text-white-light group-hover:hidden" />
@@ -1077,6 +1099,75 @@ const Index = () => {
                 ))}
 
             </div>
+
+
+            <Transition appear show={modalDownloadPdf} as={Fragment}>
+                <Dialog as="div" open={modalDownloadPdf} onClose={() => setModalDownloadPdf(false)}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0" />
+                    </Transition.Child>
+                    <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                        <div className="flex items-center justify-center min-h-screen px-4">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[80%] my-8 text-black dark:text-white-dark">
+                                    <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                        <h5 className="font-bold text-lg">
+                                            {dataPDF ? dataPDF?.fullcode + ' - ' + dataPDF?.name : ''}
+                                        </h5>
+                                        <button
+                                            type="button"
+                                            className="text-white-dark hover:text-dark"
+                                            onClick={() => {
+                                                setModalDownloadPdf(false);
+                                                setDataPDF(null);
+                                            }}>
+                                            <IconX />
+                                        </button>
+                                    </div>
+                                    <div className="p-5">
+
+                                        {dataPDF?.uri && (
+                                            <embed
+                                                src={dataPDF?.uri}
+                                                type="application/pdf"
+                                                className='w-full h-[calc(100vh-200px)]' />
+                                        )}
+
+                                        <div className="flex justify-end items-center mt-4">
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-danger"
+                                                onClick={() => {
+                                                    setModalDownloadPdf(false);
+                                                    setDataPDF(null);
+                                                }}>
+                                                Batalkan
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition>
         </>
     );
 }
