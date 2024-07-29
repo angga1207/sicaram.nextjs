@@ -257,6 +257,22 @@ const Header = () => {
                     setNewNotification(false);
                 }
             }
+
+            if (res?.message?.response?.status == 401) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Sesi Anda telah berakhir',
+                    text: 'Silahkan login kembali',
+                    padding: '10px 20px',
+                    showCancelButton: false,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/login';
+                    }
+                });
+            }
         })
     }
 

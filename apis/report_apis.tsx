@@ -13,49 +13,70 @@ const CurrentToken = getCookie('token');
 const baseUri = BaseUri();
 
 export async function getRealisasiHead(instance: any, year: any) {
-    const res = await axios.get(baseUri + '/report/realisasi-head', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-        params: {
-            instance: instance,
-            year: year
+    try {
+        const res = await axios.get(baseUri + '/report/realisasi-head', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                year: year
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
         }
-    });
-    const data = await res.data;
-    return data;
+    }
 }
 
 export async function getRealisasi(instance: any, year: any, triwulan: any) {
-    const res = await axios.get(baseUri + '/report/realisasi', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-        params: {
-            instance: instance,
-            year: year,
-            triwulan: triwulan
+    try {
+        const res = await axios.get(baseUri + '/report/realisasi', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                year: year,
+                triwulan: triwulan
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
         }
-    });
-    const data = await res.data;
-    return data;
+    }
 }
 
 
 export async function getReportTagSumberDana(instance: any, year: any, tag: any) {
-    const res = await axios.get(baseUri + '/report/tag-sumber-dana', {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-        params: {
-            instance: instance,
-            year: year,
-            tag: tag
+    try {
+        const res = await axios.get(baseUri + '/report/tag-sumber-dana', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                year: year,
+                tag: tag
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
         }
-    });
-    const data = await res.data;
-    return data;
+    }
 }

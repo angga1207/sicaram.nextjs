@@ -142,21 +142,29 @@ const Index = () => {
     }, [router.query]);
 
     useEffect(() => {
-        fetchPeriodes().then((data) => {
-            setPeriodes(data.data);
-        });
-        fetchInstances(searchInstance).then((data) => {
-            setInstances(data.data);
-        });
-        fetchSatuans().then((data) => {
-            setSatuans(data.data);
-        });
-        fetchRangePeriode(periode).then((data) => {
-            if (data.status == 'success') {
-                setYears(data.data.years);
-            }
-        });
-    }, [CurrentUser, periode]);
+        if (isMounted) {
+            fetchPeriodes().then((data) => {
+                if (data.status == 'success') {
+                    setPeriodes(data.data);
+                }
+            });
+            fetchInstances(searchInstance).then((data) => {
+                if (data.status == 'success') {
+                    setInstances(data.data);
+                }
+            });
+            fetchSatuans().then((data) => {
+                if (data.status == 'success') {
+                    setSatuans(data.data);
+                }
+            });
+            fetchRangePeriode(periode).then((data) => {
+                if (data.status == 'success') {
+                    setYears(data.data.years);
+                }
+            });
+        }
+    }, [isMounted]);
 
     useEffect(() => {
         if (searchInstance == '') {
@@ -174,23 +182,41 @@ const Index = () => {
     }, [searchInstance]);
 
     useEffect(() => {
-        if (instance && year) {
-            fetchProgramsSubKegiatan(instance, year).then((data) => {
-                if (data.status === 'success') {
-                    setDatas(data.data);
-                }
+        if (isMounted) {
+            if (instance && year) {
+                fetchProgramsSubKegiatan(instance, year).then((data) => {
+                    if (data.status === 'success') {
+                        setDatas(data.data);
+                    }
 
-                if (data.status === 'error') {
-                    showAlert('error', data.message);
+                    if (data.status === 'error') {
+                        showAlert('error', data.message);
+                    }
+
+                    if (data?.message?.response?.status == 401) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Sesi Anda telah berakhir',
+                            text: 'Silahkan login kembali',
+                            padding: '10px 20px',
+                            showCancelButton: false,
+                            confirmButtonText: 'Login',
+                            cancelButtonText: 'Batal',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/login';
+                            }
+                        });
+                    }
+                });
+                if (router.query) {
+                    router.query.year = year;
+                    router.query.instance = instance;
+                    router.push(router);
                 }
-            });
-            if (router.query) {
-                router.query.year = year;
-                router.query.instance = instance;
-                router.push(router);
             }
         }
-    }, [instance, year]);
+    }, [instance, year, isMounted]);
 
     const [showPrograms, setShowPrograms] = useState<string[]>([]);
     const [showKegiatans, setShowKegiatans] = useState<string[]>([]);
@@ -291,19 +317,6 @@ const Index = () => {
                         {!instance ? (
                             <>
                                 <div className="flex items-center gap-1">
-
-                                    {/* {[1, 2].includes(CurrentUser?.role_id) && (
-                                        <div className="btn btn-warning whitespace-nowrap relative cursor-pointer" onClick={(e) => {
-                                            e.preventDefault();
-                                            setModalImport(true);
-                                            setUploadMessages(null);
-                                        }}>
-                                            <FontAwesomeIcon icon={faFileUpload} className="w-4 h-4 mr-2" />
-                                            <span className="ltr:ml-2 rtl:mr-2">
-                                                Import Excel
-                                            </span>
-                                        </div>
-                                    )} */}
 
                                     <button
                                         onClick={() => {
