@@ -702,8 +702,7 @@ const Header = () => {
                                     {themeConfig.languageList.map((item: any) => {
                                         return (
                                             <li key={'lang' + item.code}>
-                                                <button
-                                                    type="button"
+                                                <div
                                                     className={`flex w-full hover:text-primary ${i18n.language === item.code ? 'bg-primary/10 text-primary' : ''}`}
                                                     onClick={() => {
                                                         dispatch(toggleLocale(item.code));
@@ -713,7 +712,7 @@ const Header = () => {
                                                 >
                                                     <img src={`/assets/images/flags/${item.code.toUpperCase()}.svg`} alt="flag" className="h-5 w-5 rounded-full object-cover" />
                                                     <span className="ltr:ml-3 rtl:mr-3">{item.name}</span>
-                                                </button>
+                                                </div>
                                             </li>
                                         );
                                     })}
