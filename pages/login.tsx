@@ -315,17 +315,6 @@ const Login = () => {
 
     return (
         <div className=''>
-            {/* <div className="absolute inset-0">
-                <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="h-full w-full object-cover">
-                    <source src="/assets/videos/bg-login.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
-            </div> */}
             <div className="relative flex h-screen items-center justify-center bg-[url(/assets/images/auth/map.png)] bg-cover bg-center bg-no-repeat px-6 py-10 bg-sky-400 dark:bg-[#060818] sm:px-16">
                 <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-sm dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
                     <div className="relative hidden w-full items-center justify-center bg-opacity-100 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">

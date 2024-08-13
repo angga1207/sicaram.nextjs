@@ -1251,12 +1251,12 @@ const Index = () => {
                                         )}
                                         {subKegiatan?.status === 'verified' && (
                                             <li>
-                                                <a href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
+                                                <Link href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
                                                     <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
                                                     <span>
                                                         Buka Realisasi
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                         )}
                                     </ul>

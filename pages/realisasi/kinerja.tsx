@@ -409,36 +409,36 @@ const Index = () => {
                                                 {data?.website && (
                                                     <li>
                                                         <Tippy content={"Website"} >
-                                                            <a href={data?.website} target='_blank' className="btn btn-outline-dark p-0 h-5 w-5 rounded-full">
+                                                            <Link href={data?.website} target='_blank' className="btn btn-outline-dark p-0 h-5 w-5 rounded-full">
                                                                 <FontAwesomeIcon icon={faGlobeAsia} className="w-2.5 h-2.5" />
-                                                            </a>
+                                                            </Link>
                                                         </Tippy>
                                                     </li>
                                                 )}
                                                 {data?.facebook && (
                                                     <li>
                                                         <Tippy content={"Facebook"} >
-                                                            <a href={data?.facebook} target='_blank' className="btn btn-outline-primary p-0 h-5 w-5 rounded-full">
+                                                            <Link href={data?.facebook} target='_blank' className="btn btn-outline-primary p-0 h-5 w-5 rounded-full">
                                                                 <FontAwesomeIcon icon={faFacebookF} className="w-2.5 h-2.5" />
-                                                            </a>
+                                                            </Link>
                                                         </Tippy>
                                                     </li>
                                                 )}
                                                 {data?.instagram && (
                                                     <li>
                                                         <Tippy content={"Instagram"} >
-                                                            <a href={data?.instagram} target='_blank' className="btn btn-outline-secondary p-0 h-5 w-5 rounded-full">
+                                                            <Link href={data?.instagram} target='_blank' className="btn btn-outline-secondary p-0 h-5 w-5 rounded-full">
                                                                 <FontAwesomeIcon icon={faInstagram} className="w-2.5 h-2.5" />
-                                                            </a>
+                                                            </Link>
                                                         </Tippy>
                                                     </li>
                                                 )}
                                                 {data?.youtube && (
                                                     <li>
                                                         <Tippy content={"Youtube"} >
-                                                            <a href={data?.youtube} target='_blank' className="btn btn-outline-danger p-0 h-5 w-5 rounded-full">
+                                                            <Link href={data?.youtube} target='_blank' className="btn btn-outline-danger p-0 h-5 w-5 rounded-full">
                                                                 <FontAwesomeIcon icon={faYoutube} className="w-2.5 h-2.5" />
-                                                            </a>
+                                                            </Link>
                                                         </Tippy>
                                                     </li>
                                                 )}

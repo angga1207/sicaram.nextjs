@@ -3103,12 +3103,12 @@ const Index = () => {
                                                     </li>
                                                 )}
                                                 <li>
-                                                    <a href={`/kinerja/target/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
+                                                    <Link href={`/kinerja/target/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
                                                         <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
                                                         <span>
                                                             Buka Target
                                                         </span>
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                             </ul>
                                         </Dropdown>
