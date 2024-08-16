@@ -360,7 +360,7 @@ const Index = () => {
                     </div>
                 )}
                 <div className="panel">
-                    <div className="mb-5 flex items-center justify-between">
+                    <div className="mb-5 flex flex-col sm:flex-row gap-y-3 sm:items-center justify-between">
                         <h5 className="text-lg font-semibold dark:text-white-light">
                             Daftar Pengguna
                         </h5>
@@ -428,10 +428,24 @@ const Index = () => {
                                             {userType == 'verifikator' ? (
                                                 <td>
                                                     <div className="flex items-center flex-wrap gap-1">
-                                                        {data?.instance_ids?.map((instance: any) => (
-                                                            <div className='bg-sky-200 rounded px-2 py-1 text-xs'>
-                                                                {instance}
-                                                            </div>
+                                                        {data?.instance_ids?.map((instance: any, key: number) => (
+                                                            <>
+                                                                {key < 4 && (
+                                                                    <Tippy content={instance} theme='info'>
+                                                                        <div className='bg-sky-200 rounded px-2 py-1 text-xs max-w-[200px] truncate cursor-pointer'>
+                                                                            {instance}
+                                                                        </div>
+                                                                    </Tippy>
+                                                                )}
+
+                                                                {data?.instance_ids?.length > 4 && key == 3 && (
+                                                                    <Tippy content={data?.instance_ids?.length - 4 + ' Lainnya'} theme='info'>
+                                                                        <div className='bg-sky-200 rounded px-2 py-1 text-xs'>
+                                                                            {data?.instance_ids?.length - 4} Lainnya
+                                                                        </div>
+                                                                    </Tippy>
+                                                                )}
+                                                            </>
                                                         ))}
                                                     </div>
                                                 </td>
@@ -537,7 +551,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[45%] my-8 text-black dark:text-white-dark">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[100%] md:max-w-[45%] my-8 text-black dark:text-white-dark">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInput.inputType == 'create' ? 'Tambah Pengguna' : 'Edit Pengguna'}

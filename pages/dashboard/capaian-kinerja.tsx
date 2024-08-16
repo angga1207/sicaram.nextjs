@@ -180,11 +180,11 @@ const Index = () => {
 
                 <div className="grid grid-cols-10 gap-4">
                     <div className="col-span-10 lg:col-span-7 relative panel">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between flex-col md:flex-row gap-y-2">
                             <h5 className="text-lg font-semibold">
                                 Capaian Kinerja Kabupaten Ogan Ilir
                             </h5>
-                            <div className="flex items-center gap-x-1">
+                            <div className="flex items-center gap-x-1 overflow-x-auto w-full sm:w-auto sm:overflow-hidden">
                                 <div className="relative group">
                                     <div
                                         className={view === 1 ? `absolute transitiona-all duration-1000 bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg opacity-100 -inset-[1px] duration-400 animate-tilt` : `absolute transitiona-all duration-1000 opacity-0 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-[1px] group-hover:duration-400 animate-tilt`}>
@@ -252,9 +252,11 @@ const Index = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="rounded-lg bg-white dark:bg-black">
+                        <div className="rounded-lg bg-white dark:bg-black relative w-full overflow-x-auto">
                             {isMounted && KinerjaSeries?.length !== 0 ? (
-                                <ReactApexChart series={apexChartKinerja.series} options={apexChartKinerja.options} type="bar" height={550} width={'100%'} />
+                                <div className="min-w-[800px] md:min-w-full max-w-full">
+                                    <ReactApexChart series={apexChartKinerja.series} options={apexChartKinerja.options} type="bar" height={550} width={'100%'} />
+                                </div>
                             ) : (
                                 <div className="flex flex-col gap-10 min-h-[550px] items-center justify-center">
                                     <LoadingSicaram></LoadingSicaram>
@@ -548,7 +550,7 @@ const Index = () => {
                                                             </div>
                                                         </Tippy>
                                                     </div>
-                                                    <div className="flex items-center justify-center gap-4 mt-3">
+                                                    <div className="flex items-center justify-center flex-wrap gap-4 mt-3">
                                                         <div className="font-semibold">
                                                             ({item?.instance_programs_count})
                                                             <span className='text-xs ml-1'>
@@ -573,7 +575,7 @@ const Index = () => {
                                             </div>
                                         </div>
 
-                                        <div className="w-32">
+                                        <div className="w-32 hidden md:block">
                                             <div className="w-32 h-32 relative rounded-full">
                                                 <img src={item.instance_logo} alt={item.instance_name} className='w-full h-full p-1 rounded-full object-contain' />
                                             </div>

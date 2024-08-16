@@ -366,7 +366,7 @@ const Page = () => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[90%] my-8 text-black dark:text-white-dark">
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[90%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3 rounded-t-lg">
                                         <h5 className="font-semibold text-md">
                                             {isLoadingDetail ? (
@@ -385,7 +385,7 @@ const Page = () => {
                                         </button>
                                     </div>
                                     <div className="p-5">
-                                        <div className="border rounded border-dashed">
+                                        <div className="border rounded border-dashed relative overflow-x-auto">
                                             <table className='!border-dashed'>
                                                 <tbody>
 

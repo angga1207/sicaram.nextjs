@@ -132,7 +132,7 @@ const Page = () => {
     return (
         <>
             <div className="panel">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between flex-col md:flex-row gap-y-3">
                     <div className="">
                         <h2 className="text-xl font-semibold">Paket Penyedia Terumumkan</h2>
                         <p className="text-sm text-gray-500">Daftar paket yang telah terumumkan dari Sirup</p>

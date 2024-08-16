@@ -1488,8 +1488,8 @@ const Index = () => {
                             background: 'linear-gradient(0deg,#00c6fb -227%,#005bea)',
                         }}
                     >
-                        <div className="z-[7] mb-16 flex items-center justify-between text-white-light">
-                            <div className="">
+                        <div className="z-[7] mb-16 flex flex-col md:flex-row gap-2 items-center justify-between text-white-light">
+                            <div className="order-2 md:order-1">
                                 <h5 className="text-lg font-semibold">
                                     {Instance?.name}
                                 </h5>
@@ -1498,7 +1498,7 @@ const Index = () => {
                                 </span>
                             </div>
 
-                            <div className="relative whitespace-nowrap text-xl flex-none w-32 h-32">
+                            <div className="order-1 md:order-2 relative whitespace-nowrap text-xl flex-none w-32 h-32">
                                 <img src={Instance?.logo} alt="" className="w-full h-full rounded-full object-contain bg-white dark:bg-dark p-1" />
                             </div>
                         </div>
@@ -1765,11 +1765,11 @@ const Index = () => {
 
                     {tab === 'anggaran' && (
                         <div className="relative panel rounded-t-none">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between">
                                 <h5 className="text-lg font-semibold">
                                     Capaian Keuangan Kabupaten Ogan Ilir
                                 </h5>
-                                <div className="flex items-center gap-x-1">
+                                <div className="flex items-center gap-x-1 overflow-x-auto w-full md:w-auto md:overflow-x-hidden">
                                     <div className="relative group">
                                         <div
                                             className={view === 1 ? `absolute transitiona-all duration-1000 bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg opacity-100 -inset-[1px] duration-400 animate-tilt` : `absolute transitiona-all duration-1000 opacity-0 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-[1px] group-hover:duration-400 animate-tilt`}>
@@ -1837,9 +1837,16 @@ const Index = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="rounded-lg bg-white dark:bg-black">
+                            <div className="rounded-lg bg-white dark:bg-black relative w-full overflow-x-auto">
                                 {isMounted ? (
-                                    <ReactApexChart series={chartAnggaran.series} options={chartAnggaran.options} type="area" height={430} width={'100%'} />
+                                    <div className="min-w-[800px] md:min-w-full max-w-full">
+                                        <ReactApexChart
+                                            series={chartAnggaran.series}
+                                            options={chartAnggaran.options}
+                                            type="area"
+                                            height={430}
+                                            width={'100%'} />
+                                    </div>
                                 ) : (
                                     <div className="grid min-h-[400px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
                                         <span className="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
@@ -1851,11 +1858,11 @@ const Index = () => {
 
                     {tab === 'kinerja' && (
                         <div className="relative panel rounded-t-none">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between">
                                 <h5 className="text-lg font-semibold">
                                     Capaian Keuangan Kabupaten Ogan Ilir
                                 </h5>
-                                <div className="flex items-center gap-x-1">
+                                <div className="flex items-center gap-x-1 overflow-x-auto w-full md:w-auto md:overflow-x-hidden">
                                     <div className="relative group">
                                         <div
                                             className={view === 1 ? `absolute transitiona-all duration-1000 bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg opacity-100 -inset-[1px] duration-400 animate-tilt` : `absolute transitiona-all duration-1000 opacity-0 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-[1px] group-hover:duration-400 animate-tilt`}>
@@ -1923,9 +1930,17 @@ const Index = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="rounded-lg bg-white dark:bg-black">
+                            <div className="rounded-lg bg-white dark:bg-black relative w-full overflow-x-auto">
                                 {isMounted ? (
-                                    <ReactApexChart series={apexChartKinerja.series} options={apexChartKinerja.options} className="rounded-lg bg-white dark:bg-black overflow-hidden" type="bar" height={430} width={'100%'} />
+                                    <div className="min-w-[800px] md:min-w-full max-w-full">
+                                        <ReactApexChart
+                                            series={apexChartKinerja.series}
+                                            options={apexChartKinerja.options}
+                                            className="rounded-lg bg-white dark:bg-black overflow-hidden"
+                                            type="bar"
+                                            height={430}
+                                            width={'100%'} />
+                                    </div>
                                 ) : (
                                     <div className="grid min-h-[350px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
                                         <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
@@ -2016,13 +2031,13 @@ const Index = () => {
 
             </div>
 
-            <div className="panel mt-5 p-0">
-                <div className="w-full flex items-center">
+            <div className="mt-5 p-0">
+                <div className="w-full flex items-center flex-wrap">
                     <button
                         onClick={() => {
                             setTab2('capaian')
                         }}
-                        className={`${tab2 === 'capaian' ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tl grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                        className={`${tab2 === 'capaian' ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tl grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full max-w-full`}
                     >
                         <FontAwesomeIcon icon={faChartLine} className='w-5 h-5' />
                         <span className='font-semibold whitespace-nowrap text-lg uppercase'>
@@ -2063,7 +2078,7 @@ const Index = () => {
                                     }}
                                         className="panel !cursor-pointer group hover:bg-blue-500 hover:shadow-md hover:shadow-blue-500 transition-all duration-200">
                                         <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-                                            <div className="flex items-center gap-2 font-semibold group-hover:text-white">
+                                            <div className="flex items-center flex-col md:flex-row gap-2 font-semibold group-hover:text-white">
                                                 <div className='text-md'>
                                                     {program?.code}
                                                 </div>
@@ -2071,12 +2086,12 @@ const Index = () => {
                                                     <div className='text-[15px]'>
                                                         {program?.name}
                                                     </div>
-                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white">
+                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
                                                         {Instance?.name}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-4">
+                                            <div className="flex items-center flex-col md:flex-row gap-4">
                                                 <Tippy content="Anggaran Program">
                                                     <div className="flex flex-col justify-center items-center gap-x-2">
                                                         <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
@@ -2383,7 +2398,7 @@ const Index = () => {
                                                 }}
                                                 className="panel !cursor-pointer group bg-slate-50 hover:bg-purple-500 hover:shadow-md hover:shadow-purple-500 transition-all duration-200">
                                                 <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-                                                    <div className="flex items-center gap-2 font-semibold group-hover:text-white">
+                                                    <div className="flex items-center flex-col md:flex-row gap-2 font-semibold group-hover:text-white">
                                                         <div className='text-md'>
                                                             {kegiatan?.code}
                                                         </div>
@@ -2391,12 +2406,12 @@ const Index = () => {
                                                             <div className='text-[15px]'>
                                                                 {kegiatan?.name}
                                                             </div>
-                                                            <div className="text-[11px] font-normal text-slate-400 group-hover:text-white">
+                                                            <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
                                                                 {Instance?.name}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-4 flex-col md:flex-row">
                                                         <Tippy content="Anggaran Program">
                                                             <div className="flex flex-col justify-center items-center gap-x-2">
                                                                 <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
@@ -2699,7 +2714,7 @@ const Index = () => {
                                                         }}
                                                         className="panel !cursor-pointer group bg-slate-50 hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-500 dark:hover:bg-amber-800 transition-all duration-200">
                                                         <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-                                                            <div className="flex items-center gap-2 font-semibold group-hover:text-white">
+                                                            <div className="flex items-center flex-col md:flex-row gap-2 font-semibold group-hover:text-white">
                                                                 <div className='text-md'>
                                                                     {subKegiatan?.code}
                                                                 </div>
@@ -2707,12 +2722,12 @@ const Index = () => {
                                                                     <div className='text-[15px]'>
                                                                         {subKegiatan?.name}
                                                                     </div>
-                                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white">
+                                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
                                                                         {Instance?.name}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-4 flex-col md:flex-row">
                                                                 <Tippy content="Anggaran Program">
                                                                     <div className="flex flex-col justify-center items-center gap-x-2">
                                                                         <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
@@ -2998,7 +3013,7 @@ const Index = () => {
 
                         {selectedSubKegiatan && (
                             <div className="panel">
-                                <div className="flex">
+                                <div className="flex overflow-x-auto">
 
                                     <button
                                         onClick={(e) => {
@@ -3008,8 +3023,10 @@ const Index = () => {
                                             `w-full rounded-tl-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full rounded-tl-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2" />
-                                        Rincian Realisasi
+                                        <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Rincian Realisasi
+                                        </span>
                                     </button>
 
                                     <button
@@ -3020,8 +3037,10 @@ const Index = () => {
                                             `w-full bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2" />
-                                        Sumber Dana
+                                        <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Sumber Dana
+                                        </span>
                                     </button>
 
                                     <button
@@ -3032,8 +3051,10 @@ const Index = () => {
                                             `w-full bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faQuestionCircle} className="w-4 h-4 mr-2" />
-                                        Keterangan
+                                        <FontAwesomeIcon icon={faQuestionCircle} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Keterangan
+                                        </span>
                                     </button>
 
                                     <button
@@ -3044,8 +3065,10 @@ const Index = () => {
                                             `w-full rounded-tr-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full rounded-tr-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faFileSignature} className="w-4 h-4 mr-2" />
-                                        Kontrak
+                                        <FontAwesomeIcon icon={faFileSignature} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Kontrak
+                                        </span>
                                     </button>
 
                                 </div>

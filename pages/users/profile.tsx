@@ -660,7 +660,7 @@ const Profile = () => {
 
                     <div className="panel lg:col-span-2 xl:col-span-3">
 
-                        <div className="w-full flex items-center mb-5">
+                        <div className="w-full flex items-center mb-5 overflow-x-auto">
 
                             <button
                                 onClick={(e) => {

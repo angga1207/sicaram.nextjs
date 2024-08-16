@@ -390,7 +390,7 @@ const Index = () => {
                     <>
                         <div key={`prg-${index}`} className={`${(showProgram == null || showProgram == index) ? '' : 'hidden'} text-black p-5 pl-3.5 bg-white shadow-md rounded-tr-md rounded-br-md border border-white-light border-l-2 !border-l-primary dark:bg-dark dark:border-dark cursor-pointer hover:bg-blue-50`}>
 
-                            <div className="flex items-center justify-between pr-5">
+                            <div className="flex flex-col sm:flex-row gap-y-3 items-center justify-between pr-5">
                                 <div className="not-italic text-[#515365] text-md font-semibold dark:text-white-light m-0">
                                     {data?.fullcode} - {data?.name}
                                 </div>
@@ -628,7 +628,7 @@ const Index = () => {
                                     <>
                                         <div key={`kgt-${indexKeg}`} className={`${(showKegiatan == null || showKegiatan == indexKeg) ? '' : 'hidden'} text-black p-5 pl-3.5 bg-white shadow-md rounded-tr-md rounded-br-md border border-white-light border-l-2 !border-l-secondary dark:bg-dark dark:border-dark cursor-pointer hover:bg-purple-50`}>
 
-                                            <div className="flex items-center justify-between pr-5">
+                                            <div className="flex flex-col sm:flex-row gap-y-3 items-center justify-between pr-5">
                                                 <div className="font-semibold text-lg">
                                                     {kegiatan?.fullcode} - {kegiatan?.name}
                                                 </div>
@@ -874,7 +874,7 @@ const Index = () => {
                                                 {kegiatan?.subKegiatan?.map((subKegiatan: any, indexSubKeg: number) => (
                                                     <div key={`skgt-${indexSubKeg}`} className={`${(showSubKegiatan == null || showSubKegiatan == indexSubKeg) ? '' : 'hidden'} text-black p-5 pl-3.5 bg-white shadow-md rounded-tr-md rounded-br-md border border-white-light border-l-2 !border-l-success dark:bg-dark dark:border-dark cursor-pointer hover:bg-green-50`}>
 
-                                                        <div className="flex items-center justify-between pr-5">
+                                                        <div className="flex flex-col sm:flex-row items-center justify-between pr-5">
                                                             <div className="font-semibold text-lg">
                                                                 {subKegiatan?.fullcode} - {subKegiatan?.name}
                                                             </div>
@@ -950,7 +950,7 @@ const Index = () => {
                                                             </div>
                                                         )}
 
-                                                        <div className="my-3 flex flex-wrap xl:flex-nowrap gap-3">
+                                                        <div className="my-3 flex flex-wrap xl:flex-nowrap gap-3 overflow-x-auto">
                                                             <table className='w-full xl:w-1/2'>
                                                                 <tbody>
 
@@ -989,7 +989,7 @@ const Index = () => {
 
                                                                 </tbody>
                                                             </table>
-                                                            <div className="w-full xl:w-1/2">
+                                                            <div className="w-full xl:w-1/2 overflow-x-auto">
                                                                 <table>
                                                                     <thead>
                                                                         <tr className='!bg-slate-800 text-white'>
@@ -1140,7 +1140,7 @@ const Index = () => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[80%] my-8 text-black dark:text-white-dark">
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[100%] md:max-w-[80%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                         <h5 className="font-bold text-lg">
                                             {dataPDF ? dataPDF?.fullcode + ' - ' + dataPDF?.name : ''}

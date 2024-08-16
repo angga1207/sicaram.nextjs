@@ -267,11 +267,11 @@ const Index = () => {
 
                 <div className="grid grid-cols-10 gap-4">
                     <div className="col-span-10 lg:col-span-7 relative panel">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between">
                             <h5 className="text-lg font-semibold">
                                 Capaian Keuangan Kabupaten Ogan Ilir
                             </h5>
-                            <div className="flex items-center gap-x-1">
+                            <div className="flex items-center gap-x-1 overflow-x-auto w-full sm:w-auto sm:overflow-hidden">
                                 <div className="relative group">
                                     <div
                                         className={view === 1 ? `absolute transitiona-all duration-1000 bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg opacity-100 -inset-[1px] duration-400 animate-tilt` : `absolute transitiona-all duration-1000 opacity-0 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#445aff] to-[#965eff] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-[1px] group-hover:duration-400 animate-tilt`}>
@@ -339,9 +339,18 @@ const Index = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="rounded-lg bg-white dark:bg-black">
+                        <div className="rounded-lg bg-white dark:bg-black relative w-full overflow-x-auto">
                             {isMounted && AnggaranSeries?.length !== 0 ? (
-                                <ReactApexChart series={chartAnggaran.series} options={chartAnggaran.options} type="area" height={550} width={'100%'} />
+                                <div className="min-w-[800px] md:min-w-full max-w-full">
+                                    <ReactApexChart
+                                        clasName=""
+                                        series={chartAnggaran.series}
+                                        options={chartAnggaran.options}
+                                        type="area"
+                                        height={550}
+                                        width={'100%'}
+                                         />
+                                </div>
                             ) : (
                                 <div className="flex flex-col gap-10 min-h-[550px] items-center justify-center">
                                     <LoadingSicaram></LoadingSicaram>
@@ -480,121 +489,6 @@ const Index = () => {
                         Perangkat Daerah Kabupaten Ogan Ilir
                     </div>
 
-                    {/* <div className="col-span-10 lg:col-span-4 relative h-full">
-                        <div className="panel h-full overflow-hidden border-0 p-0">
-                            <div className="min-h-[280px] bg-gradient-to-r from-[#49ee43] to-[#206b0f] p-6">
-                                <div className="flex gap-x-2 items-center justify-between text-white">
-                                    <div className="flex-none relative bg-white rounded-full w-32 h-32 shadow">
-                                        <div className="absolute top-0 left-0 w-32 h-32 rounded-full animate-blinkingBg"></div>
-                                        {RankInstances?.length !== 0 ? (
-                                            <img src={RankInstances[0]?.instance_logo} alt='award' className='w-32 h-32 object-contain rounded-full p-1 relative z-10 shadow-xl' />
-                                        ) : (
-                                            <div className="animate-pulse w-32 h-32 bg-slate-200 rounded-full"></div>
-                                        )}
-                                    </div>
-                                    <div className="text-xl font-semibold line-clamp-4 cursor-pointer">
-                                        <div className="text-md">
-                                            {RankInstances?.length !== 0 ? (
-                                                <>
-                                                    {RankInstances[0]?.instance_code}
-                                                </>
-                                            ) : (
-                                                <div className="animate-pulse w-full h-[25px] bg-slate-200 rounded"></div>
-                                            )}
-                                        </div>
-                                        {RankInstances?.length !== 0 ? (
-                                            <>
-                                                {RankInstances[0]?.instance_name}
-                                                {RankInstances[0]?.instance_alias ? ` (${RankInstances[0]?.instance_alias})` : ''}
-                                            </>
-                                        ) : (
-                                            <div className="animate-pulse w-full h-[25px] bg-slate-200 rounded"></div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="-mt-12 px-8">
-                                <div className="rounded-md bg-white px-4 py-2.5 shadow dark:bg-[#060818]">
-                                    <p className="mb-4 text-center dark:text-white">
-                                        Capaian Anggaran
-                                    </p>
-                                    <div className="btn w-full  border-0 bg-[#ebedf2] py-1 text-base text-[#515365] shadow-none dark:bg-black dark:text-[#bfc9d4]">
-                                        {(RankInstances[0]?.persentase_realisasi_anggaran ?? 0).toFixed(2)} %
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-5">
-                                <div className="mb-5">
-                                    <span className="rounded-full bg-[#1b2e4b] px-4 py-1.5 text-xs text-white before:inline-block before:h-1.5 before:w-1.5 before:rounded-full before:bg-white ltr:before:mr-2 rtl:before:ml-2">
-                                        Rincian
-                                    </span>
-                                </div>
-                                <div className="mb-5 space-y-1">
-                                    <div className="flex items-center justify-between">
-                                        <p className="font-semibold text-[#515365]">
-                                            Anggaran
-                                        </p>
-                                        <p className="text-base">
-                                            <span>Rp. </span>
-                                            <span className="font-semibold">
-                                                {new Intl.NumberFormat('id-ID').format(RankInstances[0]?.target_anggaran)}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <p className="font-semibold text-[#515365]">
-                                            Realisasi
-                                        </p>
-                                        <p className="text-base">
-                                            <span>Rp. </span>
-                                            <span className="font-semibold">
-                                                {new Intl.NumberFormat('id-ID').format(RankInstances[0]?.realisasi_anggaran)}
-                                            </span>
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center justify-center gap-4 pt-4">
-                                        {RankInstances?.length !== 0 && (
-                                            <>
-                                                <div className="font-semibold text-md">
-                                                    ({RankInstances[0]?.instance_programs_count})
-                                                    <span className='text-sm ml-1'>
-                                                        Program
-                                                    </span>
-                                                </div>
-                                                <div className="font-semibold text-md">
-                                                    ({RankInstances[0]?.instance_kegiatans_count})
-                                                    <span className='text-sm ml-1'>
-                                                        Kegiatan
-                                                    </span>
-                                                </div>
-                                                <div className="font-semibold text-md">
-                                                    ({RankInstances[0]?.instance_sub_kegiatans_count})
-                                                    <span className='text-sm ml-1'>
-                                                        Sub Kegiatan
-                                                    </span>
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex justify-around px-2 text-center">
-                                    {RankInstances?.length !== 0 && (
-                                        <>
-                                            <Link href={`/dashboard/pd/${RankInstances[0]?.instance_alias}`} className="btn btn-outline-success ltr:mr-2 rtl:ml-2">
-                                                Lihat Detail
-                                            </Link>
-                                            <button type="button" className="btn btn-success hidden">
-                                                Beri Pujian
-                                                <FontAwesomeIcon icon={faThumbsUp} className="w-4 h-4 ml-1" />
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
-
                     <div className="col-span-10 lg:col-span-10">
 
                         <div className='space-y-2 h-full lg:h-[calc(100vh-200px)qwe] overflow-x-auto'>
@@ -657,18 +551,18 @@ const Index = () => {
                                                         </Tippy>
                                                         <div className="flex flex-col gap-4 justify-start items-start ml-4">
                                                             <Tippy content="Nilai Anggaran" theme='dark'>
-                                                                <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
+                                                                <div className="text-lg font-semibold flex flex-col md:flex-row justify-center items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Anggaran: </span>
                                                                     Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
                                                                 </div>
                                                             </Tippy>
                                                             <Tippy content="Nilai Realisasi" theme='dark'>
-                                                                <div className="text-lg font-semibold text-gray-500 group-hover:text-dark">
+                                                                <div className="text-lg font-semibold flex flex-col md:flex-row justify-center items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Realisasi: </span>
                                                                     Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
                                                                 </div>
                                                             </Tippy>
-                                                            <div className="flex items-center justify-center gap-4">
+                                                            <div className="flex items-center justify-center flex-wrap gap-4">
                                                                 <div className="font-semibold">
                                                                     ({item?.instance_programs_count})
                                                                     <span className='text-xs ml-1'>

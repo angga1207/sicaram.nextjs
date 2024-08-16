@@ -713,7 +713,7 @@ const Index = () => {
         return (
             <>
                 <div className="">
-                    <div className="flex items-center justify-between mb-5 px-5">
+                    <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between mb-5 px-5">
                         <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
                             Daftar Rekening
                             {level == 1 ? ' Akun' : ''}
@@ -982,7 +982,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[100%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
 
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">

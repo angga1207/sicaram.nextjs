@@ -710,7 +710,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[100%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInput.inputType == 'create' ? 'Tambah Kegiatan' : 'Edit Kegiatan'}
@@ -722,9 +722,9 @@ const Index = () => {
                                         <div className="p-5">
 
                                             <div className="space-y-3">
-                                                <div className='grid grid-cols-1 xl:grid-cols-3 gap-y-4 gap-x-2'>
+                                                <div className='grid grid-cols-1 xl:grid-cols-2 gap-y-4 gap-x-2'>
 
-                                                    <div className='xl:col-span-3'>
+                                                    <div className='col-span-2'>
                                                         <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Program
                                                             <span className='text-red-600 mx-1'>*</span>
@@ -775,7 +775,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div className='xl:col-span-3'>
+                                                    <div className='col-span-2'>
                                                         <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Nama Kegiatan
                                                             <span className='text-red-600 mx-1'>*</span>
@@ -809,7 +809,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div>
+                                                    <div className='col-span-2 md:col-span-1'>
                                                         <label htmlFor="alias" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Kode Kegiatan 1
                                                             <span className='text-red-600 mx-1'>*</span>
@@ -839,7 +839,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div>
+                                                    <div className='col-span-2 md:col-span-1'>
                                                         <label htmlFor="alias" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Kode Kegiatan 2
                                                             <span className='text-red-600 mx-1'>*</span>
@@ -869,7 +869,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div>
+                                                    <div className='col-span-2'>
                                                         <label htmlFor="code" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Fullcode
                                                         </label>
@@ -895,7 +895,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div className='col-span-3'>
+                                                    <div className='col-span-2'>
                                                         <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Deskripsi
                                                         </label>

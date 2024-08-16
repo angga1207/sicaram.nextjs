@@ -280,7 +280,7 @@ const Index = () => {
             <div className="">
 
                 <div className="">
-                    <div className="flex items-center justify-between mb-5 px-5">
+                    <div className="flex items-center justify-between flex-col md:flex-row gap-y-3 mb-5 px-5">
                         <h2 className="text-lg leading-6 font-bold text-[#3b3f5c] dark:text-white-light">
                             Daftar Urusan
                         </h2>
@@ -457,7 +457,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[100%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInput.inputType == 'create' ? 'Tambah Urusan' : 'Edit Urusan'}
@@ -470,7 +470,7 @@ const Index = () => {
 
                                             <div className="space-y-3">
                                                 <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
-                                                    <div className='xl:col-span-2'>
+                                                    <div className='col-span-2'>
                                                         <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Nama Urusan
                                                             <span className='text-red-600 mx-1'>*</span>
@@ -500,7 +500,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div>
+                                                    <div className='col-span-2 md:col-span-1'>
                                                         <label htmlFor="alias" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Kode Urusan
                                                             <span className='text-red-600 mx-1'>*</span>
@@ -530,7 +530,7 @@ const Index = () => {
                                                         )}
                                                     </div>
 
-                                                    <div>
+                                                    <div className='col-span-2 md:col-span-1'>
                                                         <label htmlFor="code" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                                             Fullcode
                                                         </label>

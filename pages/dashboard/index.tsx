@@ -137,14 +137,14 @@ const Index = () => {
                     <Link href={`/dashboard/capaian-keuangan`}
                         className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
                         {AnggaranSummary?.length === 0 && (
-                            <div className="w-[360px] h-[360px] flex items-center justify-center">
+                            <div className="w-[360px] max-w-full h-[360px] flex items-center justify-center">
                                 <LoadingSicaram></LoadingSicaram>
                             </div>
                         )}
                         {AnggaranSummary?.length !== 0 && (
                             <>
                             <div className="flex items-center justify-center cursor-pointer">
-                                <svg className="transform -rotate-90 w-[360px] h-[360px]">
+                                <svg className="transform -rotate-90 w-[360px] max-w-full h-[360px]">
                                     <circle
                                         cx="180"
                                         cy="180"
@@ -198,13 +198,13 @@ const Index = () => {
                     <Link href={`/dashboard/capaian-kinerja`}
                         className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
                         {KinerjaSummary?.length === 0 && (
-                            <div className="w-[360px] h-[360px] flex items-center justify-center">
+                            <div className="w-[360px] max-w-full h-[360px] flex items-center justify-center">
                                 <LoadingSicaram></LoadingSicaram>
                             </div>
                         )}
                         {KinerjaSummary?.length !== 0 && (
                             <div className="flex items-center justify-center cursor-pointer">
-                                <svg className="transform -rotate-90 w-[360px] h-[360px]">
+                                <svg className="transform -rotate-90 w-[360px] max-w-full h-[360px]">
                                     <circle
                                         cx="180"
                                         cy="180"

@@ -534,7 +534,7 @@ const Index = () => {
                                 <thead>
                                     <tr>
                                         <th>
-                                            <div className="text-md !font-semibold">
+                                            <div className="text-md !font-semibold whitespace-nowrap">
                                                 Tujuan & Sasaran Kabupaten
                                             </div>
                                         </th>
@@ -920,7 +920,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[40%] my-8 text-black dark:text-white-dark overflow-auto">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[40%] my-8 text-black dark:text-white-dark overflow-auto">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInputTujuan?.inputType == 'create' ? 'Tambah' : 'Edit'} {dataInputReferences?.type === 'tujuan' ? ' Tujuan' : ' Sasaran'}
@@ -1026,7 +1026,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[40%] my-8 text-black dark:text-white-dark overflow-auto">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[40%] my-8 text-black dark:text-white-dark overflow-auto">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInputTujuan?.inputType == 'create' ? 'Tambah' : 'Edit'} Indikator {dataInputIndikatorReferences?.type === 'tujuan' ? 'Tujuan' : 'Sasaran'}
@@ -1131,7 +1131,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[60%] h-[calc(100vh-100px)] my-8 text-black dark:text-white-dark overflow-auto">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[60%] h-[calc(100vh-100px)] my-8 text-black dark:text-white-dark overflow-auto">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInputTujuan?.inputType == 'create' ? 'Tambah' : 'Edit'} Tujuan
@@ -1339,7 +1339,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[60%] h-[calc(100vh-200px)] my-8 text-black dark:text-white-dark overflow-auto">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[60%] h-[calc(100vh-200px)] my-8 text-black dark:text-white-dark overflow-auto">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {dataInputSasaran?.inputType == 'create' ? 'Tambah' : 'Edit'} Sasaran

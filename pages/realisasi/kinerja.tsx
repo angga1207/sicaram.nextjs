@@ -484,7 +484,7 @@ const Index = () => {
                 <div className="space-y-2" ref={ref}>
                     {datas?.map((program: any, index: number) => {
                         return (
-                            <div
+                            <div key={'program-' + program?.id}
                                 className={showPrograms.includes(program?.id)
                                     ? 'pb-3'
                                     : ''}>
@@ -641,8 +641,7 @@ const Index = () => {
                                             )
                                         })}
                                     </div>
-                                )
-                                }
+                                )}
                             </div>
                         )
                     })}

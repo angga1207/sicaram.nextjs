@@ -615,7 +615,33 @@ const Index = () => {
         <>
             <div className="panel p-0">
 
-                <div className="w-full flex items-center">
+                <div className="p-4 block sm:hidden">
+                    <div className="font-semibold">
+                        Input Realisasi
+                    </div>
+                    <div className="text-sm line-clamp-2 md:line-clamp-none">
+                        {subKegiatan?.fullcode}
+                        <span className='ml-2 font-semibold'>
+                            {subKegiatan?.name}
+                        </span>
+                    </div>
+                    <div className="hidden md:block">
+                        Bulan &nbsp;
+                        <span className='font-semibold'>
+                            {new Date(year, month - 1).toLocaleString('id-ID', { month: 'long' })}
+                        </span>
+                        &nbsp; Tahun &nbsp;
+                        <span className='font-semibold'>
+                            {year}
+                        </span>
+                        &nbsp; - &nbsp;
+                        <span className='font-semibold'>
+                            {subKegiatan?.instance_name}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="w-full flex items-center overflow-x-auto">
 
                     <button
                         onClick={(e) => {
@@ -2944,18 +2970,18 @@ const Index = () => {
 
             {isMounted && (
                 <div className="fixed bottom-0 left-0 w-full bg-slate-100 dark:bg-slate-800 sm:h-[70px] py-1 pr-16 pl-0 lg:pl-16">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 gap-y-2">
-                        <div className="">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 gap-y-2 relative">
+                        <div className="hidden sm:block">
                             <div className="font-semibold">
                                 Input Realisasi
                             </div>
-                            <div className="text-sm">
+                            <div className="text-sm line-clamp-2 md:line-clamp-none">
                                 {subKegiatan?.fullcode}
                                 <span className='ml-2 font-semibold'>
                                     {subKegiatan?.name}
                                 </span>
                             </div>
-                            <div className="">
+                            <div className="hidden md:block">
                                 Bulan &nbsp;
                                 <span className='font-semibold'>
                                     {new Date(year, month - 1).toLocaleString('id-ID', { month: 'long' })}
@@ -2970,7 +2996,7 @@ const Index = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className="flex justify-end items-center gap-x-2">
+                        <div className="flex justify-end items-center gap-2 flex-wrap w-full md:w-1/2">
                             {(tab === 1 || tab === 2) && (
                                 <>
                                     <Tippy content={`Tekan Untuk Melihat Log`}>
@@ -3025,7 +3051,8 @@ const Index = () => {
                                         </button>
                                     </Tippy>
 
-                                    <div className="border-r-2 border-slate-400 h-[35px] w-2"></div>
+                                    <div className="border-r-2 border-slate-400 h-[35px] w-2 hidden sm:block"></div>
+
                                     {unsaveStatus && (
                                         <div
                                             onClick={(e) => {
@@ -3152,6 +3179,7 @@ const Index = () => {
                                 </>
                             )}
                         </div>
+
                     </div>
                 </div >
             )}
@@ -3181,7 +3209,7 @@ const Index = () => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[70%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                         <h5 className="font-semibold text-md">
                                             Logs Perubahan Status
@@ -3383,7 +3411,7 @@ const Index = () => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                         <h5 className="font-semibold text-md">
                                             Ajukan Permintaan Verifikasi
@@ -3473,7 +3501,7 @@ const Index = () => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[100%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
                                     <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                         <h5 className="font-semibold text-md">
                                             Tanggapi Permintaan Verifikasi

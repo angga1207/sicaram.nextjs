@@ -353,6 +353,32 @@ const Index = () => {
     return (
         <>
             <div className="panel">
+                <div className="block mb-4 sm:mb-0 sm:hidden">
+                    <div className="font-semibold">
+                        Input Target
+                    </div>
+                    <div className="text-sm">
+                        {subKegiatan?.fullcode}
+                        <span className='ml-2 font-semibold'>
+                            {subKegiatan?.name}
+                        </span>
+                    </div>
+                    <div className="">
+                        Bulan &nbsp;
+                        <span className='font-semibold'>
+                            {new Date(year, month - 1).toLocaleString('id-ID', { month: 'long' })}
+                        </span>
+                        &nbsp; Tahun &nbsp;
+                        <span className='font-semibold'>
+                            {year}
+                        </span>
+                        &nbsp; - &nbsp;
+                        <span className='font-semibold'>
+                            {subKegiatan?.instance_name}
+                        </span>
+                    </div>
+                </div>
+
                 <div className="table-responsive h-[calc(100vh-280px)] pr-3.5 border !border-slate-400 dark:!border-slate-100">
                     <table className=''>
                         <thead className='sticky top-0 left-0 z-[1]'>
@@ -990,7 +1016,7 @@ const Index = () => {
             {isMounted && (
                 <div className="fixed bottom-0 left-0 w-full bg-slate-100 dark:bg-slate-800 sm:h-[70px] py-1 pr-16 pl-0 lg:pl-16">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pl-10 gap-y-2">
-                        <div className="">
+                        <div className="hidden sm:block">
                             <div className="font-semibold">
                                 Input Target
                             </div>
@@ -1015,7 +1041,7 @@ const Index = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className="flex justify-end items-center gap-x-2">
+                        <div className="flex flex-wrap sm:flex-nowrap justify-center sm:justify-end items-center gap-2">
 
                             <div className="flex justify-end flex-wrap items-center gap-1 mr-3 w-[300px]">
                                 {subKegiatan?.tag_sumber_dana?.length > 0 && (
@@ -1081,6 +1107,7 @@ const Index = () => {
                                     </>
                                 )}
                             </div>
+
                             <Tippy content={`Tekan Untuk Melihat Log`}>
                                 <button
                                     type='button'
@@ -1132,7 +1159,9 @@ const Index = () => {
                                     </div>
                                 </button>
                             </Tippy>
-                            <div className="border-r-2 border-slate-400 h-[35px] w-2"></div>
+
+                            <div className="border-r-2 border-slate-400 h-[35px] w-2 hidden sm:block"></div>
+
                             {unsaveStatus && (
                                 <div
                                     onClick={(e) => {
@@ -1165,49 +1194,6 @@ const Index = () => {
                                     Muat Ulang
                                 </div>
                             )}
-
-                            {/* {subKegiatan?.status === 'verified' && (
-                                <div
-                                    onClick={(e) => {
-                                        if (unsaveStatus) {
-                                            e.preventDefault();
-                                            Swal.fire({
-                                                title: 'Peringatan',
-                                                text: 'Data yang belum disimpan akan hilang. Apakah Anda yakin ingin meninggalkan halaman ini?',
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonText: 'Ya, Keluar',
-                                                cancelButtonText: 'Batal',
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    route.push({
-                                                        pathname: `/realisasi/${subKegiatanId}`,
-                                                        query: {
-                                                            periode: periode,
-                                                            year: year,
-                                                            month: month,
-                                                        },
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            route.push({
-                                                pathname: `/realisasi/${subKegiatanId}`,
-                                                query: {
-                                                    periode: periode,
-                                                    year: year,
-                                                    month: month,
-                                                },
-                                            });
-                                        }
-                                    }}
-                                    className='btn btn-sm flex whitespace-nowrap dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white cursor-pointer'>
-                                    <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4' />
-                                    Buka Realisasi
-                                </div>
-                            )} */}
-
-
 
                             <div className="dropdown">
                                 <Dropdown

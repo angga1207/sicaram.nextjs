@@ -517,7 +517,7 @@ const Index = () => {
                     <div className="text-center text-md font-semibold mb-5">
                         Pilih Tahun
                     </div>
-                    <div className="flex items-center justify-center gap-4">
+                    <div className="flex flex-wrap items-center justify-center gap-4">
                         {years?.map((yr: any, index: number) => (
                             <button
                                 onClick={(e) => {
@@ -547,7 +547,7 @@ const Index = () => {
                                             e.preventDefault();
                                             togglePrograms(program.id);
                                         }}
-                                        className={`panel hover:bg-primary-light cursor-pointer ${(showPrograms.includes(program.id)) ? 'col-span-12 bg-primary-light' : 'col-span-6 lg:col-span-4'}`}>
+                                        className={`panel hover:bg-primary-light cursor-pointer ${(showPrograms.includes(program.id)) ? 'col-span-12 bg-primary-light' : 'col-span-12 md:col-span-6 lg:col-span-4'}`}>
 
                                         <div className="h-full gap-x-4">
                                             <div className="font-semibold">
@@ -574,7 +574,7 @@ const Index = () => {
                                                                 e.preventDefault();
                                                                 toggleKegiatans(kegiatan.id);
                                                             }}
-                                                            className={`panel hover:bg-primary-light cursor-pointer ${showKegiatans.includes(kegiatan.id) ? 'col-span-12 bg-primary-light' : 'col-span-6 lg:col-span-4'}`}>
+                                                            className={`panel hover:bg-primary-light cursor-pointer ${showKegiatans.includes(kegiatan.id) ? 'col-span-12 bg-primary-light' : 'col-span-12 md:col-span-6 lg:col-span-4'}`}>
 
                                                             <div className="h-full gap-x-4">
                                                                 <div className="font-semibold">
@@ -596,7 +596,7 @@ const Index = () => {
                                                                     <>
                                                                         {(showSubKegiatans.includes(subkegiatan.id) || showSubKegiatans.length == 0) && (
                                                                             <div
-                                                                                className={`panel hover:bg-primary-light cursor-pointer ${showSubKegiatans.includes(subkegiatan.id) ? 'col-span-12 bg-primary-light' : 'col-span-6 lg:col-span-4'}`}>
+                                                                                className={`panel hover:bg-primary-light cursor-pointer ${showSubKegiatans.includes(subkegiatan.id) ? 'col-span-12 bg-primary-light' : 'col-span-12 md:col-span-6 lg:col-span-4'}`}>
 
                                                                                 <div className="h-full gap-x-4">
                                                                                     <div
@@ -615,41 +615,6 @@ const Index = () => {
                                                                                     {showSubKegiatans.includes(subkegiatan?.id) && (
                                                                                         <>
                                                                                             <div className="flex items-center gap-2 border-t border-slate-500 pt-3 mt-3">
-                                                                                                {/* <div className="text-center">
-                                                                                                    <div className="text-xs mb-1">
-                                                                                                        Target
-                                                                                                    </div>
-                                                                                                    {subkegiatan?.target_status == 'draft' && (
-                                                                                                        <span className="badge bg-primary">
-                                                                                                            Draft
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                    {subkegiatan?.target_status == 'verified' && (
-                                                                                                        <span className="badge bg-success">
-                                                                                                            Terverifikasi
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                    {subkegiatan?.target_status == 'return' && (
-                                                                                                        <span className="badge bg-warning">
-                                                                                                            Dikembalikan
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                    {subkegiatan?.target_status == 'waiting' && (
-                                                                                                        <span className="badge bg-warning">
-                                                                                                            Menunggu
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                    {subkegiatan?.target_status == 'sent' && (
-                                                                                                        <span className="badge bg-info">
-                                                                                                            Dikirim
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                    {subkegiatan?.target_status == 'reject' && (
-                                                                                                        <span className="badge bg-danger">
-                                                                                                            Ditolak
-                                                                                                        </span>
-                                                                                                    )}
-                                                                                                </div> */}
 
                                                                                                 <div className="text-center">
                                                                                                     <div className="text-xs mb-1">
@@ -765,8 +730,8 @@ const Index = () => {
                                                                                                 </div>
                                                                                             </div>
 
-                                                                                            <div className="flex items-center justify-start gap-2 divide-x divide-indigo-500 overflow-x-auto pb-3 lg:pb-0">
-                                                                                                <div className="px-0">
+                                                                                            <div className="flex flex-col md:flex-row items-center justify-start gap-2 md:divide-x divide-indigo-500 overflow-x-auto pb-3 lg:pb-0">
+                                                                                                <div className="px-0 flex-none">
                                                                                                     <select
                                                                                                         className='form-select rw-[130px] border-indigo-400 bg-transparent font-normal mr-2'
                                                                                                         onChange={(e) => {
@@ -792,13 +757,17 @@ const Index = () => {
                                                                                                 {(periode && year && month) && (
                                                                                                     <div className="px-2 flex items-center gap-x-1">
                                                                                                         {(subkegiatan.renstra_status === 'verified' && subkegiatan.renja_status === 'verified' && subkegiatan.apbd_status === 'verified') ? (
-                                                                                                            <Link
-                                                                                                                target='_blank'
-                                                                                                                href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                                                                                                                className='btn btn-secondary font-normal'>
-                                                                                                                {CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}
-                                                                                                                <IconArrowForward className='w-4 h-4 ml-2' />
-                                                                                                            </Link>
+                                                                                                            <Tippy content={CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}>
+                                                                                                                <Link
+                                                                                                                    target='_blank'
+                                                                                                                    href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
+                                                                                                                    className='btn btn-secondary font-normal'>
+                                                                                                                    <span className='truncate w-[80px] md:w-[100px] lg:w-auto'>
+                                                                                                                        {CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}
+                                                                                                                    </span>
+                                                                                                                    <IconArrowForward className='w-4 h-4 ml-2 flex-none' />
+                                                                                                                </Link>
+                                                                                                            </Tippy>
                                                                                                         ) : (
                                                                                                             <div className="flex items-center gap-2">
                                                                                                                 {subkegiatan.renstra_status !== 'verified' && (
@@ -820,13 +789,17 @@ const Index = () => {
                                                                                                         )}
 
                                                                                                         {subkegiatan.target_status === 'verified' && (
-                                                                                                            <Link
-                                                                                                                target='_blank'
-                                                                                                                href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
-                                                                                                                className='btn btn-success font-normal'>
-                                                                                                                {CurrentUser?.role_id === 6 ? 'Lihat Realisasi' : 'Input Realisasi'}
-                                                                                                                <IconArrowForward className='w-4 h-4 ml-2' />
-                                                                                                            </Link>
+                                                                                                            <Tippy content={CurrentUser?.role_id === 6 ? 'Lihat Realisasi' : 'Input Realisasi'}>
+                                                                                                                <Link
+                                                                                                                    target='_blank'
+                                                                                                                    href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
+                                                                                                                    className='btn btn-success font-normal'>
+                                                                                                                    <span className='truncate w-[80px] md:w-[100px] lg:w-auto'>
+                                                                                                                        {CurrentUser?.role_id === 6 ? 'Lihat Realisasi' : 'Input Realisasi'}
+                                                                                                                    </span>
+                                                                                                                    <IconArrowForward className='w-4 h-4 ml-2 flex-none' />
+                                                                                                                </Link>
+                                                                                                            </Tippy>
                                                                                                         )}
                                                                                                     </div>
                                                                                                 )}

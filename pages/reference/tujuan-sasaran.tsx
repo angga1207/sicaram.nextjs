@@ -217,7 +217,7 @@ const Index = () => {
 
                         <div className="relative">
                             <form
-                                className='flex items-center gap-2'
+                                className='flex flex-col md:flex-row items-center gap-2 gap-y-3'
                                 onSubmit={
                                     (e) => {
                                         e.preventDefault();
@@ -234,28 +234,30 @@ const Index = () => {
                                     }}
                                     options={instances} />
 
-                                <input type="search"
-                                    className="form-input w-[200px]"
-                                    placeholder={type === 'tujuan' ? 'Cari Tujuan...' : 'Cari Sasaran...'}
-                                    // value={search}
-                                    onChange={(e) => {
-                                        // setSearch(e.target.value);
-                                        const value = e.target.value;
-                                        if (value == '') {
-                                            setSearch(value)
-                                        }
-                                    }}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
-                                            setSearch(ref?.current?.value);
-                                        }
-                                    }}
-                                    ref={ref}
-                                />
+                                <div className="relative grow">
+                                    <input type="search"
+                                        className="form-input w-[200px]"
+                                        placeholder={type === 'tujuan' ? 'Cari Tujuan...' : 'Cari Sasaran...'}
+                                        // value={search}
+                                        onChange={(e) => {
+                                            // setSearch(e.target.value);
+                                            const value = e.target.value;
+                                            if (value == '') {
+                                                setSearch(value)
+                                            }
+                                        }}
+                                        onKeyPress={(e) => {
+                                            if (e.key === 'Enter') {
+                                                setSearch(ref?.current?.value);
+                                            }
+                                        }}
+                                        ref={ref}
+                                    />
+                                    <div className="absolute rtl:left-0 ltr:right-0 top-0 bottom-0 flex items-center justify-center w-12 h-full">
+                                        <IconSearch className="w-4 h-4 text-slate-400" />
+                                    </div>
+                                </div>
                             </form>
-                            <div className="absolute rtl:left-0 ltr:right-0 top-0 bottom-0 flex items-center justify-center w-12 h-full">
-                                <IconSearch className="w-4 h-4 text-slate-400" />
-                            </div>
                         </div>
 
 
@@ -497,7 +499,7 @@ const Index = () => {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[80%] md:max-w-[40%] my-8 text-black dark:text-white-dark">
+                                    <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-[100%] md:max-w-[40%] my-8 text-black dark:text-white-dark">
                                         <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
                                             <h5 className="font-bold text-lg">
                                                 {/* {dataInput?.inputType == 'create' ? 'Tambah Tag Sumber Dana' : 'Edit Tag Sumber Dana'} */}
