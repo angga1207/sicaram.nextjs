@@ -412,18 +412,37 @@ const Sidebar = () => {
                                                 <AnimateHeight duration={300} height={currentMenu === 'head-tujuan-sasaran' ? 'auto' : 0}>
                                                     <ul className="sub-menu text-gray-500">
                                                         {([1, 2, 3, 6].includes(CurrentUser?.role_id)) && (
-                                                            <li>
-                                                                <Link href="/master/tujuan-sasaran" className='text-xs'>
-                                                                    Master Tujuan & Sasaran
-                                                                </Link>
-                                                            </li>
+                                                            <>
+                                                                <li>
+                                                                    <div className="text-sm font-semibold">
+                                                                        Kabupaten
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <Link href="/master/tujuan-sasaran" className='text-xs'>
+                                                                        Master Tujuan & Sasaran
+                                                                    </Link>
+                                                                </li>
+                                                                {/* <li>
+                                                                    <Link href="/target/tujuan-sasaran" className='text-xs'>
+                                                                        Target Tujuan & Sasaran
+                                                                    </Link>
+                                                                </li> */}
+                                                                <li>
+                                                                    <div className="text-sm font-semibold">
+                                                                        Perangkat Daerah
+                                                                    </div>
+                                                                </li>
+                                                            </>
                                                         )}
                                                         {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                                            <li>
-                                                                <Link href="/master/tujuan-sasaran/perangkat-daerah" className='text-xs'>
-                                                                    {CurrentUser?.role_id === 9 ? 'Master Tujuan & Sasaran' : 'Tujuan & Sasaran Perangkat Daerah'}
-                                                                </Link>
-                                                            </li>
+                                                            <>
+                                                                <li>
+                                                                    <Link href="/master/tujuan-sasaran/perangkat-daerah" className='text-xs'>
+                                                                        {CurrentUser?.role_id === 9 ? 'Master Tujuan & Sasaran' : 'Tujuan & Sasaran Perangkat Daerah'}
+                                                                    </Link>
+                                                                </li>
+                                                            </>
                                                         )}
                                                     </ul>
                                                 </AnimateHeight>

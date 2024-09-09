@@ -1,9 +1,5 @@
-import { useRouter } from "next/router";
-
-import { setCookie, getCookie, hasCookie, deleteCookie } from 'cookies-next';
-import { useState, useEffect, FormEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios, { AxiosRequestConfig } from "axios";
+import { getCookie } from 'cookies-next';
+import axios from "axios";
 import { BaseUri } from "./serverConfig";
 
 const baseUri = BaseUri();

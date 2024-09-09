@@ -1,8 +1,4 @@
-import { useRouter } from "next/router";
-
-import { setCookie, getCookie, hasCookie, deleteCookie } from 'cookies-next';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { getCookie } from 'cookies-next';
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 

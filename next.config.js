@@ -5,6 +5,7 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
+    // optimizeFonts: false,
     env: {
         APP_NAME: 'SiCaram Ogan Ilir',
         APP_NAME_ALIAS: 'SiCaram',
