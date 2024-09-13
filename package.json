@@ -7,9 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "start prod": "next start -p 3001",
+    "start prod": "next start -p 3002",
     "lint": "next lint",
-    "prod": "next build && next start -p 3001"
+    "prod": "next build && next start -p 3002"
   },
   "dependencies": {
     "@develoka/angka-terbilang-js": "^1.4.2",

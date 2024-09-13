@@ -24,6 +24,7 @@ import { faBell, faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-ic
 import { updateUserWithPhoto } from '@/apis/storedata';
 import { fetchUserMe, fetchLogs, fetchNotif, markNotifAsRead, postSavePassword } from '@/apis/personal_profile';
 import { faApple, faBrave, faChrome, faFirefox, faOpera, faSafari, faUbuntu, faWindows } from '@fortawesome/free-brands-svg-icons';
+import { cookies } from 'next/headers';
 
 const showAlert = async (icon: any, text: string) => {
     const toast = Swal.mixin({
@@ -286,7 +287,8 @@ const Profile = () => {
         }
 
         if (inputPassword.old_password != '') {
-            if (inputPassword.old_password != localStorage.getItem('userPassword')) {
+            let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
+            if (inputPassword.old_password != ups) {
                 showSweetAlert(
                     'error',
                     'Kata Sandi Lama Salah', 'Kata sandi lama yang Anda masukkan salah!',
@@ -302,6 +304,7 @@ const Profile = () => {
 
         postSavePassword(inputPassword).then((res: any) => {
             if (res.status == 'success') {
+                document.cookie = `ups=${inputPassword.password}; path=/; max-age=86400`;
                 showAlert('success', res.message);
                 setInputPassword({
                     old_password: '',
@@ -310,6 +313,7 @@ const Profile = () => {
                 });
                 setIsEditPassword(false);
                 setSubmitPasswordLoading(false);
+
             }
 
             if (res.status == 'error validation') {

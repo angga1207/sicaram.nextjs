@@ -2,7 +2,6 @@ import { useEffect, useState, Fragment, useRef } from 'react';
 import { Tab } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '@/store';
 import { setPageTitle } from '@/store/themeConfigSlice';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
@@ -17,13 +16,10 @@ import Select from 'react-select';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus, faTimes, faCog, faAngleDoubleDown, faTrashAlt, faCaretDown, faAngleDoubleUp, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import IconSearch from '@/components/Icon/IconSearch';
-import IconPlus from '@/components/Icon/IconPlus';
 import IconX from '@/components/Icon/IconX';
 import Page403 from '@/components/Layouts/Page403';
 
 import { getIndex, getDetail, update } from '@/apis/target_tujuan_sasaran'
-import IconEdit from '@/components/Icon/IconEdit';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -45,7 +41,7 @@ const Index = () => {
     const ref = useRef<any>(null);
 
     useEffect(() => {
-        dispatch(setPageTitle('Master Tujuan & Sasaran Kabupaten Ogan Ilir'));
+        dispatch(setPageTitle('Target Tujuan & Sasaran Kabupaten Ogan Ilir'));
     });
 
     const [isMounted, setIsMounted] = useState(false);
@@ -153,7 +149,6 @@ const Index = () => {
 
     const save = () => {
         if (safeToSave) {
-            console.log(dataInput);
             update(dataInput).then((res: any) => {
                 if (res?.status === 'success') {
                     showAlert('success', res?.message);
@@ -191,13 +186,18 @@ const Index = () => {
                 </div>
 
                 <div className="panel">
-                    <div className="table-responsive mb-5">
+                    <div className="table-responsive h-[calc(100vh-200px)] pb-10">
                         <table className="table">
-                            <thead>
-                                <tr>
+                            <thead className='sticky top-0 left-0'>
+                                <tr className='!bg-dark text-white'>
                                     <th className='!w-[10px] text-center border' rowSpan={2} colSpan={1}>#</th>
                                     <th rowSpan={2} colSpan={1} className='text-center border'>
                                         Tujuan
+                                        {isCollapsed && (
+                                            <span className='text-xs font-normal'>
+                                                &nbsp; / Sasaran
+                                            </span>
+                                        )}
                                     </th>
                                     <th rowSpan={2} colSpan={1} className='text-center border'>
                                         Indikator
@@ -211,7 +211,7 @@ const Index = () => {
                                         </div>
                                     </th>
                                 </tr>
-                                <tr>
+                                <tr className='!bg-dark text-white'>
                                     <th className='!w-[125px] text-center border text-xs'>
                                         2022
                                     </th>
@@ -259,18 +259,14 @@ const Index = () => {
                                                 {item?.indikator_tujuan[0]?.target[4]?.value ?? '-'}
                                             </td>
                                             <td rowSpan={item.indikator_tujuan.length} className='border'>
-                                                {/* t_id : {item?.id} <br />
-                                                ref_id : {item?.indikator_tujuan[0]?.id_ref} */}
                                                 <div className="flex justify-center items-center gap-3">
                                                     <Tippy content={(isCollapsed && collapsedId === item?.id) ? "Tutup Sasaran" : "Buka Sasaran"}>
                                                         <button type="button"
                                                             onClick={() => collapseSasaran(item.id)}
                                                         >
-                                                            {(isCollapsed && collapsedId === item?.id) ? (
-                                                                <FontAwesomeIcon icon={faAngleDoubleUp} className="w-4 h-4 text-secondary" />
-                                                            ) : (
-                                                                <FontAwesomeIcon icon={faAngleDoubleDown} className="w-4 h-4 text-secondary" />
-                                                            )}
+                                                            <FontAwesomeIcon icon={faAngleDoubleDown}
+                                                                className={(isCollapsed && collapsedId === item?.id) ? 'w-4 h-4 text-secondary transition-all duration-400 rotate-180' : 'w-4 h-4 text-secondary transition-all duration-400'}
+                                                            />
                                                         </button>
                                                     </Tippy>
                                                     <Tippy content="Edit Tujuan">
@@ -305,10 +301,6 @@ const Index = () => {
                                                         <td className='text-center font-semibold'>
                                                             {ind?.target[4]?.value ?? '-'}
                                                         </td>
-                                                        {/* <td className='border'>
-                                                            t_id : {item?.id} <br />
-                                                            ref_id : {ind?.id_ref}
-                                                        </td> */}
                                                     </tr>
                                                 )}
                                             </>
@@ -335,7 +327,9 @@ const Index = () => {
                                                                 #
                                                             </td>
                                                             <td rowSpan={sas.indikator_sasaran.length} className='border'>
-                                                                {sas?.sasaran}
+                                                                <div className="ps-3">
+                                                                    {sas?.sasaran}
+                                                                </div>
                                                             </td>
                                                             <td className='border'>
                                                                 {sas?.indikator_sasaran[0]?.name ?? '-'}
@@ -390,10 +384,6 @@ const Index = () => {
                                                                         <td className='text-center'>
                                                                             {ind?.target[4]?.value ?? '-'}
                                                                         </td>
-                                                                        {/* <td className='border'>
-                                                                            t_id : {item?.id} <br />
-                                                                            ref_id : {ind?.id_ref}
-                                                                        </td> */}
                                                                     </tr>
                                                                 )}
                                                             </>
@@ -532,7 +522,8 @@ const Index = () => {
                                                                                     </label>
                                                                                     <input
                                                                                         id={'target-item-' + target?.year}
-                                                                                        type="email"
+                                                                                        type="search"
+                                                                                        autoComplete='off'
                                                                                         placeholder={"Target Tahun " + target?.year}
                                                                                         value={target?.value}
                                                                                         onChange={(e) =>
