@@ -30,7 +30,7 @@ export async function getRealisasiHead(instance: any, year: any) {
     }
 }
 
-export async function getRealisasi(instance: any, year: any, triwulan: any) {
+export async function getRealisasi(periode:number, instance: any, year: any, triwulan: any) {
     try {
         const res = await axios.get(baseUri + '/report/realisasi', {
             headers: {
@@ -38,6 +38,7 @@ export async function getRealisasi(instance: any, year: any, triwulan: any) {
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                periode: periode,
                 instance: instance,
                 year: year,
                 triwulan: triwulan

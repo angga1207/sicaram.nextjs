@@ -48,6 +48,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -58,7 +60,6 @@ const Index = () => {
     const { t, i18n } = useTranslation();
     const route = useRouter();
 
-    const [periode, setPeriode] = useState<number>(1);
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     const [instances, setInstances] = useState<any>([]);
 
@@ -69,7 +70,21 @@ const Index = () => {
             setCurrentUser(user);
             setInstance(CurrentUser?.instance_id ?? null);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [months, setMonths] = useState([
         {
@@ -134,7 +149,6 @@ const Index = () => {
         },
     ]);
     const [years, setYears] = useState<any>([]);
-    const [year, setYear] = useState<any>(new Date().getFullYear())
     const [datas, setDatas] = useState<any>([]);
     const [emptyData, setEmptyData] = useState<boolean>(true);
     const [isLoadingData, setIsLoadingData] = useState<boolean>(true)
@@ -144,7 +158,7 @@ const Index = () => {
         if (isMounted) {
             if (CurrentUser?.role_id !== 9) {
                 fetchInstances().then((data: any) => {
-                    setInstances(data.data.map((item: any) => {
+                    setInstances(data?.data?.map((item: any) => {
                         return {
                             value: item.id,
                             label: item.name
@@ -156,10 +170,10 @@ const Index = () => {
     }, [isMounted])
 
     useEffect(() => {
-        if (isMounted && instance) {
+        if (isMounted && instance && periode?.id) {
             setEmptyData(false);
             setDatas([]);
-            getIndex(periode, instance).then((res: any) => {
+            getIndex(periode?.id, instance).then((res: any) => {
                 if (res?.status === 'success') {
                     setDatas(res.data);
                     if (res?.data?.length == 0) {
@@ -168,7 +182,7 @@ const Index = () => {
                 }
             });
         }
-    }, [isMounted, instance])
+    }, [isMounted, instance, periode?.id])
 
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const [safeToSave, setSafeToSave] = useState<boolean>(false);
@@ -227,7 +241,7 @@ const Index = () => {
         setDataInput({
             type: 'create',
             id: null,
-            periode_id: periode,
+            periode_id: periode?.id,
             instance_id: instance,
             name: '',
             file: '',
@@ -286,7 +300,7 @@ const Index = () => {
                     if (isMounted) {
                         setEmptyData(false);
                         setDatas([]);
-                        getIndex(periode, instance).then((res: any) => {
+                        getIndex(periode?.id, instance).then((res: any) => {
                             if (res?.status === 'success') {
                                 setDatas(res.data);
                                 if (res?.data?.length == 0) {
@@ -326,7 +340,7 @@ const Index = () => {
             })
             .then((result) => {
                 if (result.value) {
-                    postDelete(id, periode, instance).then((res: any) => {
+                    postDelete(id, periode?.id, instance).then((res: any) => {
                         if (res.status == 'error validation') {
                             Object.keys(res.message).map((key: any, index: any) => {
                                 showAlert('info', res.message[key][0]);
@@ -338,7 +352,7 @@ const Index = () => {
                             if (isMounted) {
                                 setEmptyData(false);
                                 setDatas([]);
-                                getIndex(periode, instance).then((res: any) => {
+                                getIndex(periode?.id, instance).then((res: any) => {
                                     if (res?.status === 'success') {
                                         setDatas(res.data);
                                         if (res?.data?.length == 0) {

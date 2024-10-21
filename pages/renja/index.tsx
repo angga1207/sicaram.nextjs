@@ -62,6 +62,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -74,14 +76,26 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
+
     const router = useRouter();
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     const [instances, setInstances] = useState<any>([]);
     const [satuans, setSatuans] = useState<any>([]);
@@ -94,7 +108,6 @@ const Index = () => {
     const [renja, setRenja] = useState<any>(null);
     const [renjas, setRenjas] = useState<any>([]);
     const [range, setRange] = useState<any>([]);
-    const [year, setYear] = useState<any>(new Date().getFullYear());
     const [anggarans, setAnggarans] = useState<any>([]);
     const [indicators, setIndicators] = useState<any>([]);
     // const [kegiatans, setKegiatans] = useState<any>([]);
@@ -170,8 +183,8 @@ const Index = () => {
     }, [searchInstance]);
 
     useEffect(() => {
-        if (instance && CurrentUser?.role_id == 9) {
-            fetchPrograms(periode, instance).then((data) => {
+        if (instance && periode?.id && CurrentUser?.role_id == 9) {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -187,13 +200,13 @@ const Index = () => {
     //     const unsubscribe = onMessage(messaging, (payload: any) => {
     //         console.log(payload)
     //         if (payload.data.title == 'Verifikasi Renstra Perubahan') {
-    //             fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
+    //             fetchRenjaValidatorNotes(periode?.id, instance, program, renja?.id).then((data) => {
     //                 if (data.status == 'success') {
     //                     setDataValidating(data.data);
     //                 }
     //             });
 
-    //             fetchRenja(periode, instance, program).then((data) => {
+    //             fetchRenja(periode?.id, instance, program).then((data) => {
     //                 if (data.status == 'success') {
     //                     setRenjas(data.data.datas);
     //                     setRenstra(data.data.renstra);
@@ -272,8 +285,8 @@ const Index = () => {
     }
 
     useEffect(() => {
-        if (periode && instance) {
-            fetchPrograms(periode, instance).then((data) => {
+        if (periode?.id && instance) {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -314,8 +327,8 @@ const Index = () => {
     }
 
     useEffect(() => {
-        if (periode && instance && program) {
-            fetchRenja(periode, instance, program).then((data) => {
+        if (periode?.id && instance && program) {
+            fetchRenja(periode?.id, instance, program).then((data) => {
                 if (data.status == 'success') {
                     setRenjas(data.data.datas);
                     setRenja(data.data.renja)
@@ -330,7 +343,7 @@ const Index = () => {
 
         if (viewValidating == false) {
             setViewValidating(true);
-            fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
+            fetchRenjaValidatorNotes(periode?.id, instance, program, renja?.id).then((data) => {
                 if (data.status == 'success') {
                     setDataValidating(data.data);
                 }
@@ -398,7 +411,7 @@ const Index = () => {
         }
 
         if (type == 'kegiatan') {
-            fetchDetailRenjaKegiatan(periode, instance, program, id, year).then((data) => {
+            fetchDetailRenjaKegiatan(periode?.id, instance, program, id, year).then((data) => {
                 if (data.status == 'success') {
                     setDataInput({
                         ...data.data,
@@ -410,7 +423,7 @@ const Index = () => {
         }
 
         if (type == 'sub-kegiatan') {
-            fetchDetailRenjaSubKegiatan(periode, instance, program, id, year).then((data) => {
+            fetchDetailRenjaSubKegiatan(periode?.id, instance, program, id, year).then((data) => {
                 if (data.status == 'success') {
                     setDataInput({
                         ...data.data,
@@ -425,11 +438,11 @@ const Index = () => {
 
     const save = () => {
         if (dataInput?.type == 'kegiatan') {
-            saveRenjaKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
+            saveRenjaKegiatan(periode?.id, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
                     showAlert('success', data.message);
                     setUnsave(false);
-                    fetchRenja(periode, instance, program).then((data) => {
+                    fetchRenja(periode?.id, instance, program).then((data) => {
                         if (data.status == 'success') {
                             setRenjas(data.data.datas);
                             setRenstra(data.data.renstra);
@@ -446,11 +459,11 @@ const Index = () => {
             });
         }
         if (dataInput?.type == 'sub-kegiatan') {
-            saveRenjaSubKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
+            saveRenjaSubKegiatan(periode?.id, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
                     showAlert('success', data.message);
                     setUnsave(false);
-                    fetchRenja(periode, instance, program).then((data) => {
+                    fetchRenja(periode?.id, instance, program).then((data) => {
                         if (data.status == 'success') {
                             setRenjas(data.data.datas);
                             setRenstra(data.data.renstra);
@@ -500,10 +513,10 @@ const Index = () => {
         }
 
         if (message && status) {
-            postRenjaNotes(periode, instance, program, renja?.id, message, status).then((data) => {
+            postRenjaNotes(periode?.id, instance, program, renja?.id, message, status).then((data) => {
                 if (data.status == 'success') {
                     showAlert('success', data.message);
-                    fetchRenjaValidatorNotes(periode, instance, program, renja?.id).then((data) => {
+                    fetchRenjaValidatorNotes(periode?.id, instance, program, renja?.id).then((data) => {
                         if (data.status == 'success') {
                             setDataValidating(data.data);
                         }
@@ -515,7 +528,7 @@ const Index = () => {
                             status: status,
                         };
                     });
-                    // fetchRenja(periode, instance, program).then((data) => {
+                    // fetchRenja(periode?.id, instance, program).then((data) => {
                     //     if (data.status == 'success') {
                     //         setRenjas(data.data.datas);
                     //         setRenstra(data.data.renstra);

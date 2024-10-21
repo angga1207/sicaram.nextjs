@@ -57,6 +57,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -69,17 +71,27 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const router = useRouter();
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [years, setYears] = useState<any>(null);
-    const [year, setYear] = useState<any>(router.query.year ?? new Date().getFullYear());
     const [months, setMonths] = useState<any>([
         { id: 1, name: 'Januari' },
         { id: 2, name: 'Februari' },
@@ -129,18 +141,20 @@ const Index = () => {
     }, [CurrentUser, router.query.instance]);
 
     useEffect(() => {
-        fetchPeriodes().then((data) => {
-            setPeriodes(data.data);
-        });
-        fetchInstances(searchInstance).then((data) => {
-            setInstances(data.data);
-        });
-        fetchRangePeriode(periode).then((data) => {
-            if (data.status == 'success') {
-                setYears(data.data.years);
-            }
-        });
-    }, [CurrentUser, periode]);
+        if (isMounted && periode?.id) {
+            fetchPeriodes().then((data) => {
+                setPeriodes(data.data);
+            });
+            fetchInstances(searchInstance).then((data) => {
+                setInstances(data.data);
+            });
+            fetchRangePeriode(periode?.id).then((data) => {
+                if (data.status == 'success') {
+                    setYears(data.data.years);
+                }
+            });
+        }
+    }, [CurrentUser, isMounted, periode?.id]);
 
     useEffect(() => {
         if (searchInstance == '') {
@@ -158,8 +172,8 @@ const Index = () => {
     }, [searchInstance]);
 
     useEffect(() => {
-        if (instance) {
-            IndexTaggingSumberDana(instance).then((data) => {
+        if (instance && periode?.id) {
+            IndexTaggingSumberDana(instance, periode?.id).then((data) => {
                 if (data.status === 'success') {
                     setDatas(data.data.data);
                     setOptionTags(data.data.options.map((item: any) => {
@@ -213,7 +227,6 @@ const Index = () => {
                 Object.keys(data.message).map((key: any) => {
                     showAlert('error', data.message[key])
                 });
-                // showAlert('error', data.message)
             } else {
                 showAlert('error', 'Data gagal disimpan');
             }

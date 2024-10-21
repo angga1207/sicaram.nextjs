@@ -6,12 +6,13 @@ const baseUri = BaseUri();
 const CurrentToken = getCookie('token');
 
 
-export async function IndexTaggingSumberDana(instance: number) {
+export async function IndexTaggingSumberDana(instance: number, periode:number) {
     try {
         const res = await axios.get(`${baseUri}/caram/tagging-sumber-dana`, {
             headers: { 'Authorization': `Bearer ${CurrentToken}` },
             params: {
-                instance: instance
+                instance: instance,
+                periode: periode,
             }
         });
         return await res.data;

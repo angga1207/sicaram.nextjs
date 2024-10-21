@@ -1,6 +1,6 @@
 import { IRootState } from '@/store';
 import { setPageTitle } from '@/store/themeConfigSlice';
-import { faAngleDoubleLeft, faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faSearch, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleLeft, faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faLink, faSearch, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -26,6 +26,9 @@ const Page = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null);
+    // const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
 
     useEffect(() => {
         setIsMounted(true);
@@ -36,15 +39,30 @@ const Page = () => {
     });
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
+
     useEffect(() => {
         if (document.cookie) {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
+
     const [slug, setSlug] = useState<any>(null);
 
     useEffect(() => {
@@ -129,10 +147,10 @@ const Page = () => {
     }
 
     useEffect(() => {
-        if (isMounted) {
+        if (isMounted && year && periode?.id) {
             fetchData(slug);
         }
-    }, [slug, isMounted]);
+    }, [slug, isMounted, year, periode?.id]);
 
 
     if (CurrentUser?.role_id >= 9) {
@@ -305,8 +323,11 @@ const Page = () => {
                                                         e.preventDefault();
                                                         handleDetail(item.kd_rup);
                                                     }}
-                                                    className='group-hover:text-blue-500'>
-                                                    {item.nama_paket}
+                                                    className='group-hover:text-blue-500 flex items-center'>
+                                                    <FontAwesomeIcon icon={faLink} className='w-3 h-3 text-slate-400 me-2' />
+                                                    <span>
+                                                        {item.nama_paket}
+                                                    </span>
                                                 </div>
                                             </Tippy>
                                         </div>

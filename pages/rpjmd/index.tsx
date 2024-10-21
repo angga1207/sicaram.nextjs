@@ -51,6 +51,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -63,13 +65,24 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     const [instances, setInstances] = useState<any>([]);
     const [satuans, setSatuans] = useState<any>([]);
@@ -79,7 +92,6 @@ const Index = () => {
     const [filteredPrograms, setFilteredPrograms] = useState<any>([]);
     const [rpjmd, setRpjmd] = useState<any>([]);
     const [range, setRange] = useState<any>([]);
-    const [year, setYear] = useState<any>(null);
     const [anggarans, setAnggarans] = useState<any>([]);
     const [indicators, setIndicators] = useState<any>([]);
     // const [kegiatans, setKegiatans] = useState<any>([]);
@@ -135,7 +147,7 @@ const Index = () => {
 
     useEffect(() => {
         if (instance) {
-            fetchPrograms(periode, instance).then((data) => {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -190,7 +202,7 @@ const Index = () => {
 
     const pickInstance = (id: any) => {
         setInstance(id);
-        fetchPrograms(periode, id).then((data) => {
+        fetchPrograms(periode?.id, id).then((data) => {
             const prgs = data.data.map((item: any) => {
                 if (item.type == 'program') {
                     return item;
@@ -216,7 +228,7 @@ const Index = () => {
                     setYear(null);
                     setFetchLoading(true);
                     setTimeout(() => {
-                        fetchRPJMD(periode, instance, id).then((data) => {
+                        fetchRPJMD(periode?.id, instance, id).then((data) => {
                             if (data.status == 'success') {
                                 setRpjmd(data.data.rpjmd);
                                 setRange(data.data.range);
@@ -235,7 +247,7 @@ const Index = () => {
         setYear(null);
         setFetchLoading(true);
         setTimeout(() => {
-            fetchRPJMD(periode, instance, id).then((data) => {
+            fetchRPJMD(periode?.id, instance, id).then((data) => {
                 if (data.status == 'success') {
                     setRpjmd(data.data.rpjmd);
                     setRange(data.data.range);
@@ -339,13 +351,13 @@ const Index = () => {
             return;
         }
 
-        saveRpjmd(periode, instance, program, rpjmd?.id, data).then((data) => {
+        saveRpjmd(periode?.id, instance, program, rpjmd?.id, data).then((data) => {
             if (data?.status == 'success') {
                 setUnsave(false);
                 setSaveLoading(false);
                 showAlert('success', data.message);
 
-                fetchRPJMD(periode, instance, program).then((data) => {
+                fetchRPJMD(periode?.id, instance, program).then((data) => {
                     if (data.status == 'success') {
                         setRpjmd(data.data.rpjmd);
                         setRange(data.data.range);

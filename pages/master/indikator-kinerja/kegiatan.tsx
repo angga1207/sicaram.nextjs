@@ -59,6 +59,8 @@ const Kegiatan = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -71,13 +73,24 @@ const Kegiatan = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     const [instances, setInstances] = useState<any>([]);
     const [programs, setPrograms] = useState<any>([]);
@@ -109,8 +122,8 @@ const Kegiatan = () => {
         fetchInstances().then((data) => {
             setInstances(data.data);
         });
-        if (instance) {
-            fetchPrograms(periode, instance).then((data) => {
+        if (instance && isMounted && periode?.id) {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -123,7 +136,7 @@ const Kegiatan = () => {
             setKegiatan(null);
             setDatas([]);
         }
-    }, [instance]);
+    }, [instance, isMounted, periode?.id]);
 
     const addData = () => {
         setModalInput(true);
@@ -134,7 +147,7 @@ const Kegiatan = () => {
             kegiatan_id: kegiatan?.id ?? '',
             program_id: program?.id ?? '',
             instance_id: instance,
-            periode_id: periode,
+            periode_id: periode?.id,
         });
     }
 
@@ -147,7 +160,7 @@ const Kegiatan = () => {
             kegiatan_id: kegiatan?.id ?? '',
             program_id: program?.id ?? '',
             instance_id: instance,
-            periode_id: periode,
+            periode_id: periode?.id,
         });
     }
 
@@ -431,8 +444,8 @@ const Kegiatan = () => {
                                                     <div key={index} className="flex items-center p-4 hover:bg-blue-100 dark:hover:bg-[#192A3A] cursor-pointer group" onClick={
                                                         () => {
                                                             setProgram(data);
-                                                            fetchKegiatans(periode, instance).then((datas) => {
-                                                                const kgts = datas.data.map((item: any) => {
+                                                            fetchKegiatans(periode?.id, instance).then((datas) => {
+                                                                const kgts = datas?.data?.map((item: any) => {
                                                                     if (item.type == 'kegiatan') {
                                                                         if (item.program_id == data.id) {
                                                                             return item;

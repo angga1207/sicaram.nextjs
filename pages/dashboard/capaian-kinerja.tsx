@@ -41,8 +41,8 @@ const Index = () => {
         setIsMounted(true);
     });
 
-
-    const [periode, setPeriode] = useState<number>(1);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
     const [view, setView] = useState<number>(1);
 
     const [KinerjaSeries, setKinerjaSeries] = useState<any>([]);
@@ -57,7 +57,22 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
+
 
     if (CurrentUser?.role_id === 9) {
         router.push('/dashboard');
@@ -65,25 +80,29 @@ const Index = () => {
 
     useEffect(() => {
         setKinerjaSeries([]);
-        chartKinerja(periode, new Date().getFullYear(), view).then((data) => {
-            if (data.status === 'success') {
-                setKinerjaSeries(data.data);
-            }
-        });
-    }, [view]);
+        if (isMounted && periode?.id && year) {
+            chartKinerja(periode?.id, year, view).then((data) => {
+                if (data.status === 'success') {
+                    setKinerjaSeries(data.data);
+                }
+            });
+        }
+    }, [view, isMounted, periode?.id, year]);
 
     useEffect(() => {
-        summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
-            if (data.status === 'success') {
-                setKinerjaSummary(data.data);
-            }
-        });
-        getRankInstance(periode, new Date().getFullYear(), 'kinerja').then((data) => {
-            if (data.status === 'success') {
-                setRankInstances(data.data);
-            }
-        });
-    }, []);
+        if (isMounted && periode?.id && year) {
+            summaryKinerja(periode?.id, year, view).then((data) => {
+                if (data.status === 'success') {
+                    setKinerjaSummary(data.data);
+                }
+            });
+            getRankInstance(periode?.id, year, 'kinerja').then((data) => {
+                if (data.status === 'success') {
+                    setRankInstances(data.data);
+                }
+            });
+        }
+    }, [isMounted, periode?.id, year]);
 
 
     // Kinerja Chart

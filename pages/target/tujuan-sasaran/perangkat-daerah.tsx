@@ -46,6 +46,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -53,11 +55,6 @@ const Index = () => {
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
 
-
-    const { t, i18n } = useTranslation();
-    const route = useRouter();
-
-    const [periode, setPeriode] = useState<number>(1);
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     const [datas, setDatas] = useState<any>([]);
     const [instances, setInstances] = useState<any>([]);
@@ -69,7 +66,22 @@ const Index = () => {
             setCurrentUser(user);
             setInstance(CurrentUser?.instance_id ?? null);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     useEffect(() => {
         if (isMounted) {
@@ -87,8 +99,8 @@ const Index = () => {
     }, [isMounted])
 
     useEffect(() => {
-        if (isMounted && instance) {
-            getIndex(periode, instance).then((data: any) => {
+        if (isMounted && instance && periode?.id) {
+            getIndex(periode?.id, instance).then((data: any) => {
                 if (data.status === 'success') {
                     setDatas(data.data);
                 }
@@ -134,7 +146,7 @@ const Index = () => {
             inputType: 'tujuan',
             id: id,
         });
-        getDetail('tujuan', id, periode, instance).then((data: any) => {
+        getDetail('tujuan', id, periode?.id, instance).then((data: any) => {
             if (data?.status == 'success') {
                 setDataInput({
                     inputType: 'tujuan',
@@ -154,7 +166,7 @@ const Index = () => {
             inputType: 'sasaran',
             id: id,
         });
-        getDetail('sasaran', id, periode, instance).then((data: any) => {
+        getDetail('sasaran', id, periode?.id, instance).then((data: any) => {
             if (data?.status == 'success') {
                 setDataInput({
                     inputType: 'sasaran',
@@ -175,7 +187,7 @@ const Index = () => {
                     showAlert('success', res?.message);
 
                     if (isMounted) {
-                        getIndex(periode, instance).then((data: any) => {
+                        getIndex(periode?.id, instance).then((data: any) => {
                             if (data.status === 'success') {
                                 setDatas(data.data);
                             }
@@ -249,7 +261,7 @@ const Index = () => {
                                             <th rowSpan={2} colSpan={1} className='text-center border'>
                                                 Indikator
                                             </th>
-                                            <th colSpan={5} rowSpan={1} className='text-center border !w-[500px]'>
+                                            <th colSpan={datas[0]?.indikator_tujuan[0]?.target?.length} rowSpan={1} className='text-center border !w-[500px]'>
                                                 Target
                                             </th>
                                             <th className='!w-[100px] border' rowSpan={2} colSpan={1}>
@@ -259,21 +271,13 @@ const Index = () => {
                                             </th>
                                         </tr>
                                         <tr className='!bg-dark text-white'>
-                                            <th className='!w-[125px] text-center border text-xs'>
-                                                2022
-                                            </th>
-                                            <th className='!w-[125px] text-center border text-xs'>
-                                                2023
-                                            </th>
-                                            <th className='!w-[125px] text-center border text-xs'>
-                                                2024
-                                            </th>
-                                            <th className='!w-[125px] text-center border text-xs'>
-                                                2025
-                                            </th>
-                                            <th className='!w-[125px] text-center border text-xs'>
-                                                2026
-                                            </th>
+
+                                            {datas[0]?.indikator_tujuan[0]?.target?.map((item: any, ind: number) => (
+                                                <th className='!w-[125px] text-center border text-xs'>
+                                                    {item?.year}
+                                                </th>
+                                            ))}
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -290,21 +294,14 @@ const Index = () => {
                                                     <td className='border font-semibold'>
                                                         {item?.indikator_tujuan[0]?.name ?? '-'}
                                                     </td>
-                                                    <td className='text-center font-semibold'>
-                                                        {item?.indikator_tujuan[0]?.target[0]?.value ?? '-'}
-                                                    </td>
-                                                    <td className='text-center font-semibold'>
-                                                        {item?.indikator_tujuan[0]?.target[1]?.value ?? '-'}
-                                                    </td>
-                                                    <td className='text-center font-semibold'>
-                                                        {item?.indikator_tujuan[0]?.target[2]?.value ?? '-'}
-                                                    </td>
-                                                    <td className='text-center font-semibold'>
-                                                        {item?.indikator_tujuan[0]?.target[3]?.value ?? '-'}
-                                                    </td>
-                                                    <td className='text-center font-semibold'>
-                                                        {item?.indikator_tujuan[0]?.target[4]?.value ?? '-'}
-                                                    </td>
+
+
+                                                    {item?.indikator_tujuan[0]?.target?.map((dt: any, ky: number) => (
+                                                        <td className='text-center font-semibold'>
+                                                            {dt.value ?? '-'}
+                                                        </td>
+                                                    ))}
+
                                                     <td rowSpan={item.indikator_tujuan.length} className='border'>
                                                         <div className="flex justify-center items-center gap-3">
                                                             <Tippy content={(isCollapsed && collapsedId === item?.id) ? "Tutup Sasaran" : "Buka Sasaran"}>
@@ -333,21 +330,13 @@ const Index = () => {
                                                                 <td className='border font-semibold'>
                                                                     {ind?.name}
                                                                 </td>
-                                                                <td className='text-center font-semibold'>
-                                                                    {ind?.target[0]?.value ?? '-'}
-                                                                </td>
-                                                                <td className='text-center font-semibold'>
-                                                                    {ind?.target[1]?.value ?? '-'}
-                                                                </td>
-                                                                <td className='text-center font-semibold'>
-                                                                    {ind?.target[2]?.value ?? '-'}
-                                                                </td>
-                                                                <td className='text-center font-semibold'>
-                                                                    {ind?.target[3]?.value ?? '-'}
-                                                                </td>
-                                                                <td className='text-center font-semibold'>
-                                                                    {ind?.target[4]?.value ?? '-'}
-                                                                </td>
+
+                                                                {ind?.target?.map((dt: any, ky: number) => (
+                                                                    <td className='text-center font-semibold'>
+                                                                        {dt.value ?? '-'}
+                                                                    </td>
+                                                                ))}
+
                                                             </tr>
                                                         )}
                                                     </>
@@ -381,21 +370,13 @@ const Index = () => {
                                                                     <td className='border'>
                                                                         {sas?.indikator_sasaran[0]?.name ?? '-'}
                                                                     </td>
-                                                                    <td className='text-center'>
-                                                                        {sas?.indikator_sasaran[0]?.target[0]?.value ?? '-'}
-                                                                    </td>
-                                                                    <td className='text-center'>
-                                                                        {sas?.indikator_sasaran[0]?.target[1]?.value ?? '-'}
-                                                                    </td>
-                                                                    <td className='text-center'>
-                                                                        {sas?.indikator_sasaran[0]?.target[2]?.value ?? '-'}
-                                                                    </td>
-                                                                    <td className='text-center'>
-                                                                        {sas?.indikator_sasaran[0]?.target[3]?.value ?? '-'}
-                                                                    </td>
-                                                                    <td className='text-center'>
-                                                                        {sas?.indikator_sasaran[0]?.target[4]?.value ?? '-'}
-                                                                    </td>
+
+                                                                    {sas?.indikator_sasaran[0]?.target?.map((dt: any, ky: number) => (
+                                                                        <td className='text-center'>
+                                                                            {dt.value ?? '-'}
+                                                                        </td>
+                                                                    ))}
+
                                                                     <td rowSpan={sas.indikator_sasaran.length} className='border text-center'>
                                                                         <div className="flex justify-center items-center gap-3">
                                                                             <Tippy content="Edit Sasaran">
@@ -416,21 +397,13 @@ const Index = () => {
                                                                                 <td className='border'>
                                                                                     {ind?.name}
                                                                                 </td>
-                                                                                <td className='text-center'>
-                                                                                    {ind?.target[0]?.value ?? '-'}
-                                                                                </td>
-                                                                                <td className='text-center'>
-                                                                                    {ind?.target[1]?.value ?? '-'}
-                                                                                </td>
-                                                                                <td className='text-center'>
-                                                                                    {ind?.target[2]?.value ?? '-'}
-                                                                                </td>
-                                                                                <td className='text-center'>
-                                                                                    {ind?.target[3]?.value ?? '-'}
-                                                                                </td>
-                                                                                <td className='text-center'>
-                                                                                    {ind?.target[4]?.value ?? '-'}
-                                                                                </td>
+
+                                                                                {ind?.target?.map((dt: any, ky: number) => (
+                                                                                    <td className='text-center'>
+                                                                                        {dt.value ?? '-'}
+                                                                                    </td>
+                                                                                ))}
+
                                                                             </tr>
                                                                         )}
                                                                     </>

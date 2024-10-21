@@ -4,19 +4,20 @@ import { getCookie } from 'cookies-next';
 const baseUri = BaseUri();
 const CurrentToken = getCookie('token');
 
-export async function getMasterTujuan(search: string, instance: any) {
+export async function getMasterTujuan(search: string, instance: any, periode: any) {
     // /master-tujuan
     try {
-        let uri = '';
-        if (search) {
-            uri = baseUri + '/master-tujuan?search=' + search + '&instance=' + instance;
-        } else {
-            uri = baseUri + '/master-tujuan?instance=' + instance;
-        }
+
+        const uri = baseUri + '/master-tujuan'
         const res = await axios.get(uri, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`
+            },
+            params: {
+                search: search,
+                instance: instance,
+                periode: periode,
             }
         });
 

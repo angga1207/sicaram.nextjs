@@ -44,6 +44,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -56,12 +58,21 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
-    const route = useRouter();
-
-    const [periode, setPeriode] = useState<number>(1);
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [months, setMonths] = useState([
         {
@@ -126,7 +137,6 @@ const Index = () => {
         },
     ]);
     const [years, setYears] = useState<any>([]);
-    const [year, setYear] = useState<any>(new Date().getFullYear())
     const [datas, setDatas] = useState<any>([]);
     const [isLoadingData, setIsLoadingData] = useState<boolean>(true)
 
@@ -134,33 +144,34 @@ const Index = () => {
         if (isMounted) {
             setIsLoadingData(true)
             setYears([]);
-            const currentYear = year ?? new Date().getFullYear();
-            if (year > 2022 && year < 2026) {
-                for (let i = currentYear - 1; i < currentYear + 2; i++) {
-                    setYears((years: any) => [
-                        ...years,
-                        {
-                            label: i,
-                            value: i,
-                        },
-                    ]);
+            if (periode?.id) {
+                if (year >= periode?.start_year && year <= periode?.end_year) {
+                    for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                        setYears((years: any) => [
+                            ...years,
+                            {
+                                label: i,
+                                value: i,
+                            },
+                        ]);
+                    }
                 }
             }
         }
-    }, [isMounted, year])
+    }, [isMounted, year, periode?.id])
 
     useEffect(() => {
-        if (isMounted) {
+        if (isMounted && periode?.id && year) {
             setIsLoadingData(true)
             setDatas([]);
-            getIndexPerubahan(periode, year, null).then((data: any) => {
+            getIndexPerubahan(periode?.id, year, null).then((data: any) => {
                 if (data.status === 'success') {
                     setDatas(data.data);
                 }
                 setIsLoadingData(false)
             })
         }
-    }, [isMounted, year])
+    }, [isMounted, year, periode?.id])
 
 
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
@@ -201,7 +212,7 @@ const Index = () => {
             inputType: 'tujuan',
             id: id,
         });
-        getDetailPerubahan('tujuan', id, year, periode, null).then((data: any) => {
+        getDetailPerubahan('tujuan', id, year, periode?.id, null).then((data: any) => {
             if (data?.status == 'success') {
                 setDataInput({
                     inputType: 'tujuan',
@@ -222,7 +233,7 @@ const Index = () => {
             inputType: 'sasaran',
             id: id,
         });
-        getDetailPerubahan('sasaran', id, year, periode, null).then((data: any) => {
+        getDetailPerubahan('sasaran', id, year, periode?.id, null).then((data: any) => {
             if (data?.status == 'success') {
                 setDataInput({
                     inputType: 'sasaran',
@@ -243,7 +254,7 @@ const Index = () => {
                     showAlert('success', res?.message);
 
                     if (isMounted) {
-                        getIndexPerubahan(periode, year, null).then((data: any) => {
+                        getIndexPerubahan(periode?.id, year, null).then((data: any) => {
                             if (data.status === 'success') {
                                 setDatas(data.data);
                             }
@@ -267,18 +278,23 @@ const Index = () => {
                         Target Perubahan Tujuan & Sasaran Kabupaten Tahun {year}
                     </h2>
                     <div className="flex flex-wrap items-center justify-center gap-2">
-                        <div className="btn btn-outline-dark w-8 h-8 p-0 rounded-full cursor-pointer"
 
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (isLoadingData === false) {
-                                    if (year > 2022) {
-                                        setYear(year - 1)
-                                    }
-                                }
-                            }}>
-                            <FontAwesomeIcon icon={faCaretLeft} className='w-4 h-4' />
-                        </div>
+                        {year > periode?.start_year && (
+                            <Tippy content="Tahun Sebelumnya" >
+                                <div className="btn btn-outline-dark w-8 h-8 p-0 rounded-full cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (isLoadingData === false) {
+                                            if (year > periode?.start_year) {
+                                                setYear(parseInt(year) - 1)
+                                            }
+                                        }
+                                    }}>
+                                    <FontAwesomeIcon icon={faCaretLeft} className='w-4 h-4' />
+                                </div>
+                            </Tippy>
+                        )}
+
                         <div className="grow">
                             <Select
                                 required={true}
@@ -290,17 +306,22 @@ const Index = () => {
                                 placeholder="Pilih Tahun"
                                 options={years} />
                         </div>
-                        <div className="btn btn-outline-dark w-8 h-8 p-0 rounded-full cursor-pointer"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (isLoadingData === false) {
-                                    if (year < 2026) {
-                                        setYear(year + 1)
-                                    }
-                                }
-                            }}>
-                            <FontAwesomeIcon icon={faCaretRight} className='w-4 h-4' />
-                        </div>
+
+                        {year < periode?.end_year && (
+                            <Tippy content="Tahun Berikutnya" >
+                                <div className="btn btn-outline-dark w-8 h-8 p-0 rounded-full cursor-pointer"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (isLoadingData === false) {
+                                            if (year < periode?.end_year) {
+                                                setYear(parseInt(year) + 1)
+                                            }
+                                        }
+                                    }}>
+                                    <FontAwesomeIcon icon={faCaretRight} className='w-4 h-4' />
+                                </div>
+                            </Tippy>
+                        )}
 
                     </div>
                 </div>

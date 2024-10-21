@@ -84,6 +84,8 @@ const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonTex
 const Header = () => {
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -120,7 +122,21 @@ const Header = () => {
                 }
             }
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [CurrentToken, isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
@@ -384,10 +400,10 @@ const Header = () => {
 
 
     return (
-        <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
+        <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''} !bg-transparent`}>
             <div className="shadow-sm">
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
-                    <div className="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
+                    <div className="horizontal-logo flex gap-x-2 items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
                             <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo-caram.png" alt="logo" />
                             <span className="hidden align-middle text-2xl  font-semibold  transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">
@@ -396,26 +412,71 @@ const Header = () => {
                         </Link>
                         <button
                             type="button"
-                            className="collapse-icon flex flex-none rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary ltr:ml-2 rtl:mr-2 dark:bg-dark/40 dark:text-[#d0d2d6] dark:hover:bg-dark/60 dark:hover:text-primary lg:hidden"
+                            className="collapse-icon flex flex-none rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:text-[#d0d2d6] dark:hover:bg-dark/60 dark:hover:text-primary lg:hidden"
                             onClick={() => dispatch(toggleSidebar())}
                         >
                             <IconMenu className="h-5 w-5" />
                         </button>
+
+                        <div className="">
+                            {periode?.name ? (
+                                <>
+                                    <div className="text-sm font-normal">
+                                        Periode : {periode?.name}
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex justify-start items-center gap-2">
+                                        <div className="">
+                                            <div className="animate-spin border-[3px] border-slate-500 border-l-transparent rounded-full w-4 h-4 inline-block align-middle m-auto"></div>
+                                        </div>
+                                        <div className='text-sm font-normal animate-pulse'>
+                                            Memuat Periode
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     <div className="hidden ltr:mr-2 rtl:ml-2 sm:block">
                         <ul className="flex items-center space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]">
                             <li>
                                 <div className="text-base font-bold flex flex-col gap-x-3">
+
                                     <div>
                                         <span className="hidden sm:inline">SiCaram,</span> Kabupaten Ogan Ilir
                                     </div>
+
                                     <div className="flex items-center space-x-1.5 text-xs">
                                         <IconCalendar className="h-3.5 w-3.5" />
                                         <span className="font-semibold">
                                             {currentTime}
                                         </span>
                                     </div>
+
+                                    <div className="">
+                                        {periode?.name ? (
+                                            <>
+                                                <div className="text-sm font-normal">
+                                                    Periode : {periode?.name}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="flex justify-start items-center gap-2">
+                                                    <div className="">
+                                                        <div className="animate-spin border-[3px] border-slate-500 border-l-transparent rounded-full w-4 h-4 inline-block align-middle m-auto"></div>
+                                                    </div>
+                                                    <div className='text-sm font-normal animate-pulse'>
+                                                        Memuat Periode
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+
                                 </div>
                                 <div>
                                     <span className="text-slate-800 dark:text-[#d0d2d6] text-lg">

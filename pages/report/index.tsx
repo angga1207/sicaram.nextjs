@@ -73,6 +73,8 @@ const Index = () => {
     const ref = useRef<any>(null);
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -89,13 +91,25 @@ const Index = () => {
             let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
             setCurrentToken(token);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
 
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [years, setYears] = useState<any>(null);
-    const [year, setYear] = useState<any>(router.query.year ?? new Date().getFullYear());
     const [months, setMonths] = useState<any>([
         { id: 1, name: 'Januari' },
         { id: 2, name: 'Februari' },
@@ -142,7 +156,7 @@ const Index = () => {
                 Authorization: `Bearer ${CurrentToken}`
             },
             params: {
-                periode_id: periode,
+                periode_id: periode?.id,
             }
         });
         const data = await response.data;
@@ -150,9 +164,8 @@ const Index = () => {
     }
 
     useEffect(() => {
-        if (isMounted) {
+        if (isMounted && periode?.id) {
             fetchRefs().then((data) => {
-                console.log(data);
                 if (data.status == 'success') {
                     setInstances(data.data.instances);
                     setPeriodes(data.data.periodes);
@@ -170,7 +183,7 @@ const Index = () => {
             setYear(new Date().getFullYear());
         }
 
-    }, [isMounted]);
+    }, [isMounted, periode?.id]);
 
     return (
         <>

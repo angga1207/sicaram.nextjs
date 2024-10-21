@@ -62,7 +62,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
     return (
         <App>
             {/* BEGIN MAIN CONTAINER */}
-            <div className="relative">
+            <div className="relative  bg-[url(/assets/images/108364.jpg)] bg-cover bg-center bg-no-repeat">
                 {/* screen loader  */}
                 {showLoader && (
                     <div className="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">

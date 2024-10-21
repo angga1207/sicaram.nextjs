@@ -54,21 +54,36 @@ const Index = () => {
     });
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
+
     useEffect(() => {
         if (document.cookie) {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     if (CurrentUser?.role_id === 9) {
         router.push('/dashboard');
     }
 
-    const [periode, setPeriode] = useState<any>(1);
     const [slug, setSlug] = useState<any>(null);
-    const [year, setYear] = useState<any>(null);
     const [month, setMonth] = useState<any>(null);
     const [tab, setTab] = useState<string>('summary');
     const [tab2, setTab2] = useState<string>('capaian'); // capaian / tujuan-sasaran
@@ -110,15 +125,15 @@ const Index = () => {
     const [selectedDetailRealisasi, setSelectedDetailRealisasi] = useState<any>(null);
 
     useEffect(() => {
-        setYear(router.query.year ?? new Date().getFullYear());
+        // setYear(router.query.year ?? new Date().getFullYear());
         setMonth(router.query.month ?? new Date().getMonth());
         setSlug(router.query.slug as string);
     });
 
     useEffect(() => {
-        if (slug) {
+        if (slug && isMounted && periode?.id && year) {
             setLoadingDataPrograms(true);
-            getDetailInstance(router.query.slug as string, 1, year, view).then((res) => {
+            getDetailInstance(router.query.slug as string, periode?.id, year, view).then((res) => {
                 if (res.status === 'success') {
                     setInstance(res.data.instance);
                     setAdmins(res.data.admins)
@@ -132,11 +147,11 @@ const Index = () => {
             });
 
         }
-    }, [slug, view]);
+    }, [slug, view, isMounted, periode?.id, year]);
 
     useEffect(() => {
         if (Instance) {
-            getMasterTujuan('', Instance?.id).then((data: any) => {
+            getMasterTujuan('', Instance?.id, periode?.id).then((data: any) => {
                 if (data.status === 'success') {
                     setDataTujuanSasaran(data.data);
                 }
@@ -624,7 +639,7 @@ const Index = () => {
     const pickProgram = (data: any) => {
         setSelectedProgram(data);
         setLoadingDataKegiatans(true);
-        getDetailProgram(slug, data.id, periode, year, view).then((res) => {
+        getDetailProgram(slug, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedProgram((prevState: any) => ({
@@ -901,7 +916,7 @@ const Index = () => {
     const pickKegiatan = (data: any) => {
         setSelectedKegiatan(data);
         setLoadingDataSubKegiatans(true);
-        getDetaiKegiatan(slug, data.id, periode, year, view).then((res) => {
+        getDetaiKegiatan(slug, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedKegiatan((prevState: any) => ({
@@ -1177,7 +1192,7 @@ const Index = () => {
     const pickSubKegiatan = (data: any) => {
         setSelectedSubKegiatan(data);
         setLoadingDetailRealisasi(true);
-        getDetailSubKegiatan(slug, data.id, periode, year, view).then((res) => {
+        getDetailSubKegiatan(slug, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedSubKegiatan((prevState: any) => ({
@@ -1682,7 +1697,7 @@ const Index = () => {
 
                     {tab === 'summary' && (
                         <div className="panel rounded-t-none">
-                            <div className="h-full flex items-center justify-around flex-wrap">
+                            <div className="h-full grid md:grid-cols-2">
                                 <div className="">
                                     <div className="text-center">
                                         <div className="">

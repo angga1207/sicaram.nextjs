@@ -40,7 +40,8 @@ const Index = () => {
         setIsMounted(true);
     });
 
-    const [periode, setPeriode] = useState<number>(1);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
     const [view, setView] = useState<number>(1);
 
     const [AnggaranSeries, setAnggaranSeries] = useState<any>([]);
@@ -54,7 +55,21 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     if (CurrentUser?.role_id === 9) {
         router.push('/dashboard');
@@ -63,34 +78,32 @@ const Index = () => {
 
     useEffect(() => {
         setAnggaranSeries([]);
-        chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
-            if (data.status === 'success') {
-                setAnggaranSeries(data.data);
-
-                const target = Math.max(...data.data?.target?.map((item: any) => item.target));
-                const realisasi = Math.max(...data.data?.realisasi?.map((item: any) => item.realisasi));
-                const percent = target > 0 ? ((realisasi / target) * 100).toFixed(2) : 0;
-                setAnggaranSummary({
-                    'target': target,
-                    'realisasi': realisasi,
-                    'percent': percent,
-                });
-            }
-        });
-    }, [view]);
+        if (isMounted && periode?.id && year) {
+            chartRealisasi(periode?.id, year, view).then((data) => {
+                if (data.status === 'success') {
+                    setAnggaranSeries(data.data);
+                    const target = Math.max(...data.data?.target?.map((item: any) => item.target));
+                    const realisasi = Math.max(...data.data?.realisasi?.map((item: any) => item.realisasi));
+                    const percent = target > 0 ? ((realisasi / target) * 100).toFixed(2) : 0;
+                    setAnggaranSummary({
+                        'target': target,
+                        'realisasi': realisasi,
+                        'percent': percent,
+                    });
+                }
+            });
+        }
+    }, [view, periode?.id, year, isMounted]);
 
     useEffect(() => {
-        // summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
-        //     if (data.status === 'success') {
-        //         setAnggaranSummary(data.data);
-        //     }
-        // });
-        getRankInstance(periode, new Date().getFullYear(), 'keuangan').then((data) => {
-            if (data.status === 'success') {
-                setRankInstances(data.data);
-            }
-        });
-    }, []);
+        if (isMounted && periode?.id && year) {
+            getRankInstance(periode?.id, year, 'keuangan').then((data) => {
+                if (data.status === 'success') {
+                    setRankInstances(data.data);
+                }
+            });
+        }
+    }, [isMounted, periode?.id, year]);
 
     // Anggaran Chart
     const chartAnggaran: any = {
@@ -349,7 +362,7 @@ const Index = () => {
                                         type="area"
                                         height={550}
                                         width={'100%'}
-                                         />
+                                    />
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-10 min-h-[550px] items-center justify-center">

@@ -47,6 +47,8 @@ const Index = () => {
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -59,11 +61,22 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const [periode, setPeriode] = useState<any>(1);
-    // const [slug, setSlug] = useState<any>(null);
-    const [year, setYear] = useState<any>(null);
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
+
     const [month, setMonth] = useState<any>(null);
     const [tab, setTab] = useState<string>('summary');
     const [tab2, setTab2] = useState<string>('capaian'); // capaian / tujuan-sasaran
@@ -142,14 +155,14 @@ const Index = () => {
     useEffect(() => {
         if (Instance) {
             if (dataTujuanSasaran?.length === 0) {
-                getMasterTujuan('', Instance?.id).then((data: any) => {
+                getMasterTujuan('', Instance?.id, periode?.id).then((data: any) => {
                     if (data.status === 'success') {
                         setDataTujuanSasaran(data.data);
                     }
                 });
             }
         }
-    }, [Instance]);
+    }, [Instance, periode?.id]);
 
 
     const chartSummaryAnggaran: any = {
@@ -631,7 +644,7 @@ const Index = () => {
     const pickProgram = (data: any) => {
         setSelectedProgram(data);
         setLoadingDataKegiatans(true);
-        getDetailProgram(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
+        getDetailProgram(CurrentUser.instance_alias, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedProgram((prevState: any) => ({
@@ -908,7 +921,7 @@ const Index = () => {
     const pickKegiatan = (data: any) => {
         setSelectedKegiatan(data);
         setLoadingDataSubKegiatans(true);
-        getDetaiKegiatan(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
+        getDetaiKegiatan(CurrentUser.instance_alias, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedKegiatan((prevState: any) => ({
@@ -1184,7 +1197,7 @@ const Index = () => {
     const pickSubKegiatan = (data: any) => {
         setSelectedSubKegiatan(data);
         setLoadingDetailRealisasi(true);
-        getDetailSubKegiatan(CurrentUser.instance_alias, data.id, periode, year, view).then((res) => {
+        getDetailSubKegiatan(CurrentUser.instance_alias, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedSubKegiatan((prevState: any) => ({
@@ -1688,7 +1701,7 @@ const Index = () => {
 
                     {tab === 'summary' && (
                         <div className="panel rounded-t-none">
-                            <div className="h-full flex items-center justify-around flex-wrap">
+                            <div className="h-full grid md:grid-cols-2">
                                 <div className="">
                                     <div className="text-center">
                                         <div className="">
@@ -2020,8 +2033,8 @@ const Index = () => {
 
             </div>
 
-            <div className="panel mt-5 p-0">
-                <div className="w-full flex items-center">
+            <div className="mt-5 p-0">
+                <div className="w-full flex items-center flex-wrap">
                     <button
                         onClick={() => {
                             setTab2('capaian')
@@ -2067,7 +2080,7 @@ const Index = () => {
                                     }}
                                         className="panel !cursor-pointer group hover:bg-blue-500 hover:shadow-md hover:shadow-blue-500 transition-all duration-200">
                                         <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-                                            <div className="flex items-center gap-2 font-semibold group-hover:text-white">
+                                            <div className="flex items-center flex-col md:flex-row gap-2 font-semibold group-hover:text-white">
                                                 <div className='text-md'>
                                                     {program?.code}
                                                 </div>
@@ -2075,12 +2088,12 @@ const Index = () => {
                                                     <div className='text-[15px]'>
                                                         {program?.name}
                                                     </div>
-                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white">
+                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
                                                         {Instance?.name}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-4">
+                                            <div className="flex items-center flex-col md:flex-row gap-4">
                                                 <Tippy content="Anggaran Program">
                                                     <div className="flex flex-col justify-center items-center gap-x-2">
                                                         <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
@@ -2387,7 +2400,7 @@ const Index = () => {
                                                 }}
                                                 className="panel !cursor-pointer group bg-slate-50 hover:bg-purple-500 hover:shadow-md hover:shadow-purple-500 transition-all duration-200">
                                                 <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-                                                    <div className="flex items-center gap-2 font-semibold group-hover:text-white">
+                                                    <div className="flex items-center flex-col md:flex-row gap-2 font-semibold group-hover:text-white">
                                                         <div className='text-md'>
                                                             {kegiatan?.code}
                                                         </div>
@@ -2395,12 +2408,12 @@ const Index = () => {
                                                             <div className='text-[15px]'>
                                                                 {kegiatan?.name}
                                                             </div>
-                                                            <div className="text-[11px] font-normal text-slate-400 group-hover:text-white">
+                                                            <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
                                                                 {Instance?.name}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-4 flex-col md:flex-row">
                                                         <Tippy content="Anggaran Program">
                                                             <div className="flex flex-col justify-center items-center gap-x-2">
                                                                 <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
@@ -2703,7 +2716,7 @@ const Index = () => {
                                                         }}
                                                         className="panel !cursor-pointer group bg-slate-50 hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-500 dark:hover:bg-amber-800 transition-all duration-200">
                                                         <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-                                                            <div className="flex items-center gap-2 font-semibold group-hover:text-white">
+                                                            <div className="flex items-center flex-col md:flex-row gap-2 font-semibold group-hover:text-white">
                                                                 <div className='text-md'>
                                                                     {subKegiatan?.code}
                                                                 </div>
@@ -2711,12 +2724,12 @@ const Index = () => {
                                                                     <div className='text-[15px]'>
                                                                         {subKegiatan?.name}
                                                                     </div>
-                                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white">
+                                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
                                                                         {Instance?.name}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="flex items-center gap-4">
+                                                            <div className="flex items-center gap-4 flex-col md:flex-row">
                                                                 <Tippy content="Anggaran Program">
                                                                     <div className="flex flex-col justify-center items-center gap-x-2">
                                                                         <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
@@ -2768,7 +2781,7 @@ const Index = () => {
                                                     <div className="text-md font-semibold dark:text-white">
                                                         {selectedSubKegiatan?.code} - {selectedSubKegiatan?.name}
                                                     </div>
-                                                    <Tippy content="Tutup Sub Kegiatan">
+                                                    <Tippy content="Tutup Program">
                                                         <div
                                                             onClick={() => {
                                                                 unPickSubKegiatan();
@@ -3000,27 +3013,9 @@ const Index = () => {
                             </>
                         )}
 
-                        {/* RINCIAN REALISASI OF SUB KEGIATAN START */}
                         {selectedSubKegiatan && (
                             <div className="panel">
-                                <div className="mb-3">
-                                    <div className="font-semibold text-lg px-4">
-                                        {selectedSubKegiatan?.code} - {selectedSubKegiatan?.name}
-                                    </div>
-                                    <div className="px-4">
-                                        {/* {new Date(detailRealisasi?.info?.last_update).toLocaleDateString('id-ID', {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                        })} */}
-                                        Rincian Realisasi
-                                        <span className='ml-1 font-semibold'>
-                                            {detailRealisasi?.info?.month_name} {detailRealisasi?.info?.year}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="flex">
+                                <div className="flex overflow-x-auto">
 
                                     <button
                                         onClick={(e) => {
@@ -3030,8 +3025,10 @@ const Index = () => {
                                             `w-full rounded-tl-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full rounded-tl-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2" />
-                                        Rincian Realisasi
+                                        <FontAwesomeIcon icon={faTachometerAltAverage} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Rincian Realisasi
+                                        </span>
                                     </button>
 
                                     <button
@@ -3042,8 +3039,10 @@ const Index = () => {
                                             `w-full bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2" />
-                                        Sumber Dana
+                                        <FontAwesomeIcon icon={faSackDollar} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Sumber Dana
+                                        </span>
                                     </button>
 
                                     <button
@@ -3054,8 +3053,10 @@ const Index = () => {
                                             `w-full bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faQuestionCircle} className="w-4 h-4 mr-2" />
-                                        Keterangan
+                                        <FontAwesomeIcon icon={faQuestionCircle} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Keterangan
+                                        </span>
                                     </button>
 
                                     <button
@@ -3066,11 +3067,14 @@ const Index = () => {
                                             `w-full rounded-tr-lg bg-primary font-semibold !border-white-light !border-b-white text-white !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:font-semibold ` :
                                             `w-full rounded-tr-lg bg-white dark:bg-slate-900 !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                                         type="button">
-                                        <FontAwesomeIcon icon={faFileSignature} className="w-4 h-4 mr-2" />
-                                        Kontrak
+                                        <FontAwesomeIcon icon={faFileSignature} className="w-4 h-4 mr-2 flex-none" />
+                                        <span>
+                                            Kontrak
+                                        </span>
                                     </button>
 
                                 </div>
+
 
                                 {loadingDetailRealisasi == false && (
                                     <>
@@ -3143,12 +3147,14 @@ const Index = () => {
                                                                         Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}
                                                                     </td>
                                                                     <td>
-                                                                        {new Date(
-                                                                            detail?.realisasi_year + '-' + detail?.realisasi_month + '-01'
-                                                                        )?.toLocaleDateString('id-ID', {
-                                                                            year: 'numeric',
-                                                                            month: 'long',
-                                                                        })}
+                                                                        <div className="!whitespace-nowrap">
+                                                                            {new Date(
+                                                                                detail?.realisasi_year + '-' + detail?.realisasi_month + '-01'
+                                                                            )?.toLocaleDateString('id-ID', {
+                                                                                year: 'numeric',
+                                                                                month: 'long',
+                                                                            })}
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                                 {detail?.rincian_belanja?.map((rincian: any, indexRincianBelanja: number) => (
@@ -3165,12 +3171,14 @@ const Index = () => {
                                                                                 Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.realisasi_anggaran)}
                                                                             </td>
                                                                             <td>
-                                                                                {new Date(
-                                                                                    rincian?.realisasi_year + '-' + rincian?.realisasi_month + '-01'
-                                                                                )?.toLocaleDateString('id-ID', {
-                                                                                    year: 'numeric',
-                                                                                    month: 'long',
-                                                                                })}
+                                                                                <div className="!whitespace-nowrap">
+                                                                                    {new Date(
+                                                                                        rincian?.realisasi_year + '-' + rincian?.realisasi_month + '-01'
+                                                                                    )?.toLocaleDateString('id-ID', {
+                                                                                        year: 'numeric',
+                                                                                        month: 'long',
+                                                                                    })}
+                                                                                </div>
                                                                             </td>
                                                                         </tr>
                                                                         {rincian?.keterangan_rincian?.map((keterangan: any, indexKeterangan: number) => (
@@ -3195,7 +3203,7 @@ const Index = () => {
                                                                                     Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.realisasi_anggaran_keterangan)}
                                                                                 </td>
                                                                                 <td>
-                                                                                    <div className="whitespace-nowrap">
+                                                                                    <div className="!whitespace-nowrap">
                                                                                         {new Date(
                                                                                             keterangan?.realisasi_year + '-' + keterangan?.realisasi_month + '-01'
                                                                                         )?.toLocaleDateString('id-ID', {
@@ -3638,7 +3646,6 @@ const Index = () => {
 
                             </div>
                         )}
-                        {/* RINCIAN REALISASI OF SUB KEGIATAN END */}
                     </div>
                 )}
 

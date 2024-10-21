@@ -72,8 +72,8 @@ const Index = () => {
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
     const [isMounted, setIsMounted] = useState(false);
-    const [isClient, setIsClient] = useState(false);
-    const ref = useRef<any>(null);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -86,16 +86,28 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const { t, i18n } = useTranslation();
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [years, setYears] = useState<any>(null);
     // const [year, setYear] = useState<any>(router.query.year ?? new Date().getFullYear());
-    const [year, setYear] = useState<any>(null);
     const [months, setMonths] = useState<any>([
         { id: 1, name: 'Januari' },
         { id: 2, name: 'Februari' },
@@ -137,12 +149,11 @@ const Index = () => {
     useEffect(() => {
         setYear(router.query.year);
         setInstance(router.query.instance);
-        setYear(router.query.year);
         setMonth(router.query.month);
     }, [router.query]);
 
     useEffect(() => {
-        if (isMounted) {
+        if (isMounted && periode?.id) {
             fetchPeriodes().then((data) => {
                 if (data.status == 'success') {
                     setPeriodes(data.data);
@@ -158,13 +169,13 @@ const Index = () => {
                     setSatuans(data.data);
                 }
             });
-            fetchRangePeriode(periode).then((data) => {
+            fetchRangePeriode(periode?.id).then((data) => {
                 if (data.status == 'success') {
                     setYears(data.data.years);
                 }
             });
         }
-    }, [isMounted]);
+    }, [isMounted, periode?.id]);
 
     useEffect(() => {
         if (searchInstance == '') {
@@ -754,13 +765,13 @@ const Index = () => {
                                                                                                     </select>
                                                                                                 </div>
 
-                                                                                                {(periode && year && month) && (
+                                                                                                {(periode?.id && year && month) && (
                                                                                                     <div className="px-2 flex items-center gap-x-1">
                                                                                                         {(subkegiatan.renstra_status === 'verified' && subkegiatan.renja_status === 'verified' && subkegiatan.apbd_status === 'verified') ? (
                                                                                                             <Tippy content={CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}>
                                                                                                                 <Link
                                                                                                                     target='_blank'
-                                                                                                                    href={`/kinerja/target/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
+                                                                                                                    href={`/kinerja/target/${subkegiatan.id}?periode=${periode?.id}&year=${year}&month=${month}`}
                                                                                                                     className='btn btn-secondary font-normal'>
                                                                                                                     <span className='truncate w-[80px] md:w-[100px] lg:w-auto'>
                                                                                                                         {CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}
@@ -792,7 +803,7 @@ const Index = () => {
                                                                                                             <Tippy content={CurrentUser?.role_id === 6 ? 'Lihat Realisasi' : 'Input Realisasi'}>
                                                                                                                 <Link
                                                                                                                     target='_blank'
-                                                                                                                    href={`/realisasi/${subkegiatan.id}?periode=${periode}&year=${year}&month=${month}`}
+                                                                                                                    href={`/realisasi/${subkegiatan.id}?periode=${periode?.id}&year=${year}&month=${month}`}
                                                                                                                     className='btn btn-success font-normal'>
                                                                                                                     <span className='truncate w-[80px] md:w-[100px] lg:w-auto'>
                                                                                                                         {CurrentUser?.role_id === 6 ? 'Lihat Realisasi' : 'Input Realisasi'}

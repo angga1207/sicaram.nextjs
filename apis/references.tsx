@@ -70,7 +70,7 @@ export async function deleteSumberDana(id: number) {
     }
 }
 
-export async function getRefTujuanSasaran(search: string, page: number, instance: string, type: string) {
+export async function getRefTujuanSasaran(search: string, page: number, instance: string, type: string, periode: any) {
     try {
         let uri = '';
         if (search) {
@@ -85,7 +85,8 @@ export async function getRefTujuanSasaran(search: string, page: number, instance
             },
             params: {
                 instance: instance,
-                type: type
+                type: type,
+                periode: periode,
             }
         });
 
@@ -164,7 +165,7 @@ export async function deleteRefTujuanSasaran(id: number, type: any) {
     }
 }
 
-export async function getRefIndikatorTujuanSasaran(search: string, page: number, instance: string, type: string) {
+export async function getRefIndikatorTujuanSasaran(search: string, page: number, instance: string, type: string, periode:any) {
     try {
         let uri = '';
         if (search) {
@@ -179,7 +180,8 @@ export async function getRefIndikatorTujuanSasaran(search: string, page: number,
             },
             params: {
                 instance: instance,
-                type: type
+                type: type,
+                periode: periode,
             }
         });
 

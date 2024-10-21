@@ -63,6 +63,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -75,14 +77,26 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
+
     const router = useRouter();
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     const [instances, setInstances] = useState<any>([]);
     const [satuans, setSatuans] = useState<any>([]);
@@ -94,7 +108,6 @@ const Index = () => {
     const [renstra, setRenstra] = useState<any>(null);
     const [renstras, setRenstras] = useState<any>([]);
     const [range, setRange] = useState<any>([]);
-    const [year, setYear] = useState<any>(new Date().getFullYear());
     const [anggarans, setAnggarans] = useState<any>([]);
     const [indicators, setIndicators] = useState<any>([]);
     // const [kegiatans, setKegiatans] = useState<any>([]);
@@ -170,8 +183,8 @@ const Index = () => {
     }, [searchInstance]);
 
     useEffect(() => {
-        if (instance && CurrentUser?.role_id == 9) {
-            fetchPrograms(periode, instance).then((data) => {
+        if (instance && periode?.id && CurrentUser?.role_id == 9) {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -186,7 +199,7 @@ const Index = () => {
     //     const messaging = getMessaging(firebaseApp);
     //     const unsubscribe = onMessage(messaging, (payload: any) => {
     //         if (payload.data.title == 'Verifikasi Renstra') {
-    //             fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
+    //             fetchRenstraValidatorNotes(periode?.id, instance, program, renstra?.id).then((data) => {
     //                 if (data.status == 'success') {
     //                     setDataValidating(data.data);
     //                 }
@@ -264,8 +277,8 @@ const Index = () => {
     }, [router.query])
 
     useEffect(() => {
-        if (periode && instance) {
-            fetchPrograms(periode, instance).then((data) => {
+        if (periode?.id && instance) {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const prgs = data.data.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -306,8 +319,8 @@ const Index = () => {
     }
 
     useEffect(() => {
-        if (periode && instance && program) {
-            fetchRenstra(periode, instance, program).then((data) => {
+        if (periode?.id && instance && program) {
+            fetchRenstra(periode?.id, instance, program).then((data) => {
                 if (data.status == 'success') {
                     setRenstras(data.data.datas);
                     setRenstra(data.data.renstra);
@@ -321,7 +334,7 @@ const Index = () => {
 
         if (viewValidating == false) {
             setViewValidating(true);
-            fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
+            fetchRenstraValidatorNotes(periode?.id, instance, program, renstra?.id).then((data) => {
                 if (data.status == 'success') {
                     setDataValidating(data.data);
                 }
@@ -388,7 +401,7 @@ const Index = () => {
         }
 
         if (type == 'kegiatan') {
-            fetchDetailRenstraKegiatan(periode, instance, program, id, year).then((data) => {
+            fetchDetailRenstraKegiatan(periode?.id, instance, program, id, year).then((data) => {
                 if (data.status == 'success') {
                     setDataInput({
                         ...data.data,
@@ -400,7 +413,7 @@ const Index = () => {
         }
 
         if (type == 'sub-kegiatan') {
-            fetchDetailRenstraSubKegiatan(periode, instance, program, id, year).then((data) => {
+            fetchDetailRenstraSubKegiatan(periode?.id, instance, program, id, year).then((data) => {
                 if (data.status == 'success') {
                     setDataInput({
                         ...data.data,
@@ -415,11 +428,11 @@ const Index = () => {
 
     const save = () => {
         if (dataInput?.type == 'kegiatan') {
-            saveRenstraKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
+            saveRenstraKegiatan(periode?.id, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
                     showAlert('success', data.message);
                     setUnsave(false);
-                    fetchRenstra(periode, instance, program).then((data) => {
+                    fetchRenstra(periode?.id, instance, program).then((data) => {
                         if (data.status == 'success') {
                             setRenstras(data.data.datas);
                             setRenstra(data.data.renstra);
@@ -436,11 +449,11 @@ const Index = () => {
         }
 
         if (dataInput?.type == 'sub-kegiatan') {
-            saveRenstraSubKegiatan(periode, instance, program, dataInput?.id, year, dataInput).then((data) => {
+            saveRenstraSubKegiatan(periode?.id, instance, program, dataInput?.id, year, dataInput).then((data) => {
                 if (data.status == 'success') {
                     showAlert('success', data.message);
                     setUnsave(false);
-                    fetchRenstra(periode, instance, program).then((data) => {
+                    fetchRenstra(periode?.id, instance, program).then((data) => {
                         if (data.status == 'success') {
                             setRenstras(data.data.datas);
                             setRenstra(data.data.renstra);
@@ -487,17 +500,17 @@ const Index = () => {
         }
 
         if (message && status) {
-            postRenstraNotes(periode, instance, program, renstra?.id, message, status).then((data) => {
+            postRenstraNotes(periode?.id, instance, program, renstra?.id, message, status).then((data) => {
                 setMessage('');
                 setStatus('');
                 if (data.status == 'success') {
                     // showAlert('success', data.message);
-                    fetchRenstraValidatorNotes(periode, instance, program, renstra?.id).then((data) => {
+                    fetchRenstraValidatorNotes(periode?.id, instance, program, renstra?.id).then((data) => {
                         if (data.status == 'success') {
                             setDataValidating(data.data);
                         }
                     });
-                    fetchRenstra(periode, instance, program).then((data) => {
+                    fetchRenstra(periode?.id, instance, program).then((data) => {
                         if (data.status == 'success') {
                             setRenstras(data.data.datas);
                             setRenstra(data.data.renstra);

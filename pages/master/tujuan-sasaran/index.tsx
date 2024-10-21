@@ -49,6 +49,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -61,9 +63,22 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
+
     const route = useRouter();
     const [datas, setDatas] = useState<any>([]);
     const [detail, setDetail] = useState<any>({});
@@ -84,6 +99,7 @@ const Index = () => {
         id: '',
         name: '',
         instance_id: instance,
+        periode_id: periode?.id,
     });
     const [modalInputIndikatorReferences, setModalInputIndikatorReferences] = useState<any>(false);
     const [dataInputIndikatorReferences, setDataInputIndikatorReferences] = useState<any>({
@@ -92,6 +108,7 @@ const Index = () => {
         id: '',
         name: '',
         instance_id: instance,
+        periode_id: periode?.id,
     });
     const [modalInputTujuan, setModalInputTujuan] = useState<any>(false);
     const [viewIndikatorTujuan, setViewIndikatorTujuan] = useState<any>(null);
@@ -99,6 +116,7 @@ const Index = () => {
         inputType: 'create',
         id: '',
         instance_id: instance,
+        periode: periode?.id,
         ref_tujuan_id: null,
         indikator_tujuan_ids: [],
         rumus_tujuan: [],
@@ -109,6 +127,7 @@ const Index = () => {
         inputType: 'create',
         id: '',
         instance_id: instance,
+        periode: periode?.id,
         tujuan_id: '',
         ref_tujuan_id: null,
         indikator_tujuan_ids: [],
@@ -141,50 +160,52 @@ const Index = () => {
     }, []);
 
     useEffect(() => {
-        getMasterTujuan(search, instance).then((data: any) => {
-            if (data.status === 'success') {
-                setDatas(data.data);
-            }
-        });
-        setIsDetail(false);
-        setDetail({});
-
-        getRefTujuanSasaran(search, 1, instance, 'tujuan').then((data: any) => {
-            setOptionRefTujuan(data.data.map((item: any) => {
-                return {
-                    value: item.id,
-                    label: item.name
+        if (isMounted && periode?.id) {
+            getMasterTujuan(search, instance, periode?.id).then((data: any) => {
+                if (data.status === 'success') {
+                    setDatas(data.data);
                 }
-            }));
-        });
+            });
+            setIsDetail(false);
+            setDetail({});
 
-        getRefTujuanSasaran(search, 1, instance, 'sasaran').then((data: any) => {
-            setOptionRefSasaran(data.data.map((item: any) => {
-                return {
-                    value: item.id,
-                    label: item.name
-                }
-            }));
-        });
+            getRefTujuanSasaran(search, 1, instance, 'tujuan', periode?.id).then((data: any) => {
+                setOptionRefTujuan(data.data.map((item: any) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                }));
+            });
 
-        getRefIndikatorTujuanSasaran(search, 1, instance, 'tujuan').then((data: any) => {
-            setOptionRefIndikatorTujuan(data.data.map((item: any) => {
-                return {
-                    value: item.id,
-                    label: item.name
-                }
-            }));
-        });
+            getRefTujuanSasaran(search, 1, instance, 'sasaran', periode?.id).then((data: any) => {
+                setOptionRefSasaran(data.data.map((item: any) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                }));
+            });
 
-        getRefIndikatorTujuanSasaran(search, 1, instance, 'sasaran').then((data: any) => {
-            setOptionRefIndikatorSasaran(data.data.map((item: any) => {
-                return {
-                    value: item.id,
-                    label: item.name
-                }
-            }));
-        });
-    }, [instance]);
+            getRefIndikatorTujuanSasaran(search, 1, instance, 'tujuan', periode?.id).then((data: any) => {
+                setOptionRefIndikatorTujuan(data.data.map((item: any) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                }));
+            });
+
+            getRefIndikatorTujuanSasaran(search, 1, instance, 'sasaran', periode?.id).then((data: any) => {
+                setOptionRefIndikatorSasaran(data.data.map((item: any) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                }));
+            });
+        }
+    }, [instance, isMounted, periode?.id]);
 
     const detailData = (data: any) => {
         setDetail(data);
@@ -197,6 +218,7 @@ const Index = () => {
             id: '',
             name: '',
             instance_id: instance,
+            periode_id: periode?.id,
         });
         setModalInputReferences(true);
         setModalInputTujuan(false);
@@ -210,6 +232,7 @@ const Index = () => {
             id: '',
             name: '',
             instance_id: instance,
+            periode_id: periode?.id,
         });
         setModalInputReferences(true);
         setModalInputTujuan(false);
@@ -223,6 +246,7 @@ const Index = () => {
             id: '',
             name: '',
             instance_id: instance,
+            periode_id: periode?.id,
         });
         setModalInputIndikatorReferences(true);
         setModalInputTujuan(false);
@@ -231,6 +255,7 @@ const Index = () => {
 
     const addRefIndikatorSasaran = () => {
         setDataInputIndikatorReferences({
+            periode_id: periode?.id,
             inputType: 'create',
             type: 'sasaran',
             id: '',
@@ -248,7 +273,7 @@ const Index = () => {
                 setModalInputReferences(false);
                 showAlert('success', 'Data berhasil disimpan');
                 if (dataInputReferences?.type === 'tujuan') {
-                    getRefTujuanSasaran(search, 1, instance, 'tujuan').then((data: any) => {
+                    getRefTujuanSasaran(search, 1, instance, 'tujuan', periode?.id).then((data: any) => {
                         setOptionRefTujuan(data.data.map((item: any) => {
                             return {
                                 value: item.id,
@@ -259,7 +284,7 @@ const Index = () => {
                     setModalInputTujuan(true);
                 }
                 if (dataInputReferences?.type === 'sasaran') {
-                    getRefTujuanSasaran(search, 1, instance, 'sasaran').then((data: any) => {
+                    getRefTujuanSasaran(search, 1, instance, 'sasaran', periode?.id).then((data: any) => {
                         setOptionRefSasaran(data.data.map((item: any) => {
                             return {
                                 value: item.id,
@@ -281,7 +306,7 @@ const Index = () => {
                 setModalInputIndikatorReferences(false);
                 showAlert('success', 'Data berhasil disimpan');
                 if (dataInputIndikatorReferences?.type === 'tujuan') {
-                    getRefIndikatorTujuanSasaran(search, 1, instance, 'tujuan').then((data: any) => {
+                    getRefIndikatorTujuanSasaran(search, 1, instance, 'tujuan', periode?.id).then((data: any) => {
                         setOptionRefIndikatorTujuan(data.data.map((item: any) => {
                             return {
                                 value: item.id,
@@ -292,7 +317,7 @@ const Index = () => {
                     setModalInputTujuan(true);
                 }
                 if (dataInputIndikatorReferences?.type === 'sasaran') {
-                    getRefIndikatorTujuanSasaran(search, 1, instance, 'sasaran').then((data: any) => {
+                    getRefIndikatorTujuanSasaran(search, 1, instance, 'sasaran', periode?.id).then((data: any) => {
                         setOptionRefIndikatorSasaran(data.data.map((item: any) => {
                             return {
                                 value: item.id,
@@ -309,15 +334,14 @@ const Index = () => {
     }
 
     const addTujuan = () => {
-        if (dataInputTujuan?.inputType === 'edit') {
-            setDataInputTujuan({
-                inputType: 'create',
-                instance: instance,
-                ref_tujuan_id: null,
-                indikator_tujuan_ids: [],
-                rumus_tujuan: [],
-            });
-        }
+        setDataInputTujuan({
+            inputType: 'create',
+            instance: instance,
+            periode: periode?.id,
+            ref_tujuan_id: null,
+            indikator_tujuan_ids: [],
+            rumus_tujuan: [],
+        });
         setViewIndikatorTujuan(0);
         setModalInputTujuan(true);
     }
@@ -329,6 +353,7 @@ const Index = () => {
                     inputType: 'edit',
                     id: data.data.id,
                     instance: instance,
+                    periode: periode?.id,
                     ref_tujuan_id: data.data.ref_tujuan_id,
                     indikator_tujuan_ids: data.data.indikator_tujuan_ids,
                     rumus_tujuan: data.data.rumus_tujuan,
@@ -347,7 +372,7 @@ const Index = () => {
                     setSaveLoading(false);
                     setModalInputTujuan(false);
                     showAlert('success', 'Data berhasil disimpan');
-                    getMasterTujuan(search, instance).then((data: any) => {
+                    getMasterTujuan(search, instance, periode?.id).then((data: any) => {
                         if (data.status === 'success') {
                             setDatas(data.data);
                         }
@@ -365,7 +390,7 @@ const Index = () => {
                     setSaveLoading(false);
                     setModalInputSasaran(false);
                     showAlert('success', 'Data berhasil disimpan');
-                    getMasterTujuan(search, instance).then((data: any) => {
+                    getMasterTujuan(search, instance, periode?.id).then((data: any) => {
                         if (data.status === 'success') {
                             setDatas(data.data);
                         }
@@ -393,7 +418,7 @@ const Index = () => {
             if (result.isConfirmed) {
                 deleteMasterTujuan(id).then((data: any) => {
                     if (data.status === 'success') {
-                        getMasterTujuan(search, instance).then((data: any) => {
+                        getMasterTujuan(search, instance, periode?.id).then((data: any) => {
                             if (data.status === 'success') {
                                 setDatas(data.data);
                             }
@@ -408,17 +433,16 @@ const Index = () => {
     }
 
     const addSasaran = (data: any) => {
-        if (dataInputSasaran?.inputType === 'edit') {
-            setDataInputSasaran({
-                inputType: 'create',
-                id: '',
-                instance_id: instance,
-                tujuan_id: data?.id,
-                ref_sasaran_id: null,
-                indikator_sasaran_ids: [],
-                rumus_sasaran: [],
-            });
-        }
+        setDataInputSasaran({
+            inputType: 'create',
+            id: '',
+            instance_id: instance,
+            periode: periode?.id,
+            tujuan_id: data.id,
+            ref_sasaran_id: null,
+            indikator_sasaran_ids: [],
+            rumus_sasaran: [],
+        });
         setViewIndikatorSasaran(0);
         setModalInputSasaran(true);
     }
@@ -430,6 +454,7 @@ const Index = () => {
                     inputType: 'edit',
                     id: data.data.id,
                     instance_id: instance,
+                    periode: periode?.id,
                     tujuan_id: data.data.tujuan_id,
                     ref_sasaran_id: data.data.ref_sasaran_id,
                     indikator_sasaran_ids: data.data.indikator_sasaran_ids,
@@ -455,7 +480,7 @@ const Index = () => {
             if (result.isConfirmed) {
                 deleteMasterSasaran(data?.id).then((data: any) => {
                     if (data.status === 'success') {
-                        getMasterTujuan(search, instance).then((data: any) => {
+                        getMasterTujuan(search, instance, periode?.id).then((data: any) => {
                             if (data.status === 'success') {
                                 setDatas(data.data);
                             }
@@ -468,6 +493,7 @@ const Index = () => {
             }
         });
     }
+
     if (CurrentUser?.role_id && [1, 2, 3, 6].includes(CurrentUser?.role_id)) {
         return (
             <>

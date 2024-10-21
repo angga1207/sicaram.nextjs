@@ -53,6 +53,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -65,13 +67,22 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
-
-    const [periode, setPeriode] = useState(1);
-    const [year, setYear] = useState<any>(new Date().getFullYear());
     const [datas, setDatas] = useState<any>([]);
     const [active1, setActive1] = useState<any>(false);
     const [active2, setActive2] = useState<any>(false);
@@ -109,27 +120,29 @@ const Index = () => {
     const [file, setFile] = useState<any>(null);
 
     useEffect(() => {
-        fetchRekenings(periode, level).then((res) => {
-            if (res.status === 'success') {
-                setDatas(res.data);
-                setOptions1(res.data.map((data: any) => ({
-                    value: data.id,
-                    label: data.fullcode + ' - ' + data.name,
-                })) ?? []);
-            }
+        if (isMounted && periode?.id) {
+            fetchRekenings(periode?.id, level).then((res) => {
+                if (res.status === 'success') {
+                    setDatas(res.data);
+                    setOptions1(res.data.map((data: any) => ({
+                        value: data.id,
+                        label: data.fullcode + ' - ' + data.name,
+                    })) ?? []);
+                }
 
-            if (res.status === 'error') {
-                setNoData(true);
-                showAlert('error', res.message)
-            }
-        });
-    }, []);
+                if (res.status === 'error') {
+                    setNoData(true);
+                    showAlert('error', res.message)
+                }
+            });
+        }
+    }, [isMounted, periode?.id]);
 
     const getChilds = (parent: any) => {
         setNoData(false);
         if (parent?.level < 6) {
             setDatas([])
-            fetchRekenings(periode, parent.level + 1, parent?.id).then((res) => {
+            fetchRekenings(periode?.id, parent.level + 1, parent?.id).then((res) => {
                 if (res.status === 'success') {
                     setDatas(res.data);
                 }
@@ -214,7 +227,7 @@ const Index = () => {
         setModalInput(true);
 
         if (level == 2) {
-            fetchRekenings(periode, 1).then((res) => {
+            fetchRekenings(periode?.id, 1).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -223,7 +236,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 2, active1?.id).then((res) => {
+            fetchRekenings(periode?.id, 2, active1?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
                         value: data.id,
@@ -234,7 +247,7 @@ const Index = () => {
         }
 
         if (level == 3) {
-            fetchRekenings(periode, 1).then((res) => {
+            fetchRekenings(periode?.id, 1).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -243,7 +256,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 2, active1?.id).then((res) => {
+            fetchRekenings(periode?.id, 2, active1?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
                         value: data.id,
@@ -252,7 +265,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 3, active2?.id).then((res) => {
+            fetchRekenings(periode?.id, 3, active2?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -263,7 +276,7 @@ const Index = () => {
         }
 
         if (level == 4) {
-            fetchRekenings(periode, 1).then((res) => {
+            fetchRekenings(periode?.id, 1).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -272,7 +285,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 2, active1?.id).then((res) => {
+            fetchRekenings(periode?.id, 2, active1?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
                         value: data.id,
@@ -281,7 +294,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 3, active2?.id).then((res) => {
+            fetchRekenings(periode?.id, 3, active2?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -290,7 +303,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 4, active3?.id).then((res) => {
+            fetchRekenings(periode?.id, 4, active3?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions4(res.data.map((data: any) => ({
                         value: data.id,
@@ -301,7 +314,7 @@ const Index = () => {
         }
 
         if (level == 5) {
-            fetchRekenings(periode, 1).then((res) => {
+            fetchRekenings(periode?.id, 1).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -310,7 +323,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 2, active1?.id).then((res) => {
+            fetchRekenings(periode?.id, 2, active1?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
                         value: data.id,
@@ -319,7 +332,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 3, active2?.id).then((res) => {
+            fetchRekenings(periode?.id, 3, active2?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -328,7 +341,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 4, active3?.id).then((res) => {
+            fetchRekenings(periode?.id, 4, active3?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions4(res.data.map((data: any) => ({
                         value: data.id,
@@ -337,7 +350,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 5, active4?.id).then((res) => {
+            fetchRekenings(periode?.id, 5, active4?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions5(res.data.map((data: any) => ({
                         value: data.id,
@@ -348,7 +361,7 @@ const Index = () => {
         }
 
         if (level == 6) {
-            fetchRekenings(periode, 1).then((res) => {
+            fetchRekenings(periode?.id, 1).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -357,7 +370,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 2, active1?.id).then((res) => {
+            fetchRekenings(periode?.id, 2, active1?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
                         value: data.id,
@@ -366,7 +379,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 3, active2?.id).then((res) => {
+            fetchRekenings(periode?.id, 3, active2?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -375,7 +388,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 4, active3?.id).then((res) => {
+            fetchRekenings(periode?.id, 4, active3?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions4(res.data.map((data: any) => ({
                         value: data.id,
@@ -384,7 +397,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 5, active4?.id).then((res) => {
+            fetchRekenings(periode?.id, 5, active4?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions5(res.data.map((data: any) => ({
                         value: data.id,
@@ -393,7 +406,7 @@ const Index = () => {
                 }
             });
 
-            fetchRekenings(periode, 6, active5?.id).then((res) => {
+            fetchRekenings(periode?.id, 6, active5?.id).then((res) => {
                 if (res.status === 'success') {
                     setOptions6(res.data.map((data: any) => ({
                         value: data.id,
@@ -414,7 +427,7 @@ const Index = () => {
 
         setSaveLoading(true);
         if (dataInput.inputType == 'create') {
-            storeRefRekening(periode, dataInput, year).then((res) => {
+            storeRefRekening(periode?.id, dataInput, year).then((res) => {
                 if (res.status == 'error validation') {
                     setSaveLoading(false);
                     Object.keys(res.message).map((key: any, index: any) => {
@@ -427,7 +440,7 @@ const Index = () => {
 
                 if (res.status == 'success') {
                     setModalInput(false);
-                    fetchRekenings(periode, level, dataInput?.parent_id).then((res) => {
+                    fetchRekenings(periode?.id, level, dataInput?.parent_id).then((res) => {
                         if (res.status === 'success') {
                             setDatas(res.data);
                         }
@@ -442,7 +455,7 @@ const Index = () => {
             });
         }
         if (dataInput.inputType == 'edit') {
-            updateRefRekening(periode, dataInput).then((res) => {
+            updateRefRekening(periode?.id, dataInput).then((res) => {
                 if (res.status == 'error validation') {
                     setSaveLoading(false);
                     Object.keys(res.message).map((key: any, index: any) => {
@@ -455,7 +468,7 @@ const Index = () => {
 
                 if (res.status == 'success') {
                     setModalInput(false);
-                    fetchRekenings(periode, level, dataInput?.parent_id).then((res2) => {
+                    fetchRekenings(periode?.id, level, dataInput?.parent_id).then((res2) => {
                         if (res2.status === 'success') {
                             setDatas(res2.data);
                         }
@@ -475,7 +488,7 @@ const Index = () => {
     const editData = (data: any) => {
 
         if (data?.level == 1) {
-            fetchRekenings(periode, 1).then((res) => {
+            fetchRekenings(periode?.id, 1).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -486,7 +499,7 @@ const Index = () => {
         }
 
         if (data?.level == 2) {
-            fetchRekenings(periode, 1, null).then((res) => {
+            fetchRekenings(periode?.id, 1, null).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -497,7 +510,7 @@ const Index = () => {
         }
 
         if (data?.level == 3) {
-            fetchRekenings(periode, 1, null).then((res) => {
+            fetchRekenings(periode?.id, 1, null).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -505,7 +518,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 2, data?.parent_1_id).then((res) => {
+            fetchRekenings(periode?.id, 2, data?.parent_1_id).then((res) => {
                 console.log(res.data)
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
@@ -517,7 +530,7 @@ const Index = () => {
         }
 
         if (data?.level == 4) {
-            fetchRekenings(periode, 1, null).then((res) => {
+            fetchRekenings(periode?.id, 1, null).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -525,7 +538,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 2, data?.parent_1_id).then((res) => {
+            fetchRekenings(periode?.id, 2, data?.parent_1_id).then((res) => {
                 console.log(res.data)
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
@@ -534,7 +547,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 3, data?.parent_2_id).then((res) => {
+            fetchRekenings(periode?.id, 3, data?.parent_2_id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -545,7 +558,7 @@ const Index = () => {
         }
 
         if (data?.level == 5) {
-            fetchRekenings(periode, 1, null).then((res) => {
+            fetchRekenings(periode?.id, 1, null).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -553,7 +566,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 2, data?.parent_1_id).then((res) => {
+            fetchRekenings(periode?.id, 2, data?.parent_1_id).then((res) => {
                 console.log(res.data)
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
@@ -562,7 +575,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 3, data?.parent_2_id).then((res) => {
+            fetchRekenings(periode?.id, 3, data?.parent_2_id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -570,7 +583,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 4, data?.parent_3_id).then((res) => {
+            fetchRekenings(periode?.id, 4, data?.parent_3_id).then((res) => {
                 if (res.status === 'success') {
                     setOptions4(res.data.map((data: any) => ({
                         value: data.id,
@@ -581,7 +594,7 @@ const Index = () => {
         }
 
         if (data?.level == 6) {
-            fetchRekenings(periode, 1, null).then((res) => {
+            fetchRekenings(periode?.id, 1, null).then((res) => {
                 if (res.status === 'success') {
                     setOptions1(res.data.map((data: any) => ({
                         value: data.id,
@@ -589,7 +602,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 2, data?.parent_1_id).then((res) => {
+            fetchRekenings(periode?.id, 2, data?.parent_1_id).then((res) => {
                 console.log(res.data)
                 if (res.status === 'success') {
                     setOptions2(res.data.map((data: any) => ({
@@ -598,7 +611,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 3, data?.parent_2_id).then((res) => {
+            fetchRekenings(periode?.id, 3, data?.parent_2_id).then((res) => {
                 if (res.status === 'success') {
                     setOptions3(res.data.map((data: any) => ({
                         value: data.id,
@@ -606,7 +619,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 4, data?.parent_3_id).then((res) => {
+            fetchRekenings(periode?.id, 4, data?.parent_3_id).then((res) => {
                 if (res.status === 'success') {
                     setOptions4(res.data.map((data: any) => ({
                         value: data.id,
@@ -614,7 +627,7 @@ const Index = () => {
                     })) ?? []);
                 }
             });
-            fetchRekenings(periode, 5, data?.parent_4_id).then((res) => {
+            fetchRekenings(periode?.id, 5, data?.parent_4_id).then((res) => {
                 if (res.status === 'success') {
                     setOptions5(res.data.map((data: any) => ({
                         value: data.id,
@@ -624,7 +637,7 @@ const Index = () => {
             });
         }
 
-        fetchRekening(data?.id, data?.level, periode).then((res) => {
+        fetchRekening(data?.id, data?.level, periode?.id).then((res) => {
             if (res.status == 'success') {
                 setDataInput({
                     inputType: 'edit',
@@ -670,7 +683,7 @@ const Index = () => {
     const deleteData = (data: any) => {
         deleteRefRekening(data?.level, data?.id).then((res) => {
             if (res.status == 'success') {
-                fetchRekenings(periode, level, data?.parent_id).then((res) => {
+                fetchRekenings(periode?.id, level, data?.parent_id).then((res) => {
                     if (res.status === 'success') {
                         setDatas(res.data);
                     }
@@ -691,22 +704,25 @@ const Index = () => {
     }
 
     const uploadFile = () => {
-        uploadExcel(file).then((res) => {
-            if (res.status == 'success') {
-                setModalImport(false);
-                fetchRekenings(periode, level).then((res) => {
-                    if (res.status === 'success') {
-                        setDatas(res.data);
-                    }
-                });
-                showAlert('success', res.message);
-            }
+        if (periode?.id && year) {
+            uploadExcel(file, periode?.id, year).then((res) => {
+                if (res.status == 'success') {
+                    setModalImport(false);
+                    fetchRekenings(periode?.id, level).then((res) => {
+                        if (res.status === 'success') {
+                            setDatas(res.data);
+                        }
+                    });
+                    showAlert('success', res.message);
+                }
 
-            if (res.status != 'success') {
-                console.log(res)
-                showAlert('error', res.message);
-            }
-        });
+                if (res.status != 'success') {
+                    showAlert('error', res.message);
+                }
+            });
+        } else {
+            showAlert('error', 'Periode & Tahun Salah');
+        }
     }
 
     if (CurrentUser?.role_id && [1, 2, 4, 7].includes(CurrentUser?.role_id)) {
@@ -854,7 +870,7 @@ const Index = () => {
                                         setActive4(false);
                                         setActive5(false);
                                         setActive6(false);
-                                        fetchRekenings(periode, 1).then((res) => {
+                                        fetchRekenings(periode?.id, 1).then((res) => {
                                             if (res.status === 'success') {
                                                 setDatas(res.data);
                                             }
@@ -1022,7 +1038,7 @@ const Index = () => {
                                                                     level: 2,
                                                                 });
 
-                                                                fetchRekenings(periode, 2, e?.value).then((res) => {
+                                                                fetchRekenings(periode?.id, 2, e?.value).then((res) => {
                                                                     if (res.status === 'success') {
                                                                         setOptions2(res.data.map((data: any) => ({
                                                                             value: data.id,
@@ -1062,7 +1078,7 @@ const Index = () => {
                                                                     level: 3,
                                                                 });
 
-                                                                fetchRekenings(periode, 3, e?.value).then((res) => {
+                                                                fetchRekenings(periode?.id, 3, e?.value).then((res) => {
                                                                     if (res.status === 'success') {
                                                                         setOptions3(res.data.map((data: any) => ({
                                                                             value: data.id,
@@ -1100,7 +1116,7 @@ const Index = () => {
                                                                     level: 4,
                                                                 });
 
-                                                                fetchRekenings(periode, 4, e?.value).then((res) => {
+                                                                fetchRekenings(periode?.id, 4, e?.value).then((res) => {
                                                                     if (res.status === 'success') {
                                                                         setOptions4(res.data.map((data: any) => ({
                                                                             value: data.id,
@@ -1136,7 +1152,7 @@ const Index = () => {
                                                                     level: 5,
                                                                 });
 
-                                                                fetchRekenings(periode, 5, e?.value).then((res) => {
+                                                                fetchRekenings(periode?.id, 5, e?.value).then((res) => {
                                                                     if (res.status === 'success') {
                                                                         setOptions5(res.data.map((data: any) => ({
                                                                             value: data.id,
@@ -1170,7 +1186,7 @@ const Index = () => {
                                                                     level: 6,
                                                                 });
 
-                                                                fetchRekenings(periode, 6, e?.value).then((res) => {
+                                                                fetchRekenings(periode?.id, 6, e?.value).then((res) => {
                                                                     if (res.status === 'success') {
                                                                         setOptions6(res.data.map((data: any) => ({
                                                                             value: data.id,

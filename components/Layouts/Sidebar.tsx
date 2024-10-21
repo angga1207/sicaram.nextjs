@@ -43,8 +43,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
 import { faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
+import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
+    const APP_VERSION = "2.4a.1";
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const router = useRouter();
     const [currentMenu, setCurrentMenu] = useState<string>('');
     const [errorSubMenu, setErrorSubMenu] = useState(false);
@@ -121,7 +129,7 @@ const Sidebar = () => {
                             <IconCaretsDown className="m-auto rotate-90" />
                         </button>
                     </div>
-                    <PerfectScrollbar className="relative h-[calc(100vh-80px)]">
+                    <PerfectScrollbar className="relative h-[calc(100vh-100px)]">
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
 
                             {CurrentUser?.role_id === 9 && (
@@ -682,6 +690,15 @@ const Sidebar = () => {
                             {/* End Here */}
                         </ul>
                     </PerfectScrollbar>
+
+                    <div className="px-2 pt-2">
+                        <Tippy content="Versi Aplikasi">
+                            <div className="text-center text-xs truncate font-semibold cursor-pointer hover:text-primary transition-all duration-300">
+                                V. {APP_VERSION}
+                            </div>
+                        </Tippy>
+                    </div>
+
                 </div>
             </nav>
         </div>

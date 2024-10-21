@@ -140,3 +140,23 @@ export async function DeleteRincianBelanja(id: any, periode: any, year: any, mon
         }
     }
 }
+
+export async function DeleteTargetKinerja(id: any) {
+    try {
+        const res = await axios.delete(baseUri + '/caram/target-kinerja-delete/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}

@@ -254,9 +254,11 @@ export async function deleteRefRekening(level: any, id: string) {
     return dataRes;
 }
 
-export async function uploadExcel(file: any) {
+export async function uploadExcel(file: any, periode: any, year: any) {
     const res = await axios.post(baseUri + '/ref-rekening-upload', {
         'file': file,
+        periode: periode,
+        year: year,
     }, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -883,10 +885,12 @@ export async function uploadExcelCodeSubToCodeRekening(file: any) {
     }
 }
 
-export async function uploadExcelSumberDana(file: any) {
+export async function uploadExcelSumberDana(file: any, periode: any, year: any) {
     try {
         const res = await axios.post(baseUri + '/ref-sumber-dana-upload', {
             'file': file,
+            periode: periode,
+            year: year,
         }, {
             headers: {
                 'Content-Type': 'multipart/form-data',

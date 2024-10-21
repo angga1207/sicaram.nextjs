@@ -50,6 +50,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -68,7 +70,6 @@ const Index = () => {
 
     const [datas, setDatas] = useState([]);
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [search, setSearch] = useState('');
     const [modalInput, setModalInput] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
@@ -83,19 +84,38 @@ const Index = () => {
     });
 
 
-    useEffect(() => {
-        fetchPeriodes().then((data) => {
-            setPeriodes(data.data);
-        });
-    }, []);
 
     useEffect(() => {
-        fetchUrusans(periode).then((data) => {
-            if (data.status == 'success') {
-                setDatas(data.data);
+        if (isMounted) {
+            fetchPeriodes().then((data) => {
+                setPeriodes(data.data);
+            });
+        }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
+    }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
             }
-        });
-    }, []);
+        }
+    }, [isMounted, periode?.id])
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            fetchUrusans(periode?.id).then((data) => {
+                if (data.status == 'success') {
+                    setDatas(data.data);
+                }
+            });
+        }
+    }, [isMounted, periode?.id])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -106,9 +126,11 @@ const Index = () => {
 
     const reRenderDatas = () => {
         if (search.length >= 3 || search.length == 0) {
-            fetchUrusans(periode, search).then((data) => {
-                setDatas((data?.data));
-            });
+            if (isMounted && periode?.id) {
+                fetchUrusans(periode?.id, search).then((data) => {
+                    setDatas((data?.data));
+                });
+            }
         }
     }
 
@@ -121,7 +143,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             name: '',
             code: '',
             fullcode: '',
@@ -139,7 +161,7 @@ const Index = () => {
         setDataInput({
             inputType: 'edit',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             name: null,
             code: null,
             fullcode: null,
@@ -171,7 +193,7 @@ const Index = () => {
             storeUrusan(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchUrusans(periode, search).then((data) => {
+                    fetchUrusans(periode?.id, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -194,7 +216,7 @@ const Index = () => {
             updateUrusan(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchUrusans(periode, search).then((data) => {
+                    fetchUrusans(periode?.id, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -231,7 +253,7 @@ const Index = () => {
                 if (result.value) {
                     deleteUrusan(id ?? null).then((data) => {
                         if (data.status == 'success') {
-                            fetchUrusans(periode, search).then((data) => {
+                            fetchUrusans(periode?.id, search).then((data) => {
                                 setDatas((data?.data));
                             });
                             swalWithBootstrapButtons.fire('Terhapus!', data.message, 'success');

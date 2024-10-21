@@ -57,6 +57,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -69,14 +71,27 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const { t, i18n } = useTranslation();
 
     const [datas, setDatas] = useState<any>([]);
     const [isDatasEmpty, setIsDatasEmpty] = useState<any>(false)
     const [periodes, setPeriodes] = useState<any>([]);
-    const [periode, setPeriode] = useState(1);
     const [bidangs, setBidangs] = useState<any>([]);
     const [instance, setInstance] = useState<any>(null);
     const [instances, setInstances] = useState<any>([]);
@@ -87,7 +102,7 @@ const Index = () => {
     const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
-        periode_id: periode,
+        periode_id: periode?.id,
         bidang_id: '',
         instance_id: instance,
         name: '',
@@ -105,34 +120,38 @@ const Index = () => {
         fetchPeriodes().then((data) => {
             setPeriodes(data.data);
         });
-        fetchBidangs(periode).then((data) => {
-            const bdgs = data?.data?.map((item: any) => {
-                if (item.type == 'bidang') {
-                    return item;
-                }
-            }).filter((item: any) => item != undefined);
-            setBidangs(bdgs);
-        });
         fetchInstances().then((data) => {
             setInstances(data.data);
         });
-    }, [instance]);
+        if (isMounted && periode?.id) {
+            fetchBidangs(periode?.id).then((data) => {
+                const bdgs = data?.data?.map((item: any) => {
+                    if (item.type == 'bidang') {
+                        return item;
+                    }
+                }).filter((item: any) => item != undefined);
+                setBidangs(bdgs);
+            });
+        }
+    }, [instance, isMounted, periode?.id]);
 
     useEffect(() => {
         if (instance) {
             setIsDatasEmpty(false)
-            fetchPrograms(periode, instance).then((data) => {
-                if (data.status == 'success') {
-                    if (data.data.length == 0) {
-                        setIsDatasEmpty(true)
-                        showAlert('error', 'Program tidak ditemukan!');
+            if (isMounted && periode?.id) {
+                fetchPrograms(periode?.id, instance).then((data) => {
+                    if (data.status == 'success') {
+                        if (data.data.length == 0) {
+                            setIsDatasEmpty(true)
+                            showAlert('error', 'Program tidak ditemukan!');
+                        }
+                        setDatas(data.data);
                     }
-                    setDatas(data.data);
-                }
-                if (data.status == 'no instance') {
-                    setDatas([]);
-                }
-            });
+                    if (data.status == 'no instance') {
+                        setDatas([]);
+                    }
+                });
+            }
         }
     }, [instance]);
 
@@ -147,9 +166,11 @@ const Index = () => {
 
     const reRenderDatas = () => {
         if (search.length >= 3 || search.length == 0) {
-            fetchPrograms(periode, instance, search).then((data) => {
-                setDatas((data?.data));
-            });
+            if (isMounted && periode?.id) {
+                fetchPrograms(periode?.id, instance, search).then((data) => {
+                    setDatas((data?.data));
+                });
+            }
         }
     }
 
@@ -162,7 +183,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             bidang_id: '',
             instance_id: instance,
             name: '',
@@ -184,7 +205,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             bidang_id: bidang_id,
             instance_id: instance,
             name: '',
@@ -205,7 +226,7 @@ const Index = () => {
         setDataInput({
             inputType: 'edit',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             instance_id: instance,
             bidang_id: null,
             name: null,
@@ -245,7 +266,7 @@ const Index = () => {
                 if (data.status == 'success') {
                     setModalInput(false);
                     setInstance(instance)
-                    fetchPrograms(periode, instance, search).then((data) => {
+                    fetchPrograms(periode?.id, instance, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -268,7 +289,7 @@ const Index = () => {
             updateProgram(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchPrograms(periode, instance, search).then((data) => {
+                    fetchPrograms(periode?.id, instance, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -305,7 +326,7 @@ const Index = () => {
                 if (result.value) {
                     deleteProgram(id ?? null).then((data) => {
                         if (data.status == 'success') {
-                            fetchPrograms(periode, instance, search).then((data) => {
+                            fetchPrograms(periode?.id, instance, search).then((data) => {
                                 setDatas((data?.data));
                             });
                             swalWithBootstrapButtons.fire('Terhapus!', data.message, 'success');

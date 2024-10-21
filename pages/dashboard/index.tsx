@@ -43,7 +43,8 @@ const Index = () => {
 
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
-    const [periode, setPeriode] = useState<number>(1);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
     const [view, setView] = useState<number>(1);
 
     const [AnggaranSeries, setAnggaranSeries] = useState<any>([]);
@@ -59,15 +60,29 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     if (CurrentUser?.role_id === 9) {
         router.push('/dashboard/pd');
     }
 
     useEffect(() => {
-        if (isMounted) {
-            summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
+        if (isMounted && periode?.id && year) {
+            summaryKinerja(periode?.id, year, view).then((data) => {
                 if (data?.message?.response?.status === 401) {
                     signOut();
                 }
@@ -79,18 +94,8 @@ const Index = () => {
     }, [view]);
 
     useEffect(() => {
-        if (isMounted) {
-            // summaryRealisasi(periode, new Date().getFullYear()).then((data) => {
-            //     if (data.status === 'success') {
-            //         if (data?.message?.response?.status === 401) {
-            //             signOut();
-            //         }
-            //         setAnggaranSummary(data?.data);
-            //         setPercentageAnggaranSummary(data?.data?.realisasi?.realisasi / data?.data?.target?.target * 100);
-            //     }
-            // });
-
-            chartRealisasi(periode, new Date().getFullYear(), view).then((data) => {
+        if (isMounted && periode?.id && year) {
+            chartRealisasi(periode?.id, year, view).then((data) => {
                 if (data.status === 'success') {
                     setAnggaranSeries(data.data);
 
@@ -106,7 +111,7 @@ const Index = () => {
                 }
             });
 
-            summaryKinerja(periode, new Date().getFullYear(), view).then((data) => {
+            summaryKinerja(periode?.id, year, view).then((data) => {
                 if (data?.message?.response?.status === 401) {
                     signOut();
                 }
@@ -115,7 +120,174 @@ const Index = () => {
                 }
             });
         }
-    }, [isMounted]);
+    }, [isMounted, periode?.id, year]);
+
+
+    // Chart Capaian Keuangan
+    const chartCapaianKeuangan: any = {
+        series: [percentageAnggaranSummary?.toFixed(2) ?? 0],
+        options: {
+            chart: {
+                type: 'radialBar',
+                height: 600,
+                fontFamily: 'Nunito, sans-serif',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 225,
+                    hollow: {
+                        margin: 0,
+                        size: '50%',
+                        background: 'transparent',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#fff',
+                        strokeWidth: '67%',
+                        margin: 0, // margin is in pixels
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: 30,
+                            show: true,
+                            color: '#888',
+                            fontSize: '17px'
+                        },
+                        value: {
+                            offsetY: 50,
+                            formatter: function (val: any) {
+                                return parseFloat(val) + '%';
+                            },
+                            color: '#111',
+                            fontSize: '36px',
+                            show: true,
+                        }
+                    }
+                }
+            },
+            colors: ['#C1E899'],
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    type: 'horizontal',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#ABE5A1'],
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100]
+                }
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            labels: ['Capaian Keuangan'],
+        },
+    };
+
+    // Chart Capaian Kinerja
+    const chartCapaianKinerja: any = {
+        series: [KinerjaSummary?.realisasi?.toFixed(2) ?? 0],
+        options: {
+            chart: {
+                type: 'radialBar',
+                height: 600,
+                fontFamily: 'Nunito, sans-serif',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 225,
+                    hollow: {
+                        margin: 0,
+                        size: '50%',
+                        background: 'transparent',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#fff',
+                        strokeWidth: '67%',
+                        margin: 0, // margin is in pixels
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: 30,
+                            show: true,
+                            color: '#888',
+                            fontSize: '17px'
+                        },
+                        value: {
+                            offsetY: 50,
+                            formatter: function (val: any) {
+                                return parseFloat(val) + '%';
+                            },
+                            color: '#111',
+                            fontSize: '36px',
+                            show: true,
+                        }
+                    }
+                }
+            },
+            colors: ['#0D92F4'],
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    type: 'horizontal',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#77CDFF'],
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100]
+                }
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            labels: ['Capaian Kinerja'],
+        },
+    };
 
     return (
         <>
@@ -132,10 +304,83 @@ const Index = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-around flex-wrap lg:h-[calc(100vh-400px)s]">
+                <div className="grid md:grid-cols-2">
+
+                    <div className="flex items-center justify-center">
+                        <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
+
+                            <div className="absolute top-[30%] inset-x-0 group-hover:top-[25%] transition-all delay-100 duration-300">
+                                <Player
+                                    autoplay
+                                    loop
+                                    src="/lottie/animation-4.json"
+                                    className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
+                                >
+                                </Player>
+                            </div>
+
+                            <Link href={`/dashboard/capaian-keuangan`} className=''>
+                                {isMounted ? (
+                                    <ReactApexChart series={chartCapaianKeuangan.series} options={chartCapaianKeuangan.options} type="radialBar" height={500} width={'100%'} />
+                                ) : (
+                                    <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
+                                        <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
+                                    </div>
+                                )}
+
+                                <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-300'>
+                                    Capaian Keuangan
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
+                                        Klik untuk Melihat Rincian Capaian Keuangan
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-center">
+                        <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
+
+                            <div className="absolute top-[30%] inset-x-0 group-hover:top-[25%] transition-all delay-100 duration-300">
+                                <Player
+                                    autoplay
+                                    loop
+                                    src="/lottie/animation-3.json"
+                                    className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
+                                >
+                                </Player>
+                            </div>
+
+                            <Link href={`/dashboard/capaian-kinerja`} className=''>
+                                {isMounted ? (
+                                    <ReactApexChart series={chartCapaianKinerja.series} options={chartCapaianKinerja.options} type="radialBar" height={500} width={'100%'} />
+                                ) : (
+                                    <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
+                                        <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
+                                    </div>
+                                )}
+                                <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-300'>
+                                    Capaian Kinerja
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
+                                        Klik untuk Melihat Rincian Capaian Kinerja
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* <div className="flex items-center justify-around flex-wrap lg:h-[calc(100vh-400px)]">
 
                     <Link href={`/dashboard/capaian-keuangan`}
-                        className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
+                        className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-100 duration-300'>
                         {AnggaranSummary?.length === 0 && (
                             <div className="w-[360px] max-w-full h-[360px] flex items-center justify-center">
                                 <LoadingSicaram></LoadingSicaram>
@@ -143,60 +388,60 @@ const Index = () => {
                         )}
                         {AnggaranSummary?.length !== 0 && (
                             <>
-                            <div className="flex items-center justify-center cursor-pointer">
-                                <svg className="transform -rotate-90 w-[360px] max-w-full h-[360px]">
-                                    <circle
-                                        cx="180"
-                                        cy="180"
-                                        r="120"
-                                        stroke="currentColor"
-                                        stroke-width="60"
-                                        fill="transparent"
-                                        className="text-dark-light" />
+                                <div className="flex items-center justify-center cursor-pointer">
+                                    <svg className="transform -rotate-90 w-[360px] max-w-full h-[360px]">
+                                        <circle
+                                            cx="180"
+                                            cy="180"
+                                            r="120"
+                                            stroke="currentColor"
+                                            stroke-width="60"
+                                            fill="transparent"
+                                            className="text-dark-light" />
 
-                                    <circle
-                                        cx="180"
-                                        cy="180"
-                                        r="120"
-                                        stroke="currentColor"
-                                        strokeWidth="60"
-                                        strokeLinecap="round" // square or round
-                                        fill="transparent"
-                                        strokeDasharray={754.285714286}
-                                        strokeDashoffset={(754.285714286) - percentageAnggaranSummary?.toFixed(2) ?? 0 / 100 * (754.285714286)}
-                                        className="text-success progress-ring__circle stroke-current group-hover:animate-blinkingTextSuccess" />
+                                        <circle
+                                            cx="180"
+                                            cy="180"
+                                            r="120"
+                                            stroke="currentColor"
+                                            strokeWidth="60"
+                                            strokeLinecap="round" // square or round
+                                            fill="transparent"
+                                            strokeDasharray={754.285714286}
+                                            strokeDashoffset={(754.285714286) - percentageAnggaranSummary?.toFixed(2) ?? 0 / 100 * (754.285714286)}
+                                            className="text-success progress-ring__circle stroke-current group-hover:animate-blinkingTextSuccess" />
 
-                                </svg>
-                                <div className="absolute w-[180px] h-[180px] rounded-full flex flex-col items-center justify-center text-success">
-                                    <Player
-                                        autoplay
-                                        loop
-                                        // src="https://lottie.host/57136a3b-aff5-4b0b-99c7-2408199230ad/aneTHQRQbg.json"
-                                        src="/lottie/animation-4.json"
-                                        className='w-32 h-32'
-                                    >
-                                    </Player>
-                                    <div className="text-5xl font-semibold -mt-10">
-                                        {percentageAnggaranSummary?.toFixed(2) ?? 0}%
+                                    </svg>
+                                    <div className="absolute w-[180px] h-[180px] rounded-full flex flex-col items-center justify-center text-success">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            // src="https://lottie.host/57136a3b-aff5-4b0b-99c7-2408199230ad/aneTHQRQbg.json"
+                                            src="/lottie/animation-4.json"
+                                            className='w-32 h-32'
+                                        >
+                                        </Player>
+                                        <div className="text-5xl font-semibold -mt-10">
+                                            {percentageAnggaranSummary?.toFixed(2) ?? 0}%
+                                        </div>
+                                    </div>
+                                    <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
+                                        <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-300"></div>
                                     </div>
                                 </div>
-                                <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
-                                    <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
-                                </div>
-                            </div>
                             </>
                         )}
-                        <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-500'>
+                        <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-300'>
                             Capaian Keuangan
                         </div>
-                        <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-200 duration-500 flex items-center justify-center">
+                        <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
                             <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
                             Klik untuk Melihat Rincian Capaian Keuangan
                         </div>
                     </Link>
 
                     <Link href={`/dashboard/capaian-kinerja`}
-                        className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-200 duration-500'>
+                        className='relative group p-4 rounded-xl hover:shadow-xl transition-all delay-100 duration-300'>
                         {KinerjaSummary?.length === 0 && (
                             <div className="w-[360px] max-w-full h-[360px] flex items-center justify-center">
                                 <LoadingSicaram></LoadingSicaram>
@@ -241,22 +486,22 @@ const Index = () => {
                                     </div>
                                 </div>
                                 <div className='absolute w-[300px] h-[300px] rounded-full overflow-hidden'>
-                                    <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-500"></div>
+                                    <div className="relative w-full h-full bg-white rounded-full bg-opacity-0 group-hover:bg-opacity-10 -left-[270px] group-hover:left-[0px] transition-all duration-300"></div>
                                 </div>
                             </div>
                         )}
-                        <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-500'>
+                        <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-300'>
                             Capaian Kinerja
                         </div>
-                        <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-200 duration-500 flex items-center justify-center">
+                        <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
                             <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
                             Klik untuk Melihat Rincian Capaian Kinerja
                         </div>
                     </Link>
 
-                </div>
+                </div> */}
 
-            </div>
+            </div >
         </>
     );
 };

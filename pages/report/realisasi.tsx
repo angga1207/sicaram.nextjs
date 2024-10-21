@@ -50,6 +50,8 @@ const showBoxAlert = async (icon: any, title: any, text: any) => {
 const Index = () => {
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -61,6 +63,9 @@ const Index = () => {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
+        }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
         }
     }, [isMounted]);
 
@@ -76,7 +81,6 @@ const Index = () => {
     const [datas, setDatas] = useState<any>([]);
     const [instanceId, setInstanceId] = useState<any>(null);
     const [instance, setInstance] = useState<any>(null);
-    const [year, setYear] = useState<any>(new Date().getFullYear());
     const [triwulan, setTriwulan] = useState<any>(null);
     const [arrTujuanSasaran, setArrTujuanSasaran] = useState<any>([]);
     const [showTujuanSasaran, setShowTujuanSasaran] = useState<boolean>(false);
@@ -163,6 +167,17 @@ const Index = () => {
                         setInstance(res.data.instance);
                         setArrTujuanSasaran(res.data.tujuan);
                     }
+                    else if (res.status == 'error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Mohon Maaf!',
+                            text: 'Terjadi Kesalahan Saat Memuat Data. Silahkan hubungi Admin',
+                            padding: '10px 20px',
+                            showCancelButton: false,
+                            confirmButtonText: 'Tutup',
+                        })
+                        setLoaded(2);
+                    }
                     if (res?.message?.response?.status == 401) {
                         Swal.fire({
                             icon: 'error',
@@ -204,11 +219,22 @@ const Index = () => {
             }, 250);
 
             if (instanceId && year) {
-                getRealisasi(instanceId, year, triwulan).then((res) => {
+                getRealisasi(periode?.id, instanceId, year, triwulan).then((res) => {
                     if (res.status == 'success') {
                         setDatas(res.data);
+                        setLoaded(2);
                     }
-                    setLoaded(2);
+                    else if (res.status == 'error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Mohon Maaf!',
+                            text: 'Terjadi Kesalahan Saat Memuat Data. Silahkan hubungi Admin',
+                            padding: '10px 20px',
+                            showCancelButton: false,
+                            confirmButtonText: 'Tutup',
+                        })
+                        setLoaded(2);
+                    }
                 });
             }
         }
@@ -369,7 +395,7 @@ const Index = () => {
 
             <div className="space-y-8">
 
-                {datas?.length == 0 && (
+                {loaded !== 2 && (
                     <div className='w-full h-[calc(100vh-300px)] flex flex-col gap-3 items-center justify-center'>
                         <LoadingSicaram />
                         <div className="w-[500px] max-w-full">
@@ -619,6 +645,18 @@ const Index = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                                <div className="mt-4">
+                                    * Data Laporan ini
+                                    <span className='font-semibold'> Realtime </span>
+                                    berdasarkan inputan Realisasi yang
+                                    <Tippy content="Terverifikasi" theme='success'>
+                                        <span className='text-success font-semibold cursor-pointer'> Terverifikasi </span>
+                                    </Tippy>
+                                    maupun yang
+                                    <Tippy content="Belum Terverifikasi" theme='danger'>
+                                        <span className='font-semibold text-danger cursor-pointer'> Belum Terverifikasi.</span>
+                                    </Tippy>
+                                </div>
                             </div>
                         </div>
 
@@ -864,6 +902,19 @@ const Index = () => {
                                                         </tbody>
                                                     </table>
                                                 </div>
+
+                                                <div className="mt-4">
+                                                    * Data Laporan ini
+                                                    <span className='font-semibold'> Realtime </span>
+                                                    berdasarkan inputan Realisasi yang
+                                                    <Tippy content="Terverifikasi" theme='success'>
+                                                        <span className='text-success font-semibold cursor-pointer'> Terverifikasi </span>
+                                                    </Tippy>
+                                                    maupun yang
+                                                    <Tippy content="Belum Terverifikasi" theme='danger'>
+                                                        <span className='font-semibold text-danger cursor-pointer'> Belum Terverifikasi.</span>
+                                                    </Tippy>
+                                                </div>
                                             </div>
 
                                         </div>
@@ -1099,6 +1150,19 @@ const Index = () => {
 
                                                                     </tbody>
                                                                 </table>
+                                                            </div>
+
+                                                            <div className="mt-4">
+                                                                * Data Laporan ini
+                                                                <span className='font-semibold'> Realtime </span>
+                                                                berdasarkan inputan Realisasi yang
+                                                                <Tippy content="Terverifikasi" theme='success'>
+                                                                    <span className='text-success font-semibold cursor-pointer'> Terverifikasi </span>
+                                                                </Tippy>
+                                                                maupun yang
+                                                                <Tippy content="Belum Terverifikasi" theme='danger'>
+                                                                    <span className='font-semibold text-danger cursor-pointer'> Belum Terverifikasi.</span>
+                                                                </Tippy>
                                                             </div>
                                                         </div>
 

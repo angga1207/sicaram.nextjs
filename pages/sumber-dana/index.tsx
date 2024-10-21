@@ -54,6 +54,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -66,15 +68,23 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
-
-    const [periode, setPeriode] = useState(1);
-    const [year, setYear] = useState<any>(new Date().getFullYear());
     const [datas, setDatas] = useState<any>([]);
-
     const [level, setLevel] = useState(1);
     const [modalInput, setModalInput] = useState(false);
     const [modalImport, setModalImport] = useState(false);
@@ -98,17 +108,19 @@ const Index = () => {
 
 
     useEffect(() => {
-        fetchSumberDanas(periode).then((res) => {
-            if (res.status === 'success') {
-                setDatas(res.data);
-            }
+        if (isMounted && periode?.id) {
+            fetchSumberDanas(periode?.id).then((res) => {
+                if (res.status === 'success') {
+                    setDatas(res.data);
+                }
 
-            if (res.status === 'error') {
-                setNoData(true);
-                showAlert('error', res.message)
-            }
-        });
-    }, []);
+                if (res.status === 'error') {
+                    setNoData(true);
+                    showAlert('error', res.message)
+                }
+            });
+        }
+    }, [isMounted, periode?.id]);
 
 
     const addImport = () => {
@@ -118,10 +130,10 @@ const Index = () => {
     }
 
     const uploadFile = () => {
-        uploadExcelSumberDana(file).then((res: any) => {
+        uploadExcelSumberDana(file, periode?.id, year).then((res: any) => {
             if (res.status == 'success') {
                 setModalImport(false);
-                fetchSumberDanas(periode).then((res) => {
+                fetchSumberDanas(periode?.id).then((res) => {
                     if (res.status === 'success') {
                         setDatas(res.data);
                     }
@@ -171,10 +183,10 @@ const Index = () => {
                                 <span className="ltr:ml-2 rtl:mr-2">Import Excel</span>
                             </button>
 
-                            <button type="button" className="btn btn-info whitespace-nowrap">
+                            {/* <button type="button" className="btn btn-info whitespace-nowrap">
                                 <IconPlus className="w-4 h-4" />
                                 <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
-                            </button>
+                            </button> */}
                         </div>
 
                     </div>

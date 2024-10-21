@@ -52,6 +52,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -64,11 +66,21 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
-
-    const route = useRouter();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [datas, setDatas] = useState<any>([]);
     const [type, setType] = useState<any>('tujuan');
@@ -80,7 +92,7 @@ const Index = () => {
         per_page: 10,
         total: 0,
     });
-    const [periode, setPeriode] = useState(1);
+
     const [instance, setInstance] = useState<any>(CurrentUser?.instance_id ?? null);
     // const [instance, setInstance] = useState<any>(14);
     const [instances, setInstances] = useState<any>([]);
@@ -94,6 +106,7 @@ const Index = () => {
         name: '',
         type: type,
         instance_id: instance,
+        periode_id: periode?.id,
     });
 
     useEffect(() => {
@@ -123,26 +136,28 @@ const Index = () => {
 
     useEffect(() => {
         setIsEmptyDatas(false);
-        getRefIndikatorTujuanSasaran(search, pagination?.current_page, instance, type).then((res: any) => {
-            if (res.status == 'success') {
-                setDatas(res.data);
-                // setPagination({
-                //     current_page: res.data.current_page,
-                //     from: res.data.from,
-                //     to: res.data.to,
-                //     last_page: res.data.last_page,
-                //     per_page: res.data.per_page,
-                //     total: res.data.total,
-                // });
-                // if (res.data.data.length == 0) {
-                //     setIsEmptyDatas(true);
-                // }
-            }
-            if (res.status == 'error') {
-                showAlert('error', res.message);
-            }
-        });
-    }, [search, type, pagination?.current_page, instance]);
+        if (isMounted && periode?.id) {
+            getRefIndikatorTujuanSasaran(search, pagination?.current_page, instance, type, periode?.id).then((res: any) => {
+                if (res.status == 'success') {
+                    setDatas(res.data);
+                    // setPagination({
+                    //     current_page: res.data.current_page,
+                    //     from: res.data.from,
+                    //     to: res.data.to,
+                    //     last_page: res.data.last_page,
+                    //     per_page: res.data.per_page,
+                    //     total: res.data.total,
+                    // });
+                    // if (res.data.data.length == 0) {
+                    //     setIsEmptyDatas(true);
+                    // }
+                }
+                if (res.status == 'error') {
+                    showAlert('error', res.message);
+                }
+            });
+        }
+    }, [search, type, pagination?.current_page, instance, isMounted, periode?.id]);
 
     const addData = () => {
         setDataInput({
@@ -151,6 +166,7 @@ const Index = () => {
             name: '',
             type: type,
             instance_id: instance,
+            periode_id: periode?.id,
         });
         setModalInput(true);
     }
@@ -164,6 +180,7 @@ const Index = () => {
                     name: res.data.name,
                     status: res.data.status,
                     instance_id: res.data.instance_id,
+                    periode_id: res.data.periode_id,
                     type: type,
                 });
                 setModalInput(true);
@@ -183,7 +200,7 @@ const Index = () => {
                 showAlert('success', res.message);
                 setSaveLoading(false);
 
-                getRefIndikatorTujuanSasaran(search, pagination?.current_page, instance, type).then((res: any) => {
+                getRefIndikatorTujuanSasaran(search, pagination?.current_page, instance, type, periode?.id).then((res: any) => {
                     if (res.status == 'success') {
                         setDatas(res.data);
                     }

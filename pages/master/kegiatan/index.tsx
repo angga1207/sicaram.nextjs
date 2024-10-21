@@ -56,6 +56,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -68,14 +70,27 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const { t, i18n } = useTranslation();
 
     const [datas, setDatas] = useState<any>([]);
     const [isDatasEmpty, setIsDatasEmpty] = useState<any>(false)
     const [periodes, setPeriodes] = useState<any>([]);
-    const [periode, setPeriode] = useState(1);
     const [programs, setPrograms] = useState<any>([]);
     const [instance, setInstance] = useState<any>(null);
     const [instances, setInstances] = useState<any>([]);
@@ -86,7 +101,7 @@ const Index = () => {
     const [dataInput, setDataInput] = useState<any>({
         inputType: 'create',
         id: '',
-        periode_id: periode,
+        periode_id: periode?.id,
         program_id: '',
         instance_id: instance,
         name: '',
@@ -105,8 +120,11 @@ const Index = () => {
         fetchPeriodes().then((data) => {
             setPeriodes(data.data);
         });
-        if (instance) {
-            fetchPrograms(periode, instance).then((data) => {
+        fetchInstances().then((data) => {
+            setInstances(data.data);
+        });
+        if (instance && isMounted && periode?.id) {
+            fetchPrograms(periode?.id, instance).then((data) => {
                 const bdgs = data?.data?.map((item: any) => {
                     if (item.type == 'program') {
                         return item;
@@ -116,14 +134,11 @@ const Index = () => {
                 console.log(programs, instance)
             });
         }
-        fetchInstances().then((data) => {
-            setInstances(data.data);
-        });
-    }, [instance]);
+    }, [instance, isMounted, periode?.id]);
 
     useEffect(() => {
-        if (instance) {
-            fetchKegiatans(periode, instance).then((data) => {
+        if (instance && isMounted && periode?.id) {
+            fetchKegiatans(periode?.id, instance).then((data) => {
                 if (data.status == 'success') {
                     if (data.data.length == 0) {
                         setIsDatasEmpty(true)
@@ -136,7 +151,7 @@ const Index = () => {
                 }
             });
         }
-    }, [instance]);
+    }, [instance, isMounted, periode?.id]);
 
     useEffect(() => {
         if (instance) {
@@ -148,10 +163,12 @@ const Index = () => {
     }, [search]);
 
     const reRenderDatas = () => {
-        if (search.length >= 3 || search.length == 0) {
-            fetchKegiatans(periode, instance, search).then((data) => {
-                setDatas((data?.data));
-            });
+        if (instance && isMounted && periode?.id) {
+            if (search.length >= 3 || search.length == 0) {
+                fetchKegiatans(periode?.id, instance, search).then((data) => {
+                    setDatas((data?.data));
+                });
+            }
         }
     }
 
@@ -164,7 +181,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             program_id: '',
             instance_id: instance,
             name: '',
@@ -175,7 +192,6 @@ const Index = () => {
             description: '',
         });
         setModalInput(true);
-        console.log(dataInput, instance);
     }
 
     const addDataOnSpesific = (program_id: any) => {
@@ -187,7 +203,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             program_id: program_id,
             instance_id: instance,
             name: '',
@@ -209,7 +225,7 @@ const Index = () => {
         setDataInput({
             inputType: 'edit',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             instance_id: instance,
             program_id: null,
             name: null,
@@ -260,7 +276,7 @@ const Index = () => {
                 if (data.status == 'success') {
                     setModalInput(false);
                     setInstance(instance)
-                    fetchKegiatans(periode, instance, search).then((data) => {
+                    fetchKegiatans(periode?.id, instance, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -283,7 +299,7 @@ const Index = () => {
             updateKegiatan(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchKegiatans(periode, instance, search).then((data) => {
+                    fetchKegiatans(periode?.id, instance, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -320,7 +336,7 @@ const Index = () => {
                 if (result.value) {
                     deleteKegiatan(id ?? null).then((data) => {
                         if (data.status == 'success') {
-                            fetchKegiatans(periode, instance, search).then((data) => {
+                            fetchKegiatans(periode?.id, instance, search).then((data) => {
                                 setDatas((data?.data));
                             });
                             swalWithBootstrapButtons.fire('Terhapus!', data.message, 'success');
@@ -886,7 +902,7 @@ const Index = () => {
                                                                     name="fullcode"
                                                                     id="fullcode"
                                                                     className="form-input bg-slate-200"
-                                                                    placeholder="Pilih Bidang & Masukkan Kode"
+                                                                    placeholder="Pilih Program & Masukkan Kode 1 dan 2"
                                                                     value={dataInput.parent_code && dataInput.parent_code + '.' + dataInput.code_1 + "." + dataInput.code_2}
                                                                     readOnly={true}
                                                                 />

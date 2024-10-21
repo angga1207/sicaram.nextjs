@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
+    reactStrictMode: false,
     swcMinify: true,
     eslint: {
         ignoreDuringBuilds: true,
@@ -12,15 +12,6 @@ const nextConfig = {
         APP_DESCRIPTION: 'Sistem Informasi Caram',
     },
 
-    // avoid headers cors
-    // async headers() {
-    //     return [
-    //         {
-    //             source: '/(.*)',
-    //             headers: securityHeaders,
-    //         },
-    //     ];
-    // },
 };
 
 module.exports = nextConfig;

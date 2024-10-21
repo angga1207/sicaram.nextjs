@@ -233,7 +233,7 @@ const Index = () => {
                     setDataBackEndMessage(data.data.error_message);
                 }
                 if (data.status === 'error') {
-                    showAlert('error', data.message);
+                    showAlert('error', 'Terjadi Kesalahan Server! Harap Hubungi Admin!');
                 }
                 setIsLoading(false);
             });
@@ -302,20 +302,37 @@ const Index = () => {
                 if (result.isConfirmed) {
                     SaveRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
                         if (data.status == 'success') {
-                            // showAlertBox('success', 'Berhasil', data.message);
                             setUnsaveStatus(false);
+
+                            SaveRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
+                                if (data.status == 'success') {
+                                    showAlertBox('success', 'Berhasil', data.message);
+                                    setUnsaveStatus(false);
+                                }
+                                else {
+                                    showAlertBox('error', 'Error', data.message);
+                                }
+                            });
+
                         }
                         else {
-                            showAlertBox('error', 'Error', data.message);
-                        }
-                    });
-                    SaveRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
-                        if (data.status == 'success') {
-                            showAlertBox('success', 'Berhasil', data.message);
-                            setUnsaveStatus(false);
-                        }
-                        else {
-                            showAlertBox('error', 'Error', data.message);
+                            if (data.message == 'Target Kinerja Anggaran belum diverifikasi') {
+                                Swal.fire({
+                                    title: 'Terjadi Kesalahan',
+                                    text: 'Target Kinerja Anggaran belum diverifikasi',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Ke Target Kinerja Anggaran',
+                                    cancelButtonText: 'Tutup',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        route.push(`/kinerja/target/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`)
+                                    }
+                                });
+
+                            } else {
+                                showAlertBox('error', 'Error', data.message);
+                            }
                         }
                     });
                 }
@@ -326,7 +343,7 @@ const Index = () => {
     const [syncLoading, setSyncLoading] = useState(false);
 
     const confirmSync = () => {
-        if ([1, 2, 3, 4, 5].includes(CurrentUser.role_id)) {
+        if ([1, 2, 3, 4, 5, 9].includes(CurrentUser.role_id)) {
             Swal.fire({
                 title: 'Singkronisasi Realisasi',
                 text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya yang belum Diverifikasi',
@@ -337,25 +354,29 @@ const Index = () => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     setSyncLoading(true);
+                    // sync 1 start
                     SyncRealisasi(subKegiatanId, datas, periode, year, month).then((data: any) => {
                         if (data.status == 'success') {
-                            // showAlertBox('success', 'Berhasil', data.message);
                             setUnsaveStatus(false);
+
+                            // sync 2 start
+                            SyncRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
+                                if (data.status == 'success') {
+                                    setUnsaveStatus(false);
+
+                                    // final notif
+                                    showAlertBox('success', 'Berhasil', 'Data Realisasi Berhasil Singkronkan');
+                                    setSyncLoading(false);
+                                } else {
+                                    showAlert('error', 'Terjadi Kesalahan Server! Harap Hubungi Admin!');
+                                    setSyncLoading(false);
+                                }
+                            });
+
+                        } else {
+                            showAlert('error', 'Terjadi Kesalahan Server! Harap Hubungi Admin!');
+                            setSyncLoading(false);
                         }
-                        else {
-                            showAlertBox('error', 'Error', data.message);
-                        }
-                        setSyncLoading(false);
-                    });
-                    SyncRincianRealisasi(subKegiatanId, dataRincian, periode, year, month).then((data: any) => {
-                        if (data.status == 'success') {
-                            showAlertBox('success', 'Berhasil', 'Data Realisasi Berhasil Singkronkan');
-                            setUnsaveStatus(false);
-                        }
-                        else {
-                            showAlertBox('error', 'Error', data.message);
-                        }
-                        setSyncLoading(false);
                     });
                 }
             });
@@ -3141,7 +3162,7 @@ const Index = () => {
                                         </Dropdown>
                                     </div>
 
-                                    {(dataBackEndError === false && [1, 2, 3, 4, 5].includes(CurrentUser.role_id)) && (
+                                    {(dataBackEndError === false && [1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser.role_id)) && (
                                         <button
                                             type='button'
                                             className='btn btn-sm dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white'

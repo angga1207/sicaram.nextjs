@@ -64,11 +64,11 @@ const Page = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
-    const [isClient, setIsClient] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
-        setIsClient(true);
     }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
@@ -78,9 +78,21 @@ const Page = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [CurrentToken, setCurrentToken] = useState<any>(null);
     useEffect(() => {
@@ -157,7 +169,6 @@ const Page = () => {
     const [years, setYears] = useState<any>([]);
 
     const [month, setMonth] = useState<any>(new Date().getMonth())
-    const [year, setYear] = useState<any>(new Date().getFullYear())
     const [fileApbd, setFileApbd] = useState<any>(null)
     const [messageApbd, setMessageApbd] = useState<any>('')
     const [fileTargetBelanja, setFileTargetBelanja] = useState<any>(null)
@@ -169,18 +180,21 @@ const Page = () => {
     useEffect(() => {
         if (isMounted) {
             setYears([]);
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear - 1; i < currentYear + 2; i++) {
-                setYears((years: any) => [
-                    ...years,
-                    {
-                        label: i,
-                        value: i,
-                    },
-                ]);
+            if (periode?.id) {
+                if (year >= periode?.start_year && year <= periode?.end_year) {
+                    for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                        setYears((years: any) => [
+                            ...years,
+                            {
+                                label: i,
+                                value: i,
+                            },
+                        ]);
+                    }
+                }
             }
         }
-    }, [isMounted])
+    }, [isMounted, year, periode?.id])
 
     useEffect(() => {
         if (CurrentToken && isMounted) {
@@ -199,6 +213,7 @@ const Page = () => {
             formData.append('file', fileApbd)
             formData.append('month', month)
             formData.append('year', year)
+            formData.append('periode', periode?.id)
             formData.append('message', messageApbd)
 
             const res = await axios.post(BaseUri() + '/caram/upload-apbd', formData, {

@@ -1,6 +1,6 @@
 import { IRootState } from '@/store';
 import { setPageTitle } from '@/store/themeConfigSlice';
-import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faLink, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -24,6 +24,9 @@ const Page = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
+    // const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
 
     useEffect(() => {
         setIsMounted(true);
@@ -40,27 +43,43 @@ const Page = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
     const [arrYear, setArrYear] = useState<number[]>([]);
 
     useEffect(() => {
         if (isMounted) {
             if (router.query.year == 'NaN') {
                 router.query.year = new Date().getFullYear().toString();
+                router.push(router);
+                setIsLoadingData(true)
             }
             setYear(parseInt(router.query.year as string));
         }
-    }, [router.query.year]);
+    }, [isMounted, periode?.id, router.query.year]);
 
     useEffect(() => {
-        let arrYear: number[] = [];
-        for (let i = 2021; i <= new Date().getFullYear(); i++) {
-            arrYear.push(i);
+        if (isMounted) {
+            setIsLoadingData(true)
+            setArrYear([]);
+            if (periode?.id) {
+                if (year >= periode?.start_year && year <= periode?.end_year) {
+                    for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                        setArrYear((years: any) => [
+                            ...years,
+                            {
+                                label: i,
+                                value: i,
+                            },
+                        ]);
+                    }
+                }
+            }
         }
-        setArrYear(arrYear);
-    }, []);
+    }, [isMounted, year, periode?.id])
 
     useEffect(() => {
         if (isMounted) {
@@ -97,10 +116,10 @@ const Page = () => {
     }
 
     useEffect(() => {
-        if (isMounted) {
+        if (isMounted && year && periode?.id) {
             fetchSwakelola();
         }
-    }, [year, isMounted]);
+    }, [year, isMounted, periode?.id]);
 
 
     if (CurrentUser?.role_id >= 9) {
@@ -143,8 +162,10 @@ const Page = () => {
                             value={year}
                             onChange={(e) => setYear(parseInt(e.target.value))}
                         >
-                            {arrYear.map((item, index) => (
-                                <option key={'option-year-' + index} value={item}>{item}</option>
+                            {arrYear.map((item: any, index: number) => (
+                                <option key={'option-year-' + item?.label} value={item?.label}>
+                                    {item?.label}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -198,8 +219,11 @@ const Page = () => {
                                     <td>
                                         <Link href={`/lpse/swakelola/${item.kd_satker_str}?year=${year}`} className="inline-block">
                                             <Tippy content={`Klik untuk melihat detail`}>
-                                                <div className="hover:text-blue-400">
-                                                    {item.nama_satker}
+                                                <div className="hover:text-blue-400 flex items-center">
+                                                    <FontAwesomeIcon icon={faLink} className='w-3 h-3 text-slate-400 me-2' />
+                                                    <span>
+                                                        {item.nama_satker}
+                                                    </span>
                                                 </div>
                                             </Tippy>
                                         </Link>

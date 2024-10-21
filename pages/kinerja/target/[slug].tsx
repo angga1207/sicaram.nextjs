@@ -20,7 +20,7 @@ import CreatableSelect from 'react-select/creatable';
 import IconX from '@/components/Icon/IconX';
 const angkaTerbilang = require('@develoka/angka-terbilang-js');
 
-import { getMasterData, Save, fetchLogs, sendRequestVerification, sendReplyVerification, DeleteRincianBelanja } from '@/apis/targetkinerja_apis';
+import { getMasterData, Save, fetchLogs, sendRequestVerification, sendReplyVerification, DeleteRincianBelanja, DeleteTargetKinerja } from '@/apis/targetkinerja_apis';
 import { fetchPeriodes, fetchSatuans } from '@/apis/fetchdata';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -96,6 +96,7 @@ const Index = () => {
     const [unsaveStatus, setUnsaveStatus] = useState<boolean>(false);
     const [satuans, setSatuans] = useState<any>([]);
     const [modalLogs, setModalLogs] = useState(false);
+    const [modalSumberDana, setModalSumberDana] = useState(false);
     const [logs, setLogs] = useState<any>([]);
     const [modalRequestVerification, setModalRequestVerification] = useState<boolean>(false);
     const [requestVerificationData, setRequestVerificationData] = useState<any>({
@@ -109,11 +110,13 @@ const Index = () => {
     const [showTags, setShowTags] = useState(false);
 
     useEffect(() => {
-        fetchSatuans().then((data) => {
-            if (data.status == 'success') {
-                setSatuans(data.data);
-            }
-        });
+        if (isMounted) {
+            fetchSatuans().then((data) => {
+                if (data.status == 'success') {
+                    setSatuans(data.data);
+                }
+            });
+        }
     }, [CurrentUser]);
 
     useEffect(() => {
@@ -184,6 +187,49 @@ const Index = () => {
         });
     }
 
+    const addTargetKinerja = (index: any) => {
+        if (subKegiatan?.status == 'verified') {
+            showAlert('error', 'Data tidak dapat diubah karena Status Target Sudah "Terverifikasi"');
+            return;
+        }
+        setUnsaveStatus(true);
+        const rek6 = datas[index];
+        const newData = {
+            created_by: CurrentUser?.id,
+            created_by_name: CurrentUser?.fullname,
+            editable: true,
+            id: null,
+            id_rek_1: rek6.id_rek_1,
+            id_rek_2: rek6.id_rek_2,
+            id_rek_3: rek6.id_rek_3,
+            id_rek_4: rek6.id_rek_4,
+            id_rek_5: rek6.id_rek_5,
+            id_rek_6: rek6.id_rek_6,
+            is_detail: rek6?.is_detail ?? false,
+            is_new: true,
+            is_pagu_match: true,
+            jenis: 'Manual',
+            long: rek6?.long ?? true,
+            nama_paket: null,
+            pagu: "0",
+            rincian_belanja: [],
+            sumber_dana_fullcode: null,
+            sumber_dana_id: null,
+            sumber_dana_name: null,
+            temp_pagu: 0,
+            type: "target-kinerja",
+            updated_by: null,
+            updated_by_name: null,
+            year: year,
+        };
+        setDatas((prev: any) => {
+            const updated = [...prev];
+            updated.splice(index + 1, 0, newData);
+            return updated;
+        });
+
+    }
+
     const confirmDeleteRincianBelanja = (index: any, indexRincian: any, rincianId: any) => {
         if (subKegiatan?.status == 'verified') {
             showAlert('error', 'Data tidak dapat diubah karena Status Target Sudah "Terverifikasi"');
@@ -232,10 +278,32 @@ const Index = () => {
         }
     }
 
+    const deleteTargetKinerja = (id: any) => {
+        DeleteTargetKinerja(id).then((data: any) => {
+            if (data.status == 'success') {
+                showAlert('success', data?.message);
+                setDatas([]);
+                getMasterData(subKegiatanId, year, month).then((data) => {
+                    if (data.status == 'success') {
+                        setDatas(data.data.data);
+                        setSubKegiatan(data.data.subkegiatan);
+                        setDataBackEndError(data.data.data_error);
+                        setDataBackEndMessage(data.data.message_error);
+                    }
+                    if (data.status == 'error') {
+                        showAlert('error', data.message);
+                    }
+                });
+            } else {
+                showAlert('error', data?.message);
+            }
+        })
+    }
+
     const confirmSave = () => {
         Swal.fire({
             title: 'Simpan Target Kinerja',
-            text: 'Apakah Anda yakin ingin menyimpan target kinerja ini?',
+            text: 'Apakah Anda yakin ingin menyimpan target kinerja ini? Mohon untuk diperiksa ulang Pagu Anggarannya!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, Simpan',
@@ -428,7 +496,7 @@ const Index = () => {
                                     {datas?.map((data: any, index: any) => {
                                         return (
                                             <>
-                                                <tr key={index} className=''>
+                                                <tr key={data?.id} className=''>
 
                                                     <td className='border-y !border-slate-400 dark:!border-slate-100'>
                                                         <div className="text-xs font-semibold">
@@ -441,61 +509,197 @@ const Index = () => {
                                                     >
                                                         <div className="text-xs font-semibold">
                                                             {data.type == 'rekening' && (
-                                                                <>
-                                                                    {data.uraian}
-                                                                </>
+                                                                <div className='flex items-center justify-between'>
+                                                                    <div className="mb-2">
+                                                                        {data.uraian}
+                                                                    </div>
+
+                                                                    {data?.rekening == 6 && (
+                                                                        <div className="flex items-center gap-2">
+                                                                            <Tippy content="Tambah Rincian Belanja" >
+                                                                                <button type='button'
+                                                                                    className='btn bg-primary text-white w-4.5 h-4.5 p-1 rounded-full'
+                                                                                    onClick={(e) => {
+                                                                                        addTargetKinerja(index);
+                                                                                    }}>
+                                                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3' />
+                                                                                </button>
+                                                                            </Tippy>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             )}
+
                                                             {data.type == 'target-kinerja' && (
                                                                 <>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <div className="">
-                                                                            <div className="">
-                                                                                [#] {data.nama_paket}
-                                                                            </div>
-                                                                            <div className="">
-                                                                                Sumber Dana : {data.sumber_dana_name}
-                                                                            </div>
-                                                                            <div className='flex items-center gap-x-2'>
-                                                                                <Tippy content={`Dibuat Oleh`}
-                                                                                    animation='scale'
-                                                                                >
-                                                                                    <div className="font-normal text-2xs mt-1.5 text-slate-500 flex items-center cursor-pointer">
-                                                                                        <FontAwesomeIcon icon={faUserAlt} className='mr-1 w-1.5 h-1.5' />
-                                                                                        {data.created_by_name}
-                                                                                    </div>
-                                                                                </Tippy>
+                                                                    <div className="flex items-center justify-between gap-4">
+                                                                        {(data?.is_new || data?.jenis == "Manual") ? (
+                                                                            <div className='grow flex flex-col gap-y-2'>
+                                                                                <input
+                                                                                    type='text'
+                                                                                    value={data?.nama_paket}
+                                                                                    readOnly={subKegiatan?.status == 'verified' ? true : false}
+                                                                                    onChange={
+                                                                                        (e) => {
+                                                                                            if (subKegiatan?.status == 'verified') {
+                                                                                                showAlert('error', 'Data tidak dapat diubah karena Status Target Sudah "Terverifikasi"');
+                                                                                                return;
+                                                                                            }
+                                                                                            setUnsaveStatus(true);
+                                                                                            setDatas((prev: any) => {
+                                                                                                const updated = [...prev];
+                                                                                                updated[index] = {
+                                                                                                    editable: data?.editable,
+                                                                                                    long: data?.long,
+                                                                                                    type: data?.type,
+                                                                                                    id: data?.id,
+                                                                                                    id_rek_1: data?.id_rek_1,
+                                                                                                    id_rek_2: data?.id_rek_2,
+                                                                                                    id_rek_3: data?.id_rek_3,
+                                                                                                    id_rek_4: data?.id_rek_4,
+                                                                                                    id_rek_5: data?.id_rek_5,
+                                                                                                    id_rek_6: data?.id_rek_6,
+                                                                                                    year: data?.year,
+                                                                                                    jenis: data?.jenis,
+                                                                                                    sumber_dana_id: data?.sumber_dana_id,
+                                                                                                    sumber_dana_fullcode: data?.sumber_dana_fullcode,
+                                                                                                    sumber_dana_name: data?.sumber_dana_name,
+                                                                                                    nama_paket: e.target.value,
+                                                                                                    // pagu: parseInt(e.target.value),
+                                                                                                    pagu: data?.pagu,
+                                                                                                    temp_pagu: data?.temp_pagu,
+                                                                                                    is_pagu_match: data?.is_pagu_match,
+                                                                                                    is_detail: data?.is_detail,
+                                                                                                    is_new: data?.is_new ?? false,
+                                                                                                    rincian_belanja: data?.rincian_belanja,
+                                                                                                };
 
-                                                                                {data?.updated_by && (
-                                                                                    <Tippy content={`Diperbarui Oleh`}
-                                                                                        animation='scale'
-                                                                                    >
-                                                                                        <div className="font-normal text-2xs mt-1.5 text-blue-500 flex items-center cursor-pointer">
-                                                                                            <FontAwesomeIcon icon={faUserAlt} className='mr-1 w-1.5 h-1.5' />
-                                                                                            {data.updated_by_name}
-                                                                                        </div>
-                                                                                    </Tippy>
-                                                                                )}
+                                                                                                return updated;
+                                                                                            });
+                                                                                        }
+                                                                                    }
+                                                                                    className='form-input w-full border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 resize-none leading-tight disabled:opacity-50'
+                                                                                    placeholder='Nama Paket'
+                                                                                />
+
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <div className="">
+                                                                                        Sumber Dana : {data.sumber_dana_name}
+                                                                                    </div>
+
+                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                        <Tippy content={`Dibuat Oleh`}
+                                                                                            animation='scale'
+                                                                                        >
+                                                                                            <div className="font-normal text-2xs text-slate-500 flex items-center cursor-pointer">
+                                                                                                <FontAwesomeIcon icon={faUserAlt} className='mr-1 w-1.5 h-1.5' />
+                                                                                                {data.created_by_name}
+                                                                                            </div>
+                                                                                        </Tippy>
+
+                                                                                        {data?.updated_by && (
+                                                                                            <Tippy content={`Diperbarui Oleh`}
+                                                                                                animation='scale'
+                                                                                            >
+                                                                                                <div className="font-normal text-2xs text-blue-500 flex items-center cursor-pointer">
+                                                                                                    <FontAwesomeIcon icon={faUserAlt} className='mr-1 w-1.5 h-1.5' />
+                                                                                                    {data.updated_by_name}
+                                                                                                </div>
+                                                                                            </Tippy>
+                                                                                        )}
+                                                                                    </div>
+                                                                                </div>
+
                                                                             </div>
-                                                                        </div>
-                                                                        <div className="">
-                                                                            {(data.is_detail == true && month == 1) && (
-                                                                                <>
-                                                                                    <Tippy content={`Tambah Rincian Belanja`}>
-                                                                                        <button
-                                                                                            type='button'
-                                                                                            className='btn bg-success text-white w-4.5 h-4.5 p-1 rounded-full'
-                                                                                            onClick={(e) => {
-                                                                                                addRincianBelanja(index);
-                                                                                            }}>
-                                                                                            <FontAwesomeIcon icon={faPlus} className='' />
-                                                                                        </button>
-                                                                                    </Tippy>
-                                                                                </>
+                                                                        ) : (
+                                                                            <div className="grow">
+                                                                                <div className="">
+                                                                                    [#] {data.nama_paket}
+                                                                                </div>
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <div className="">
+                                                                                        Sumber Dana : {data.sumber_dana_name}
+                                                                                    </div>
+                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                        <Tippy content={`Dibuat Oleh`}
+                                                                                            animation='scale'
+                                                                                        >
+                                                                                            <div className="font-normal text-2xs text-slate-500 flex items-center cursor-pointer">
+                                                                                                <FontAwesomeIcon icon={faUserAlt} className='mr-1 w-1.5 h-1.5' />
+                                                                                                {data.created_by_name}
+                                                                                            </div>
+                                                                                        </Tippy>
+
+                                                                                        {data?.updated_by && (
+                                                                                            <Tippy content={`Diperbarui Oleh`}
+                                                                                                animation='scale'
+                                                                                            >
+                                                                                                <div className="font-normal text-2xs text-blue-500 flex items-center cursor-pointer">
+                                                                                                    <FontAwesomeIcon icon={faUserAlt} className='mr-1 w-1.5 h-1.5' />
+                                                                                                    {data.updated_by_name}
+                                                                                                </div>
+                                                                                            </Tippy>
+                                                                                        )}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                        <div className="flex items-center gap-x-1">
+                                                                            {(data.is_detail == true) && (
+                                                                                <Tippy content={`Tambah Rincian Belanja`}>
+                                                                                    <button
+                                                                                        type='button'
+                                                                                        className='btn bg-success text-white w-4.5 h-4.5 p-1 rounded-full'
+                                                                                        onClick={(e) => {
+                                                                                            addRincianBelanja(index);
+                                                                                        }}>
+                                                                                        <FontAwesomeIcon icon={faPlus} className='' />
+                                                                                    </button>
+                                                                                </Tippy>
                                                                             )}
+
+                                                                            {/* {(data?.is_new && data.is_detail == false) && ( */}
+                                                                            {data?.is_new || data?.jenis == 'Manual' && (
+                                                                                <Tippy content="Hapus Target Kinerja" >
+                                                                                    <button type='button'
+                                                                                        className='btn bg-danger text-white w-4.5 h-4.5 p-1 rounded-full'
+                                                                                        onClick={(e) => {
+                                                                                            e.preventDefault();
+                                                                                            Swal.fire({
+                                                                                                title: 'Peringatan',
+                                                                                                text: 'Apakah Anda yakin untuk menghapus Target Kinerja Ini? Kalkulasi Pagu Anggaran tidak akan berubah!',
+                                                                                                icon: 'warning',
+                                                                                                showCancelButton: true,
+                                                                                                confirmButtonText: 'Ya, Hapus',
+                                                                                                cancelButtonText: 'Batal',
+                                                                                            }).then((result) => {
+                                                                                                if (result.isConfirmed) {
+                                                                                                    if (data.is_new) {
+                                                                                                        setDatas((prev: any) => {
+                                                                                                            const updated = [...prev];
+                                                                                                            updated.splice(index, 1);
+                                                                                                            return updated;
+                                                                                                        });
+                                                                                                    } else if (data.jenis == 'Manual') {
+                                                                                                        if (data.id) {
+                                                                                                            deleteTargetKinerja(data.id)
+                                                                                                        } else {
+                                                                                                            showAlert('info', 'Terjadi Kesalahan, Mohon Refresh Halaman!');
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            });
+                                                                                        }}>
+                                                                                        <FontAwesomeIcon icon={faTrashAlt} className='w-3 h-3' />
+                                                                                    </button>
+                                                                                </Tippy>
+                                                                            )}
+
                                                                         </div>
                                                                     </div>
                                                                 </>
                                                             )}
+
                                                         </div>
                                                     </td>
 
@@ -537,7 +741,7 @@ const Index = () => {
                                                                     type='text'
                                                                     value={data?.pagu}
                                                                     readOnly={subKegiatan?.status == 'verified' ? true : false}
-                                                                    disabled={month == 1 ? false : true}
+                                                                    // disabled={month == 1 ? false : true}
                                                                     onChange={
                                                                         (e) => {
                                                                             if (subKegiatan?.status == 'verified') {
@@ -547,22 +751,143 @@ const Index = () => {
                                                                             setUnsaveStatus(true);
                                                                             setDatas((prev: any) => {
                                                                                 const updated = [...prev];
+                                                                                let value = parseInt(e.target.value ?? 0);
+                                                                                if (isNaN(value)) {
+                                                                                    value = 0;
+                                                                                }
                                                                                 updated[index] = {
                                                                                     editable: data?.editable,
                                                                                     long: data?.long,
                                                                                     type: data?.type,
                                                                                     id: data?.id,
+                                                                                    id_rek_1: data?.id_rek_1,
+                                                                                    id_rek_2: data?.id_rek_2,
+                                                                                    id_rek_3: data?.id_rek_3,
+                                                                                    id_rek_4: data?.id_rek_4,
+                                                                                    id_rek_5: data?.id_rek_5,
+                                                                                    id_rek_6: data?.id_rek_6,
                                                                                     year: data?.year,
                                                                                     jenis: data?.jenis,
                                                                                     sumber_dana_id: data?.sumber_dana_id,
                                                                                     sumber_dana_fullcode: data?.sumber_dana_fullcode,
                                                                                     sumber_dana_name: data?.sumber_dana_name,
                                                                                     nama_paket: data?.nama_paket,
-                                                                                    pagu: parseInt(e.target.value),
+                                                                                    pagu: value,
                                                                                     temp_pagu: data?.temp_pagu,
                                                                                     is_pagu_match: data?.is_pagu_match,
                                                                                     is_detail: data?.is_detail,
+                                                                                    is_new: data?.is_new ?? false,
                                                                                     rincian_belanja: data?.rincian_belanja,
+                                                                                };
+
+                                                                                const Rekening6 = updated.find((item: any) => item.id == data.id_rek_6);
+                                                                                const Rekening6Index = updated.findIndex((item: any) => item.id == data.id_rek_6);
+                                                                                const RincianBelanjas = updated.filter((item: any) => item.type == 'target-kinerja' && item.id_rek_6 == data.id_rek_6);
+                                                                                let RincianSumAnggaran = RincianBelanjas.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (parseInt(b['pagu']) || 0), 0);
+
+                                                                                updated[Rekening6Index] = {
+                                                                                    editable: Rekening6?.editable,
+                                                                                    fullcode: Rekening6?.fullcode,
+                                                                                    id: Rekening6?.id,
+                                                                                    id_rek_1: Rekening6?.id_rek_1,
+                                                                                    id_rek_2: Rekening6?.id_rek_2,
+                                                                                    id_rek_3: Rekening6?.id_rek_3,
+                                                                                    id_rek_4: Rekening6?.id_rek_4,
+                                                                                    id_rek_5: Rekening6?.id_rek_5,
+                                                                                    id_rek_6: Rekening6?.id_rek_6,
+                                                                                    long: Rekening6?.long,
+                                                                                    // pagu: Rekening6?.pagu,
+                                                                                    pagu: RincianSumAnggaran,
+                                                                                    parent_id: Rekening6?.parent_id,
+                                                                                    rekening: Rekening6?.rekening,
+                                                                                    rincian_belanja: Rekening6?.rincian_belanja,
+                                                                                    type: Rekening6?.type,
+                                                                                    uraian: Rekening6?.uraian,
+                                                                                };
+
+                                                                                const Rekening5 = updated.find((item: any) => item.id == data.id_rek_5);
+                                                                                const Rekening5Index = updated.findIndex((item: any) => item.id == data.id_rek_5);
+                                                                                const RincianBelanjas5 = updated.filter((item: any) => item.type == 'target-kinerja' && item.id_rek_5 == data.id_rek_5);
+                                                                                let RincianSumAnggaran5 = RincianBelanjas5.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (parseInt(b['pagu']) || 0), 0);
+
+                                                                                updated[Rekening5Index] = {
+                                                                                    editable: Rekening5?.editable,
+                                                                                    fullcode: Rekening5?.fullcode,
+                                                                                    id: Rekening5?.id,
+                                                                                    long: Rekening5?.long,
+                                                                                    pagu: RincianSumAnggaran5,
+                                                                                    parent_id: Rekening5?.parent_id,
+                                                                                    rincian_belanja: Rekening5?.rincian_belanja,
+                                                                                    type: Rekening5?.type,
+                                                                                    uraian: Rekening5?.uraian,
+                                                                                };
+
+                                                                                const Rekening4 = updated.find((item: any) => item.id == data.id_rek_4);
+                                                                                const Rekening4Index = updated.findIndex((item: any) => item.id == data.id_rek_4);
+                                                                                const RincianBelanjas4 = updated.filter((item: any) => item.type == 'target-kinerja' && item.id_rek_4 == data.id_rek_4);
+                                                                                let RincianSumAnggaran4 = RincianBelanjas4.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (parseInt(b['pagu']) || 0), 0);
+
+                                                                                updated[Rekening4Index] = {
+                                                                                    editable: Rekening4?.editable,
+                                                                                    fullcode: Rekening4?.fullcode,
+                                                                                    id: Rekening4?.id,
+                                                                                    long: Rekening4?.long,
+                                                                                    pagu: RincianSumAnggaran4,
+                                                                                    parent_id: Rekening4?.parent_id,
+                                                                                    rincian_belanja: Rekening4?.rincian_belanja,
+                                                                                    type: Rekening4?.type,
+                                                                                    uraian: Rekening4?.uraian,
+                                                                                };
+
+                                                                                const Rekening3 = updated.find((item: any) => item.id == data.id_rek_3);
+                                                                                const Rekening3Index = updated.findIndex((item: any) => item.id == data.id_rek_3);
+                                                                                const RincianBelanjas3 = updated.filter((item: any) => item.type == 'target-kinerja' && item.id_rek_3 == data.id_rek_3);
+                                                                                let RincianSumAnggaran3 = RincianBelanjas3.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (parseInt(b['pagu']) || 0), 0);
+
+                                                                                updated[Rekening3Index] = {
+                                                                                    editable: Rekening3?.editable,
+                                                                                    fullcode: Rekening3?.fullcode,
+                                                                                    id: Rekening3?.id,
+                                                                                    long: Rekening3?.long,
+                                                                                    pagu: RincianSumAnggaran3,
+                                                                                    parent_id: Rekening3?.parent_id,
+                                                                                    rincian_belanja: Rekening3?.rincian_belanja,
+                                                                                    type: Rekening3?.type,
+                                                                                    uraian: Rekening3?.uraian,
+                                                                                };
+
+                                                                                const Rekening2 = updated.find((item: any) => item.id == data.id_rek_2);
+                                                                                const Rekening2Index = updated.findIndex((item: any) => item.id == data.id_rek_2);
+                                                                                const RincianBelanjas2 = updated.filter((item: any) => item.type == 'target-kinerja' && item.id_rek_2 == data.id_rek_2);
+                                                                                let RincianSumAnggaran2 = RincianBelanjas2.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (parseInt(b['pagu']) || 0), 0);
+
+                                                                                updated[Rekening2Index] = {
+                                                                                    editable: Rekening2?.editable,
+                                                                                    fullcode: Rekening2?.fullcode,
+                                                                                    id: Rekening2?.id,
+                                                                                    long: Rekening2?.long,
+                                                                                    pagu: RincianSumAnggaran2,
+                                                                                    parent_id: Rekening2?.parent_id,
+                                                                                    rincian_belanja: Rekening2?.rincian_belanja,
+                                                                                    type: Rekening2?.type,
+                                                                                    uraian: Rekening2?.uraian,
+                                                                                };
+
+                                                                                const Rekening1 = updated.find((item: any) => item.id == data.id_rek_1);
+                                                                                const Rekening1Index = updated.findIndex((item: any) => item.id == data.id_rek_1);
+                                                                                const RincianBelanjas1 = updated.filter((item: any) => item.type == 'target-kinerja' && item.id_rek_1 == data.id_rek_1);
+                                                                                let RincianSumAnggaran1 = RincianBelanjas1.filter((item: any) => item.type == 'target-kinerja').reduce((a: any, b: any) => a + (parseInt(b['pagu']) || 0), 0);
+
+                                                                                updated[Rekening1Index] = {
+                                                                                    editable: Rekening1?.editable,
+                                                                                    fullcode: Rekening1?.fullcode,
+                                                                                    id: Rekening1?.id,
+                                                                                    long: Rekening1?.long,
+                                                                                    pagu: RincianSumAnggaran1,
+                                                                                    parent_id: Rekening1?.parent_id,
+                                                                                    rincian_belanja: Rekening1?.rincian_belanja,
+                                                                                    type: Rekening1?.type,
+                                                                                    uraian: Rekening1?.uraian,
                                                                                 };
 
                                                                                 return updated;
@@ -688,6 +1013,7 @@ const Index = () => {
                                                                                                                 ppn: keterangan?.ppn,
                                                                                                                 pagu: keterangan?.pagu,
                                                                                                             };
+
                                                                                                             return updated;
                                                                                                         });
                                                                                                     }
@@ -752,6 +1078,12 @@ const Index = () => {
                                                                                                                 long: data?.long,
                                                                                                                 type: data?.type,
                                                                                                                 id: data?.id,
+                                                                                                                id_rek_1: data?.id_rek_1,
+                                                                                                                id_rek_2: data?.id_rek_2,
+                                                                                                                id_rek_3: data?.id_rek_3,
+                                                                                                                id_rek_4: data?.id_rek_4,
+                                                                                                                id_rek_5: data?.id_rek_5,
+                                                                                                                id_rek_6: data?.id_rek_6,
                                                                                                                 year: data?.year,
                                                                                                                 jenis: data?.jenis,
                                                                                                                 sumber_dana_id: data?.sumber_dana_id,
@@ -762,8 +1094,10 @@ const Index = () => {
                                                                                                                 temp_pagu: tempSumCalculatePagu,
                                                                                                                 is_pagu_match: isPaguMatch,
                                                                                                                 is_detail: data?.is_detail,
+                                                                                                                is_new: data?.is_new ?? false,
                                                                                                                 rincian_belanja: data?.rincian_belanja,
                                                                                                             };
+
                                                                                                             updated[index]['rincian_belanja'][indexRincian] = {
                                                                                                                 editable: rincian?.editable,
                                                                                                                 long: rincian?.long,
@@ -788,6 +1122,7 @@ const Index = () => {
                                                                                                                 ppn: keterangan?.ppn,
                                                                                                                 pagu: calculatePagu,
                                                                                                             };
+
                                                                                                             return updated;
                                                                                                         });
                                                                                                     }
@@ -933,6 +1268,12 @@ const Index = () => {
                                                                                                                 long: data?.long,
                                                                                                                 type: data?.type,
                                                                                                                 id: data?.id,
+                                                                                                                id_rek_1: data?.id_rek_1,
+                                                                                                                id_rek_2: data?.id_rek_2,
+                                                                                                                id_rek_3: data?.id_rek_3,
+                                                                                                                id_rek_4: data?.id_rek_4,
+                                                                                                                id_rek_5: data?.id_rek_5,
+                                                                                                                id_rek_6: data?.id_rek_6,
                                                                                                                 year: data?.year,
                                                                                                                 jenis: data?.jenis,
                                                                                                                 sumber_dana_id: data?.sumber_dana_id,
@@ -943,6 +1284,7 @@ const Index = () => {
                                                                                                                 temp_pagu: tempSumCalculatePagu,
                                                                                                                 is_pagu_match: isPaguMatch,
                                                                                                                 is_detail: data?.is_detail,
+                                                                                                                is_new: data?.is_new ?? false,
                                                                                                                 rincian_belanja: data?.rincian_belanja,
                                                                                                             };
                                                                                                             updated[index]['rincian_belanja'][indexRincian] = {
@@ -1044,7 +1386,7 @@ const Index = () => {
                         <div className="flex flex-wrap sm:flex-nowrap justify-center sm:justify-end items-center gap-2">
 
                             <div className="flex justify-end flex-wrap items-center gap-1 mr-3 w-[300px]">
-                                {subKegiatan?.tag_sumber_dana?.length > 0 && (
+                                {/* {subKegiatan?.tag_sumber_dana?.length > 0 && (
                                     <>
                                         {showTags === false ? (
                                             <>
@@ -1105,7 +1447,14 @@ const Index = () => {
                                             </>
                                         )}
                                     </>
-                                )}
+                                )} */}
+
+                                <Tippy content={`Tagging Sumber Dana`}>
+                                    <div onClick={() => setModalSumberDana(true)}
+                                        className="btn btn-primary btn-sm cursor-pointer">
+                                        Taggin Sumber Dana
+                                    </div>
+                                </Tippy>
                             </div>
 
                             <Tippy content={`Tekan Untuk Melihat Log`}>
@@ -1663,6 +2012,92 @@ const Index = () => {
                                                 className="btn btn-dark text-xs">
                                                 <IconX className="w-4 h-4 mr-1" />
                                                 Batal
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition>
+
+            <Transition appear show={modalSumberDana} as={Fragment}>
+                <Dialog as="div" open={modalSumberDana} onClose={() => setModalSumberDana(false)}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0" />
+                    </Transition.Child>
+                    <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                        <div className="flex items-center justify-center min-h-screen px-4">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Dialog.Panel as="div" className="panel border-0 p-0 rounded-lg w-full max-w-[80%] md:max-w-[50%] my-8 text-black dark:text-white-dark">
+                                    <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                        <h5 className="font-semibold text-md">
+                                            Daftar Tagging Sumber Dana
+                                        </h5>
+                                        <button type="button" className="text-white-dark hover:text-dark" onClick={() => {
+                                            setModalSumberDana(false)
+                                        }}>
+                                            <IconX />
+                                        </button>
+                                    </div>
+                                    <div className="p-5">
+
+                                        <table>
+                                            <thead className=''>
+                                                <tr>
+                                                    <th className=''>
+                                                        Nama Tag Sumber Dana
+                                                    </th>
+                                                    <th className=''>
+                                                        Nominal
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {subKegiatan?.tag_sumber_dana?.length > 0 && (
+                                                    <>
+                                                        {subKegiatan?.tag_sumber_dana?.map((tag: any, index: any) => (
+                                                            <tr>
+                                                                <td>
+                                                                    {tag?.tag_name}
+                                                                </td>
+                                                                <td>
+                                                                    Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(tag?.nominal)}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </>
+                                                )}
+                                            </tbody>
+                                        </table>
+
+
+                                        <div className="flex items-center justify-end gap-2 mt-5">
+                                            <button
+                                                onClick={() => {
+                                                    setModalSumberDana(false)
+                                                }}
+                                                type="button"
+                                                className="btn btn-dark text-xs">
+                                                <IconX className="w-4 h-4 mr-1" />
+                                                Tutup
                                             </button>
                                         </div>
                                     </div>

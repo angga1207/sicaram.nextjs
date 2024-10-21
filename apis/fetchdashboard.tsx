@@ -10,25 +10,39 @@ const baseUri = BaseUri();
 
 
 export async function fetchDashboardOPD(code: string, year: number, month: number) {
-    const res = await axios.get(baseUri + '/public/rka-pd/' + code + '?year=' + year + '&month=' + month, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/public/rka-pd/' + code + '?year=' + year + '&month=' + month, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function chartRealisasi(periode: any, year: any, view: any) {
-    const res = await axios.get(baseUri + '/dashboard/chart-realisasi?periode=' + periode + '&year=' + year + '&view=' + view, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${CurrentToken}`,
-        },
-    });
-    const data = await res.data;
-    return data;
+    try {
+        const res = await axios.get(baseUri + '/dashboard/chart-realisasi?periode=' + periode + '&year=' + year + '&view=' + view, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
 }
 
 export async function summaryRealisasi(periode: any, year: any) {
@@ -110,13 +124,15 @@ export async function summaryKinerja(periode: any, year: any, view: any) {
 
 export async function getDetailInstance(slug: any, periode: any, year: any, view: any) {
     try {
-        const res = await axios.get(baseUri + '/dashboard/instance/' + slug + '?periode=' + periode + '&year=' + year, {
+        const res = await axios.get(baseUri + '/dashboard/instance/' + slug, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
-                view: view
+                view: view,
+                periode: periode,
+                year: year,
             }
         });
         const data = await res.data;

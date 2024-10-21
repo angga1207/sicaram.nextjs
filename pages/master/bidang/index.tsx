@@ -50,6 +50,8 @@ const Index = () => {
     });
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -62,13 +64,26 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const { t, i18n } = useTranslation();
 
     const [datas, setDatas] = useState<any>([]);
     const [periodes, setPeriodes] = useState<any>([]);
-    const [periode, setPeriode] = useState<any>(1);
     const [urusans, setUrusans] = useState<any>([]);
     const [search, setSearch] = useState<any>('');
     const [modalInput, setModalInput] = useState(false);
@@ -89,18 +104,17 @@ const Index = () => {
         fetchPeriodes().then((data) => {
             setPeriodes(data.data);
         });
-        fetchUrusans(periode).then((data) => {
-            setUrusans(data.data);
-        });
-    }, []);
-
-    useEffect(() => {
-        fetchBidangs(periode).then((data) => {
-            if (data.status == 'success') {
-                setDatas(data.data);
-            }
-        });
-    }, []);
+        if (isMounted && periode?.id) {
+            fetchUrusans(periode?.id).then((data) => {
+                setUrusans(data.data);
+            });
+            fetchBidangs(periode?.id).then((data) => {
+                if (data.status == 'success') {
+                    setDatas(data.data);
+                }
+            });
+        }
+    }, [isMounted, periode?.id]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -111,9 +125,11 @@ const Index = () => {
 
     const reRenderDatas = () => {
         if (search.length >= 3 || search.length == 0) {
-            fetchBidangs(periode, search).then((data) => {
-                setDatas((data?.data));
-            });
+            if (isMounted && periode?.id) {
+                fetchBidangs(periode?.id, search).then((data) => {
+                    setDatas((data?.data));
+                });
+            }
         }
     }
 
@@ -126,7 +142,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             urusan_id: '',
             name: '',
             code: '',
@@ -146,7 +162,7 @@ const Index = () => {
         setDataInput({
             inputType: 'create',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             urusan_id: urusan_id,
             name: '',
             code: '',
@@ -166,7 +182,7 @@ const Index = () => {
         setDataInput({
             inputType: 'edit',
             id: '',
-            periode_id: periode,
+            periode_id: periode?.id,
             urusan_id: null,
             name: null,
             code: null,
@@ -212,7 +228,7 @@ const Index = () => {
             storeBidang(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchBidangs(periode, search).then((data) => {
+                    fetchBidangs(periode?.id, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -235,7 +251,7 @@ const Index = () => {
             updateBidang(dataInput).then((data) => {
                 if (data.status == 'success') {
                     setModalInput(false);
-                    fetchBidangs(periode, search).then((data) => {
+                    fetchBidangs(periode?.id, search).then((data) => {
                         setDatas((data?.data));
                     });
                     showAlert('success', data.message);
@@ -272,7 +288,7 @@ const Index = () => {
                 if (result.value) {
                     deleteBidang(id ?? null).then((data) => {
                         if (data.status == 'success') {
-                            fetchBidangs(periode, search).then((data) => {
+                            fetchBidangs(periode?.id, search).then((data) => {
                                 setDatas((data?.data));
                             });
                             swalWithBootstrapButtons.fire('Terhapus!', data.message, 'success');
