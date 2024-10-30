@@ -26,7 +26,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { BaseUri } from '@/apis/serverConfig';
 import { fetchNotifLess, markNotifAsRead } from '@/apis/personal_profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckDouble } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faCheckDouble, faLockOpen, faSignOut, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import IconBookmark from '../Icon/IconBookmark';
 import IconPlus from '../Icon/IconPlus';
@@ -123,7 +123,25 @@ const Header = () => {
             }
         }
         if (isMounted) {
-            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '',
+                    html: 'Periode Belum dipilih',
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Tutup',
+
+                    // callback on confirm
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // callback();
+                        router.push('/login')
+                    }
+                });
+            }
         }
     }, [CurrentToken, isMounted]);
 
@@ -418,10 +436,10 @@ const Header = () => {
                             <IconMenu className="h-5 w-5" />
                         </button>
 
-                        <div className="">
+                        <div className="block sm:hidden">
                             {periode?.name ? (
                                 <>
-                                    <div className="text-sm font-normal">
+                                    <div className="text-sm font-semibold">
                                         Periode : {periode?.name}
                                     </div>
                                 </>
@@ -459,7 +477,7 @@ const Header = () => {
                                     <div className="">
                                         {periode?.name ? (
                                             <>
-                                                <div className="text-sm font-normal">
+                                                <div className="text-xs font-semibold">
                                                     Periode : {periode?.name}
                                                 </div>
                                             </>
@@ -803,9 +821,19 @@ const Header = () => {
                                     </li>
                                     <li>
                                         <Link href="/users/profile" className="dark:hover:text-white">
-                                            <IconUser className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                            <FontAwesomeIcon icon={faUser} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                             Profil
                                         </Link>
+
+                                        {CurrentUser?.role_id === 9 && (
+                                            <Link href={`/instance`} className="dark:hover:text-white">
+                                                <FontAwesomeIcon icon={faBriefcase} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                                <span className='!capitalize'>
+                                                    Profil {CurrentUser?.instance_alias}
+                                                </span>
+                                            </Link>
+                                        )}
+
                                     </li>
                                     <li>
                                         <div
@@ -813,7 +841,7 @@ const Header = () => {
                                                 kunciLayar();
                                             }}
                                             className="flex px-4 py-2 dark:hover:text-white cursor-pointer hover:bg-indigo-50 hover:text-indigo-700">
-                                            <IconLockDots className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                            <FontAwesomeIcon icon={faLockOpen} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                             Kunci Layar
                                         </div>
                                     </li>
@@ -823,7 +851,7 @@ const Header = () => {
                                                 e.preventDefault();
                                                 logout();
                                             }}>
-                                            <IconLogout className="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2" />
+                                            <FontAwesomeIcon icon={faSignOutAlt} className="h-4.5 w-4.5 shrink-0 rotate-0 ltr:mr-2 rtl:ml-2" />
                                             Log Out
                                         </Link>
                                     </li>

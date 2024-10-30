@@ -85,34 +85,43 @@ const Index = () => {
     }, [isMounted])
 
     useEffect(() => {
+        // if (userType && isMounted && !search) {
+        //     fetchAllDataUsers(userType)
+        //         .then((data: any) => {
+        //             if (data.status == 'success') {
+        //                 setRoles((data?.data?.roles) ?? [])
+        //             }
+        //             if (data.status == 'success') {
+        //                 setInstances((data.data.instances) ?? [])
+        //             }
+        //         });
+        // }
         if (userType) {
-            fetchAllDataUsers(userType)
-                .then((data: any) => {
+            if (CurrentUser.role_id == 9) {
+                fetchUsers(userType, search, CurrentUser.instance_id).then((data) => {
                     if (data.status == 'success') {
                         setRoles((data?.data?.roles) ?? [])
-                    }
-                    if (data.status == 'success') {
                         setInstances((data.data.instances) ?? [])
+                        setDatas((data?.data?.users));
                     }
                 });
+            } else {
+                fetchUsers(userType, search).then((data) => {
+                    if (data.status == 'success') {
+                        setRoles((data?.data?.roles) ?? [])
+                        setInstances((data.data.instances) ?? [])
+                        setDatas((data?.data?.users));
+                    }
+                });
+            }
         }
-    }, [isMounted, userType]);
+    }, [isMounted, userType, search]);
 
     // console.log(roles)
 
     useEffect(() => {
-        if (userType) {
-            if (CurrentUser.role_id == 9) {
-                fetchUsers(userType, search, CurrentUser.instance_id).then((data) => {
-                    setDatas((data?.data?.users));
-                });
-            } else {
-                fetchUsers(userType, search).then((data) => {
-                    setDatas((data?.data?.users));
-                });
-            }
-        }
     }, [userType, search]);
+
     const changeUserType = (e: any) => {
         setDatas([]);
         setUserType(e);
@@ -340,7 +349,7 @@ const Index = () => {
     if (CurrentUser?.role_id && [1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id)) {
         return (
             <>
-                {CurrentUser?.role_id && [1, 2, 3, 4, 5].includes(CurrentUser?.role_id) && (
+                {(CurrentUser?.role_id && ([1, 2, 3, 4, 5].includes(CurrentUser?.role_id))) && (
                     <div className="flex gap-2 mb-4">
                         <button type="button" className={userType == 'admin' ? 'btn btn-success' : 'btn btn-primary'} onClick={() => {
                             changeUserType('admin');
@@ -377,18 +386,13 @@ const Index = () => {
                                 </div>
                             </div>
 
-                            {CurrentUser?.role_id && [1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id) && (
-                                <>
-                                    {(CurrentUser?.role_id == 9 && CurrentUser?.instance_type != 'kepala') ? (
-                                        <></>
-                                    ) : (
-                                        <button type="button" onClick={() => addUser()} className="btn btn-info whitespace-nowrap gap-1">
-                                            <IconPlus></IconPlus>
-                                            Tambah Pengguna
-                                        </button>
-                                    )}
-                                </>
-                            )}
+                            {(CurrentUser?.role_id && ([1, 2, 3, 4, 5].includes(CurrentUser?.role_id) ||
+                                (CurrentUser?.role_id === 9 && CurrentUser?.instance_type === 'kepala'))) && (
+                                    <button type="button" onClick={() => addUser()} className="btn btn-info whitespace-nowrap gap-1">
+                                        <IconPlus></IconPlus>
+                                        Tambah Pengguna
+                                    </button>
+                                )}
                         </div>
                     </div>
                     <div className="table-responsive mb-5">
@@ -452,7 +456,16 @@ const Index = () => {
                                             ) : (
                                                 <td>
                                                     <div className="text-center">
-                                                        {data?.role_name ? data?.role_name : ''}
+                                                        {userType === 'perangkat_daerah' && (
+                                                            <div className={`badge capitalize shadow-md ${data?.instance_type == 'kepala' ? 'bg-success' : 'bg-info'}`}>
+                                                                {data?.instance_type}
+                                                            </div>
+                                                        )}
+                                                        {userType !== 'perangkat_daerah' && (
+                                                            <>
+                                                                {data?.role_name ? data?.role_name : ''}
+                                                            </>
+                                                        )}
                                                     </div>
                                                 </td>
                                             )}

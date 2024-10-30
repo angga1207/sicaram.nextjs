@@ -67,7 +67,10 @@ const Index = () => {
             setCurrentUser(user);
         }
         if (isMounted) {
-            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            }
         }
     }, [isMounted]);
 

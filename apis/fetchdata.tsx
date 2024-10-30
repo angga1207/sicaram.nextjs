@@ -146,6 +146,94 @@ export async function fetchInstance(id: string = '') {
         }
     }
 }
+
+export async function fetchInstanceSubUnit(id: string = '', periode: number) {
+    try {
+        const res = await axios.get(baseUri + '/instances/' + id + '/sub_unit', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                periode: periode,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchInstanceSubUnitDetail(alias: string = '', id: any, periode: number) {
+    try {
+        const res = await axios.get(baseUri + '/instances/' + alias + '/sub_unit/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                periode: periode,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchInstanceSubUnitDelete(alias: string = '', id: any, periode: number) {
+    try {
+        const res = await axios.delete(baseUri + '/instances/' + alias + '/sub_unit/' + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                periode: periode,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function storeInstanceSubUnit(instanceId: any, data: any) {
+    const Slug = instanceId;
+    if (!Slug) {
+        return {
+            status: 'error',
+            message: 'Id not found'
+        }
+    }
+    try {
+        const res = await axios.post(baseUri + '/instances/' + Slug + '/sub_unit', data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        })
+        const dataRes = await res.data;
+        return dataRes;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        };
+    }
+}
 // Instances End
 
 

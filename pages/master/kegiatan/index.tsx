@@ -71,7 +71,10 @@ const Index = () => {
             setCurrentUser(user);
         }
         if (isMounted) {
-            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            }
         }
     }, [isMounted]);
 
@@ -377,12 +380,17 @@ const Index = () => {
                                         </div>
                                     </div>
 
-                                    <button type="button" className="btn btn-info whitespace-nowrap" onClick={() => addKegiatan()} >
-                                        <IconPlus className="w-4 h-4" />
-                                        <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
-                                    </button>
+                                    {(([1, 2, 3, 4, 5, 6, 7, 8].includes(CurrentUser?.role_id)) || (CurrentUser?.role_id == 9 && CurrentUser?.instance_type == 'kepala')) && (
+                                        <button
+                                            type="button"
+                                            className="btn btn-info whitespace-nowrap"
+                                            onClick={() => addKegiatan()} >
+                                            <IconPlus className="w-4 h-4" />
+                                            <span className="ltr:ml-2 rtl:mr-2">Tambah</span>
+                                        </button>
+                                    )}
 
-                                    {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
+                                    {([1, 2, 3, 4, 5, 6, 7, 8].includes(CurrentUser?.role_id)) && (
                                         <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={(e) => {
                                             e.preventDefault();
                                             setInstance(null);
@@ -677,18 +685,24 @@ const Index = () => {
                                                                         <IconEdit className="m-auto text-blue-600 hover:text-blue-800" />
                                                                     </button>
                                                                 </Tippy>
-                                                                <Tippy content="Delete">
-                                                                    <button type="button" onClick={() => confirmDelete(data?.id)}>
-                                                                        <IconTrashLines className="m-auto text-red-600 hover:text-red-800" />
-                                                                    </button>
-                                                                </Tippy>
+                                                                {(([1, 2, 3, 4, 5, 6, 7, 8].includes(CurrentUser?.role_id)) || (CurrentUser?.role_id == 9 && CurrentUser?.instance_type == 'kepala')) && (
+                                                                    <Tippy content="Delete">
+                                                                        <button type="button" onClick={() => confirmDelete(data?.id)}>
+                                                                            <IconTrashLines className="m-auto text-red-600 hover:text-red-800" />
+                                                                        </button>
+                                                                    </Tippy>
+                                                                )}
                                                             </>
                                                         ) : (
-                                                            <Tippy content="Tambah Kegiatan">
-                                                                <button type="button" onClick={() => addDataOnSpesific(data?.id)}>
-                                                                    <IconPlus className="m-auto text-blue-600 hover:text-blue-800" />
-                                                                </button>
-                                                            </Tippy>
+                                                            <>
+                                                                {(([1, 2, 3, 4, 5, 6, 7, 8].includes(CurrentUser?.role_id)) || (CurrentUser?.role_id == 9 && CurrentUser?.instance_type == 'kepala')) && (
+                                                                    <Tippy content="Tambah Kegiatan">
+                                                                        <button type="button" onClick={() => addDataOnSpesific(data?.id)}>
+                                                                            <IconPlus className="m-auto text-blue-600 hover:text-blue-800" />
+                                                                        </button>
+                                                                    </Tippy>
+                                                                )}
+                                                            </>
                                                         )}
                                                     </div>
                                                 </td>

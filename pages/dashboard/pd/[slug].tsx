@@ -2101,8 +2101,15 @@ const Index = () => {
                                                     <div className='text-[15px]'>
                                                         {program?.name}
                                                     </div>
-                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:block">
-                                                        {Instance?.name}
+                                                    <div className="text-[11px] font-normal text-slate-400 group-hover:text-white hidden md:flex items-center gap-2">
+                                                        {/* {program?.instance_name} - */}
+                                                        {program?.instance_sub_unit?.map((subUnit: any, index: number) => (
+                                                            <Tippy content="Bidang / Bagian" placement='top-start'>
+                                                                <div className='uppercase'>
+                                                                    - {subUnit?.name}
+                                                                </div>
+                                                            </Tippy>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             </div>

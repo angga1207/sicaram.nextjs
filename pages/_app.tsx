@@ -85,7 +85,33 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
                     });
             }
             if (notificationPermissionStatus === 'denied') {
-                showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
+                // showAlert('warning', 'Aktifkan notifikasi untuk mendapatkan informasi terbaru');
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                        popup: 'sweet-alerts',
+                    },
+                    buttonsStyling: false,
+                });
+                swalWithBootstrapButtons
+                    .fire({
+                        text: "Aktifkan notifikasi untuk mendapatkan informasi terbaru!",
+                        position: 'top',
+                        showCancelButton: true,
+                        confirmButtonText: 'Aktifkan!',
+                        cancelButtonText: 'Tidak!',
+                        reverseButtons: true,
+                        padding: '2em',
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            // swalWithBootstrapButtons.fire('Batal', 'Pengaktifan notifikasi dibatalkan', 'info');
+                        }
+                    });
             }
         }
     }, [isMounted]);

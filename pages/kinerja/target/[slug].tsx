@@ -55,10 +55,9 @@ const Index = () => {
 
     const route = useRouter();
 
-    const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
-    const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
-
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -71,9 +70,24 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            }
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const closeWindow = () => {
         if (history.length > 1) {
@@ -85,10 +99,8 @@ const Index = () => {
     }
 
     const [periodes, setPeriodes] = useState([]);
-    const [periode, setPeriode] = useState(1);
     const [subKegiatan, setSubKegiatan] = useState<any>(null);
     const [subKegiatanId, setSubKegiatanId] = useState<any>(null);
-    const [year, setYear] = useState<any>(null);
     const [month, setMonth] = useState<any>(null);
     const [datas, setDatas] = useState<any>(null);
     const [dataBackEndError, setDataBackEndError] = useState<any>(null);
@@ -252,7 +264,7 @@ const Index = () => {
     const deleteRincianBelanja = (index: any, indexRincian: any, rincianId: any) => {
         setUnsaveStatus(true);
         if (rincianId) {
-            DeleteRincianBelanja(rincianId, periode, year, month).then((data: any) => {
+            DeleteRincianBelanja(rincianId, periode?.id, year, month).then((data: any) => {
                 if (data.status == 'success') {
                     setDatas((prev: any) => {
                         const updated = [...prev];
@@ -310,7 +322,7 @@ const Index = () => {
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.isConfirmed) {
-                Save(subKegiatanId, datas, periode, year, month).then((data: any) => {
+                Save(subKegiatanId, datas, periode?.id, year, month).then((data: any) => {
                     if (data.status == 'success') {
                         getMasterData(subKegiatanId, year, month).then((data) => {
                             if (data.status == 'success') {
@@ -1586,7 +1598,7 @@ const Index = () => {
                                         )}
                                         {subKegiatan?.status === 'verified' && (
                                             <li>
-                                                <Link href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${month}`} className='flex items-center'>
+                                                <Link href={`/realisasi/${subKegiatanId}?periode=${periode?.id}&year=${year}&month=${month}`} className='flex items-center'>
                                                     <FontAwesomeIcon icon={faLink} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
                                                     <span>
                                                         Buka Realisasi

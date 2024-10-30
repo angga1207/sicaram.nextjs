@@ -27,6 +27,9 @@ import { faCog, faEdit, faEye, faTrashAlt } from '@fortawesome/free-solid-svg-ic
 import { fetchInstances, fetchInstance } from '../../apis/fetchdata';
 import { storeInstance, updateInstance, deleteInstance } from '../../apis/storedata';
 import Page403 from '@/components/Layouts/Page403';
+import IconPencil from '@/components/Icon/IconPencil';
+import IconMultipleForwardRight from '@/components/Icon/IconMultipleForwardRight';
+import IconCpuBolt from '@/components/Icon/IconCpuBolt';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -53,6 +56,8 @@ const Index = () => {
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
     const [isMounted, setIsMounted] = useState(false);
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -65,9 +70,24 @@ const Index = () => {
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            }
+        }
     }, [isMounted]);
 
-    const { t, i18n } = useTranslation();
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                setYear(currentYear);
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id])
 
     const [datas, setDatas] = useState([]);
     const [search, setSearch] = useState('');
@@ -288,56 +308,131 @@ const Index = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                         {datas?.map((data: any, index: number) => (
-                            <div className="flex items-center justify-center relative dropdown">
+                            // <div className="flex items-center justify-center relative dropdown">
 
-                                <div className="max-w-[30rem] w-full h-full bg-white hover:bg-slate-100 shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:hover:bg-slate-700 dark:shadow-none cursor-pointer">
-                                    <div className="p-5">
-                                        <div className="flex items-center flex-col sm:flex-row gap-y-4" onClick={() => editInstance(data?.id)}>
-                                            <div className="flex-1 ltr:sm:pr-5 rtl:sm:pl-5 text-center sm:text-left">
-                                                <h5 className="text-[#3b3f5c] text-[15px] font-semibold dark:text-white-light">
-                                                    {data?.name}
-                                                </h5>
-                                                <p className="mb-1 text-white-dark">
-                                                    {data?.code}
-                                                </p>
-                                                <span className="badge bg-primary rounded-full capitalize">
-                                                    {data?.status}
-                                                </span>
-                                            </div>
-                                            <div className="mb-5 min-w-20 flex flex-col items-center justify-center rounded overflow-hidden">
-                                                <div className="">
-                                                    <img src={data?.logo} alt="profile" className="w-20 h-16 object-contain" />
-                                                </div>
+                            //     <div className="max-w-[30rem] w-full h-full bg-white hover:bg-slate-100 shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:hover:bg-slate-700 dark:shadow-none cursor-pointer">
+                            //         <div className="p-5">
+                            //             <div className="flex items-center flex-col sm:flex-row gap-y-4" onClick={() => editInstance(data?.id)}>
+                            //                 <div className="flex-1 ltr:sm:pr-5 rtl:sm:pl-5 text-center sm:text-left">
+                            //                     <h5 className="text-[#3b3f5c] text-[15px] font-semibold dark:text-white-light">
+                            //                         {data?.name}
+                            //                     </h5>
+                            //                     <p className="mb-1 text-white-dark">
+                            //                         {data?.code}
+                            //                     </p>
+                            //                     <span className="badge bg-primary rounded-full capitalize">
+                            //                         {data?.status}
+                            //                     </span>
+                            //                 </div>
+                            //                 <div className="mb-5 min-w-20 flex flex-col items-center justify-center rounded overflow-hidden">
+                            //                     <div className="">
+                            //                         <img src={data?.logo} alt="profile" className="w-20 h-16 object-contain" />
+                            //                     </div>
 
-                                                <Tippy content={data?.alias}>
-                                                    <div className="text-center mt-1 font-bold text-blue-700">
-                                                        ({data?.alias})
-                                                    </div>
-                                                </Tippy>
-                                            </div>
+                            //                     <Tippy content={data?.alias}>
+                            //                         <div className="text-center mt-1 font-bold text-blue-700">
+                            //                             ({data?.alias})
+                            //                         </div>
+                            //                     </Tippy>
+                            //                 </div>
+                            //             </div>
+                            //             {/* <div className="font-semibold text-white-dark line-clamp-2" dangerouslySetInnerHTML={{ __html: data?.description }}></div> */}
+
+                            //             <div className="flex items-center justify-end gap-x-3 mt-4">
+                            //                 {/* <div>
+                            //                 <Link href={`/dashboard/` + data?.code} className='flex items-center gap-2 text-slate-400 hover:text-slate-600'>
+                            //                     <FontAwesomeIcon icon={faEye} className="text-xs w-4 h-4" />
+                            //                     Lihat
+                            //                 </Link>
+                            //             </div> */}
+                            //                 <Tippy content='Pengaturan'>
+                            //                     <button type="button" className='flex items-center gap-2 text-slate-500 hover:text-slate-700'
+                            //                         onClick={() => editInstance(data?.id)}>
+                            //                         <FontAwesomeIcon icon={faEdit} className="text-xs w-4 h-4" />
+                            //                     </button>
+                            //                 </Tippy>
+                            //                 <Tippy content='Hapus'>
+                            //                     <button type="button" className='flex items-center gap-2 text-red-500 hover:text-red-700'
+                            //                         onClick={() => confirmDelete(data?.id)}>
+                            //                         <FontAwesomeIcon icon={faTrashAlt} className="text-xs w-4 h-4" />
+                            //                     </button>
+                            //                 </Tippy>
+                            //             </div>
+                            //         </div>
+                            //     </div>
+                            // </div>
+
+
+
+                            <div className="bg-white dark:bg-[#1c232f] rounded-md overflow-hidden text-center shadow relative">
+                                <div className="bg-slate-700 rounded-t-md bg-center bg-cover p-6 pb-0" style={
+                                    {
+                                        backgroundImage: "url('/assets/images/notification-bg.png')"
+                                        // backgroundImage: data?.logo ? `url(${data?.logo})` : "url('/assets/images/notification-bg.png')"
+                                    }
+                                }>
+                                    <img className="object-contain w-4/5 h-40 mx-auto" src={data?.logo} alt="contact_image" />
+                                </div>
+                                <div className="px-2 py-4">
+                                    <Link href={`/instances/${data?.alias}`}
+                                        className="cursor-pointer group"
+                                    // onClick={(e) => {
+                                    //     e.preventDefault();
+                                    //     editInstance(data?.id)
+                                    // }}
+                                    >
+                                        <div className="text-lg font-semibold line-clamp-2 h-15 group-hover:text-primary">
+                                            {data?.name}
                                         </div>
-                                        {/* <div className="font-semibold text-white-dark line-clamp-2" dangerouslySetInnerHTML={{ __html: data?.description }}></div> */}
+                                        <div className="text-white-dark group-hover:text-primary">
+                                            ({data?.alias})
+                                        </div>
+                                    </Link>
 
-                                        <div className="flex items-center justify-end gap-x-3 mt-4">
-                                            {/* <div>
-                                            <Link href={`/dashboard/` + data?.code} className='flex items-center gap-2 text-slate-400 hover:text-slate-600'>
-                                                <FontAwesomeIcon icon={faEye} className="text-xs w-4 h-4" />
-                                                Lihat
+                                    <div className="mt-6 flex justify-center gap-4 w-full">
+
+                                        <Tippy content='Pengaturan'>
+                                            <Link
+                                                href={`/instances/${data?.alias}`}
+                                                // onClick={(e) => {
+                                                //     e.preventDefault();
+                                                //     editInstance(data?.id)
+                                                // }}
+                                                type="button"
+                                                className="btn btn-outline-primary">
+                                                <IconEdit className="w-4 h-4 mr-2" />
+                                                Edit
                                             </Link>
-                                        </div> */}
-                                            <Tippy content='Pengaturan'>
-                                                <button type="button" className='flex items-center gap-2 text-slate-500 hover:text-slate-700'
-                                                    onClick={() => editInstance(data?.id)}>
-                                                    <FontAwesomeIcon icon={faEdit} className="text-xs w-4 h-4" />
-                                                </button>
+                                        </Tippy>
+
+                                        {/* {data?.code == '4.01.0.00.0.00.01.0000' ? (
+                                            <Tippy content='Bagian'>
+                                                <Link
+                                                    href={`/instances/${data?.alias}`}
+                                                    className="btn btn-outline-warning">
+                                                    <IconCpuBolt className="w-4 h-4 mr-2" />
+                                                    Bagian
+                                                </Link>
                                             </Tippy>
-                                            <Tippy content='Hapus'>
-                                                <button type="button" className='flex items-center gap-2 text-red-500 hover:text-red-700'
-                                                    onClick={() => confirmDelete(data?.id)}>
-                                                    <FontAwesomeIcon icon={faTrashAlt} className="text-xs w-4 h-4" />
-                                                </button>
+                                        ) : (
+                                            <Tippy content='Bidang'>
+                                                <Link
+                                                    href={`/instances/${data?.alias}`}
+                                                    className="btn btn-outline-info">
+                                                    <IconCpuBolt className="w-4 h-4 mr-2" />
+                                                    Bidang
+                                                </Link>
                                             </Tippy>
-                                        </div>
+                                        )} */}
+
+                                        {/* <Tippy content='Hapus'>
+                                            <button type="button" className='btn btn-outline-danger'
+                                                onClick={() => confirmDelete(data?.id)}>
+                                                <FontAwesomeIcon icon={faTrashAlt} className="text-xs w-4 h-4" />
+                                                Hapus
+                                            </button>
+                                        </Tippy> */}
+
                                     </div>
                                 </div>
                             </div>

@@ -78,7 +78,10 @@ const Index = () => {
             setCurrentUser(user);
         }
         if (isMounted) {
-            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            }
         }
     }, [isMounted]);
 
@@ -151,8 +154,10 @@ const Index = () => {
 
 
     useEffect(() => {
-        setInstance(CurrentUser?.instance_id ?? null);
-    }, [CurrentUser]);
+        if (CurrentUser?.instance_id) {
+            setInstance(CurrentUser?.instance_id);
+        }
+    }, [isMounted, CurrentUser?.instance_id]);
 
     useEffect(() => {
         fetchPeriodes().then((data) => {
