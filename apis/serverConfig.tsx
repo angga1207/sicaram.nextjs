@@ -36,12 +36,13 @@ export async function serverCheck() {
     }
 }
 
-export async function GlobalEndPoint(_get: any) {
+export async function GlobalEndPoint(_get: any, q: any = null) {
     try {
         // aioe
         const CurrentToken = localStorage.getItem('token');
         const res = await axios.post(BaseUri() + '/aioe', {
             '_get': _get,
+            'q': q,
         }, {
             headers: {
                 'Content-Type': 'application/json',

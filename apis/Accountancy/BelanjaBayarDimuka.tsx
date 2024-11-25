@@ -1,6 +1,6 @@
 import { getCookie } from 'cookies-next';
 import axios from "axios";
-import { BaseUri } from "./serverConfig";
+import { BaseUri } from "../serverConfig";
 
 
 const CurrentToken = getCookie('token');
@@ -8,40 +8,17 @@ const CurrentToken = getCookie('token');
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 const baseUri = BaseUri();
 
-export async function getRealisasiHead(instance: any, year: any) {
+export async function getData(instance: any = null, periode: any, year:any) {
     try {
-        const res = await axios.get(baseUri + '/report/realisasi-head', {
+        const res = await axios.get(baseUri + '/accountancy/bbdm', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
                 instance: instance,
-                year: year
-            }
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-
-export async function getRealisasi(periode: number, instance: any, year: any, triwulan: any) {
-    try {
-        const res = await axios.get(baseUri + '/report/realisasi', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            params: {
                 periode: periode,
-                instance: instance,
                 year: year,
-                triwulan: triwulan
             }
         });
         const data = await res.data;
@@ -54,19 +31,17 @@ export async function getRealisasi(periode: number, instance: any, year: any, tr
     }
 }
 
-
-export async function getReportTagSumberDana(instance: any, year: any, tag: any) {
+export async function storeData(dataInput: any, periode: any, year: any) {
     try {
-        const res = await axios.get(baseUri + '/report/tag-sumber-dana', {
+        const res = await axios.post(baseUri + '/accountancy/bbdm', {
+            periode: periode,
+            year: year,
+            data: dataInput,
+        }, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
-            params: {
-                instance: instance,
-                year: year,
-                tag: tag
-            }
         });
         const data = await res.data;
         return data;
@@ -78,18 +53,16 @@ export async function getReportTagSumberDana(instance: any, year: any, tag: any)
     }
 }
 
-export async function getReportRekening(instance: any, year: any, periode: any) {
+export async function deleteData(id: any) {
     try {
-        const res = await axios.get(baseUri + '/report/kode-rekening', {
+        const res = await axios.delete(baseUri + '/accountancy/bbdm', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
-            params: {
-                instance: instance,
-                year: year,
-                periode: periode,
-            }
+            data: {
+                id: id
+            },
         });
         const data = await res.data;
         return data;

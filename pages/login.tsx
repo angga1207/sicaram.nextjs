@@ -255,11 +255,12 @@ const Login = () => {
         if (json.status == 'success') {
             localStorage.setItem('periode_id', formData.periode);
 
-            // save to cookie
-            document.cookie = `token=${data.token}; path=/; max-age=86400`;
-            document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=86400`;
-            document.cookie = `ups=${formData.password}; path=/; max-age=86400`;
-            document.cookie = `locked=false; path=/; max-age=86400`;
+            // save to cookie 34560000 / 86400
+            document.cookie = `token=${data.token}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+            document.cookie = `mytoken=${data.token}; path=/'token'; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+            document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+            document.cookie = `ups=${formData.password}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+            document.cookie = `locked=false; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
 
             let callbackUrl = '/dashboard';
 

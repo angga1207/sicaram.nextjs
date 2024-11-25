@@ -8,45 +8,17 @@ import { IRootState } from '../../store';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import IconCaretsDown from '../../components/Icon/IconCaretsDown';
-import IconMenuDashboard from '../../components/Icon/Menu/IconMenuDashboard';
 import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconMinus from '../../components/Icon/IconMinus';
-import IconMenuChat from '../../components/Icon/Menu/IconMenuChat';
-import IconMenuMailbox from '../../components/Icon/Menu/IconMenuMailbox';
-import IconMenuTodo from '../../components/Icon/Menu/IconMenuTodo';
-import IconMenuNotes from '../../components/Icon/Menu/IconMenuNotes';
-import IconMenuScrumboard from '../../components/Icon/Menu/IconMenuScrumboard';
-import IconMenuContacts from '../../components/Icon/Menu/IconMenuContacts';
-import IconMenuInvoice from '../../components/Icon/Menu/IconMenuInvoice';
-import IconMenuCalendar from '../../components/Icon/Menu/IconMenuCalendar';
-import IconMenuComponents from '../../components/Icon/Menu/IconMenuComponents';
-import IconMenuElements from '../../components/Icon/Menu/IconMenuElements';
-import IconMenuCharts from '../../components/Icon/Menu/IconMenuCharts';
-import IconMenuWidgets from '../../components/Icon/Menu/IconMenuWidgets';
-import IconMenuFontIcons from '../../components/Icon/Menu/IconMenuFontIcons';
-import IconMenuDragAndDrop from '../../components/Icon/Menu/IconMenuDragAndDrop';
-import IconMenuTables from '../../components/Icon/Menu/IconMenuTables';
-import IconMenuDatatables from '../../components/Icon/Menu/IconMenuDatatables';
-import IconMenuForms from '../../components/Icon/Menu/IconMenuForms';
 import IconMenuUsers from '../../components/Icon/Menu/IconMenuUsers';
-import IconMenuPages from '../../components/Icon/Menu/IconMenuPages';
-import IconMenuAuthentication from '../../components/Icon/Menu/IconMenuAuthentication';
-import IconMenuDocumentation from '../../components/Icon/Menu/IconMenuDocumentation';
-import IconListCheck from '../Icon/IconListCheck';
-import IconOpenBook from '../Icon/IconOpenBook';
-import IconNotesEdit from '../Icon/IconNotesEdit';
-import IconLaptop from '../Icon/IconLaptop';
-import IconAirplay from '../Icon/IconAirplay';
-import IconDollarSign from '../Icon/IconDollarSign';
-import IconDollarSignCircle from '../Icon/IconDollarSignCircle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faMoneyBills, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
 import { faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.4a.1";
+    const APP_VERSION = "2.4c.1";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -611,6 +583,85 @@ const Sidebar = () => {
                                             </div>
                                         </Link>
                                     </li>
+
+                                    {([1].includes(CurrentUser?.role_id)) && (
+                                        <>
+                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                                <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <span>
+                                                    Akuntansi
+                                                </span>
+                                            </h2>
+
+                                            <li className="menu nav-item">
+                                                <Link href="/accountancy" className="group">
+                                                    <div className="flex items-center">
+                                                        <FontAwesomeIcon icon={faMoneyBills} className='shrink-0 group-hover:!text-primary' />
+                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                            Akuntansi
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
+
+                                    {/* <li className="menu nav-item">
+                                        <Link href={`/accountancy`}
+                                            type="button"
+                                            className={`${currentMenu === 'accountancy' ? 'active' : ''} nav-link group w-full`}
+                                            onClick={() => toggleMenu('accountancy')}>
+                                            <div className="flex items-center">
+                                                <FontAwesomeIcon icon={faHomeUser} className='shrink-0 group-hover:!text-primary' />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    Akuntansi
+                                                </span>
+                                            </div>
+                                            <div className={currentMenu !== 'accountancy' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                                <IconCaretDown />
+                                            </div>
+                                        </Link>
+
+                                        <AnimateHeight duration={300} height={currentMenu === 'accountancy' ? 'auto' : 0}>
+                                            <ul className="sub-menu text-gray-500">
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        Rekonsiliasi Aset
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        Penyesuaian Aset dan Beban
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        LRA Pendapatan dan Belanja
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        Beban Laporan Operasional
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        Hutang
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        Belanja Bayar Dimuka
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/dashboard">
+                                                        Pendapatan LRA LO
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        </AnimateHeight>
+                                    </li> */}
 
                                     {([1, 2, 4].includes(CurrentUser?.role_id)) && (
                                         <>

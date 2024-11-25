@@ -142,7 +142,7 @@ const Index = () => {
                     hollow: {
                         margin: 0,
                         size: '50%',
-                        background: 'transparent',
+                        background: '#fff',
                         image: undefined,
                         imageOffsetX: 0,
                         imageOffsetY: 0,
@@ -225,7 +225,7 @@ const Index = () => {
                     hollow: {
                         margin: 0,
                         size: '50%',
-                        background: 'transparent',
+                        background: '#fff',
                         image: undefined,
                         imageOffsetX: 0,
                         imageOffsetY: 0,
@@ -314,7 +314,18 @@ const Index = () => {
 
                             {percentageAnggaranSummary ? (
                                 <>
-                                    <div className="absolute top-[30%] inset-x-0 group-hover:top-[25%] transition-all delay-100 duration-300">
+
+                                    <div className="absolute top-0 inset-x-0">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            src="/lottie/animation-6.json"
+                                            className='w-[100%] h-[500px]'
+                                        >
+                                        </Player>
+                                    </div>
+
+                                    <div className="absolute z-[1] top-[30%] inset-x-0 group-hover:top-[25%] transition-all delay-100 duration-300">
                                         <Player
                                             autoplay
                                             loop
@@ -326,7 +337,10 @@ const Index = () => {
 
                                     <Link href={`/dashboard/capaian-keuangan`} className=''>
                                         {isMounted ? (
-                                            <ReactApexChart series={chartCapaianKeuangan.series} options={chartCapaianKeuangan.options} type="radialBar" height={500} width={'100%'} />
+                                            <ReactApexChart
+                                                series={chartCapaianKeuangan.series}
+                                                options={chartCapaianKeuangan.options}
+                                                type="radialBar" height={500} width={'100%'} />
                                         ) : (
                                             <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
                                                 <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
@@ -357,7 +371,18 @@ const Index = () => {
 
                             {KinerjaSummary?.realisasi ? (
                                 <>
-                                    <div className="absolute top-[30%] inset-x-0 group-hover:top-[25%] transition-all delay-100 duration-300">
+
+                                    <div className="absolute -top-7 inset-x-0">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            src="/lottie/animation-7.json"
+                                            className='w-[100%] h-[600px]'
+                                        >
+                                        </Player>
+                                    </div>
+
+                                    <div className="absolute z-[1] top-[30%] inset-x-0 group-hover:top-[25%] transition-all delay-100 duration-300">
                                         <Player
                                             autoplay
                                             loop
