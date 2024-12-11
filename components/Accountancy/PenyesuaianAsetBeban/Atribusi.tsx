@@ -82,6 +82,9 @@ const Atribusi = (data: any) => {
         if (paramData[1]?.length > 0) {
             setArrKodeRekening(paramData[1])
         }
+        if (paramData[4]) {
+            setInstance(paramData[4]);
+        }
     }, [isMounted, paramData]);
 
     const [dataInput, setDataInput] = useState<any>([]);
@@ -138,8 +141,18 @@ const Atribusi = (data: any) => {
     }
 
     useEffect(() => {
-        if (isMounted) {
-            setInstance(CurrentUser?.instance_id ?? '');
+        // if (isMounted) {
+        //     setInstance(CurrentUser?.instance_id ?? '');
+        //     _getDatas();
+        // }
+        if (isMounted && periode?.id && year && !instance) {
+            if ([9].includes(CurrentUser?.role_id)) {
+                setInstance(CurrentUser?.instance_id ?? '');
+            } else {
+                _getDatas();
+            }
+        }
+        else if (isMounted && periode?.id && year && instance) {
             _getDatas();
         }
     }, [isMounted, instance, year])
@@ -210,15 +223,15 @@ const Atribusi = (data: any) => {
             const updated = [...prevData];
 
             const keysToSumBelPeg = ['bel_peg_belanja_last_year', 'bel_peg_hutang_last_year'];
-            const sumBelPeg = keysToSumBelPeg.reduce((acc, key) => acc + (data[index][key] || 0), 0);
+            const sumBelPeg = keysToSumBelPeg.reduce((acc, key) => acc + (parseFloat(data[index][key]) || 0), 0);
             updated[index]['bel_peg_jumlah'] = sumBelPeg;
 
             const keyToSumBelBarjas = ['bel_barjas_belanja', 'bel_barjas_hutang'];
-            const sumBelBarjas = keyToSumBelBarjas.reduce((acc, key) => acc + (data[index][key] || 0), 0);
+            const sumBelBarjas = keyToSumBelBarjas.reduce((acc, key) => acc + (parseFloat(data[index][key]) || 0), 0);
             updated[index]['bel_barjas_jumlah'] = sumBelBarjas;
 
             const keyToSumBelModal = ['bel_modal_belanja', 'bel_modal_hutang'];
-            const sumBelModal = keyToSumBelModal.reduce((acc, key) => acc + (data[index][key] || 0), 0);
+            const sumBelModal = keyToSumBelModal.reduce((acc, key) => acc + (parseFloat(data[index][key]) || 0), 0);
             updated[index]['bel_modal_jumlah'] = sumBelModal;
 
             // const keysToSumAtri = [
@@ -296,7 +309,7 @@ const Atribusi = (data: any) => {
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 left-0 z-[1]'>
+                        <tr className='sticky top-0 left-0 z-[1] !bg-slate-900 !text-white'>
                             {([9].includes(CurrentUser?.role_id) == false) && (
                                 <th rowSpan={2}
                                     className='whitespace-nowrap border text-center'>
@@ -323,21 +336,21 @@ const Atribusi = (data: any) => {
                             <th rowSpan={1}
                                 className='!bg-white border !px-2'></th>
                             <th colSpan={2}
-                                className="text-center bg-green-200">
+                                className="text-center bg-green-300 !text-slate-900">
                                 Keterangan
                             </th>
                             <th rowSpan={1}
                                 className='!bg-white border !px-2'></th>
                             <th colSpan={7}
-                                className="text-center bg-yellow-200">
+                                className="text-center bg-yellow-300 !text-slate-900">
                                 Atribusi/ Kapitalisasi ke Kelompok Aset (Rp)
                             </th>
                             <th rowSpan={2}
-                                className='whitespace-nowrap border text-center bg-yellow-200'>
+                                className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Keterangan - No Kontrak/ No SP2D
                             </th>
                         </tr>
-                        <tr className='sticky top-[45px] left-0 z-[1]'>
+                        <tr className='sticky top-[45px] left-0 z-[1] !bg-slate-900 !text-white'>
                             <th className='whitespace-nowrap border'>
                                 Kode Rekening
                             </th>
@@ -392,34 +405,34 @@ const Atribusi = (data: any) => {
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border bg-green-300 !text-slate-900'>
                                 No Kontrak Pegawai / Barang Jasa
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border bg-green-300 !text-slate-900'>
                                 No SP2D Pegawai / Barang Jasa
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Konstruksi Dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
                                 Aset Lain-lain
                             </th>
 
@@ -573,141 +586,108 @@ const Atribusi = (data: any) => {
 
                                 <td className='border'>
                                     {/* Belanja Last Year */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Belanja"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_peg_belanja_last_year}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_peg_belanja_last_year'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.bel_peg_belanja_last_year}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['bel_peg_belanja_last_year'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_peg_belanja_last_year)}
                                         </div>
                                     </div>
                                 </td>
 
                                 <td className='border'>
                                     {/* Hutang Last Year */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Hutang"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_peg_hutang_last_year}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_peg_hutang_last_year'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.bel_peg_hutang_last_year}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['bel_peg_hutang_last_year'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_peg_hutang_last_year)}
                                         </div>
                                     </div>
                                 </td>
 
                                 <td className='border'>
                                     {/* Belanja Pegawai Jumlah */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Jumlah"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_peg_jumlah}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_peg_jumlah'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-100">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_peg_jumlah)}
                                         </div>
                                     </div>
                                 </td>
@@ -720,36 +700,34 @@ const Atribusi = (data: any) => {
                                 {/* BELANJA BARANG DAN JASA */}
                                 <td className='border'>
                                     {/* Kode Rekening */}
-                                    <div className="">
-                                        <Select placeholder="Pilih Kode Rekening"
-                                            className='min-w-[400px]'
-                                            onChange={(e: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['bel_barjas_kode_rekening_id'] = e?.value;
-                                                    updated[index]['bel_barjas_nama_rekening_rincian_paket'] = arrKodeRekening?.filter((data: any, index: number) => data?.id === e.value)[0].name
-                                                    return updated;
-                                                })
-                                            }}
-                                            value={
-                                                arrKodeRekening?.map((data: any, index: number) => {
-                                                    if (data.id == input.bel_barjas_kode_rekening_id) {
-                                                        return {
-                                                            value: data.id,
-                                                            label: data.fullcode + ' - ' + data.name,
-                                                        }
-                                                    }
-                                                })
-                                            }
-                                            options={
-                                                arrKodeRekening?.map((data: any, index: number) => {
+                                    <Select placeholder="Pilih Kode Rekening"
+                                        className='min-w-[400px]'
+                                        onChange={(e: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['bel_barjas_kode_rekening_id'] = e?.value;
+                                                updated[index]['bel_barjas_nama_rekening_rincian_paket'] = arrKodeRekening?.filter((data: any, index: number) => data?.id === e.value)[0].name
+                                                return updated;
+                                            })
+                                        }}
+                                        value={
+                                            arrKodeRekening?.map((data: any, index: number) => {
+                                                if (data.id == input.bel_barjas_kode_rekening_id) {
                                                     return {
                                                         value: data.id,
                                                         label: data.fullcode + ' - ' + data.name,
                                                     }
-                                                })
-                                            } />
-                                    </div>
+                                                }
+                                            })
+                                        }
+                                        options={
+                                            arrKodeRekening?.map((data: any, index: number) => {
+                                                return {
+                                                    value: data.id,
+                                                    label: data.fullcode + ' - ' + data.name,
+                                                }
+                                            })
+                                        } />
                                 </td>
 
                                 <td className='border'>
@@ -776,141 +754,108 @@ const Atribusi = (data: any) => {
 
                                 <td className='border'>
                                     {/* Belanja */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Belanja"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_barjas_belanja}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_barjas_belanja'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.bel_barjas_belanja}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['bel_barjas_belanja'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_barjas_belanja)}
                                         </div>
                                     </div>
                                 </td>
 
                                 <td className='border'>
                                     {/* Hutang Last Year */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Hutang"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_barjas_hutang}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_barjas_hutang'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.bel_barjas_hutang}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['bel_barjas_hutang'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_barjas_hutang)}
                                         </div>
                                     </div>
                                 </td>
 
                                 <td className='border'>
                                     {/* Belanja Pegawai Jumlah */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Jumlah"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_barjas_jumlah}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_barjas_jumlah'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-100">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_barjas_jumlah)}
                                         </div>
                                     </div>
                                 </td>
@@ -979,141 +924,108 @@ const Atribusi = (data: any) => {
 
                                 <td className='border'>
                                     {/* Belanja */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Belanja"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_modal_belanja}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_modal_belanja'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.bel_modal_belanja}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['bel_modal_belanja'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_modal_belanja)}
                                         </div>
                                     </div>
                                 </td>
 
                                 <td className='border'>
                                     {/* Hutang Last Year */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Hutang"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_modal_hutang}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_modal_hutang'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.bel_modal_hutang}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['bel_modal_hutang'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_modal_hutang)}
                                         </div>
                                     </div>
                                 </td>
 
                                 <td className='border'>
                                     {/* Belanja Pegawai Jumlah */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Jumlah"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.bel_modal_jumlah}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['bel_modal_jumlah'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-100">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.bel_modal_jumlah)}
                                         </div>
                                     </div>
                                 </td>
@@ -1176,323 +1088,330 @@ const Atribusi = (data: any) => {
                                 {/* ATRIBUSI */}
                                 <td className='border'>
                                     {/* Aset Tetap Tanah */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Aset Tetap Tanah"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_aset_tetap_tanah}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_aset_tetap_tanah}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_aset_tetap_tanah)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border'>
                                     {/* Aset Tetap Peralatan dan Mesin */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Aset Tetap Peralatan dan Mesin"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_aset_tetap_peralatan_mesin}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_aset_tetap_peralatan_mesin}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_aset_tetap_peralatan_mesin)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border'>
                                     {/* Aset Tetap Gedung dan Bangunan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Aset Tetap Gedung dan Bangunan"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_aset_tetap_gedung_bangunan}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_aset_tetap_gedung_bangunan}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_aset_tetap_gedung_bangunan)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border'>
                                     {/* Aset Tetap Jalan Jaringan Irigasi */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Aset Tetap Jalan Jaringan Irigasi"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_aset_tetap_jalan_jaringan_irigasi}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_aset_tetap_jalan_jaringan_irigasi}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_aset_tetap_jalan_jaringan_irigasi)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border'>
                                     {/* Aset Tetap Lainnya */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Aset Tetap Lainnya"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_aset_tetap_tetap_lainnya}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_aset_tetap_tetap_lainnya'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_aset_tetap_tetap_lainnya}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_aset_tetap_tetap_lainnya'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_aset_tetap_tetap_lainnya)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border'>
                                     {/* Konstruksi Dalam Pekerjaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Konstruksi Dalam Pekerjaan"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_konstruksi_dalam_pekerjaan}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_konstruksi_dalam_pekerjaan}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_konstruksi_dalam_pekerjaan)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border'>
                                     {/* Aset Lain-lain */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Aset Lain-lain"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.atri_aset_lain_lain}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['atri_aset_lain_lain'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.atri_aset_lain_lain}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['atri_aset_lain_lain'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.atri_aset_lain_lain)}
                                         </div>
                                     </div>
                                 </td>
@@ -1529,61 +1448,61 @@ const Atribusi = (data: any) => {
                             </td>
 
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_peg_belanja_last_year)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_peg_belanja_last_year)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_peg_hutang_last_year)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_peg_hutang_last_year)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_peg_jumlah)}
-                            </td>
-
-                            <td colSpan={3} className='!bg-slate-300'></td>
-
-                            <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_barjas_belanja)}
-                            </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_barjas_hutang)}
-                            </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_barjas_jumlah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_peg_jumlah)}
                             </td>
 
                             <td colSpan={3} className='!bg-slate-300'></td>
 
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_modal_belanja)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_barjas_belanja)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_modal_hutang)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_barjas_hutang)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.bel_modal_jumlah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_barjas_jumlah)}
+                            </td>
+
+                            <td colSpan={3} className='!bg-slate-300'></td>
+
+                            <td className='text-end font-semibold !bg-slate-300'>
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_modal_belanja)}
+                            </td>
+                            <td className='text-end font-semibold !bg-slate-300'>
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_modal_hutang)}
+                            </td>
+                            <td className='text-end font-semibold !bg-slate-300'>
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_modal_jumlah)}
                             </td>
 
                             <td colSpan={4} className='!bg-slate-300'></td>
 
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_aset_tetap_tanah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_tetap_tanah)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_aset_tetap_peralatan_mesin)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_tetap_peralatan_mesin)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_aset_tetap_gedung_bangunan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_tetap_gedung_bangunan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_aset_tetap_jalan_jaringan_irigasi)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_tetap_jalan_jaringan_irigasi)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_aset_tetap_tetap_lainnya)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_tetap_tetap_lainnya)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_konstruksi_dalam_pekerjaan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_konstruksi_dalam_pekerjaan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.atri_aset_lain_lain)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_lain_lain)}
                             </td>
 
                             <td className='text-end font-semibold !bg-slate-300'></td>

@@ -20,20 +20,20 @@ import { faThList } from '@fortawesome/free-solid-svg-icons';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import { GlobalEndPoint } from '@/apis/serverConfig';
 import IconArrowBackward from '@/components/Icon/IconArrowBackward';
-import Rekap from '@/components/AssetsReconciliation/Rekap';
-import RekapOPD from '@/components/AssetsReconciliation/RekapOPD';
-import RekapAsetTetap from '@/components/AssetsReconciliation/RekapAsetTetap';
-import RekapBelanja from '@/components/AssetsReconciliation/RekapBelanja';
-import KIB_A from '@/components/AssetsReconciliation/KIB_A';
-import KIB_B from '@/components/AssetsReconciliation/KIB_B';
-import KIB_C from '@/components/AssetsReconciliation/KIB_C';
-import KIB_D from '@/components/AssetsReconciliation/KIB_D';
-import KIB_E from '@/components/AssetsReconciliation/KIB_E';
-import KDP from '@/components/AssetsReconciliation/KDP';
-import AsetTakBerwujud from '@/components/AssetsReconciliation/AsetTakBerwujud';
-import AsetLainLain from '@/components/AssetsReconciliation/AsetLainLain';
-import RekapAsetLainnya from '@/components/AssetsReconciliation/RekapAsetLainnya';
-import Penyusutan from '@/components/AssetsReconciliation/Penyusutan';
+import Rekap from '@/components/Accountancy/AssetsReconciliation/Rekap';
+import RekapOPD from '@/components/Accountancy/AssetsReconciliation/RekapOPD';
+import RekapAsetTetap from '@/components/Accountancy/AssetsReconciliation/RekapAsetTetap';
+import RekapBelanja from '@/components/Accountancy/AssetsReconciliation/RekapBelanja';
+import KIB_A from '@/components/Accountancy/AssetsReconciliation/KIB_A';
+import KIB_B from '@/components/Accountancy/AssetsReconciliation/KIB_B';
+import KIB_C from '@/components/Accountancy/AssetsReconciliation/KIB_C';
+import KIB_D from '@/components/Accountancy/AssetsReconciliation/KIB_D';
+import KIB_E from '@/components/Accountancy/AssetsReconciliation/KIB_E';
+import KDP from '@/components/Accountancy/AssetsReconciliation/KDP';
+import AsetTakBerwujud from '@/components/Accountancy/AssetsReconciliation/AsetTakBerwujud';
+import AsetLainLain from '@/components/Accountancy/AssetsReconciliation/AsetLainLain';
+import RekapAsetLainnya from '@/components/Accountancy/AssetsReconciliation/RekapAsetLainnya';
+import Penyusutan from '@/components/Accountancy/AssetsReconciliation/Penyusutan';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -78,6 +78,7 @@ const Page = () => {
     const [isMounted, setIsMounted] = useState(false);
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
+    const [years, setYears] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
@@ -113,6 +114,24 @@ const Page = () => {
         }
     }, [isMounted, periode?.id])
 
+    useEffect(() => {
+        if (isMounted) {
+            setYears([]);
+            if (periode?.id) {
+                if (year >= periode?.start_year && year <= periode?.end_year) {
+                    for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                        setYears((years: any) => [
+                            ...years,
+                            {
+                                label: i,
+                                value: i,
+                            },
+                        ]);
+                    }
+                }
+            }
+        }
+    }, [isMounted, year, periode?.id])
 
     const [instance, setInstance] = useState<any>((router.query.instance ?? null) ?? CurrentUser?.instance_id);
     const [instances, setInstances] = useState<any>([]);
@@ -140,11 +159,11 @@ const Page = () => {
 
     useEffect(() => {
         if (isMounted && arrKodeRekening?.length === 0) {
-            GlobalEndPoint('kode_rekening', 'where|code_6|!=|null').then((res: any) => {
-                if (res.status === 'success') {
-                    setArrKodeRekening(res.data);
-                }
-            });
+            // GlobalEndPoint('kode_rekening', 'where|code_6|!=|null').then((res: any) => {
+            //     if (res.status === 'success') {
+            //         setArrKodeRekening(res.data);
+            //     }
+            // });
         }
     }, [isMounted]);
 
@@ -159,6 +178,58 @@ const Page = () => {
                     </h2>
 
                     <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
+
+                        {[1, 12].includes(CurrentUser?.role_id) && (
+                            <div className="">
+                                <Select placeholder="Kabupaten Ogan Ilir"
+                                    className='min-w-[300px] max-w-[300px] z-[2]'
+                                    onChange={(e: any) => {
+                                        if ([9].includes(CurrentUser?.role_id)) {
+                                            showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                        } else {
+                                            setInstance(e?.value);
+                                        }
+                                    }}
+                                    isLoading={instances?.length === 0}
+                                    isClearable={true}
+                                    isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                                    value={
+                                        instances?.map((data: any, index: number) => {
+                                            if (data.id == instance) {
+                                                return {
+                                                    value: data.id,
+                                                    label: data.name,
+                                                }
+                                            }
+                                        })
+                                    }
+                                    options={
+                                        instances?.map((data: any, index: number) => {
+                                            return {
+                                                value: data.id,
+                                                label: data.name,
+                                            }
+                                        })
+                                    } />
+                            </div>
+                        )}
+
+                        <div className="">
+                            <Select
+                                className="min-w-[200px]"
+                                id="tahun"
+                                options={years}
+                                value={years?.find((option: any) => option.value === year)}
+                                onChange={(e: any) => {
+                                    setYear(e.value)
+                                }}
+                                isSearchable={false}
+                                isClearable={false}
+                                classNamePrefix={'selectAngga'}
+                                isDisabled={(years?.length === 0) || false}
+                            />
+                            <div className='text-danger text-xs error-validation' id="error-year"></div>
+                        </div>
 
                         <Link href={`/accountancy`}
                             className="btn btn-secondary whitespace-nowrap text-xs">
@@ -305,7 +376,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="active pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <Rekap data={isMounted && [instances, arrKodeRekening]} />
+                                        <Rekap data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -313,7 +386,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <RekapOPD data={isMounted && [instances, arrKodeRekening]} />
+                                        <RekapOPD data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -321,7 +396,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <RekapAsetTetap data={isMounted && [instances, arrKodeRekening]} />
+                                        <RekapAsetTetap data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -329,7 +406,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <RekapBelanja data={isMounted && [instances, arrKodeRekening]} />
+                                        <RekapBelanja data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -337,7 +416,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <KIB_A data={isMounted && [instances, arrKodeRekening]} />
+                                        <KIB_A data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -345,7 +426,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <KIB_B data={isMounted && [instances, arrKodeRekening]} />
+                                        <KIB_B data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -353,7 +436,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <KIB_C data={isMounted && [instances, arrKodeRekening]} />
+                                        <KIB_C data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -361,7 +446,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <KIB_D data={isMounted && [instances, arrKodeRekening]} />
+                                        <KIB_D data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -369,7 +456,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <KIB_E data={isMounted && [instances, arrKodeRekening]} />
+                                        <KIB_E data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -377,7 +466,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <KDP data={isMounted && [instances, arrKodeRekening]} />
+                                        <KDP data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -385,7 +476,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <AsetTakBerwujud data={isMounted && [instances, arrKodeRekening]} />
+                                        <AsetTakBerwujud data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -393,7 +486,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <AsetLainLain data={isMounted && [instances, arrKodeRekening]} />
+                                        <AsetLainLain data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -401,7 +496,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <RekapAsetLainnya data={isMounted && [instances, arrKodeRekening]} />
+                                        <RekapAsetLainnya data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>
@@ -409,7 +506,9 @@ const Page = () => {
                             <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
-                                        <Penyusutan data={isMounted && [instances, arrKodeRekening]} />
+                                        <Penyusutan data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                            key={[year, instance]}
+                                        />
                                     )}
                                 </div>
                             </Tab.Panel>

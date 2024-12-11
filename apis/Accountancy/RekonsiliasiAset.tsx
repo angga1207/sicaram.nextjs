@@ -8,9 +8,11 @@ const CurrentToken = getCookie('token');
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 const baseUri = BaseUri();
 
-export async function getPenyesuaianBebanBarjas(instance: any = null, periode: any, year: any) {
+// Rekap Belanja Start
+export async function getRekapBelanja(instance: any, periode: any, year: any) {
+    // /accountancy/rekon-aset/rekap-belanja
     try {
-        const res = await axios.get(baseUri + '/accountancy/padb/1', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/rekap-belanja', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
@@ -31,9 +33,10 @@ export async function getPenyesuaianBebanBarjas(instance: any = null, periode: a
     }
 }
 
-export async function storePenyesuaianBebanBarjas(dataInput: any, periode: any, year: any) {
+export async function saveRekapBelanja(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/1', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/rekap-belanja', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -52,40 +55,20 @@ export async function storePenyesuaianBebanBarjas(dataInput: any, periode: any, 
         }
     }
 }
+// Rekap Belanja End
 
-export async function deletePenyesuaianBebanBarjas(id: any) {
+// KIB A Start
+export async function getKibA(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/1', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-
-
-export async function getModalKeBeban(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/2', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/kib_a', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -98,9 +81,10 @@ export async function getModalKeBeban(instance: any = null, periode: any, year: 
     }
 }
 
-export async function storeModalKeBeban(dataInput: any, periode: any, year: any) {
+export async function saveKibA(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/2', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/kib_a', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -119,40 +103,20 @@ export async function storeModalKeBeban(dataInput: any, periode: any, year: any)
         }
     }
 }
+// KIB A End
 
-export async function deleteModalKeBeban(id: any) {
+// KIB B Start
+export async function getKibB(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/2', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-
-
-export async function getBarjasKeAset(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/3', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/kib_b', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -165,9 +129,10 @@ export async function getBarjasKeAset(instance: any = null, periode: any, year: 
     }
 }
 
-export async function storeBarjasKeAset(dataInput: any, periode: any, year: any) {
+export async function saveKibB(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/3', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/kib_b', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -186,40 +151,20 @@ export async function storeBarjasKeAset(dataInput: any, periode: any, year: any)
         }
     }
 }
+// KIB B End
 
-export async function deleteBarjasKeAset(id: any) {
+// KIB C Start
+export async function getKibC(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/3', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-
-
-export async function getPenyesuaianAset(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/4', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/kib_c', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -232,9 +177,10 @@ export async function getPenyesuaianAset(instance: any = null, periode: any, yea
     }
 }
 
-export async function storePenyesuaianAset(dataInput: any, periode: any, year: any) {
+export async function saveKibC(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/4', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/kib_c', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -253,40 +199,20 @@ export async function storePenyesuaianAset(dataInput: any, periode: any, year: a
         }
     }
 }
+// KIB C End
 
-export async function deletePenyesuaianAset(id: any) {
+// KIB D Start
+export async function getKibD(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/4', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-
-
-export async function getAtribusi(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/5', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/kib_d', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -299,9 +225,10 @@ export async function getAtribusi(instance: any = null, periode: any, year: any)
     }
 }
 
-export async function storeAtribusi(dataInput: any, periode: any, year: any) {
+export async function saveKibD(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/5', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/kib_d', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -320,42 +247,20 @@ export async function storeAtribusi(dataInput: any, periode: any, year: any) {
         }
     }
 }
+// KIB D End
 
-export async function deleteAtribusi(id: any) {
+// KIB E Start
+export async function getKibE(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/5', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-
-
-// Kertas Kerja Tambahan
-// Mutasi Aset
-export async function getMutasiAset(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/6.1', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/kib_e', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -367,9 +272,11 @@ export async function getMutasiAset(instance: any = null, periode: any, year: an
         }
     }
 }
-export async function storeMutasiAset(dataInput: any, periode: any, year: any) {
+
+export async function saveKibE(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/6.1', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/kib_e', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -388,41 +295,20 @@ export async function storeMutasiAset(dataInput: any, periode: any, year: any) {
         }
     }
 }
+// KIB E End
 
-export async function deleteMutasiAset(id: any) {
+// Aset Lain-lain Start
+export async function getAsetLainLain(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/6.1', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// Mutasi Aset
-
-// Dafter Pekerjaan
-export async function getDaftarPekerjaan(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/6.2', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/aset-lain-lain', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -434,9 +320,11 @@ export async function getDaftarPekerjaan(instance: any = null, periode: any, yea
         }
     }
 }
-export async function storeDaftarPekerjaan(dataInput: any, periode: any, year: any) {
+
+export async function saveAsetLainLain(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/6.2', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/aset-lain-lain', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -455,41 +343,20 @@ export async function storeDaftarPekerjaan(dataInput: any, periode: any, year: a
         }
     }
 }
+// Aset Lain-lain End
 
-export async function deleteDaftarPekerjaan(id: any) {
+// KDP Start
+export async function getKDP(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/6.2', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// Dafter Pekerjaan
-
-// Hibah Masuk
-export async function getHibahMasuk(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/6.3', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/kdp', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -501,9 +368,11 @@ export async function getHibahMasuk(instance: any = null, periode: any, year: an
         }
     }
 }
-export async function storeHibahMasuk(dataInput: any, periode: any, year: any) {
+
+export async function saveKDP(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/6.3', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/kdp', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -522,41 +391,20 @@ export async function storeHibahMasuk(dataInput: any, periode: any, year: any) {
         }
     }
 }
+// KDP End
 
-export async function deleteHibahMasuk(id: any) {
+// AsetTakBerwujud Start
+export async function getAsetTakBerwujud(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/6.3', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// Hibah Masuk
-
-// Hibah Keluar
-export async function getHibahKeluar(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/6.4', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/aset-tak-berwujud', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -568,9 +416,11 @@ export async function getHibahKeluar(instance: any = null, periode: any, year: a
         }
     }
 }
-export async function storeHibahKeluar(dataInput: any, periode: any, year: any) {
+
+export async function saveAsetTakBerwujud(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/6.4', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/aset-tak-berwujud', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -589,41 +439,20 @@ export async function storeHibahKeluar(dataInput: any, periode: any, year: any) 
         }
     }
 }
+// AsetTakBerwujud End
 
-export async function deleteHibahKeluar(id: any) {
+// RekapAsetLainnya Start
+export async function getRekapAsetLainnya(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/6.4', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// Hibah Keluar
-
-// PenilaianAset
-export async function getPenilaianAset(instance: any = null, periode: any, year: any) {
-    try {
-        const res = await axios.get(baseUri + '/accountancy/padb/7', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/rekap-aset-lainnya', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -635,9 +464,11 @@ export async function getPenilaianAset(instance: any = null, periode: any, year:
         }
     }
 }
-export async function storePenilaianAset(dataInput: any, periode: any, year: any) {
+
+export async function saveRekapAsetLainnya(instance: any, periode: any, year: any, dataInput: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/7', {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/rekap-aset-lainnya', {
+            instance: dataInput?.instance_id,
             periode: periode,
             year: year,
             data: dataInput,
@@ -656,40 +487,20 @@ export async function storePenilaianAset(dataInput: any, periode: any, year: any
         }
     }
 }
-export async function deletePenilaianAset(id: any) {
-    try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/7', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// PenilaianAset
+// RekapAsetLainnya End
 
-// PenghapusanAset
-export async function getPenghapusanAset(instance: any = null, periode: any, year: any) {
+// RekapAsetTetap Start
+export async function getRekapAsetTetap(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.get(baseUri + '/accountancy/padb/8', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/rekap-aset-tetap', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -701,61 +512,20 @@ export async function getPenghapusanAset(instance: any = null, periode: any, yea
         }
     }
 }
-export async function storePenghapusanAset(dataInput: any, periode: any, year: any) {
-    try {
-        const res = await axios.post(baseUri + '/accountancy/padb/8', {
-            periode: periode,
-            year: year,
-            data: dataInput,
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-export async function deletePenghapusanAset(id: any) {
-    try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/8', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// PenghapusanAset
+// RekapAsetTetap End
 
-// PenjualanAset
-export async function getPenjualanAset(instance: any = null, periode: any, year: any) {
+// RekapOPD Start
+export async function getRekapOPD(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.get(baseUri + '/accountancy/padb/9', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/rekap-opd', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                instance: instance,
                 periode: periode,
                 year: year,
-                instance: instance,
             }
         });
         const data = await res.data;
@@ -767,9 +537,61 @@ export async function getPenjualanAset(instance: any = null, periode: any, year:
         }
     }
 }
-export async function storePenjualanAset(dataInput: any, periode: any, year: any) {
+// RekapOPD End
+
+// Rekap Start
+export async function getRekap(instance: any, periode: any, year: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/padb/9', {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/rekap', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                periode: periode,
+                year: year,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+// Rekap End
+
+// Penyusutan Start
+export async function getPenyusutan(instance: any, periode: any, year: any) {
+    try {
+        const res = await axios.get(baseUri + '/accountancy/rekon-aset/penyusutan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                periode: periode,
+                year: year,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function savePenyusutan(instance: any, periode: any, year: any, dataInput: any) {
+    try {
+        const res = await axios.post(baseUri + '/accountancy/rekon-aset/penyusutan', {
+            instance: instance,
             periode: periode,
             year: year,
             data: dataInput,
@@ -782,30 +604,11 @@ export async function storePenjualanAset(dataInput: any, periode: any, year: any
         const data = await res.data;
         return data;
     } catch (error) {
+        console.log('error', error);
         return {
             status: 'error',
             message: error
         }
     }
 }
-export async function deletePenjualanAset(id: any) {
-    try {
-        const res = await axios.delete(baseUri + '/accountancy/padb/9', {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
-            },
-            data: {
-                id: id
-            },
-        });
-        const data = await res.data;
-        return data;
-    } catch (error) {
-        return {
-            status: 'error',
-            message: error
-        }
-    }
-}
-// PenjualanAset
+// Penyusutan End

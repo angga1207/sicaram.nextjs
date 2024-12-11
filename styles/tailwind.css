@@ -736,3 +736,8 @@ pre.hljs {
         clip-path: inset(0 -1ch 0 0);
     }
 }
+
+
+.selectAngga__menu {
+    z-index: 10 !important;
+}

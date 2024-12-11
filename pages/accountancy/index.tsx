@@ -108,6 +108,24 @@ const Page = () => {
             <div className="mt-4">
                 <div className="flex items-center justify-center gap-x-6 gap-y-4 flex-wrap">
 
+                    <Tippy content="Import & Detail LRA" placement='bottom'>
+                        <Link
+                            href="/accountancy/import-lra"
+                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/accountant-8.json"
+                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
+                            <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                Import & Detail LRA
+                            </div>
+                        </Link>
+                    </Tippy>
+
                     <Tippy content="Rekonsiliasi Aset" placement='bottom'>
                         <Link
                             href="/accountancy/rekonsiliasi-aset"
@@ -143,7 +161,25 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    <Tippy content="LRA Pendapatan dan Belanja" placement='bottom' theme='danger'>
+                    <Tippy content="Belanja Bayar Dimuka" placement='bottom'>
+                        <Link
+                            href="/accountancy/belanja-bayar-dimuka"
+                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/accountant-5.json"
+                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
+                            <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                Belanja Bayar Dimuka
+                            </div>
+                        </Link>
+                    </Tippy>
+
+                    {/* <Tippy content="LRA Pendapatan dan Belanja" placement='bottom' theme='danger'>
                         <Link
                             href="#"
                             className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
@@ -159,7 +195,7 @@ const Page = () => {
                                 LRA Pendapatan dan Belanja
                             </div>
                         </Link>
-                    </Tippy>
+                    </Tippy> */}
 
                     <Tippy content="Beban Laporan Operasional" placement='bottom' theme='danger'>
                         <Link
@@ -175,24 +211,6 @@ const Page = () => {
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
                                 Beban Laporan Operasional
-                            </div>
-                        </Link>
-                    </Tippy>
-
-                    <Tippy content="Belanja Bayar Dimuka" placement='bottom'>
-                        <Link
-                            href="/accountancy/belanja-bayar-dimuka"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
-
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/accountant-5.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Belanja Bayar Dimuka
                             </div>
                         </Link>
                     </Tippy>

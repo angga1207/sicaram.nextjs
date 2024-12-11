@@ -82,6 +82,9 @@ const PenyesuaianAset = (data: any) => {
         if (paramData[1]?.length > 0) {
             setArrKodeRekening(paramData[1])
         }
+        if (paramData[4]) {
+            setInstance(paramData[4]);
+        }
     }, [isMounted, paramData]);
 
     const [dataInput, setDataInput] = useState<any>([]);
@@ -130,8 +133,18 @@ const PenyesuaianAset = (data: any) => {
     }
 
     useEffect(() => {
-        if (isMounted) {
-            setInstance(CurrentUser?.instance_id ?? '');
+        // if (isMounted) {
+        //     setInstance(CurrentUser?.instance_id ?? '');
+        //     _getDatas();
+        // }
+        if (isMounted && periode?.id && year && !instance) {
+            if ([9].includes(CurrentUser?.role_id)) {
+                setInstance(CurrentUser?.instance_id ?? '');
+            } else {
+                _getDatas();
+            }
+        }
+        else if (isMounted && periode?.id && year && instance) {
             _getDatas();
         }
     }, [isMounted, instance, year])
@@ -1295,55 +1308,55 @@ const PenyesuaianAset = (data: any) => {
                             <td colSpan={1} className='!bg-slate-300'></td>
 
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_aset_tetap_tanah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_aset_tetap_tanah)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_aset_tetap_peralatan_mesin)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_aset_tetap_peralatan_mesin)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_aset_tetap_gedung_bangunan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_aset_tetap_gedung_bangunan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_aset_tetap_jalan_jaringan_irigasi)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_aset_tetap_jalan_jaringan_irigasi)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_aset_tetap_lainnya)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_aset_tetap_lainnya)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_konstruksi_dalam_pekerjaan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_konstruksi_dalam_pekerjaan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_aset_lain_lain)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_aset_lain_lain)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.plus_jumlah_penyesuaian)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_jumlah_penyesuaian)}
                             </td>
 
                             <td></td>
 
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_aset_tetap_tanah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_tanah)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_aset_tetap_peralatan_mesin)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_peralatan_mesin)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_aset_tetap_gedung_bangunan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_gedung_bangunan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_aset_tetap_jalan_jaringan_irigasi)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_jalan_jaringan_irigasi)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_aset_tetap_lainnya)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_lainnya)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_konstruksi_dalam_pekerjaan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_konstruksi_dalam_pekerjaan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_aset_lain_lain)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_lain_lain)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', {}).format(totalData?.min_jumlah_penyesuaian)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_jumlah_penyesuaian)}
                             </td>
 
                         </tr>

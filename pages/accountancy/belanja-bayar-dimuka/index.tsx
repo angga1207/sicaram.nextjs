@@ -30,6 +30,7 @@ import BarjasKeAset from '@/components/Accountancy/PenyesuaianAsetBeban/BarjasKe
 import PenyesuaianAset from '@/components/Accountancy/PenyesuaianAsetBeban/PenyesuaianAset';
 import Atribusi from '@/components/Accountancy/PenyesuaianAsetBeban/Atribusi';
 import { deleteData, getData, storeData } from '@/apis/Accountancy/BelanjaBayarDimuka';
+import IconTrash from '@/components/Icon/IconTrash';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -156,14 +157,13 @@ const Page = () => {
 
     useEffect(() => {
         if (isMounted && arrKodeRekening?.length === 0) {
-            GlobalEndPoint('kode_rekening', 'where|code_6|!=|null').then((res: any) => {
+            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
                 }
             });
         }
     }, [isMounted]);
-
 
     const [dataInput, setDataInput] = useState<any>([]);
     const [isUnsaved, setIsUnsaved] = useState(false);
@@ -180,6 +180,14 @@ const Page = () => {
                             {
                                 id: '',
                                 instance_id: instance ?? '',
+
+                                kode_rekening_id: '',
+                                uraian: '',
+                                nomor_perjanjian: '',
+                                tanggal_perjanjian: '',
+                                rekanan: '',
+                                jangka_waktu: '',
+
                                 kontrak_date_start: '',
                                 kontrak_date_end: '',
                                 kontrak_value: 0,
@@ -213,6 +221,14 @@ const Page = () => {
         const newData = {
             id: '',
             instance_id: instance ?? '',
+
+            kode_rekening_id: '',
+            uraian: '',
+            nomor_perjanjian: '',
+            tanggal_perjanjian: '',
+            rekanan: '',
+            jangka_waktu: '',
+
             kontrak_date_start: '',
             kontrak_date_end: '',
             kontrak_value: 0,
@@ -240,9 +256,10 @@ const Page = () => {
         setIsSaving(true);
         storeData(dataInput, periode?.id, year).then((res: any) => {
             if (res.status == 'success') {
-                showAlert('success', 'Data berhasil disimpan');
+                // showAlert('success', 'Data berhasil disimpan');
                 setIsUnsaved(false);
                 setIsSaving(false);
+                showAlertCenter('success', 'Data berhasil disimpan');
             } else {
                 showAlert('error', 'Data gagal disimpan');
                 setIsSaving(false);
@@ -342,14 +359,32 @@ const Page = () => {
                                     <th rowSpan={2} className='text-center border border-slate-100 whitespace-nowrap min-w-[300px] max-w-[300px]'>
                                         Perangkat Daerah
                                     </th>
-                                    <th colSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                    <th colSpan={9} className='text-center border border-slate-100 whitespace-nowrap'>
                                         Kontrak
                                     </th>
                                     <th colSpan={2} className='text-center border border-slate-100 whitespace-nowrap'>
-                                        Nilai Per 31 Des 2024
+                                        Nilai Per 31 Des {year}
                                     </th>
                                 </tr>
                                 <tr className='!bg-dark !text-white'>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Kode Rekening
+                                    </th>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Uraian
+                                    </th>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Nomor Perjanjian
+                                    </th>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Tanggal Perjanjian
+                                    </th>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Rekanan
+                                    </th>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Jangka Waktu (Bulan)
+                                    </th>
                                     <th className='text-center border border-slate-100 whitespace-nowrap'>
                                         Tanggal Mulai
                                     </th>
@@ -412,6 +447,178 @@ const Page = () => {
                                                 </>
                                             )}
                                         </td>
+
+                                        <td className='border border-slate-900'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='w-[400px]'
+                                                    isDisabled={isSaving == true}
+                                                    onChange={(e: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening?.map((data: any, index: number) => {
+                                                            if (data.id == input.kode_rekening_id) {
+                                                                return {
+                                                                    value: data.id,
+                                                                    label: data.fullcode + ' - ' + data.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening?.map((data: any, index: number) => {
+                                                            return {
+                                                                value: data.id,
+                                                                label: data.fullcode + ' - ' + data.name,
+                                                            }
+                                                        })
+                                                    } />
+
+                                                {input?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(input.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border border-slate-900">
+                                            <input
+                                                disabled={isSaving == true}
+                                                type="text"
+                                                placeholder="Uraian"
+                                                className="form-input w-[250px] placeholder:font-normal"
+                                                value={input.uraian}
+                                                onChange={(e: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['uraian'] = e?.target?.value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className="border border-slate-900">
+                                            <input
+                                                disabled={isSaving == true}
+                                                type="text"
+                                                placeholder="Nomor Perjanjian"
+                                                className="form-input w-[250px] placeholder:font-normal"
+                                                value={input.nomor_perjanjian}
+                                                onChange={(e: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['nomor_perjanjian'] = e?.target?.value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border border-slate-900'>
+                                            <Flatpickr
+                                                placeholder='Pilih Tanggal Perjanjian'
+                                                options={{
+                                                    dateFormat: 'Y-m-d',
+                                                    position: 'auto right'
+                                                }}
+                                                className="form-input w-[250px] placeholder:font-normal"
+                                                value={input?.tanggal_perjanjian}
+                                                onChange={(date) => {
+                                                    let Ymd = new Date(date[0].toISOString());
+                                                    Ymd.setDate(Ymd.getDate() + 1);
+                                                    const newYmd = Ymd.toISOString().split('T')[0];
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['tanggal_perjanjian'] = newYmd;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }} />
+                                        </td>
+
+                                        <td className='border border-slate-900'>
+                                            <input
+                                                disabled={isSaving == true}
+                                                type="text"
+                                                placeholder="Rekanan"
+                                                className="form-input w-[250px] placeholder:font-normal"
+                                                value={input.rekanan}
+                                                onChange={(e: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['rekanan'] = e?.target?.value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border border-slate-900'>
+                                            <input
+                                                disabled={isSaving == true}
+                                                type="text"
+                                                placeholder="Jangka Waktu"
+                                                className="form-input w-[250px] placeholder:font-normal"
+                                                value={input.jangka_waktu}
+                                                onChange={(e: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['jangka_waktu'] = e?.target?.value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
                                         <td className='border border-slate-900'>
                                             <Flatpickr
                                                 placeholder='Pilih Tanggal Mulai'
@@ -419,7 +626,7 @@ const Page = () => {
                                                     dateFormat: 'Y-m-d',
                                                     position: 'auto right'
                                                 }}
-                                                className="form-input placeholder:font-normal"
+                                                className="form-input w-[250px] placeholder:font-normal"
                                                 value={input?.kontrak_date_start}
                                                 onChange={(date) => {
                                                     let Ymd = new Date(date[0].toISOString());
@@ -433,11 +640,12 @@ const Page = () => {
                                                     setIsUnsaved(true);
                                                 }} />
                                         </td>
+
                                         <td className='border border-slate-900'>
                                             <Flatpickr
                                                 placeholder='Pilih Tanggal Berakhir'
                                                 options={{ dateFormat: 'Y-m-d', position: 'auto right' }}
-                                                className="form-input placeholder:font-normal"
+                                                className="form-input w-[250px] placeholder:font-normal"
                                                 value={input?.kontrak_date_end}
                                                 onChange={(date) => {
                                                     let Ymd = new Date(date[0].toISOString());
@@ -452,131 +660,149 @@ const Page = () => {
                                                 }} />
                                         </td>
                                         <td className='border border-slate-900'>
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Nilai Kontrak"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.kontrak_value}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['kontrak_value'] = isNaN(value) ? 0 : value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                            <div className="flex group">
+                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                    Rp.
+                                                </div>
+                                                <input
+                                                    disabled={isSaving == true}
+                                                    type="text"
+                                                    onKeyDown={(e) => {
+                                                        if (!(
+                                                            (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                            (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                            e.keyCode == 8 ||
+                                                            e.keyCode == 46 ||
+                                                            e.keyCode == 37 ||
+                                                            e.keyCode == 39 ||
+                                                            e.keyCode == 188 ||
+                                                            e.keyCode == 9 ||
+                                                            // copy & paste
+                                                            (e.keyCode == 67 && e.ctrlKey) ||
+                                                            (e.keyCode == 86 && e.ctrlKey) ||
+                                                            // command + c & command + v
+                                                            (e.keyCode == 67 && e.metaKey) ||
+                                                            (e.keyCode == 86 && e.metaKey) ||
+                                                            // command + a
+                                                            (e.keyCode == 65 && e.metaKey) ||
+                                                            (e.keyCode == 65 && e.ctrlKey)
+                                                        )) {
+                                                            e.preventDefault();
+                                                        }
+                                                    }}
+                                                    value={input.kontrak_value}
+                                                    onChange={(e) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            const value = parseFloat(e?.target?.value);
+                                                            updated[index]['kontrak_value'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        })
+                                                    }}
+                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.kontrak_value)}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className='border border-slate-900'>
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Sudah Jatuh Tempo / Digunakan"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.sudah_jatuh_tempo}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['sudah_jatuh_tempo'] = isNaN(value) ? 0 : value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                            <div className="flex group">
+                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                    Rp.
+                                                </div>
+                                                <input
+                                                    disabled={isSaving == true}
+                                                    type="text"
+                                                    onKeyDown={(e) => {
+                                                        if (!(
+                                                            (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                            (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                            e.keyCode == 8 ||
+                                                            e.keyCode == 46 ||
+                                                            e.keyCode == 37 ||
+                                                            e.keyCode == 39 ||
+                                                            e.keyCode == 188 ||
+                                                            e.keyCode == 9 ||
+                                                            // copy & paste
+                                                            (e.keyCode == 67 && e.ctrlKey) ||
+                                                            (e.keyCode == 86 && e.ctrlKey) ||
+                                                            // command + c & command + v
+                                                            (e.keyCode == 67 && e.metaKey) ||
+                                                            (e.keyCode == 86 && e.metaKey) ||
+                                                            // command + a
+                                                            (e.keyCode == 65 && e.metaKey) ||
+                                                            (e.keyCode == 65 && e.ctrlKey)
+                                                        )) {
+                                                            e.preventDefault();
+                                                        }
+                                                    }}
+                                                    value={input.sudah_jatuh_tempo}
+                                                    onChange={(e) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            const value = parseFloat(e?.target?.value);
+                                                            updated[index]['sudah_jatuh_tempo'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        })
+                                                    }}
+                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.sudah_jatuh_tempo)}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className='border border-slate-900'>
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Belum Jatuh Tempo / Digunakan"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.belum_jatuh_tempo}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['belum_jatuh_tempo'] = isNaN(value) ? 0 : value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
+                                            <div className="flex group">
+                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                    Rp.
+                                                </div>
+                                                <input
+                                                    disabled={isSaving == true}
+                                                    type="text"
+                                                    onKeyDown={(e) => {
+                                                        if (!(
+                                                            (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                            (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                            e.keyCode == 8 ||
+                                                            e.keyCode == 46 ||
+                                                            e.keyCode == 37 ||
+                                                            e.keyCode == 39 ||
+                                                            e.keyCode == 188 ||
+                                                            e.keyCode == 9 ||
+                                                            // copy & paste
+                                                            (e.keyCode == 67 && e.ctrlKey) ||
+                                                            (e.keyCode == 86 && e.ctrlKey) ||
+                                                            // command + c & command + v
+                                                            (e.keyCode == 67 && e.metaKey) ||
+                                                            (e.keyCode == 86 && e.metaKey) ||
+                                                            // command + a
+                                                            (e.keyCode == 65 && e.metaKey) ||
+                                                            (e.keyCode == 65 && e.ctrlKey)
+                                                        )) {
+                                                            e.preventDefault();
+                                                        }
+                                                    }}
+                                                    value={input.belum_jatuh_tempo}
+                                                    onChange={(e) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            const value = parseFloat(e?.target?.value);
+                                                            updated[index]['belum_jatuh_tempo'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        })
+                                                    }}
+                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.belum_jatuh_tempo)}
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                             <tfoot>
                                 <tr className='!bg-slate-400'>
-                                    <td colSpan={2} className='py-4 !bg-slate-300'></td>
+                                    <td colSpan={8} className='py-4 !bg-slate-300'></td>
                                     <td className='py-4 !bg-slate-300 text-end'>
                                         Jumlah :
                                     </td>

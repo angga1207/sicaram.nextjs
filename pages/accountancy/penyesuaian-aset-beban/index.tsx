@@ -25,6 +25,10 @@ import ModalKeBeban from '@/components/Accountancy/PenyesuaianAsetBeban/ModalKeB
 import BarjasKeAset from '@/components/Accountancy/PenyesuaianAsetBeban/BarjasKeAset';
 import PenyesuaianAset from '@/components/Accountancy/PenyesuaianAsetBeban/PenyesuaianAset';
 import Atribusi from '@/components/Accountancy/PenyesuaianAsetBeban/Atribusi';
+import KertasKerjaTambahan from '@/components/Accountancy/PenyesuaianAsetBeban/KertasKerjaTambahan';
+import PenilaianAset from '@/components/Accountancy/PenyesuaianAsetBeban/PenilaianAset';
+import PenghapusanAset from '@/components/Accountancy/PenyesuaianAsetBeban/PenghapusanAset';
+import PenjualanAset from '@/components/Accountancy/PenyesuaianAsetBeban/PenjualanAset';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -152,7 +156,12 @@ const Page = () => {
 
     useEffect(() => {
         if (isMounted && arrKodeRekening?.length === 0) {
-            GlobalEndPoint('kode_rekening', 'where|code_6|!=|null').then((res: any) => {
+            // GlobalEndPoint('kode_rekening', 'where|code_6|!=|null').then((res: any) => {
+            //     if (res.status === 'success') {
+            //         setArrKodeRekening(res.data);
+            //     }
+            // });
+            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
                 }
@@ -171,6 +180,40 @@ const Page = () => {
                     </h2>
 
                     <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+                        {[1, 12].includes(CurrentUser?.role_id) && (
+                            <div className="">
+                                <Select placeholder="Kabupaten Ogan Ilir"
+                                    className='min-w-[300px] max-w-[300px] z-[2]'
+                                    onChange={(e: any) => {
+                                        if ([9].includes(CurrentUser?.role_id)) {
+                                            showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                        } else {
+                                            setInstance(e?.value);
+                                        }
+                                    }}
+                                    isLoading={instances?.length === 0}
+                                    isClearable={true}
+                                    isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                                    value={
+                                        instances?.map((data: any, index: number) => {
+                                            if (data.id == instance) {
+                                                return {
+                                                    value: data.id,
+                                                    label: data.name,
+                                                }
+                                            }
+                                        })
+                                    }
+                                    options={
+                                        instances?.map((data: any, index: number) => {
+                                            return {
+                                                value: data.id,
+                                                label: data.name,
+                                            }
+                                        })
+                                    } />
+                            </div>
+                        )}
 
                         <div className="">
 
@@ -201,11 +244,11 @@ const Page = () => {
 
                 <div className="panel">
                     <Tab.Group>
-                        <Tab.List className="mt-3 flex flex-wrap border-b border-white-light dark:border-[#191e3a]">
+                        <Tab.List className="mt-3 flex flex-nowrap border-b border-white-light dark:border-[#191e3a overflow-x-auto">
                             <Tab as={Fragment}>
                                 {({ selected }) => (
                                     <button
-                                        className={`uppercase font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
                                         Penyesuaian Beban Barjas
                                     </button>
@@ -214,7 +257,7 @@ const Page = () => {
                             <Tab as={Fragment}>
                                 {({ selected }) => (
                                     <button
-                                        className={`uppercase font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
                                         Modal ke Beban
                                     </button>
@@ -223,7 +266,7 @@ const Page = () => {
                             <Tab as={Fragment}>
                                 {({ selected }) => (
                                     <button
-                                        className={`uppercase font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
                                         Barjas ke Aset
                                     </button>
@@ -232,7 +275,7 @@ const Page = () => {
                             <Tab as={Fragment}>
                                 {({ selected }) => (
                                     <button
-                                        className={`uppercase font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
                                         Penyesuaian Aset
                                     </button>
@@ -241,12 +284,51 @@ const Page = () => {
                             <Tab as={Fragment}>
                                 {({ selected }) => (
                                     <button
-                                        className={`uppercase font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
                                         Atribusi
                                     </button>
                                 )}
                             </Tab>
+
+                            <Tab as={Fragment}>
+                                {({ selected }) => (
+                                    <button
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
+                                        Kertas Kerja Tambahan
+                                    </button>
+                                )}
+                            </Tab>
+
+                            <Tab as={Fragment}>
+                                {({ selected }) => (
+                                    <button
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
+                                        Penilaian Aset
+                                    </button>
+                                )}
+                            </Tab>
+                            <Tab as={Fragment}>
+                                {({ selected }) => (
+                                    <button
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
+                                        Penghapusan Aset
+                                    </button>
+                                )}
+                            </Tab>
+                            <Tab as={Fragment}>
+                                {({ selected }) => (
+                                    <button
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
+                                        Penjualan Aset
+                                    </button>
+                                )}
+                            </Tab>
+
                         </Tab.List>
 
                         <Tab.Panels>
@@ -254,8 +336,8 @@ const Page = () => {
                                 <div className="active pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <PenyesuaianBebanDanBarjas
-                                            data={isMounted && [instances, arrKodeRekening, periode, year]}
-                                            key={year}
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
                                         />
                                     )}
                                 </div>
@@ -265,8 +347,8 @@ const Page = () => {
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <ModalKeBeban
-                                            data={isMounted && [instances, arrKodeRekening, periode, year]}
-                                            key={year}
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
                                         />
                                     )}
                                 </div>
@@ -276,8 +358,8 @@ const Page = () => {
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <BarjasKeAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year]}
-                                            key={year}
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
                                         />
                                     )}
                                 </div>
@@ -287,8 +369,8 @@ const Page = () => {
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <PenyesuaianAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year]}
-                                            key={year}
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
                                         />
                                     )}
                                 </div>
@@ -298,8 +380,52 @@ const Page = () => {
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <Atribusi
-                                            data={isMounted && [instances, arrKodeRekening, periode, year]}
-                                            key={year}
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
+                                        />
+                                    )}
+                                </div>
+                            </Tab.Panel>
+
+                            <Tab.Panel>
+                                <div className="pt-0">
+                                    {(isMounted && instances.length > 0) && (
+                                        <KertasKerjaTambahan
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
+                                        />
+                                    )}
+                                </div>
+                            </Tab.Panel>
+
+                            <Tab.Panel>
+                                <div className="pt-5">
+                                    {(isMounted && instances.length > 0) && (
+                                        <PenilaianAset
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
+                                        />
+                                    )}
+                                </div>
+                            </Tab.Panel>
+
+                            <Tab.Panel>
+                                <div className="pt-5">
+                                    {(isMounted && instances.length > 0) && (
+                                        <PenghapusanAset
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
+                                        />
+                                    )}
+                                </div>
+                            </Tab.Panel>
+
+                            <Tab.Panel>
+                                <div className="pt-5">
+                                    {(isMounted && instances.length > 0) && (
+                                        <PenjualanAset
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
                                         />
                                     )}
                                 </div>
