@@ -426,7 +426,44 @@ const RekapAsetLainnya = (data: any) => {
                                                             <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                                 Rp.
                                                             </div>
-                                                            <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
+                                                            {/* <input
+                                                        type="text"
+                                                        placeholder=""
+                                                        onKeyDown={(e) => {
+                                                            if (!(
+                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                e.keyCode == 8 ||
+                                                                e.keyCode == 46 ||
+                                                                e.keyCode == 37 ||
+                                                                e.keyCode == 39 ||
+                                                                e.keyCode == 188 ||
+                                                                e.keyCode == 9 ||
+                                                                // copy & paste
+                                                                (e.keyCode == 67 && e.ctrlKey) ||
+                                                                (e.keyCode == 86 && e.ctrlKey) ||
+                                                                // command + c & command + v
+                                                                (e.keyCode == 67 && e.metaKey) ||
+                                                                (e.keyCode == 86 && e.metaKey) ||
+                                                                // command + a
+                                                                (e.keyCode == 65 && e.metaKey) ||
+                                                                (e.keyCode == 65 && e.ctrlKey)
+                                                            )) {
+                                                                e.preventDefault();
+                                                            }
+                                                        }}
+                                                        value={row.saldo_awal}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const value = parseFloat(e?.target?.value);
+                                                                const data = [...prev];
+                                                                data[index].saldo_awal = isNaN(value) ? 0 : value;
+                                                                _calculateData(index)
+                                                                return data;
+                                                            });
+                                                        }}
+                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" /> */}
+                                                            <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                                 {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.saldo_awal)}
                                                             </div>
                                                         </div>

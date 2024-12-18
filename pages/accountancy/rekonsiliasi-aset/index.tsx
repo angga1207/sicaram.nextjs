@@ -79,6 +79,7 @@ const Page = () => {
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [years, setYears] = useState<any>(null)
+    const [queryApp, setQueryApp] = useState<any>(null);
 
     useEffect(() => {
         setIsMounted(true);
@@ -102,6 +103,12 @@ const Page = () => {
             }
         }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted) {
+            setQueryApp(router.query.app ?? 0);
+        }
+    }, [isMounted, router]);
 
     useEffect(() => {
         if (isMounted && periode?.id) {
@@ -182,6 +189,7 @@ const Page = () => {
                         {[1, 12].includes(CurrentUser?.role_id) && (
                             <div className="">
                                 <Select placeholder="Kabupaten Ogan Ilir"
+                                    classNamePrefix={'selectAngga'}
                                     className='min-w-[300px] max-w-[300px] z-[2]'
                                     onChange={(e: any) => {
                                         if ([9].includes(CurrentUser?.role_id)) {
@@ -242,279 +250,365 @@ const Page = () => {
                 </div>
 
                 <div className="panel">
-                    <Tab.Group>
-                        <Tab.List className="mt-3 pb-3 flex flex-nowrap overflow-y-auto border-b border-white-light dark:border-[#191e3a]">
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    {queryApp != null && (
+                        <Tab.Group defaultIndex={queryApp} key={queryApp}>
+                            <Tab.List className="mt-3 pb-3 flex flex-nowrap overflow-y-auto border-b border-white-light dark:border-[#191e3a]">
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 0 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Rekap
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 1 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap OPD
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Rekap OPD
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 2 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap Aset Tetap
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Rekap Aset Tetap
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 3 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap Belanja
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Rekap Belanja
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 4 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        KIB A
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            KIB A
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 5 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        KIB B
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            KIB B
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 6 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        KIB C
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            KIB C
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 7 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        KIB D
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            KIB D
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 8 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        KIB E
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            KIB E
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 9 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        KDP
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            KDP
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 10 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Aset Tak Berwujud
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Aset Tak Berwujud
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 11 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Aset Lain-lain
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Aset Lain-lain
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 12 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap Aset Lainnya
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Rekap Aset Lainnya
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/rekonsiliasi-aset',
+                                                //     query: { app: 13 },
+                                                // });
+                                            }}
+                                            className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Penyusutan
-                                    </button>
-                                )}
-                            </Tab>
-                        </Tab.List>
-
-                        <Tab.Panels>
-                            <Tab.Panel>
-                                <div className="active pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <Rekap data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
+                                            Penyusutan
+                                        </button>
                                     )}
-                                </div>
-                            </Tab.Panel>
+                                </Tab>
+                            </Tab.List>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <RekapOPD data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                            <Tab.Panels>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <Rekap data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <RekapAsetTetap data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <RekapOPD data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <RekapBelanja data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <RekapAsetTetap data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KIB_A data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <RekapBelanja data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KIB_B data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="active pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KIB_A data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KIB_C data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KIB_B data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KIB_D data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KIB_C data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KIB_E data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KIB_D data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KDP data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KIB_E data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <AsetTakBerwujud data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KDP data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <AsetLainLain data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <AsetTakBerwujud data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <RekapAsetLainnya data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <AsetLainLain data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <Penyusutan data={isMounted && [instances, arrKodeRekening, instance, year]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <RekapAsetLainnya data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                        </Tab.Panels>
-                    </Tab.Group>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <Penyusutan data={isMounted && [instances, arrKodeRekening, instance, year]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+
+                            </Tab.Panels>
+                        </Tab.Group>
+                    )}
                 </div>
 
             </div>

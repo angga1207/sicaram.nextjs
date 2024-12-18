@@ -1,10 +1,13 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faLink, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { getKibA, saveKibA } from '@/apis/Accountancy/RekonsiliasiAset';
+import Link from 'next/link';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -418,9 +421,9 @@ const KIB_A = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
+                                                    {/* <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
+                                                        placeholder=""
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -454,8 +457,8 @@ const KIB_A = (data: any) => {
                                                                 return data;
                                                             });
                                                         }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" /> */}
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.saldo_awal)}
                                                     </div>
                                                 </div>
@@ -1809,17 +1812,25 @@ const KIB_A = (data: any) => {
                                                         }}
                                                         value={row.min_penghapusan}
                                                         onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_penghapusan = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
+                                                            // setDataInput((prev: any) => {
+                                                            //     const value = parseFloat(e?.target?.value);
+                                                            //     const data = [...prev];
+                                                            //     data[index].min_penghapusan = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return data;
+                                                            // });
                                                         }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                        readOnly={true}
+                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block read-only:bg-slate-100" />
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden read-only:bg-slate-100">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_penghapusan)}
+                                                    </div>
+                                                    <div className="self-center ml-1">
+                                                        <Tippy content="Link Penghapusan Aset & Penjualan Aset" theme="bct" className="p-2">
+                                                            <Link href="/accountancy/penyesuaian-aset-beban?app=7" className="btn btn-primary px-2 rounded-full h-9 w-9">
+                                                                <FontAwesomeIcon icon={faLink} className="w-4 h-4 cursor-pointer" />
+                                                            </Link>
+                                                        </Tippy>
                                                     </div>
                                                 </div>
                                             </td>
@@ -2161,7 +2172,7 @@ const KIB_A = (data: any) => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 export default KIB_A;

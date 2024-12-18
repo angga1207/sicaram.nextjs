@@ -179,9 +179,9 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    {/* <Tippy content="LRA Pendapatan dan Belanja" placement='bottom' theme='danger'>
+                    <Tippy content="Persediaan" placement='bottom' theme='default'>
                         <Link
-                            href="#"
+                            href="/accountancy/persediaan"
                             className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
 
                             <Player
@@ -192,10 +192,28 @@ const Page = () => {
                             >
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                LRA Pendapatan dan Belanja
+                                Persediaan
                             </div>
                         </Link>
-                    </Tippy> */}
+                    </Tippy>
+
+                    <Tippy content="Hutang Belanja" placement='bottom' theme='default'>
+                        <Link
+                            href="/accountancy/hutang-belanja"
+                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/accountant-9.json"
+                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
+                            <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                Hutang Belanja
+                            </div>
+                        </Link>
+                    </Tippy>
 
                     <Tippy content="Beban Laporan Operasional" placement='bottom' theme='danger'>
                         <Link
@@ -233,21 +251,23 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    {/* <Link
-                        href="/rekonsiliasi-aset"
-                        className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                    <Tippy content="Admin Only" placement='bottom' theme='default'>
+                        <Link
+                            href="/accountancy/admin-only"
+                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
 
-                        <Player
-                            autoplay
-                            loop
-                            src="/lottie/sicaram.json"
-                            className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                        >
-                        </Player>
-                        <div className="mt-2 text-center text-lg uppercase font-semibold">
-                            Rekonsiliasi Aset
-                        </div>
-                    </Link> */}
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/sicaram.json"
+                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
+                            <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                Admin Only
+                            </div>
+                        </Link>
+                    </Tippy>
 
                 </div>
             </div>

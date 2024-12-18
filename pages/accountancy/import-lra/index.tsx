@@ -370,22 +370,22 @@ const Page = () => {
                             <table className="table-striped">
                                 <thead>
                                     <tr className='!bg-slate-900 !text-white sticky top-0 left-0 z-[1]'>
-                                        <th className='!text-center'>
+                                        <th className='!text-center min-w-[150px]'>
                                             Kode Rekening
                                         </th>
-                                        <th className='!text-center'>
+                                        <th className='!text-center min-w-[300px]'>
                                             Uraian
                                         </th>
-                                        <th className='!text-center'>
+                                        <th className='!text-center w-[250px]'>
                                             Anggaran
                                         </th>
-                                        <th className='!text-center'>
+                                        <th className='!text-center w-[250px]'>
                                             Realisasi {year}
                                         </th>
-                                        <th className='!text-center'>
+                                        <th className='!text-center w-[50px]'>
                                             Persentase {year}
                                         </th>
-                                        <th className='!text-center'>
+                                        <th className='!text-center w-[250px]'>
                                             Realisasi {year - 1}
                                         </th>
                                     </tr>
@@ -402,22 +402,39 @@ const Page = () => {
                                                         {data?.uraian}
                                                     </td>
                                                     <td>
-                                                        <span className='whitespace-nowrap'>
-                                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data?.anggaran)}
-                                                        </span>
+                                                        <div className="flex items-center justify-between">
+                                                            <span>
+                                                                Rp.
+                                                            </span>
+                                                            <span className='whitespace-nowrap'>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.anggaran)}
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <span className='whitespace-nowrap'>
-                                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data?.realisasi)}
-                                                        </span>
+                                                        <div className="flex items-center justify-between">
+                                                            <span>
+                                                                Rp.
+                                                            </span>
+                                                            <span className='whitespace-nowrap'>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.realisasi)}
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        {new Intl.NumberFormat('id-ID', {}).format(data?.realisasi_percentage)} %
+                                                        <div className="text-center">
+                                                            {new Intl.NumberFormat('id-ID', {}).format(data?.realisasi_percentage)} %
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <span className='whitespace-nowrap'>
-                                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data?.realisasi_last_year)}
-                                                        </span>
+                                                        <div className="flex items-center justify-between">
+                                                            <span>
+                                                                Rp.
+                                                            </span>
+                                                            <span className='whitespace-nowrap'>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.realisasi_last_year)}
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             )

@@ -116,13 +116,13 @@ const ModalKeBeban = (data: any) => {
                                 plus_beban_lain_lain: 0,
                                 plus_jumlah_penyesuaian: 0,
 
-                                min_beban_pegawai: 0,
-                                min_beban_persediaan: 0,
-                                min_beban_jasa: 0,
-                                min_beban_pemeliharaan: 0,
-                                min_beban_perjalanan_dinas: 0,
-                                min_beban_hibah: 0,
-                                min_beban_lain_lain: 0,
+                                min_aset_tetap_tanah: 0,
+                                min_aset_tetap_peralatan_mesin: 0,
+                                min_aset_tetap_gedung_bangunan: 0,
+                                min_aset_tetap_jalan_jaringan_irigasi: 0,
+                                min_aset_tetap_lainnya: 0,
+                                min_konstruksi_dalam_pekerjaan: 0,
+                                min_aset_lain_lain: 0,
                                 min_jumlah_penyesuaian: 0,
                             }
                         ])
@@ -159,13 +159,13 @@ const ModalKeBeban = (data: any) => {
         plus_beban_lain_lain: 0,
         plus_jumlah_penyesuaian: 0,
 
-        min_beban_pegawai: 0,
-        min_beban_persediaan: 0,
-        min_beban_jasa: 0,
-        min_beban_pemeliharaan: 0,
-        min_beban_perjalanan_dinas: 0,
-        min_beban_hibah: 0,
-        min_beban_lain_lain: 0,
+        min_aset_tetap_tanah: 0,
+        min_aset_tetap_peralatan_mesin: 0,
+        min_aset_tetap_gedung_bangunan: 0,
+        min_aset_tetap_jalan_jaringan_irigasi: 0,
+        min_aset_tetap_lainnya: 0,
+        min_konstruksi_dalam_pekerjaan: 0,
+        min_aset_lain_lain: 0,
         min_jumlah_penyesuaian: 0,
     });
 
@@ -187,13 +187,13 @@ const ModalKeBeban = (data: any) => {
             plus_beban_lain_lain: 0,
             plus_jumlah_penyesuaian: 0,
 
-            min_beban_pegawai: 0,
-            min_beban_persediaan: 0,
-            min_beban_jasa: 0,
-            min_beban_pemeliharaan: 0,
-            min_beban_perjalanan_dinas: 0,
-            min_beban_hibah: 0,
-            min_beban_lain_lain: 0,
+            min_aset_tetap_tanah: 0,
+            min_aset_tetap_peralatan_mesin: 0,
+            min_aset_tetap_gedung_bangunan: 0,
+            min_aset_tetap_jalan_jaringan_irigasi: 0,
+            min_aset_tetap_lainnya: 0,
+            min_konstruksi_dalam_pekerjaan: 0,
+            min_aset_lain_lain: 0,
             min_jumlah_penyesuaian: 0,
         }
         setDataInput((prevData: any) => [...prevData, newData]);
@@ -206,7 +206,7 @@ const ModalKeBeban = (data: any) => {
             const keysToSumPlus = ['plus_beban_pegawai', 'plus_beban_persediaan', 'plus_beban_jasa', 'plus_beban_pemeliharaan', 'plus_beban_perjalanan_dinas', 'plus_beban_hibah', 'plus_beban_lain_lain'];
             const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
             updated[index]['plus_jumlah_penyesuaian'] = sumPlus;
-            const keysToSumMinus = ['min_beban_pegawai', 'min_beban_persediaan', 'min_beban_jasa', 'min_beban_pemeliharaan', 'min_beban_perjalanan_dinas', 'min_beban_hibah', 'min_beban_lain_lain'];
+            const keysToSumMinus = ['min_aset_tetap_tanah', 'min_aset_tetap_peralatan_mesin', 'min_aset_tetap_gedung_bangunan', 'min_aset_tetap_jalan_jaringan_irigasi', 'min_aset_tetap_lainnya', 'min_konstruksi_dalam_pekerjaan', 'min_aset_lain_lain'];
             const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
             updated[index]['min_jumlah_penyesuaian'] = sumMinus;
             return updated;
@@ -227,13 +227,13 @@ const ModalKeBeban = (data: any) => {
                 updated['plus_beban_lain_lain'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['plus_beban_lain_lain']), 0);
                 updated['plus_jumlah_penyesuaian'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['plus_jumlah_penyesuaian']), 0);
 
-                updated['min_beban_pegawai'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_pegawai']), 0);
-                updated['min_beban_persediaan'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_persediaan']), 0);
-                updated['min_beban_jasa'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_jasa']), 0);
-                updated['min_beban_pemeliharaan'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_pemeliharaan']), 0);
-                updated['min_beban_perjalanan_dinas'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_perjalanan_dinas']), 0);
-                updated['min_beban_hibah'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_hibah']), 0);
-                updated['min_beban_lain_lain'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_beban_lain_lain']), 0);
+                updated['min_aset_tetap_tanah'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_aset_tetap_tanah']), 0);
+                updated['min_aset_tetap_peralatan_mesin'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_aset_tetap_peralatan_mesin']), 0);
+                updated['min_aset_tetap_gedung_bangunan'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_aset_tetap_gedung_bangunan']), 0);
+                updated['min_aset_tetap_jalan_jaringan_irigasi'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_aset_tetap_jalan_jaringan_irigasi']), 0);
+                updated['min_aset_tetap_lainnya'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_aset_tetap_lainnya']), 0);
+                updated['min_konstruksi_dalam_pekerjaan'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_konstruksi_dalam_pekerjaan']), 0);
+                updated['min_aset_lain_lain'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_aset_lain_lain']), 0);
                 updated['min_jumlah_penyesuaian'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_jumlah_penyesuaian']), 0);
                 return updated;
             })
@@ -293,55 +293,55 @@ const ModalKeBeban = (data: any) => {
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Pegawai
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Persediaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Jasa
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Pemeliharaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Perjalanan Dinas
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Hibah
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Beban Lain-lain
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Jumlah Penyesuaian
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Pegawai
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Persediaan
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Jasa
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Pemeliharaan
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Aset Tetap Jalan Jaringan dan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Perjalanan Dinas
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Hibah
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Konstruksi Dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Lain-lain
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
+                                Aset Lain-lain
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-300'>
                                 Jumlah Penyesuaian
                             </th>
 
@@ -539,7 +539,7 @@ const ModalKeBeban = (data: any) => {
                                     {/* Separator */}
                                 </td>
 
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Pegawai */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -587,7 +587,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Persediaan */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -635,7 +635,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Jasa */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -683,7 +683,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Pemeliharaan */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -731,7 +731,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Perjalanan Dinas */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -779,7 +779,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Hibah */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -827,7 +827,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Beban Lain-lain */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -875,7 +875,7 @@ const ModalKeBeban = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-yellow-200'>
+                                <td className='border bg-yellow-300'>
                                     {/* Jumlah Penyesuaian */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -928,7 +928,7 @@ const ModalKeBeban = (data: any) => {
                                     {/* Separator */}
                                 </td>
 
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Pegawai */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -960,23 +960,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_pegawai}
+                                            value={input.min_aset_tetap_tanah}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_pegawai'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_pegawai)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_tanah)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Persediaan */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1008,23 +1008,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_persediaan}
+                                            value={input.min_aset_tetap_peralatan_mesin}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_persediaan'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_persediaan)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_peralatan_mesin)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Jasa */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1056,23 +1056,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_jasa}
+                                            value={input.min_aset_tetap_gedung_bangunan}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_jasa'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_jasa)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_gedung_bangunan)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Pemeliharaan */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1104,23 +1104,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_pemeliharaan}
+                                            value={input.min_aset_tetap_jalan_jaringan_irigasi}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_pemeliharaan'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_pemeliharaan)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_jalan_jaringan_irigasi)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Perjalanan Dinas */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1152,23 +1152,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_perjalanan_dinas}
+                                            value={input.min_aset_tetap_lainnya}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_perjalanan_dinas'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_aset_tetap_lainnya'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_perjalanan_dinas)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_lainnya)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Hibah */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1200,23 +1200,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_hibah}
+                                            value={input.min_konstruksi_dalam_pekerjaan}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_hibah'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_hibah)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_konstruksi_dalam_pekerjaan)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Lain-lain */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1248,23 +1248,23 @@ const ModalKeBeban = (data: any) => {
                                                     e.preventDefault();
                                                 }
                                             }}
-                                            value={input.min_beban_lain_lain}
+                                            value={input.min_aset_lain_lain}
                                             onChange={(e) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
-                                                    updated[index]['min_beban_lain_lain'] = isNaN(value) ? 0 : value;
+                                                    updated[index]['min_aset_lain_lain'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
                                             }}
                                             className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                         <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_beban_lain_lain)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_lain_lain)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Jumlah Penyesuaian */}
                                     <div className="flex group">
                                         <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
@@ -1351,25 +1351,25 @@ const ModalKeBeban = (data: any) => {
                             <td></td>
 
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_pegawai)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_tanah)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_persediaan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_peralatan_mesin)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_jasa)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_gedung_bangunan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_pemeliharaan)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_jalan_jaringan_irigasi)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_perjalanan_dinas)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_tetap_lainnya)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_hibah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_konstruksi_dalam_pekerjaan)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_lain_lain)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_aset_lain_lain)}
                             </td>
                             <td className='text-end font-semibold !bg-slate-300'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_jumlah_penyesuaian)}

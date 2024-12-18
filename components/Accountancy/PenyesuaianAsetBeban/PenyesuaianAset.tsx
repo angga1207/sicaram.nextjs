@@ -205,10 +205,10 @@ const PenyesuaianAset = (data: any) => {
         setDataInput((prev: any) => {
             const updated = [...prev];
             const keysToSumPlus = ['plus_aset_tetap_tanah', 'plus_aset_tetap_peralatan_mesin', 'plus_aset_tetap_gedung_bangunan', 'plus_aset_tetap_jalan_jaringan_irigasi', 'plus_aset_tetap_lainnya', 'plus_konstruksi_dalam_pekerjaan', 'plus_aset_lain_lain'];
-            const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (updated[index][key] || 0), 0);
+            const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + parseFloat(updated[index][key] || 0), 0);
             updated[index]['plus_jumlah_penyesuaian'] = sumPlus;
             const keysToSumMinus = ['min_aset_tetap_tanah', 'min_aset_tetap_peralatan_mesin', 'min_aset_tetap_gedung_bangunan', 'min_aset_tetap_jalan_jaringan_irigasi', 'min_aset_tetap_lainnya', 'min_konstruksi_dalam_pekerjaan', 'min_aset_lain_lain'];
-            const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + (updated[index][key] || 0), 0);
+            const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + parseFloat(updated[index][key] || 0), 0);
             updated[index]['min_jumlah_penyesuaian'] = sumMinus;
             return updated;
         })
@@ -540,378 +540,377 @@ const PenyesuaianAset = (data: any) => {
 
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Pegawai */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Pegawai"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_aset_tetap_tanah}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_aset_tetap_tanah}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_aset_tetap_tanah)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Persediaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Persediaan"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_aset_tetap_peralatan_mesin}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_aset_tetap_peralatan_mesin}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_aset_tetap_peralatan_mesin)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Jasa */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Jasa"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_aset_tetap_gedung_bangunan}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_aset_tetap_gedung_bangunan}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_aset_tetap_gedung_bangunan)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Pemeliharaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Pemeliharaan"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_aset_tetap_jalan_jaringan_irigasi}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_aset_tetap_jalan_jaringan_irigasi}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_aset_tetap_jalan_jaringan_irigasi)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Perjalanan Dinas */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Perjalanan Dinas"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_aset_tetap_lainnya}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_aset_tetap_lainnya'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_aset_tetap_lainnya}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_aset_tetap_lainnya'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_aset_tetap_lainnya)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Hibah */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Hibah"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_konstruksi_dalam_pekerjaan}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_konstruksi_dalam_pekerjaan}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_konstruksi_dalam_pekerjaan)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Beban Lain-lain */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Lain-lain"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_aset_lain_lain}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_aset_lain_lain'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_aset_lain_lain}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_aset_lain_lain'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_aset_lain_lain)}
                                         </div>
                                     </div>
                                 </td>
                                 <td className='border bg-yellow-200'>
                                     {/* Jumlah Penyesuaian */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Jumlah Penyesuaian"
-                                                className="form-input min-w-[250px] read-only:bg-slate-100"
-                                                readOnly
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.plus_jumlah_penyesuaian}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['plus_jumlah_penyesuaian'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.plus_jumlah_penyesuaian}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['plus_jumlah_penyesuaian'] = isNaN(value) ? 0 : value;
+                                                    return updated;
+                                                })
+                                                setIsUnsaved(true);
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.plus_jumlah_penyesuaian)}
                                         </div>
                                     </div>
                                 </td>
@@ -920,379 +919,387 @@ const PenyesuaianAset = (data: any) => {
                                     {/* Separator */}
                                 </td>
 
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Pegawai */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Pegawai"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_aset_tetap_tanah}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_aset_tetap_tanah}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_tanah)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Persediaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Persediaan"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_aset_tetap_peralatan_mesin}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_aset_tetap_peralatan_mesin}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_peralatan_mesin)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Jasa */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Jasa"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_aset_tetap_gedung_bangunan}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_aset_tetap_gedung_bangunan}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_gedung_bangunan)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Pemeliharaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Pemeliharaan"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_aset_tetap_jalan_jaringan_irigasi}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_aset_tetap_jalan_jaringan_irigasi}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_jalan_jaringan_irigasi)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Perjalanan Dinas */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Perjalanan Dinas"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_aset_tetap_lainnya}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_aset_tetap_lainnya'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_aset_tetap_lainnya}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_aset_tetap_lainnya'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_tetap_lainnya)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Hibah */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Hibah"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_konstruksi_dalam_pekerjaan}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_konstruksi_dalam_pekerjaan}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_konstruksi_dalam_pekerjaan)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Beban Lain-lain */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Beban Lain-lain"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_aset_lain_lain}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_aset_lain_lain'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_aset_lain_lain}
+                                            onChange={(e) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    const value = parseFloat(e?.target?.value);
+                                                    updated[index]['min_aset_lain_lain'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_aset_lain_lain)}
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border bg-green-200'>
+                                <td className='border bg-green-300'>
                                     {/* Jumlah Penyesuaian */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Jumlah Penyesuaian"
-                                                className="form-input min-w-[250px]"
-                                                onKeyDown={(e) => {
-                                                    if (!(
-                                                        (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                        (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                        e.keyCode == 8 ||
-                                                        e.keyCode == 46 ||
-                                                        e.keyCode == 37 ||
-                                                        e.keyCode == 39 ||
-                                                        e.keyCode == 188 ||
-                                                        e.keyCode == 9 ||
-                                                        // copy & paste
-                                                        (e.keyCode == 67 && e.ctrlKey) ||
-                                                        (e.keyCode == 86 && e.ctrlKey) ||
-                                                        // command + c & command + v
-                                                        (e.keyCode == 67 && e.metaKey) ||
-                                                        (e.keyCode == 86 && e.metaKey) ||
-                                                        // command + a
-                                                        (e.keyCode == 65 && e.metaKey) ||
-                                                        (e.keyCode == 65 && e.ctrlKey)
-                                                    )) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                                value={input.min_jumlah_penyesuaian}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        const value = parseFloat(e?.target?.value);
-                                                        updated[index]['min_jumlah_penyesuaian'] = isNaN(value) ? 0 : value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
+                                    <div className="flex group">
+                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                            Rp.
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="Mutasi Kurang"
+                                            onKeyDown={(e) => {
+                                                if (!(
+                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                    e.keyCode == 8 ||
+                                                    e.keyCode == 46 ||
+                                                    e.keyCode == 37 ||
+                                                    e.keyCode == 39 ||
+                                                    e.keyCode == 188 ||
+                                                    e.keyCode == 9 ||
+                                                    // copy & paste
+                                                    (e.keyCode == 67 && e.ctrlKey) ||
+                                                    (e.keyCode == 86 && e.ctrlKey) ||
+                                                    // command + c & command + v
+                                                    (e.keyCode == 67 && e.metaKey) ||
+                                                    (e.keyCode == 86 && e.metaKey) ||
+                                                    // command + a
+                                                    (e.keyCode == 65 && e.metaKey) ||
+                                                    (e.keyCode == 65 && e.ctrlKey)
+                                                )) {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            value={input.min_jumlah_penyesuaian}
+                                            onChange={(e) => {
+                                                // setDataInput((prev: any) => {
+                                                //     const value = parseFloat(e?.target?.value);
+                                                //     const data = [...prev];
+                                                //     data[index].min_jumlah_penyesuaian = isNaN(value) ? 0 : value;
+                                                //     return data;
+                                                // });
+                                            }}
+                                            readOnly={true}
+                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.min_jumlah_penyesuaian)}
                                         </div>
                                     </div>
                                 </td>

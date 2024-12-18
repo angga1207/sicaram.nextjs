@@ -74,6 +74,7 @@ const Page = () => {
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [years, setYears] = useState<any>([])
+    const [queryApp, setQueryApp] = useState<any>(null);
 
     useEffect(() => {
         setIsMounted(true);
@@ -97,6 +98,12 @@ const Page = () => {
             }
         }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted) {
+            setQueryApp(router.query.app ?? 0);
+        }
+    }, [isMounted, router]);
 
     useEffect(() => {
         if (isMounted && periode?.id) {
@@ -183,6 +190,7 @@ const Page = () => {
                         {[1, 12].includes(CurrentUser?.role_id) && (
                             <div className="">
                                 <Select placeholder="Kabupaten Ogan Ilir"
+                                    classNamePrefix={'selectAngga'}
                                     className='min-w-[300px] max-w-[300px] z-[2]'
                                     onChange={(e: any) => {
                                         if ([9].includes(CurrentUser?.role_id)) {
@@ -243,196 +251,252 @@ const Page = () => {
 
 
                 <div className="panel">
-                    <Tab.Group>
-                        <Tab.List className="mt-3 flex flex-nowrap border-b border-white-light dark:border-[#191e3a overflow-x-auto">
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    {(isMounted && queryApp != null) && (
+                        <Tab.Group defaultIndex={queryApp} key={queryApp}>
+                            <Tab.List className="mt-3 flex flex-nowrap border-b border-white-light dark:border-[#191e3a overflow-x-auto">
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 0 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Penyesuaian Beban Barjas
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Penyesuaian Beban Barjas
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 1 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Modal ke Beban
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Modal ke Beban
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 2 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Barjas ke Aset
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Barjas ke Aset
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 3 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Penyesuaian Aset
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Penyesuaian Aset
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 4 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Atribusi
-                                    </button>
-                                )}
-                            </Tab>
+                                            Atribusi
+                                        </button>
+                                    )}
+                                </Tab>
 
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 5 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Kertas Kerja Tambahan
-                                    </button>
-                                )}
-                            </Tab>
+                                            Kertas Kerja Tambahan
+                                        </button>
+                                    )}
+                                </Tab>
 
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 6 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Penilaian Aset
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Penilaian Aset
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 7 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Penghapusan Aset
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            Penghapusan Aset
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={() => {
+                                                // router.push({
+                                                //     pathname: '/accountancy/penyesuaian-aset-beban',
+                                                //     query: { app: 8 },
+                                                // });
+                                            }}
+                                            className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Penjualan Aset
-                                    </button>
-                                )}
-                            </Tab>
-
-                        </Tab.List>
-
-                        <Tab.Panels>
-                            <Tab.Panel>
-                                <div className="active pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <PenyesuaianBebanDanBarjas
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
+                                            Penjualan Aset
+                                        </button>
                                     )}
-                                </div>
-                            </Tab.Panel>
+                                </Tab>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <ModalKeBeban
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                            </Tab.List>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <BarjasKeAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                            <Tab.Panels>
+                                <Tab.Panel>
+                                    <div className="active pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <PenyesuaianBebanDanBarjas
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <PenyesuaianAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <ModalKeBeban
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <Atribusi
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <BarjasKeAset
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-0">
-                                    {(isMounted && instances.length > 0) && (
-                                        <KertasKerjaTambahan
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <PenyesuaianAset
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <PenilaianAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <Atribusi
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <PenghapusanAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-0">
+                                        {(isMounted && instances.length > 0) && (
+                                            <KertasKerjaTambahan
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <PenjualanAset
-                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <PenilaianAset
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
 
-                        </Tab.Panels>
-                    </Tab.Group>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <PenghapusanAset
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <PenjualanAset
+                                                data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+
+                            </Tab.Panels>
+                        </Tab.Group>
+                    )}
                 </div>
 
             </div>

@@ -418,9 +418,9 @@ const KIB_D = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
+                                                    {/* <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
+                                                        placeholder=""
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -454,8 +454,8 @@ const KIB_D = (data: any) => {
                                                                 return data;
                                                             });
                                                         }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" /> */}
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.saldo_awal)}
                                                     </div>
                                                 </div>
