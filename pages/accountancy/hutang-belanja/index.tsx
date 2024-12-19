@@ -182,8 +182,9 @@ const Page = () => {
 
                                 kode_rekening_id: '',
                                 nama_kegiatan: '',
-                                pelaksana_kegiatan: '',
+                                pelaksana_pekerjaan: '',
                                 nomor_kontrak: '',
+                                tahun_kontrak: '',
                                 nilai_kontrak: 0,
                                 kewajiban_tidak_terbayar: 0,
                                 kewajiban_tidak_terbayar_last_year: 0,
@@ -271,8 +272,9 @@ const Page = () => {
 
             kode_rekening_id: '',
             nama_kegiatan: '',
-            pelaksana_kegiatan: '',
+            pelaksana_pekerjaan: '',
             nomor_kontrak: '',
+            tahun_kontrak: '',
             nilai_kontrak: 0,
             kewajiban_tidak_terbayar: 0,
             kewajiban_tidak_terbayar_last_year: 0,
@@ -314,7 +316,14 @@ const Page = () => {
     const updatedData = (data: any, index: number) => {
         setDataInput((prev: any) => {
             const updated = [...prev];
-            //
+            updated[index].jumlah_pembayaran_hutang = parseFloat(updated[index].p1_jumlah) + parseFloat(updated[index].p2_jumlah) + parseFloat(updated[index].p3_jumlah);
+
+            if (updated[index].tahun_kontrak == year) {
+                updated[index].hutang_baru = parseFloat(updated[index].nilai_kontrak) - parseFloat(updated[index].jumlah_pembayaran_hutang);
+                updated[index].kewajiban_tidak_terbayar = updated[index].hutang_baru;
+            } else {
+                updated[index].kewajiban_tidak_terbayar = parseFloat(updated[index].kewajiban_tidak_terbayar_last_year) - parseFloat(updated[index].jumlah_pembayaran_hutang);
+            }
             return updated;
         })
         setIsUnsaved(true);
@@ -474,11 +483,14 @@ const Page = () => {
                                     <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
                                         Pelaksana Pekerjaan
                                     </th>
-                                    <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
-                                        No. Kontrak
+                                    <th rowSpan={2} colSpan={2} className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Kontrak
                                     </th>
                                     <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
                                         Nilai Belanja / Nilai Kontrak
+                                    </th>
+                                    <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Kewajiban Tidak Terbayar {year - 1}
                                     </th>
                                     <th colSpan={9} className='text-center border border-slate-100 whitespace-nowrap'>
                                         Pembayaran s.d 31 Des {year}
@@ -487,10 +499,10 @@ const Page = () => {
                                         Jumlah Pembayaran Hutang s.d 31 Des {year}
                                     </th>
                                     <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
-                                        Hutang Baru {year}
+                                        Kewajiban Tidak Terbayar {year}
                                     </th>
                                     <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
-                                        Kewajiban Tidak Terbayar {year}
+                                        Hutang Baru {year}
                                     </th>
                                     <th colSpan={13} rowSpan={2} className='text-center border border-slate-100 whitespace-nowrap'>
                                         Hutang (Rp)
@@ -508,6 +520,13 @@ const Page = () => {
                                     </th>
                                 </tr>
                                 <tr className="!bg-dark !text-white">
+
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Nomor
+                                    </th>
+                                    <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                        Tahun
+                                    </th>
 
                                     <th className='text-center border border-slate-100 whitespace-nowrap'>
                                         No SP2D
@@ -723,11 +742,11 @@ const Page = () => {
                                                 <input type="text"
                                                     placeholder='Pelaksana Pekerjaan'
                                                     autoComplete='off'
-                                                    value={data.pelaksana_kegiatan}
+                                                    value={data.pelaksana_pekerjaan}
                                                     onChange={(e) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
-                                                            updated[index]['pelaksana_kegiatan'] = e.target.value;
+                                                            updated[index]['pelaksana_pekerjaan'] = e.target.value;
                                                             return updated;
                                                         });
                                                     }}
@@ -746,6 +765,26 @@ const Page = () => {
                                                         });
                                                     }}
                                                     className='form-input font-normal min-w-[250px]' />
+                                            </td>
+                                            <td className='border'>
+                                                <Select
+                                                    className="min-w-[250px]"
+                                                    id="tahun"
+                                                    options={years}
+                                                    placeholder="Pilih Tahun Kontrak"
+                                                    value={years?.find((option: any) => option.value === data.tahun_kontrak)}
+                                                    onChange={(e: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['tahun_kontrak'] = e.value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                    isSearchable={false}
+                                                    isClearable={false}
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={(years?.length === 0) || false}
+                                                />
                                             </td>
                                             <td className='border'>
                                                 <div className="flex group">
@@ -790,6 +829,52 @@ const Page = () => {
                                                         className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
                                                     <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.nilai_kontrak)}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className='border'>
+                                                <div className="flex group">
+                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                        Rp.
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        onKeyDown={(e) => {
+                                                            if (!(
+                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                                                e.keyCode == 8 ||
+                                                                e.keyCode == 46 ||
+                                                                e.keyCode == 37 ||
+                                                                e.keyCode == 39 ||
+                                                                e.keyCode == 188 ||
+                                                                e.keyCode == 9 ||
+                                                                // copy & paste
+                                                                (e.keyCode == 67 && e.ctrlKey) ||
+                                                                (e.keyCode == 86 && e.ctrlKey) ||
+                                                                // command + c & command + v
+                                                                (e.keyCode == 67 && e.metaKey) ||
+                                                                (e.keyCode == 86 && e.metaKey) ||
+                                                                // command + a
+                                                                (e.keyCode == 65 && e.metaKey) ||
+                                                                (e.keyCode == 65 && e.ctrlKey)
+                                                            )) {
+                                                                e.preventDefault();
+                                                            }
+                                                        }}
+                                                        value={data.kewajiban_tidak_terbayar_last_year}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                const value = parseFloat(e?.target?.value);
+                                                                updated[index]['kewajiban_tidak_terbayar_last_year'] = isNaN(value) ? 0 : value;
+                                                                updatedData(updated, index);
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
+                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.kewajiban_tidak_terbayar_last_year)}
                                                     </div>
                                                 </div>
                                             </td>
@@ -1052,43 +1137,7 @@ const Page = () => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={data.jumlah_pembayaran_hutang}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const updated = [...prev];
-                                                                const value = parseFloat(e?.target?.value);
-                                                                updated[index]['jumlah_pembayaran_hutang'] = isNaN(value) ? 0 : value;
-                                                                updatedData(updated, index);
-                                                                return updated;
-                                                            });
-                                                        }}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-100">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.jumlah_pembayaran_hutang)}
                                                     </div>
                                                 </div>
@@ -1098,7 +1147,17 @@ const Page = () => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
+                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-100">
+                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.kewajiban_tidak_terbayar)}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className='border'>
+                                                <div className="flex group">
+                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                        Rp.
+                                                    </div>
+                                                    {/* <input
                                                         type="text"
                                                         onKeyDown={(e) => {
                                                             if (!(
@@ -1133,55 +1192,9 @@ const Page = () => {
                                                                 return updated;
                                                             });
                                                         }}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" /> */}
+                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-100">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.hutang_baru)}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className='border'>
-                                                <div className="flex group">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={data.kewajiban_tidak_terbayar}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const updated = [...prev];
-                                                                const value = parseFloat(e?.target?.value);
-                                                                updated[index]['kewajiban_tidak_terbayar'] = isNaN(value) ? 0 : value;
-                                                                updatedData(updated, index);
-                                                                return updated;
-                                                            });
-                                                        }}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.kewajiban_tidak_terbayar)}
                                                     </div>
                                                 </div>
                                             </td>
@@ -1789,6 +1802,80 @@ const Page = () => {
                                     </Fragment>
                                 ))}
                             </tbody>
+                            <tfoot className='hidden'>
+                                <tr>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Jumlah
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                    <td className='border'>
+                                        <div className="flex justify-center font-semibold">
+                                            Rp.
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
 

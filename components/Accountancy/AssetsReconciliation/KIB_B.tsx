@@ -1,10 +1,13 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faLink, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { getKibB, saveKibB } from '@/apis/Accountancy/RekonsiliasiAset';
+import Link from 'next/link';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -419,43 +422,6 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    {/* <input
-                                                        type="text"
-                                                        placeholder=""
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.saldo_awal}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].saldo_awal = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" /> */}
                                                     <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.saldo_awal)}
                                                     </div>
@@ -481,44 +447,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_hutang_kegiatan}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_hutang_kegiatan = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_hutang_kegiatan)}
                                                     </div>
                                                 </div>
@@ -530,44 +459,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_atribusi}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_atribusi = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_atribusi)}
                                                     </div>
                                                 </div>
@@ -580,7 +472,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -628,7 +519,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -676,7 +566,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -722,44 +611,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_kib_a}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_kib_a = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_kib_a)}
                                                     </div>
                                                 </div>
@@ -770,44 +622,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_kib_b}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_kib_b = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_kib_b)}
                                                     </div>
                                                 </div>
@@ -818,44 +633,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_kib_c}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_kib_c = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_kib_c)}
                                                     </div>
                                                 </div>
@@ -866,44 +644,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_kib_d}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_kib_d = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_kib_d)}
                                                     </div>
                                                 </div>
@@ -914,44 +655,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_kib_e}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_kib_e = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_kib_e)}
                                                     </div>
                                                 </div>
@@ -962,44 +666,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_kdp}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_kdp = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_kdp)}
                                                     </div>
                                                 </div>
@@ -1010,44 +677,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_reklasifikasi_aset_lain_lain}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_reklasifikasi_aset_lain_lain = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_reklasifikasi_aset_lain_lain)}
                                                     </div>
                                                 </div>
@@ -1058,44 +688,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_hibah_masuk}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_hibah_masuk = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_hibah_masuk)}
                                                     </div>
                                                 </div>
@@ -1106,44 +699,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_penilaian}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_penilaian = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_penilaian)}
                                                     </div>
                                                 </div>
@@ -1154,44 +710,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_mutasi_antar_opd}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].plus_mutasi_antar_opd = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_mutasi_antar_opd)}
                                                     </div>
                                                 </div>
@@ -1202,45 +721,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.plus_total}
-                                                        readOnly={true}
-                                                        // onChange={(e) => {
-                                                        //     setDataInput((prev: any) => {
-                                                        //         const value = parseFloat(e?.target?.value);
-                                                        //         const data = [...prev];
-                                                        //         data[index].plus_total = isNaN(value) ? 0 : value;
-                                                        //         _calculateData(index)
-                                                        //         return data;
-                                                        //     });
-                                                        // }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.plus_total)}
                                                     </div>
                                                 </div>
@@ -1256,7 +737,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1304,7 +784,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1352,7 +831,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1400,7 +878,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1446,44 +923,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_kib_a}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_kib_a = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_kib_a)}
                                                     </div>
                                                 </div>
@@ -1494,44 +934,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_kib_b}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_kib_b = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_kib_b)}
                                                     </div>
                                                 </div>
@@ -1542,44 +945,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_kib_c}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_kib_c = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_kib_c)}
                                                     </div>
                                                 </div>
@@ -1590,44 +956,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_kib_d}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_kib_d = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_kib_d)}
                                                     </div>
                                                 </div>
@@ -1638,44 +967,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_kib_e}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_kib_e = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_kib_e)}
                                                     </div>
                                                 </div>
@@ -1686,44 +978,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_kdp}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_kdp = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_kdp)}
                                                     </div>
                                                 </div>
@@ -1734,44 +989,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_reklasifikasi_beban_aset_lain_lain}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_reklasifikasi_beban_aset_lain_lain = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_reklasifikasi_beban_aset_lain_lain)}
                                                     </div>
                                                 </div>
@@ -1782,45 +1000,15 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_penghapusan}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_penghapusan = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_penghapusan)}
+                                                    </div>
+                                                    <div className="self-center ml-1">
+                                                        <Tippy content="Link Penghapusan Aset & Penjualan Aset" theme="bct" className="p-2">
+                                                            <Link href="/accountancy/penyesuaian-aset-beban?app=7" className="btn btn-primary px-2 rounded-full h-9 w-9">
+                                                                <FontAwesomeIcon icon={faLink} className="w-4 h-4 cursor-pointer" />
+                                                            </Link>
+                                                        </Tippy>
                                                     </div>
                                                 </div>
                                             </td>
@@ -1830,44 +1018,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_mutasi_antar_opd}
-                                                        onChange={(e) => {
-                                                            setDataInput((prev: any) => {
-                                                                const value = parseFloat(e?.target?.value);
-                                                                const data = [...prev];
-                                                                data[index].min_mutasi_antar_opd = isNaN(value) ? 0 : value;
-                                                                _calculateData(index)
-                                                                return data;
-                                                            });
-                                                        }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_mutasi_antar_opd)}
                                                     </div>
                                                 </div>
@@ -1880,7 +1031,6 @@ const KIB_B = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -1926,45 +1076,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.min_total}
-                                                        readOnly={true}
-                                                        // onChange={(e) => {
-                                                        //     setDataInput((prev: any) => {
-                                                        //         const value = parseFloat(e?.target?.value);
-                                                        //         const data = [...prev];
-                                                        //         data[index].min_total = isNaN(value) ? 0 : value;
-                                                        //         // _calculateData(index)
-                                                        //         return data;
-                                                        //     });
-                                                        // }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_total)}
                                                     </div>
                                                 </div>
@@ -1975,45 +1087,7 @@ const KIB_B = (data: any) => {
                                                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                         Rp.
                                                     </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={row.saldo_akhir}
-                                                        readOnly={true}
-                                                        // onChange={(e) => {
-                                                        //     setDataInput((prev: any) => {
-                                                        //         const value = parseFloat(e?.target?.value);
-                                                        //         const data = [...prev];
-                                                        //         data[index].saldo_akhir = isNaN(value) ? 0 : value;
-                                                        //         // _calculateData(index)
-                                                        //         return data;
-                                                        //     });
-                                                        // }}
-                                                        className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.saldo_akhir)}
                                                     </div>
                                                 </div>

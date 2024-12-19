@@ -186,7 +186,7 @@ const Page = () => {
                                 nomor_perjanjian: '',
                                 tanggal_perjanjian: '',
                                 rekanan: '',
-                                jangka_waktu: '',
+                                jangka_waktu: 0,
 
                                 kontrak_date_start: '',
                                 kontrak_date_end: '',
@@ -227,7 +227,7 @@ const Page = () => {
             nomor_perjanjian: '',
             tanggal_perjanjian: '',
             rekanan: '',
-            jangka_waktu: '',
+            jangka_waktu: 0,
 
             kontrak_date_start: '',
             kontrak_date_end: '',
@@ -237,6 +237,32 @@ const Page = () => {
             belum_jatuh_tempo: 0,
         }
         setDataInput((prevData: any) => [...prevData, newData]);
+        setIsUnsaved(true);
+    }
+
+    const updatedData = (data: any, index: number) => {
+        setDataInput((prev: any) => {
+            const updated = [...prev];
+            const dateStart = new Date(data[index].kontrak_date_start);
+            const dateEnd = new Date(data[index].kontrak_date_end);
+            const monthRange = (dateEnd.getFullYear() - dateStart.getFullYear()) * 12 + (dateEnd.getMonth() - dateStart.getMonth());
+
+            if (monthRange >= 0) {
+                updated[index]['jangka_waktu'] = monthRange;
+            }
+
+            // if dateStart < now and dateStart same year with now
+            if (dateStart < new Date() && dateStart.getFullYear() == new Date().getFullYear()) {
+                const monthRangeToNow = (new Date().getFullYear() - dateStart.getFullYear()) * 12 + (new Date().getMonth() - dateStart.getMonth());
+                console.log(monthRangeToNow)
+                updated[index]['sudah_jatuh_tempo'] = ((monthRangeToNow / monthRange) * parseFloat(data[index].kontrak_value)).toFixed(2);
+            } else {
+                updated[index]['sudah_jatuh_tempo'] = 0;
+            }
+
+            updated[index]['belum_jatuh_tempo'] = (parseFloat(data[index].kontrak_value) - parseFloat(updated[index]['sudah_jatuh_tempo'])).toFixed(2);
+            return updated;
+        })
         setIsUnsaved(true);
     }
 
@@ -606,16 +632,42 @@ const Page = () => {
                                                 disabled={isSaving == true}
                                                 type="text"
                                                 placeholder="Jangka Waktu"
-                                                className="form-input w-[250px] placeholder:font-normal"
+                                                className="form-input w-[250px] placeholder:font-normal read-only:bg-slate-200"
                                                 value={input.jangka_waktu}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['jangka_waktu'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
+                                                readOnly={true}
+                                            // onKeyDown={(e) => {
+                                            //     if (!(
+                                            //         (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                            //         (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                            //         e.keyCode == 8 ||
+                                            //         e.keyCode == 46 ||
+                                            //         e.keyCode == 37 ||
+                                            //         e.keyCode == 39 ||
+                                            //         e.keyCode == 188 ||
+                                            //         e.keyCode == 9 ||
+                                            //         // copy & paste
+                                            //         (e.keyCode == 67 && e.ctrlKey) ||
+                                            //         (e.keyCode == 86 && e.ctrlKey) ||
+                                            //         // command + c & command + v
+                                            //         (e.keyCode == 67 && e.metaKey) ||
+                                            //         (e.keyCode == 86 && e.metaKey) ||
+                                            //         // command + a
+                                            //         (e.keyCode == 65 && e.metaKey) ||
+                                            //         (e.keyCode == 65 && e.ctrlKey)
+                                            //     )) {
+                                            //         e.preventDefault();
+                                            //     }
+                                            // }}
+                                            // onChange={(e: any) => {
+                                            //     setDataInput((prev: any) => {
+                                            //         const updated = [...prev];
+                                            //         const value = parseFloat(e?.target?.value);
+                                            //         updated[index]['jangka_waktu'] = isNaN(value) ? 0 : value;
+                                            //         updatedData(updated, index);
+                                            //         return updated;
+                                            //     })
+                                            //     setIsUnsaved(true);
+                                            // }}
                                             />
                                         </td>
 
@@ -635,6 +687,7 @@ const Page = () => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];
                                                         updated[index]['kontrak_date_start'] = newYmd;
+                                                        updatedData(updated, index);
                                                         return updated;
                                                     })
                                                     setIsUnsaved(true);
@@ -654,6 +707,7 @@ const Page = () => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];
                                                         updated[index]['kontrak_date_end'] = newYmd;
+                                                        updatedData(updated, index);
                                                         return updated;
                                                     })
                                                     setIsUnsaved(true);
@@ -696,6 +750,7 @@ const Page = () => {
                                                             const updated = [...prev];
                                                             const value = parseFloat(e?.target?.value);
                                                             updated[index]['kontrak_value'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
                                                             return updated;
                                                         })
                                                     }}
@@ -710,43 +765,7 @@ const Page = () => {
                                                 <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                     Rp.
                                                 </div>
-                                                <input
-                                                    disabled={isSaving == true}
-                                                    type="text"
-                                                    onKeyDown={(e) => {
-                                                        if (!(
-                                                            (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                            (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                            e.keyCode == 8 ||
-                                                            e.keyCode == 46 ||
-                                                            e.keyCode == 37 ||
-                                                            e.keyCode == 39 ||
-                                                            e.keyCode == 188 ||
-                                                            e.keyCode == 9 ||
-                                                            // copy & paste
-                                                            (e.keyCode == 67 && e.ctrlKey) ||
-                                                            (e.keyCode == 86 && e.ctrlKey) ||
-                                                            // command + c & command + v
-                                                            (e.keyCode == 67 && e.metaKey) ||
-                                                            (e.keyCode == 86 && e.metaKey) ||
-                                                            // command + a
-                                                            (e.keyCode == 65 && e.metaKey) ||
-                                                            (e.keyCode == 65 && e.ctrlKey)
-                                                        )) {
-                                                            e.preventDefault();
-                                                        }
-                                                    }}
-                                                    value={input.sudah_jatuh_tempo}
-                                                    onChange={(e) => {
-                                                        setDataInput((prev: any) => {
-                                                            const updated = [...prev];
-                                                            const value = parseFloat(e?.target?.value);
-                                                            updated[index]['sudah_jatuh_tempo'] = isNaN(value) ? 0 : value;
-                                                            return updated;
-                                                        })
-                                                    }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.sudah_jatuh_tempo)}
                                                 </div>
                                             </div>
@@ -756,43 +775,7 @@ const Page = () => {
                                                 <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                                                     Rp.
                                                 </div>
-                                                <input
-                                                    disabled={isSaving == true}
-                                                    type="text"
-                                                    onKeyDown={(e) => {
-                                                        if (!(
-                                                            (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                            (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                            e.keyCode == 8 ||
-                                                            e.keyCode == 46 ||
-                                                            e.keyCode == 37 ||
-                                                            e.keyCode == 39 ||
-                                                            e.keyCode == 188 ||
-                                                            e.keyCode == 9 ||
-                                                            // copy & paste
-                                                            (e.keyCode == 67 && e.ctrlKey) ||
-                                                            (e.keyCode == 86 && e.ctrlKey) ||
-                                                            // command + c & command + v
-                                                            (e.keyCode == 67 && e.metaKey) ||
-                                                            (e.keyCode == 86 && e.metaKey) ||
-                                                            // command + a
-                                                            (e.keyCode == 65 && e.metaKey) ||
-                                                            (e.keyCode == 65 && e.ctrlKey)
-                                                        )) {
-                                                            e.preventDefault();
-                                                        }
-                                                    }}
-                                                    value={input.belum_jatuh_tempo}
-                                                    onChange={(e) => {
-                                                        setDataInput((prev: any) => {
-                                                            const updated = [...prev];
-                                                            const value = parseFloat(e?.target?.value);
-                                                            updated[index]['belum_jatuh_tempo'] = isNaN(value) ? 0 : value;
-                                                            return updated;
-                                                        })
-                                                    }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
+                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.belum_jatuh_tempo)}
                                                 </div>
                                             </div>

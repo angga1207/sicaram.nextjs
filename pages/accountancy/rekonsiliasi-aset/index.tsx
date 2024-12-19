@@ -189,8 +189,8 @@ const Page = () => {
                         {[1, 12].includes(CurrentUser?.role_id) && (
                             <div className="">
                                 <Select placeholder="Kabupaten Ogan Ilir"
+                                    className='min-w-[300px] max-w-[300px]'
                                     classNamePrefix={'selectAngga'}
-                                    className='min-w-[300px] max-w-[300px] z-[2]'
                                     onChange={(e: any) => {
                                         if ([9].includes(CurrentUser?.role_id)) {
                                             showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');

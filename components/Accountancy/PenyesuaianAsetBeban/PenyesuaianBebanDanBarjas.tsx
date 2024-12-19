@@ -305,7 +305,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                 Beban Hibah
                             </th>
                             <th className='whitespace-nowrap border bg-yellow-200'>
-                                Beban Lain-lain
+                                Beban Uang / Jasa Diberikan
                             </th>
                             <th className='whitespace-nowrap border bg-yellow-200'>
                                 Jumlah Penyesuaian
@@ -332,7 +332,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                 Beban Hibah
                             </th>
                             <th className='whitespace-nowrap border bg-green-200'>
-                                Beban Lain-lain
+                                Beban Uang / Jasa Diberikan
                             </th>
                             <th className='whitespace-nowrap border bg-green-200'>
                                 Jumlah Penyesuaian

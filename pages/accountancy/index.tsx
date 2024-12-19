@@ -16,7 +16,7 @@ import Link from 'next/link';
 import Select from 'react-select';
 import LoadingSicaram from '@/components/LoadingSicaram';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThList } from '@fortawesome/free-solid-svg-icons';
+import { faList12, faThList } from '@fortawesome/free-solid-svg-icons';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 const showAlert = async (icon: any, text: any) => {
@@ -99,9 +99,12 @@ const Page = () => {
     return (
         <div>
             <div className="flex items-center justify-center">
-                <FontAwesomeIcon icon={faThList} className='w-6 h-6 mr-1' />
+                {/* <FontAwesomeIcon icon={faList12} className='w-6 h-6 mr-1' /> */}
                 <div className="font-semibold text-xl uppercase">
                     Menu Akuntansi
+                    <span className='dots-loading'>
+                        ...
+                    </span>
                 </div>
             </div>
 
@@ -246,7 +249,7 @@ const Page = () => {
                             >
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Pendapatan LRA LO
+                                Pendapatan LRA LO <br /> (Piutang & PDD)
                             </div>
                         </Link>
                     </Tippy>

@@ -278,70 +278,70 @@ const PenyesuaianAset = (data: any) => {
                                     Nama Perangkat Daerah
                                 </th>
                             )}
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Kode Rekening
                             </th>
-                            <th className='whitespace-nowrap border sticky top-0 left-0 bg-slate-100 dark:bg-slate-800'>
+                            <th className='whitespace-nowrap border text-center sticky top-0 left-0 bg-slate-100 dark:bg-slate-800'>
                                 Nama Barang / Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Nomor Kontrak
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Nomor SP2D
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Konstruksi dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Aset Lain-lain
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-200'>
                                 Jumlah Penyesuaian
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Konstruksi dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Aset Lain-lain
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Jumlah Penyesuaian
                             </th>
 

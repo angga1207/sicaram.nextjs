@@ -314,35 +314,35 @@ const PenilaianAset = (data: any) => {
                             </th>
                         </tr>
                         <tr className='sticky top-[45px] left-0 z-[1] !bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border'>
+                            <th className='text-center whitespace-nowrap border'>
                                 Nomor BA
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='text-center whitespace-nowrap border'>
                                 Tanggal BA
                             </th>
 
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Persediaan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Aset Tetap Jalan, Jaringan dan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Konstruksi Dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
+                            <th className='text-center whitespace-nowrap border border-slate-900 bg-yellow-300 text-slate-900'>
                                 Aset Lainnya
                             </th>
                         </tr>

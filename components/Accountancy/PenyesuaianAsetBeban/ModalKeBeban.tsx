@@ -312,7 +312,7 @@ const ModalKeBeban = (data: any) => {
                                 Beban Hibah
                             </th>
                             <th className='whitespace-nowrap border text-center bg-yellow-300'>
-                                Beban Lain-lain
+                                Beban Uang / Jasa Diberikan
                             </th>
                             <th className='whitespace-nowrap border text-center bg-yellow-300'>
                                 Jumlah Penyesuaian

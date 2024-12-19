@@ -351,88 +351,88 @@ const Atribusi = (data: any) => {
                             </th>
                         </tr>
                         <tr className='sticky top-[45px] left-0 z-[1] !bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Kode Rekening
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Nama Rekening
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Belanja 2022 (Rp)
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Hutang 2022 (Rp)
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Jumlah (Rp)
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Kode Rekening
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Nama Rekening & Rincian Paket Pekerjaannya
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Belanja 2022 (Rp)
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Hutang 2022 (Rp)
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Jumlah (Rp)
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Kode Rekening & Rincian Paket Pekerjaannya
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Nama Rekening
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Belanja 2023 (Rp)
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Hutang 2023 (Rp)
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='whitespace-nowrap border text-center'>
                                 Jumlah (Rp)
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-green-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-green-300 !text-slate-900'>
                                 No Kontrak Pegawai / Barang Jasa
                             </th>
-                            <th className='whitespace-nowrap border bg-green-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-green-300 !text-slate-900'>
                                 No SP2D Pegawai / Barang Jasa
                             </th>
 
                             <th className='!bg-white border !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Konstruksi Dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-300 !text-slate-900'>
+                            <th className='whitespace-nowrap border text-center bg-yellow-300 !text-slate-900'>
                                 Aset Lain-lain
                             </th>
 

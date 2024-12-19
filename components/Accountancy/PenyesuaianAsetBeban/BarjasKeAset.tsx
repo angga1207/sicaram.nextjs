@@ -322,25 +322,25 @@ const BarjasKeAset = (data: any) => {
                             <th className='!bg-white border !px-2'></th>
 
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Aset Tetap Tanah
+                                Beban Pegawai
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Aset Tetap Peralatan dan Mesin
+                                Beban Persediaan
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Aset Tetap Gedung dan Bangunan
+                                Beban Jasa
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Aset Tetap Jalan Jaringan Irigasi
+                                Beban Pemeliharaan
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Aset Tetap Lainnya
+                                Beban Perjalanan Dinas
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Konstruksi dalam Pekerjaan
+                                Beban Hibah
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
-                                Aset Lain-lain
+                                Beban Uang / Jasa Diberikan
                             </th>
                             <th className='whitespace-nowrap border text-center bg-green-200'>
                                 Jumlah Penyesuaian

@@ -108,7 +108,7 @@ const MutasiAset = (data: any) => {
         akumulasi_penyusutan: 0,
 
         plus_aset_tetap_tanah: 0,
-        plus_aset_tetap_perlatan_mesin: 0,
+        plus_aset_tetap_peralatan_mesin: 0,
         plus_aset_tetap_gedung_bangunan: 0,
         plus_aset_tetap_jalan_jaringan_irigasi: 0,
         plus_aset_tetap_lainnya: 0,
@@ -116,7 +116,7 @@ const MutasiAset = (data: any) => {
         plus_aset_lainnya: 0,
 
         min_aset_tetap_tanah: 0,
-        min_aset_tetap_perlatan_mesin: 0,
+        min_aset_tetap_peralatan_mesin: 0,
         min_aset_tetap_gedung_bangunan: 0,
         min_aset_tetap_jalan_jaringan_irigasi: 0,
         min_aset_tetap_lainnya: 0,
@@ -147,7 +147,7 @@ const MutasiAset = (data: any) => {
                                 bast_date: '',
 
                                 plus_aset_tetap_tanah: 0,
-                                plus_aset_tetap_perlatan_mesin: 0,
+                                plus_aset_tetap_peralatan_mesin: 0,
                                 plus_aset_tetap_gedung_bangunan: 0,
                                 plus_aset_tetap_jalan_jaringan_irigasi: 0,
                                 plus_aset_tetap_lainnya: 0,
@@ -155,7 +155,7 @@ const MutasiAset = (data: any) => {
                                 plus_aset_lainnya: 0,
 
                                 min_aset_tetap_tanah: 0,
-                                min_aset_tetap_perlatan_mesin: 0,
+                                min_aset_tetap_peralatan_mesin: 0,
                                 min_aset_tetap_gedung_bangunan: 0,
                                 min_aset_tetap_jalan_jaringan_irigasi: 0,
                                 min_aset_tetap_lainnya: 0,
@@ -200,7 +200,7 @@ const MutasiAset = (data: any) => {
                 bast_date: '',
 
                 plus_aset_tetap_tanah: 0,
-                plus_aset_tetap_perlatan_mesin: 0,
+                plus_aset_tetap_peralatan_mesin: 0,
                 plus_aset_tetap_gedung_bangunan: 0,
                 plus_aset_tetap_jalan_jaringan_irigasi: 0,
                 plus_aset_tetap_lainnya: 0,
@@ -208,7 +208,7 @@ const MutasiAset = (data: any) => {
                 plus_aset_lainnya: 0,
 
                 min_aset_tetap_tanah: 0,
-                min_aset_tetap_perlatan_mesin: 0,
+                min_aset_tetap_peralatan_mesin: 0,
                 min_aset_tetap_gedung_bangunan: 0,
                 min_aset_tetap_jalan_jaringan_irigasi: 0,
                 min_aset_tetap_lainnya: 0,
@@ -228,7 +228,7 @@ const MutasiAset = (data: any) => {
                 updated.akumulasi_penyusutan = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.akumulasi_penyusutan), 0);
 
                 updated.plus_aset_tetap_tanah = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_tetap_tanah), 0);
-                updated.plus_aset_tetap_perlatan_mesin = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_tetap_perlatan_mesin), 0);
+                updated.plus_aset_tetap_peralatan_mesin = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_tetap_peralatan_mesin), 0);
                 updated.plus_aset_tetap_gedung_bangunan = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_tetap_gedung_bangunan), 0);
                 updated.plus_aset_tetap_jalan_jaringan_irigasi = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_tetap_jalan_jaringan_irigasi), 0);
                 updated.plus_aset_tetap_lainnya = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_tetap_lainnya), 0);
@@ -236,7 +236,7 @@ const MutasiAset = (data: any) => {
                 updated.plus_aset_lainnya = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.plus_aset_lainnya), 0);
 
                 updated.min_aset_tetap_tanah = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_aset_tetap_tanah), 0);
-                updated.min_aset_tetap_perlatan_mesin = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_aset_tetap_perlatan_mesin), 0);
+                updated.min_aset_tetap_peralatan_mesin = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_aset_tetap_peralatan_mesin), 0);
                 updated.min_aset_tetap_gedung_bangunan = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_aset_tetap_gedung_bangunan), 0);
                 updated.min_aset_tetap_jalan_jaringan_irigasi = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_aset_tetap_jalan_jaringan_irigasi), 0);
                 updated.min_aset_tetap_lainnya = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_aset_tetap_lainnya), 0);
@@ -751,19 +751,19 @@ const MutasiAset = (data: any) => {
                                                             e.preventDefault();
                                                         }
                                                     }}
-                                                    value={data.plus_aset_tetap_perlatan_mesin}
+                                                    value={data.plus_aset_tetap_peralatan_mesin}
                                                     onChange={(e) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
                                                             const value = parseFloat(e?.target?.value);
-                                                            updated[index]['plus_aset_tetap_perlatan_mesin'] = isNaN(value) ? 0 : value;
+                                                            updated[index]['plus_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
                                                             return updated;
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
                                                     className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
                                                 <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
-                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_perlatan_mesin)}
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_peralatan_mesin)}
                                                 </div>
                                             </div>
                                         </td>
@@ -1076,19 +1076,19 @@ const MutasiAset = (data: any) => {
                                                             e.preventDefault();
                                                         }
                                                     }}
-                                                    value={data.min_aset_tetap_perlatan_mesin}
+                                                    value={data.min_aset_tetap_peralatan_mesin}
                                                     onChange={(e) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
                                                             const value = parseFloat(e?.target?.value);
-                                                            updated[index]['min_aset_tetap_perlatan_mesin'] = isNaN(value) ? 0 : value;
+                                                            updated[index]['min_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
                                                             return updated;
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
                                                     className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
                                                 <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
-                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_perlatan_mesin)}
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_peralatan_mesin)}
                                                 </div>
                                             </div>
                                         </td>
@@ -1351,7 +1351,7 @@ const MutasiAset = (data: any) => {
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.plus_aset_tetap_tanah)}
                             </td>
                             <td className='border p-3 font-semibold'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.plus_aset_tetap_perlatan_mesin)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.plus_aset_tetap_peralatan_mesin)}
                             </td>
                             <td className='border p-3 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.plus_aset_tetap_gedung_bangunan)}
@@ -1375,7 +1375,7 @@ const MutasiAset = (data: any) => {
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_aset_tetap_tanah)}
                             </td>
                             <td className='border p-3 font-semibold'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_aset_tetap_perlatan_mesin)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_aset_tetap_peralatan_mesin)}
                             </td>
                             <td className='border p-3 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_aset_tetap_gedung_bangunan)}
