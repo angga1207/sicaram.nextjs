@@ -18,7 +18,7 @@ import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.4b.5";
+    const APP_VERSION = "2.4b.6";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -153,55 +153,72 @@ const Sidebar = () => {
                                 </li>
                             )}
 
-                            <li className="menu nav-item">
-                                <button type="button" className={`${currentMenu === 'lpse' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('lpse')}>
-                                    <div className="flex items-center">
-                                        <FontAwesomeIcon icon={faNetworkWired} className='shrink-0 group-hover:!text-primary' />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                            LPSE
-                                        </span>
-                                    </div>
-                                    <div className={currentMenu !== 'lpse' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-
-                                <AnimateHeight duration={300} height={currentMenu === 'lpse' ? 'auto' : 0}>
-                                    <ul className="sub-menu text-gray-500">
-                                        <li>
-                                            <Link href="/lpse">
-                                                Dashboard
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link
-                                                href="/lpse/penyedia"
-                                                className='text-xs'>
-                                                Paket Penyedia Terumumkan
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link
-                                                href="/lpse/swakelola"
-                                                className='text-xs'>
-                                                Paket Swakelola Terumumkan
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </AnimateHeight>
-                            </li>
 
                             {/* Start Here */}
 
-                            {([1, 2, 3, 4, 5, 6, 7, 8, 9, 12].includes(CurrentUser?.role_id)) && (
+                            {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].includes(CurrentUser?.role_id)) && (
                                 <>
-                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                    {/* <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
                                         <span>
                                             Master Data
                                         </span>
-                                    </h2>
+                                    </h2> */}
+
                                     <li className="menu nav-item">
+                                        <Link href="/Menu/MasterData" className="group">
+                                            <div className="flex items-center">
+                                                <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
+                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    Master Data
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+
+
+                                    {([1, 2, 3, 4, 5, 10].includes(CurrentUser?.role_id)) && (
+                                        <li className="menu nav-item">
+                                            <button type="button" className={`${currentMenu === 'lpse' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('lpse')}>
+                                                <div className="flex items-center">
+                                                    <FontAwesomeIcon icon={faNetworkWired} className='shrink-0 group-hover:!text-primary' />
+                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        LPSE
+                                                    </span>
+                                                </div>
+                                                <div className={currentMenu !== 'lpse' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                                    <IconCaretDown />
+                                                </div>
+                                            </button>
+
+                                            <AnimateHeight duration={300} height={currentMenu === 'lpse' ? 'auto' : 0}>
+                                                <ul className="sub-menu text-gray-500">
+                                                    <li>
+                                                        <Link href="/lpse">
+                                                            Dashboard
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link
+                                                            href="/lpse/penyedia"
+                                                            className='text-xs'>
+                                                            Paket Penyedia Terumumkan
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link
+                                                            href="/lpse/swakelola"
+                                                            className='text-xs'>
+                                                            Paket Swakelola Terumumkan
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+                                            </AnimateHeight>
+                                        </li>
+                                    )}
+
+
+                                    {/* <li className="menu nav-item">
                                         <button type="button" className={`${currentMenu === 'master-urusan-kegiatan' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('master-urusan-kegiatan')}>
                                             <div className="flex items-center">
                                                 <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
@@ -243,9 +260,9 @@ const Sidebar = () => {
                                                 </li>
                                             </ul>
                                         </AnimateHeight>
-                                    </li>
+                                    </li> */}
 
-                                    {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <button type="button" className={`${currentMenu === 'master-indikator-kinerja' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('master-indikator-kinerja')}>
                                                 <div className="flex items-center">
@@ -274,9 +291,9 @@ const Sidebar = () => {
                                                 </ul>
                                             </AnimateHeight>
                                         </li>
-                                    )}
+                                    )} */}
 
-                                    {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <button type="button" className={`${currentMenu === 'kode-rekening' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('kode-rekening')}>
                                                 <div className="flex items-center">
@@ -309,9 +326,9 @@ const Sidebar = () => {
                                                 </ul>
                                             </AnimateHeight>
                                         </li>
-                                    )}
+                                    )} */}
 
-                                    {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <button type="button" className={`${currentMenu === 'ref-data' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('ref-data')}>
                                                 <div className="flex items-center">
@@ -365,17 +382,10 @@ const Sidebar = () => {
                                                 </ul>
                                             </AnimateHeight>
                                         </li>
-                                    )}
+                                    )} */}
 
-                                    {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
                                         <>
-                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                                <IconMinus className="hidden h-5 w-4 flex-none" />
-                                                <span>
-                                                    Tujuan & Sasaran
-                                                </span>
-                                            </h2>
-
                                             <li className="menu nav-item">
                                                 <button type="button" className={`${currentMenu === 'head-tujuan-sasaran' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('head-tujuan-sasaran')}>
                                                     <div className="flex items-center">
@@ -413,11 +423,6 @@ const Sidebar = () => {
                                                                         Target Perubahan
                                                                     </Link>
                                                                 </li>
-                                                                <li>
-                                                                    <Link href="/realisasi/tujuan-sasaran" className=''>
-                                                                        Realisasi
-                                                                    </Link>
-                                                                </li>
 
                                                                 <li>
                                                                     <div className="text-sm font-semibold py-2">
@@ -441,11 +446,6 @@ const Sidebar = () => {
                                                                 <li>
                                                                     <Link href="/target/perubahan/tujuan-sasaran-perangkat-daerah" className=''>
                                                                         Target Perubahan
-                                                                    </Link>
-                                                                </li>
-                                                                <li>
-                                                                    <Link href="/realisasi/tujuan-sasaran-perangkat-daerah" className=''>
-                                                                        Realisasi
                                                                     </Link>
                                                                 </li>
                                                             </>
@@ -481,16 +481,9 @@ const Sidebar = () => {
                                                 </AnimateHeight>
                                             </li>
                                         </>
-                                    )}
+                                    )} */}
 
-                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                        <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>
-                                            SICARAM
-                                        </span>
-                                    </h2>
-
-                                    {([1, 2, 4, 7, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 4, 7, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <Link href="/tagging-sumber-dana" className="group">
                                                 <div className="flex items-center">
@@ -501,9 +494,9 @@ const Sidebar = () => {
                                                 </div>
                                             </Link>
                                         </li>
-                                    )}
+                                    )} */}
 
-                                    {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <Link href="/rpjmd" className="group">
                                                 <div className="flex items-center">
@@ -514,9 +507,9 @@ const Sidebar = () => {
                                                 </div>
                                             </Link>
                                         </li>
-                                    )}
+                                    )} */}
 
-                                    {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <Link href="/renstra" className="group">
                                                 <div className="flex items-center">
@@ -527,22 +520,9 @@ const Sidebar = () => {
                                                 </div>
                                             </Link>
                                         </li>
-                                    )}
-
-                                    {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
-                                            <Link href="/apbd" className="group">
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faCircleDollarToSlot} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                        APBD
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
                                     )} */}
 
-                                    {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
+                                    {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <Link href="/renja" className="group">
                                                 <div className="flex items-center">
@@ -553,28 +533,60 @@ const Sidebar = () => {
                                                 </div>
                                             </Link>
                                         </li>
-                                    )}
+                                    )} */}
 
-
-
-
-                                    <li className="menu nav-item">
-                                        <div className="h-2 border-b">
-                                            &nbsp;
-                                        </div>
-                                    </li>
                                     {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
-                                            <Link href="/kinerja" className="group">
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                        Realisasi
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
+                                        <>
+                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                                <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <span>
+                                                    REALISASI
+                                                </span>
+                                            </h2>
+                                            <li className="menu nav-item">
+                                                <Link href="/kinerja" className="group">
+                                                    <div className="flex items-center">
+                                                        <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
+                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                            Realisasi Program
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                            {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                                <li className="menu nav-item">
+                                                    <Link href="/realisasi/tujuan-sasaran" className="group">
+                                                        <div className="flex items-center">
+                                                            <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
+                                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                                Realisasi Tujuan Sasaran
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            )}
+                                            {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                                <li className="menu nav-item">
+                                                    <Link href="/realisasi/tujuan-sasaran-perangkat-daerah" className="group">
+                                                        <div className="flex items-center">
+                                                            <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
+                                                            <span className={`text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark ${([1, 2, 3, 6].includes(CurrentUser?.role_id)) ? "text-xs whitespace-normal" : ""}`}>
+                                                                Realisasi Tujuan Sasaran
+                                                                {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) ? " Perangkat Daerah" : ""}
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </>
                                     )}
+
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>
+                                            Laporan
+                                        </span>
+                                    </h2>
                                     <li className="menu nav-item">
                                         <Link href="/report" className="group">
                                             <div className="flex items-center">

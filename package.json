@@ -10,7 +10,7 @@
     "start prod": "next start -p 3002",
     "lint": "next lint",
     "prod": "next build && next start -p 3002",
-    "customprod" : "npm run start -- --port 3003"
+    "customprod": "npm run start -- --port 3003"
   },
   "dependencies": {
     "@develoka/angka-terbilang-js": "^1.4.2",
@@ -44,6 +44,7 @@
     "react": "18.2.0",
     "react-animate-height": "^3.1.0",
     "react-apexcharts": "^1.4.0",
+    "react-click-away-listener": "^2.3.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-countup": "^6.5.3",
     "react-dom": "18.2.0",

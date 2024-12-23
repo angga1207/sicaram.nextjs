@@ -138,6 +138,8 @@ const Header = () => {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // callback();
+
+                        logout();
                         router.push('/login')
                     }
                 });
