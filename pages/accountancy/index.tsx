@@ -18,7 +18,7 @@ import LoadingSicaram from '@/components/LoadingSicaram';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList12, faThList } from '@fortawesome/free-solid-svg-icons';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
-import Spline from '@splinetool/react-spline';
+// import Spline from '@splinetool/react-spline';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
