@@ -49,7 +49,7 @@ const Index = () => {
 
     const [AnggaranSeries, setAnggaranSeries] = useState<any>([]);
     const [AnggaranSummary, setAnggaranSummary] = useState<any>([]);
-    const [percentageAnggaranSummary, setPercentageAnggaranSummary] = useState<any>(0);
+    const [percentageAnggaranSummary, setPercentageAnggaranSummary] = useState<any>(null);
     const [KinerjaSeries, setKinerjaSeries] = useState<any>([]);
     const [KinerjaSummary, setKinerjaSummary] = useState<any>([]);
     const [RankInstances, setRankInstances] = useState<any>([]);
@@ -312,7 +312,7 @@ const Index = () => {
                     <div className="flex items-center justify-center">
                         <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
 
-                            {percentageAnggaranSummary ? (
+                            {percentageAnggaranSummary != null ? (
                                 <>
 
                                     <div className="absolute top-0 inset-x-0">
@@ -369,7 +369,7 @@ const Index = () => {
                     <div className="flex items-center justify-center">
                         <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
 
-                            {KinerjaSummary?.realisasi ? (
+                            {KinerjaSummary?.realisasi != null ? (
                                 <>
 
                                     <div className="absolute -top-7 inset-x-0">

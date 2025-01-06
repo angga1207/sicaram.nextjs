@@ -315,12 +315,12 @@ const MutasiAset = (data: any) => {
                                 Kelompok Aset (+++)
                             </th>
 
-                            <th className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1' rowSpan={2}>
+                            {/* <th className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1' rowSpan={2}>
                             </th>
 
                             <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800' colSpan={7}>
                                 Kelompok Aset (---)
-                            </th>
+                            </th> */}
                         </tr>
                         <tr className='!bg-slate-900 !text-white'>
                             <th className='whitespace-nowrap border text-center'>
@@ -353,7 +353,7 @@ const MutasiAset = (data: any) => {
                             </th>
 
 
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            {/* <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
                                 Aset Tetap Tanah
                             </th>
                             <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
@@ -373,7 +373,7 @@ const MutasiAset = (data: any) => {
                             </th>
                             <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
                                 Aset Lainnya
-                            </th>
+                            </th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -998,7 +998,7 @@ const MutasiAset = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
+                                        {/* <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
 
                                         <td className="border">
                                             <div className="flex group">
@@ -1321,7 +1321,7 @@ const MutasiAset = (data: any) => {
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_lainnya)}
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> */}
 
                                     </tr>
                                 )
@@ -1369,7 +1369,7 @@ const MutasiAset = (data: any) => {
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.plus_aset_lainnya)}
                             </td>
 
-                            <td colSpan={1}></td>
+                            {/* <td colSpan={1}></td>
 
                             <td className='border p-3 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_aset_tetap_tanah)}
@@ -1391,7 +1391,7 @@ const MutasiAset = (data: any) => {
                             </td>
                             <td className='border p-3 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_aset_lainnya)}
-                            </td>
+                            </td> */}
                         </tr>
                     </tfoot>
                 </table>

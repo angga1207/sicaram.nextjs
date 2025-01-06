@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { getRekapBelanja, saveRekapBelanja } from '@/apis/Accountancy/RekonsiliasiAset';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import InputRupiah from '@/components/InputRupiah';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -151,28 +152,28 @@ const RekapBelanja = (data: any) => {
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white sticky top-0 left-0'>
-                                <th className='w-[600px]'>
+                                <th className='min-w-[300px]'>
                                     Perangkat Daerah
                                 </th>
-                                <th className='text-center whitespace-nowrap'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     Tanah
                                 </th>
-                                <th className='text-center whitespace-nowrap'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     Peralatan dan Mesin
                                 </th>
-                                <th className='text-center whitespace-nowrap'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     Gedung dan Bangunan
                                 </th>
-                                <th className='text-center whitespace-nowrap'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     Jalan Jaringan Irigasi
                                 </th>
-                                <th className='text-center whitespace-nowrap'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     Aset Tetap Lainnya
                                 </th>
-                                <th className='text-center whitespace-nowrap min-w-[250px]'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     KDP
                                 </th>
-                                <th className='text-center whitespace-nowrap'>
+                                <th className='text-center whitespace-nowrap min-w-[200px] max-w-[200px]'>
                                     Aset Lain-lain
                                 </th>
                             </tr>
@@ -209,7 +210,7 @@ const RekapBelanja = (data: any) => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder="Akumulasi Penyusutan"
+                                                        placeholder="KDP"
                                                         onKeyDown={(e) => {
                                                             if (!(
                                                                 (e.keyCode >= 48 && e.keyCode <= 57) ||
@@ -248,8 +249,8 @@ const RekapBelanja = (data: any) => {
                                                                 _postData(row);
                                                             }
                                                         }}
-                                                        className="form-input text-end ltr:rounded-l-none rtl:rounded-r-none font-normal hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input text-end ltr:rounded-l-none rtl:rounded-r-none font-normal block group-focus-within:hidden group-hover:hidden">
+                                                        className="form-input text-end ltr:rounded-l-none rtl:rounded-r-none font-normal hidden group-focus-within:block group-hover:block  w-[200px]" />
+                                                    <div className="form-input text-end ltr:rounded-l-none rtl:rounded-r-none font-normal block group-focus-within:hidden group-hover:hidden w-[200px]">
                                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.kdp)}
                                                     </div>
 

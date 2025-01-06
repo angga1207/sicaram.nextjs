@@ -526,7 +526,7 @@ const Index = () => {
                 </>
             )}
 
-            {instance && !year && (
+            {instance && year && (
                 <div className='p-10'>
                     <div className="text-center text-md font-semibold mb-5">
                         Pilih Tahun
@@ -538,7 +538,7 @@ const Index = () => {
                                     e.preventDefault();
                                     setYear(yr);
                                 }}
-                                className={new Date().getFullYear() === yr ? 'btn btn-primary mr-2' : 'btn btn-outline-primary mr-2'}>
+                                className={year == yr ? 'btn btn-primary mr-2' : 'btn btn-outline-primary mr-2'}>
                                 {yr}
                             </button>
                         ))}
@@ -549,7 +549,7 @@ const Index = () => {
             {instance && year && (
                 <>
                     <div className="font-semibold text-lg mb-4">
-                        Program
+                        Pilih Program
                     </div>
 
                     <div className="grid grid-cols-12 gap-4">
@@ -577,7 +577,7 @@ const Index = () => {
                                 {showPrograms.includes(program?.id) && (
                                     <div className='col-span-12'>
                                         <div className="font-semibold text-lg mb-4">
-                                            Kegiatan
+                                            Pilih Kegiatan
                                         </div>
                                         <div className='grid grid-cols-12 gap-4'>
                                             {program?.kegiatans?.map((kegiatan: any, index: number) => (
@@ -603,7 +603,7 @@ const Index = () => {
                                                     {showKegiatans.includes(kegiatan?.id) && (
                                                         <div className='col-span-12'>
                                                             <div className="font-semibold text-lg mb-4">
-                                                                Sub Kegiatan
+                                                                Pilih Sub Kegiatan
                                                             </div>
                                                             <div className='grid grid-cols-12 gap-4'>
                                                                 {kegiatan?.sub_kegiatans?.map((subkegiatan: any, index: number) => (
@@ -759,7 +759,9 @@ const Index = () => {
                                                                                                             return (
                                                                                                                 <option
                                                                                                                     key={'select-month-' + index}
-                                                                                                                    disabled={item?.id > new Date().getMonth() + 1}
+                                                                                                                    disabled={
+                                                                                                                        (year == new Date().getFullYear() && item.id > new Date().getMonth() + 1) || (year > new Date().getFullYear())
+                                                                                                                    }
                                                                                                                     value={item?.id}>
                                                                                                                     {item?.name}
                                                                                                                 </option>

@@ -80,6 +80,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import LoadingSicaram from '@/components/LoadingSicaram';
 import Dropdown from '@/components/Dropdown';
+import InputRupiah from '@/components/InputRupiah';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -116,7 +117,7 @@ const Index = () => {
     const ref = useRef<any>(null);
 
     useEffect(() => {
-        dispatch(setPageTitle('Input Target Kinerja'));
+        dispatch(setPageTitle('Input Realisasi'));
     });
 
     const route = useRouter();
@@ -589,16 +590,16 @@ const Index = () => {
 
 
     // DEBUG TOOLS ANGGA
-    // useEffect(() => {
-    //     // if (subKegiatan?.status == 'verified' || subKegiatan?.status_target == 'verified') {
-    //     setSubKegiatan((prev: any) => {
-    //         const updated = { ...prev };
-    //         updated.status = 'draft';
-    //         updated.status_target = 'verified';
-    //         return updated;
-    //     });
-    //     // }
-    // }, [subKegiatan?.status]);
+    useEffect(() => {
+        // if (subKegiatan?.status == 'verified' || subKegiatan?.status_target == 'verified') {
+        setSubKegiatan((prev: any) => {
+            const updated = { ...prev };
+            updated.status = 'draft';
+            updated.status_target = 'verified';
+            return updated;
+        });
+        // }
+    }, [subKegiatan?.status]);
     // DEBUG TOOLS ANGGA
 
     // if (subKegiatan && subKegiatan.status != 'verified') {
@@ -634,7 +635,7 @@ const Index = () => {
 
     return (
         <>
-            <div className="panel p-0">
+            <div className="panel p-0 mb-10">
 
                 <div className="p-4 block sm:hidden">
                     <div className="font-semibold">
@@ -767,7 +768,7 @@ const Index = () => {
 
                 {tab === 2 && (
                     <div className="">
-                        <div className="table-responsive h-[calc(100vh-210px)] border !border-slate-400 dark:!border-slate-100">
+                        <div className="table-responsive h-[calc(100vh-240px)] border !border-slate-400 dark:!border-slate-100">
                             <table className=''>
                                 <thead className='sticky top-0 left-0 z-[1]'>
                                     <tr>
@@ -956,35 +957,9 @@ const Index = () => {
                                                                 )}
 
                                                                 {data?.type === 'target-kinerja' && (
-                                                                    <input
-                                                                        type='text'
-                                                                        className='form-input w-[125px] border-slate-400 dark:border-slate-100 dark:text-white min-h-8 font-normal text-xs px-1.5 py-1 disabled:bg-slate-200 dark:disabled:bg-slate-700 text-end'
-                                                                        value={data?.realisasi_anggaran_bulan_ini}
-                                                                        onKeyDown={(e) => {
-                                                                            if (!(
-                                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                                e.keyCode == 8 ||
-                                                                                e.keyCode == 46 ||
-                                                                                e.keyCode == 37 ||
-                                                                                e.keyCode == 39 ||
-                                                                                e.keyCode == 188 ||
-                                                                                e.keyCode == 9 ||
-                                                                                // copy & paste
-                                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                                // command + c & command + v
-                                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                                // command + a
-                                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                                            )) {
-                                                                                e.preventDefault();
-                                                                            }
-                                                                        }}
-                                                                        // disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
-                                                                        onChange={(e) => {
+                                                                    <InputRupiah
+                                                                        dataValue={data.realisasi_anggaran_bulan_ini}
+                                                                        onChange={(value: any) => {
                                                                             if (subKegiatan?.status === 'verified') {
                                                                                 showAlert('error', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
                                                                                 return;
@@ -994,7 +969,6 @@ const Index = () => {
                                                                                 return;
                                                                             }
                                                                             setUnsaveStatus(true);
-                                                                            let value = e.target.value ? parseFloat(e.target.value.toString().replace(/,/g, '.')) : 0;
                                                                             setDatas((prev: any) => {
                                                                                 const updated = [...prev];
                                                                                 let sumRealisasiAnggaran = data.rincian_belanja.reduce((a: any, b: any) => a + (b['realisasi_anggaran_bulan_ini'] || 0), 0);
@@ -1020,7 +994,8 @@ const Index = () => {
                                                                                     nama_paket: data?.nama_paket,
                                                                                     pagu: data?.pagu,
                                                                                     realisasi_anggaran: data?.realisasi_anggaran,
-                                                                                    realisasi_anggaran_bulan_ini: value,
+                                                                                    // realisasi_anggaran_bulan_ini: value,
+                                                                                    realisasi_anggaran_bulan_ini: isNaN(value) ? 0 : value,
                                                                                     temp_pagu: data?.temp_pagu,
                                                                                     is_pagu_match: isPaguMatch,
                                                                                     is_detail: data?.is_detail,
@@ -1155,9 +1130,7 @@ const Index = () => {
                                                                             })
                                                                             updateTotalRealisasi();
                                                                         }}
-                                                                        onBlur={(e) => {
-                                                                            updateTotalRealisasi();
-                                                                        }}
+                                                                        isRealisasi={true}
                                                                     />
                                                                 )}
                                                             </td>
@@ -1790,7 +1763,7 @@ const Index = () => {
                 )}
 
                 {tab === 1 && (
-                    <div className=" flex flex-col xl:flex-col gap-4 mb-12 sm:mb-0 h-auto">
+                    <div className="flex flex-col xl:flex-col gap-4 mb-12 sm:mb-0 h-auto">
                         <div className="table-responsive w-full">
                             <table>
                                 <tbody>

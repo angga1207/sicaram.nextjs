@@ -14,7 +14,6 @@ import IconX from '@/components/Icon/IconX';
 import IconCaretDown from '@/components/Icon/IconCaretDown';
 import IconSearch from '@/components/Icon/IconSearch';
 
-
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
         toast: true,
@@ -238,23 +237,12 @@ const MasterData = () => {
         }
     }, [isMounted]);
 
+
     return (
         <>
-            <div className="flex items-center justify-between mb-4 px-4">
+            <div className="flex items-center justify-center mb-4 px-4">
                 <div className="font-semibold text-xl uppercase">
                     MENU MASTER DATA
-                </div>
-                <div className="">
-                    {/* <div className="relative bg-white border border-white-dark/20  w-full flex">
-                        <button type="submit" placeholder="Cari Nama Menu" className="text-primary m-auto p-3 flex items-center justify-center">
-                            <IconSearch className='w-5 h-5' />
-                        </button>
-                        <input
-                            type="text"
-                            placeholder="Cari Nama Menu"
-                            className="form-input border-0 border-l rounded-none bg-white  focus:shadow-[0_0_5px_2px_rgb(194_213_255_/_62%)] dark:shadow-[#1b2e4b] placeholder:tracking-wider focus:outline-none py-3"
-                        />
-                    </div> */}
                 </div>
             </div>
 

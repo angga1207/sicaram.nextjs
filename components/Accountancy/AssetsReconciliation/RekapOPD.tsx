@@ -174,78 +174,78 @@ const RekapOPD = (data: any) => {
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white'>
-                                <th rowSpan={2} className='text-center border border-slate-900 min-w-[300px] max-w-[300px]'>
+                                <th rowSpan={2} className='text-center border border-white min-w-[300px] max-w-[300px]'>
                                     Perangkat Daerah
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     Tanah
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     Peralatan Mesin
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     Gedung dan Bangunan
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     Jalan Jaringan Irigasi
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     Aset Tetap Lainnya
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     KDP
                                 </th>
-                                <th colSpan={2} className='text-center border border-slate-900'>
+                                <th colSpan={2} className='text-center border border-white'>
                                     Aset Lainnya
                                 </th>
                             </tr>
                             <tr className='!bg-slate-900 !text-white'>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-slate-900 min-w-[150px]'>
+                                <th className='text-center border border-white min-w-[150px]'>
                                     {year}
                                 </th>
                             </tr>
@@ -261,52 +261,150 @@ const RekapOPD = (data: any) => {
                                         </td>
 
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.tanah_last_year)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.tanah_last_year)}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.tanah)}
-                                        </td>
-
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.peralatan_mesin_last_year)}
-                                        </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.peralatan_mesin)}
-                                        </td>
-
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.gedung_bangunan_last_year)}
-                                        </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.gedung_bangunan)}
-                                        </td>
-
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.jalan_jaringan_irigasi_last_year)}
-                                        </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.jalan_jaringan_irigasi)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.tanah)}
+                                                </div>
+                                            </div>
                                         </td>
 
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_tetap_lainnya_last_year)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.peralatan_mesin_last_year)}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_tetap_lainnya)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.peralatan_mesin)}
+                                                </div>
+                                            </div>
                                         </td>
 
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.kdp_last_year)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.gedung_bangunan_last_year)}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.kdp)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.gedung_bangunan)}
+                                                </div>
+                                            </div>
                                         </td>
 
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_lainnya_last_year)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.jalan_jaringan_irigasi_last_year)}
+                                                </div>
+                                            </div>
                                         </td>
                                         <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_lainnya)}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.jalan_jaringan_irigasi)}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_tetap_lainnya_last_year)}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_tetap_lainnya)}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.kdp_last_year)}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.kdp)}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_lainnya_last_year)}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    Rp.
+                                                </div>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.aset_lainnya)}
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -322,52 +420,150 @@ const RekapOPD = (data: any) => {
                                 </td>
 
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.tanah_last_year)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.tanah_last_year)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.tanah)}
-                                </td>
-
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.peralatan_mesin_last_year)}
-                                </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.peralatan_mesin)}
-                                </td>
-
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.gedung_bangunan_last_year)}
-                                </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.gedung_bangunan)}
-                                </td>
-
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.jalan_jaringan_irigasi_last_year)}
-                                </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.jalan_jaringan_irigasi)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.tanah)}
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_tetap_lainnya_last_year)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.peralatan_mesin_last_year)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_tetap_lainnya)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.peralatan_mesin)}
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.kdp_last_year)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.gedung_bangunan_last_year)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.kdp)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.gedung_bangunan)}
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_lainnya_last_year)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.jalan_jaringan_irigasi_last_year)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_lainnya)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.jalan_jaringan_irigasi)}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_tetap_lainnya_last_year)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_tetap_lainnya)}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.kdp_last_year)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.kdp)}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_lainnya_last_year)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.aset_lainnya)}
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tfoot>

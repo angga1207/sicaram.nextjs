@@ -18,6 +18,7 @@ import LoadingSicaram from '@/components/LoadingSicaram';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList12, faThList } from '@fortawesome/free-solid-svg-icons';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
+import Spline from '@splinetool/react-spline';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -97,7 +98,13 @@ const Page = () => {
     }, [isMounted, periode?.id])
 
     return (
-        <div>
+        <div className='relative'>
+            {/* <div className="absolute w-full h-full items-center justify-center">
+                <Spline className='w-full h-full'
+                    scene="https://prod.spline.design/7pfuHjSLixtGtJxw/scene.splinecode"
+                />
+            </div> */}
+
             <div className="flex items-center justify-center">
                 {/* <FontAwesomeIcon icon={faList12} className='w-6 h-6 mr-1' /> */}
                 <div className="font-semibold text-xl uppercase">
@@ -114,7 +121,7 @@ const Page = () => {
                     <Tippy content="Import & Detail LRA" placement='bottom'>
                         <Link
                             href="/accountancy/import-lra"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -132,7 +139,7 @@ const Page = () => {
                     <Tippy content="Rekonsiliasi Aset" placement='bottom'>
                         <Link
                             href="/accountancy/rekonsiliasi-aset"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -150,7 +157,7 @@ const Page = () => {
                     <Tippy content="Penyesuaian Aset dan Beban" placement='bottom'>
                         <Link
                             href="/accountancy/penyesuaian-aset-beban"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
                             <Player
                                 autoplay
                                 loop
@@ -167,7 +174,7 @@ const Page = () => {
                     <Tippy content="Belanja Bayar Dimuka" placement='bottom'>
                         <Link
                             href="/accountancy/belanja-bayar-dimuka"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -185,7 +192,7 @@ const Page = () => {
                     <Tippy content="Persediaan" placement='bottom' theme='default'>
                         <Link
                             href="/accountancy/persediaan"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -203,7 +210,7 @@ const Page = () => {
                     <Tippy content="Hutang Belanja" placement='bottom' theme='default'>
                         <Link
                             href="/accountancy/hutang-belanja"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -218,10 +225,10 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    <Tippy content="Beban Laporan Operasional" placement='bottom' theme='danger'>
+                    <Tippy content="Beban Laporan Operasional" placement='bottom'>
                         <Link
-                            href="#"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            href="/accountancy/beban-laporan-operasional"
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -236,10 +243,10 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    <Tippy content="Pendapatan LRA LO" placement='bottom' theme='danger'>
+                    <Tippy content="Pendapatan LO (Piutang & PDD)" placement='bottom'>
                         <Link
-                            href="#"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            href="/accountancy/piutang-pdd"
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay
@@ -249,7 +256,7 @@ const Page = () => {
                             >
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Pendapatan LRA LO <br /> (Piutang & PDD)
+                                Pendapatan LO <br /> (Piutang & PDD)
                             </div>
                         </Link>
                     </Tippy>
@@ -257,7 +264,7 @@ const Page = () => {
                     <Tippy content="Admin Only" placement='bottom' theme='default'>
                         <Link
                             href="/accountancy/admin-only"
-                            className="panel w-full lg:w-[400px] cursor-pointer group hover:shadow-lg transition-all duration-500">
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
                                 autoplay

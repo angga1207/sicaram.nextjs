@@ -213,7 +213,8 @@ const Rekap = (data: any) => {
                     <tfoot>
                         <tr className='!bg-slate-400 !text-white sticky left-0 -bottom-5'>
                             <td className='border text-center font-semibold p-3'>
-                                Selisih (Jumlah A + B - Nilai Persediaan dalam Neraca)
+                                {/* Selisih (Jumlah A + B - Nilai Persediaan dalam Neraca) */}
+                                Jumlah A + B
                             </td>
                             <td className='border text-end font-semibold p-3'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.saldo_awal)}

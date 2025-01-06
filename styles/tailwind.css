@@ -741,3 +741,7 @@ pre.hljs {
 .selectAngga__menu {
     z-index: 10 !important;
 }
+
+.selectAngga-100__menu {
+    z-index: 101 !important;
+}

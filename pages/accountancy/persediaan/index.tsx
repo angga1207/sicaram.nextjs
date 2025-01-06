@@ -161,9 +161,10 @@ const Page = () => {
 
     useEffect(() => {
         if (isMounted && arrKodeRekening?.length === 0) {
-            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null']).then((res: any) => {
+            GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'whereIn|code_2|1,2', 'where|code_3|=|02']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
+                    console.log(res.data)
                 }
             });
         }
@@ -278,7 +279,7 @@ const Page = () => {
                                     </button>
                                 )}
                             </Tab>
-                            <Tab as={Fragment}>
+                            {/* <Tab as={Fragment}>
                                 {({ selected }) => (
                                     <button
                                         className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
@@ -286,7 +287,7 @@ const Page = () => {
                                         C. Nilai Persediaan Neraca
                                     </button>
                                 )}
-                            </Tab>
+                            </Tab> */}
                         </Tab.List>
                         <Tab.Panels>
                             <Tab.Panel>
@@ -316,7 +317,7 @@ const Page = () => {
                                     )}
                                 </div>
                             </Tab.Panel>
-                            <Tab.Panel>
+                            {/* <Tab.Panel>
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <NilaiPersediaanNeraca data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
@@ -324,7 +325,7 @@ const Page = () => {
                                         />
                                     )}
                                 </div>
-                            </Tab.Panel>
+                            </Tab.Panel> */}
                         </Tab.Panels>
                     </Tab.Group>
                 </div>

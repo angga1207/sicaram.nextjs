@@ -24,6 +24,8 @@
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@next/font": "13.1.2",
     "@reduxjs/toolkit": "^1.9.1",
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.54",
     "@tippyjs/react": "^4.2.6",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",

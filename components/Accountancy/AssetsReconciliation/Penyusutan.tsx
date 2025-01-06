@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { getPenyusutan, savePenyusutan } from '@/apis/Accountancy/RekonsiliasiAset';
+import InputRupiah from '@/components/InputRupiah';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -200,200 +201,48 @@ const Penyusutan = (data: any) => {
                                                 </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <div className="flex group">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={data.akumulasi_penyusutan_last_year}
-                                                        onChange={(e) => {
-                                                            if (instance) {
-                                                                setDataInput((prev: any) => {
-                                                                    const value = parseFloat(e?.target?.value);
-                                                                    const data = [...prev];
-                                                                    data[index].akumulasi_penyusutan_last_year = isNaN(value) ? 0 : value;
-                                                                    return data;
-                                                                });
-                                                            }
-                                                        }}
-                                                        readOnly={!instance}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.akumulasi_penyusutan_last_year)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={data.akumulasi_penyusutan_last_year}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['akumulasi_penyusutan_last_year'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        });
+                                                    }} />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <div className="flex group">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Mutasi Tambah"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={data.mutasi_tambah}
-                                                        onChange={(e) => {
-                                                            if (instance) {
-                                                                setDataInput((prev: any) => {
-                                                                    const value = parseFloat(e?.target?.value);
-                                                                    const data = [...prev];
-                                                                    data[index].mutasi_tambah = isNaN(value) ? 0 : value;
-                                                                    return data;
-                                                                });
-                                                            }
-                                                        }}
-                                                        readOnly={!instance}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.mutasi_tambah)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={data.mutasi_tambah}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['mutasi_tambah'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        });
+                                                    }} />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <div className="flex group">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Mutasi Kurang"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={data.mutasi_kurang}
-                                                        onChange={(e) => {
-                                                            if (instance) {
-                                                                setDataInput((prev: any) => {
-                                                                    const value = parseFloat(e?.target?.value);
-                                                                    const data = [...prev];
-                                                                    data[index].mutasi_kurang = isNaN(value) ? 0 : value;
-                                                                    return data;
-                                                                });
-                                                            }
-                                                        }}
-                                                        readOnly={!instance}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.mutasi_kurang)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={data.mutasi_kurang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['mutasi_kurang'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        });
+                                                    }} />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <div className="flex group">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Akumulasi Penyusutan"
-                                                        onKeyDown={(e) => {
-                                                            if (!(
-                                                                (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                                (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                                e.keyCode == 8 ||
-                                                                e.keyCode == 46 ||
-                                                                e.keyCode == 37 ||
-                                                                e.keyCode == 39 ||
-                                                                e.keyCode == 188 ||
-                                                                e.keyCode == 9 ||
-                                                                // copy & paste
-                                                                (e.keyCode == 67 && e.ctrlKey) ||
-                                                                (e.keyCode == 86 && e.ctrlKey) ||
-                                                                // command + c & command + v
-                                                                (e.keyCode == 67 && e.metaKey) ||
-                                                                (e.keyCode == 86 && e.metaKey) ||
-                                                                // command + a
-                                                                (e.keyCode == 65 && e.metaKey) ||
-                                                                (e.keyCode == 65 && e.ctrlKey)
-                                                            )) {
-                                                                e.preventDefault();
-                                                            }
-                                                        }}
-                                                        value={data.akumulasi_penyusutan}
-                                                        onChange={(e) => {
-                                                            if (instance) {
-                                                                setDataInput((prev: any) => {
-                                                                    const value = parseFloat(e?.target?.value);
-                                                                    const data = [...prev];
-                                                                    data[index].akumulasi_penyusutan = isNaN(value) ? 0 : value;
-                                                                    return data;
-                                                                });
-                                                            }
-                                                        }}
-                                                        readOnly={!instance}
-                                                        className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                    <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.akumulasi_penyusutan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={data.akumulasi_penyusutan}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['akumulasi_penyusutan'] = isNaN(value) ? 0 : value;
+                                                            return updated;
+                                                        });
+                                                    }} />
                                             </td>
                                         </tr>
                                     )

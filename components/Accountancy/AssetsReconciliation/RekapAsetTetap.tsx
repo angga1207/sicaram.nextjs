@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { getRekapAsetTetap } from '@/apis/Accountancy/RekonsiliasiAset';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import InputRupiah from '@/components/InputRupiah';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -348,388 +349,452 @@ const RekapAsetTetap = (data: any) => {
                                                 </div>
                                             </td>
                                             <td className='border border-slate-900 sticky top-0 left-[300px] z-[1] bg-slate-50'>
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat().format(row.saldo_awal)}
-                                                    </div>
-                                                    <div className="ml-2 self-center">
-                                                        <Tippy content='Data Tarikan dari KIB A, KIB B, KIB C, KIB D, KIB E dan KDP (Tidak Dapat Dirubah)' theme='primary'>
-                                                            <FontAwesomeIcon icon={faExclamationCircle} className='w-4 h-4 text-primary cursor-pointer' />
-                                                        </Tippy>
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.saldo_awal}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['saldo_awal'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
 
 
                                             {/* PLUS START */}
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_realisasi_belanja)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_realisasi_belanja)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_realisasi_belanja}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_realisasi_belanja'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_hutang_kegiatan)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_hutang_kegiatan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_hutang_kegiatan}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_hutang_kegiatan'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_atribusi)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_atribusi)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_atribusi}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_atribusi'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_barang_habis_pakai)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_barang_habis_pakai)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_barang_habis_pakai}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_barang_habis_pakai'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_pemeliharaan)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_pemeliharaan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_pemeliharaan}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_pemeliharaan'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_jasa)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_jasa)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_jasa}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_jasa'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_kib_a)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_kib_a)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_kib_a}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_kib_a'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_kib_b)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_kib_b)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_kib_b}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_kib_b'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_kib_c)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_kib_c)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_kib_c}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_kib_c'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_kib_d)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_kib_d)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_kib_d}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_kib_d'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_kib_e)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_kib_e)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_kib_e}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_kib_e'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_kdp)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_kdp)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_kdp}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_kdp'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_reklasifikasi_aset_lain_lain)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_reklasifikasi_aset_lain_lain)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_reklasifikasi_aset_lain_lain}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_reklasifikasi_aset_lain_lain'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_hibah_masuk)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_hibah_masuk)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_hibah_masuk}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_hibah_masuk'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_penilaian)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_penilaian)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_penilaian}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_penilaian'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_mutasi_antar_opd)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_mutasi_antar_opd)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_mutasi_antar_opd}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_mutasi_antar_opd'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.plus_total)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.plus_total)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.plus_total}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['plus_total'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
 
 
                                             {/* MINUS START */}
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_pembayaran_utang)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_pembayaran_utang)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_pembayaran_utang}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_pembayaran_utang'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_persediaan)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_persediaan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_persediaan}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_persediaan'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_pemeliharaan)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_pemeliharaan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_pemeliharaan}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_pemeliharaan'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_hibah)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_hibah)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_hibah}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_hibah'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_kib_a)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_kib_a)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_kib_a}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_kib_a'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_kib_b)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_kib_b)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_kib_b}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_kib_b'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_kib_c)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_kib_c)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_kib_c}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_kib_c'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_kib_d)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_kib_d)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_kib_d}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_kib_d'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_kib_e)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_kib_e)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_kib_e}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_kib_e'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_kdp)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_kdp)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_kdp}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_kdp'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_reklasifikasi_beban_aset_lain_lain)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_reklasifikasi_beban_aset_lain_lain)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_aset_lain_lain}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_aset_lain_lain'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_penghapusan)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_penghapusan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_penghapusan}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_penghapusan'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_mutasi_antar_opd)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_penghapusan)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_mutasi_antar_opd}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_mutasi_antar_opd'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_tptgr)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_tptgr)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_tptgr}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_tptgr'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.min_total)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_total)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.min_total}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_total'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat().format(row.saldo_akhir)} */}
-                                                <div className="flex">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.saldo_akhir)}
-                                                    </div>
-                                                </div>
+                                                <InputRupiah
+                                                    dataValue={row.saldo_akhir}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['saldo_akhir'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
                                             </td>
 
                                         </tr>

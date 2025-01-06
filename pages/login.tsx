@@ -51,6 +51,8 @@ const Login = () => {
     const [user, setUser] = useState<any>(null);
     const [periodeOptions, setPeriodeOptions] = useState<any>([]);
     const [periode, setPeriode] = useState<any>(null)
+    const [attemps, setAttemps] = useState<number>(0);
+    const [maxAttemps, setMaxAttemps] = useState<number>(5);
 
     useEffect(() => {
         setIsMounted(true);
@@ -113,6 +115,8 @@ const Login = () => {
                     signOut();
                 }
             }
+
+            setAttemps(parseInt(localStorage.getItem('attemps') ?? '0'));
         }
     }, [isMounted]);
 
@@ -185,17 +189,19 @@ const Login = () => {
         }
 
         if (e.target.Username.value !== 'developer') {
-            if (!recaptchaRef?.current.getValue()) {
-                showSweetAlert(
-                    'error',
-                    'Verifikasi Robot', 'Centang Verifikasi Robot!',
-                    'OK',
-                    'Batal',
-                    () => {
-                        return;
-                    });
-                setSubmitLoading(false);
-                return;
+            if (attemps >= maxAttemps) {
+                if (!recaptchaRef?.current.getValue()) {
+                    showSweetAlert(
+                        'error',
+                        'Verifikasi Robot', 'Centang Verifikasi Robot!',
+                        'OK',
+                        'Batal',
+                        () => {
+                            return;
+                        });
+                    setSubmitLoading(false);
+                    return;
+                }
             }
         }
 
@@ -241,6 +247,8 @@ const Login = () => {
                 })
             }
             setSubmitLoading(false);
+            setAttemps(attemps + 1);
+            localStorage.setItem('attemps', attemps.toString());
             return;
         }
 
@@ -253,6 +261,10 @@ const Login = () => {
         }
 
         if (json.status == 'success') {
+            setAttemps(0);
+            localStorage.setItem('attemps', '0');
+
+
             localStorage.setItem('periode_id', formData.periode);
 
             // save to cookie 34560000 / 86400
@@ -427,16 +439,18 @@ const Login = () => {
 
 
 
-                                    <div className='relative'>
-                                        <ReCAPTCHA
-                                            className='flex items-center justify-center'
-                                            ref={recaptchaRef}
-                                            sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
-                                            onChange={onReCAPTCHAChange}
-                                        />
-                                        <div id="errorCaptcha" className='validation text-red-500 text-sm'>
+                                    {attemps >= maxAttemps && (
+                                        <div className='relative'>
+                                            <ReCAPTCHA
+                                                className='flex items-center justify-center'
+                                                ref={recaptchaRef}
+                                                sitekey="6LfFuEIpAAAAAKKQkSqEzQsWCOyC8sol7LxZkGzj"
+                                                onChange={onReCAPTCHAChange}
+                                            />
+                                            <div id="errorCaptcha" className='validation text-red-500 text-sm'>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
 
                                 </>
                             ) : (
