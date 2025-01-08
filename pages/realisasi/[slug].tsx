@@ -2279,6 +2279,12 @@ const Index = () => {
                                 </div>
                                 <div className="mt-5 space-y-5 overflow-x-auto overflow-auto h-[calc(100vh-360px)] border rounded">
 
+                                    {kontrakSPSEOptions?.length === 0 && (
+                                        <div className="text-center text-xl text-slate-400 p-10">
+                                            Tidak ada data kontrak yang ditemukan / Coba cari dengan kata kunci lain
+                                        </div>
+                                    )}
+
                                     {kontrakSPSEOptions?.length > 0 && (
                                         <>
                                             {kontrakSPSEOptions?.map((kontrak: any, index: any) => (
