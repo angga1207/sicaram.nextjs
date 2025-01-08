@@ -70,12 +70,16 @@ const Index = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                if (localStorage.getItem('year')) {
+                    setYear(localStorage.getItem('year') ?? currentYear);
+                } else {
+                    setYear(currentYear);
+                }
             } else {
                 setYear(periode?.start_year)
             }
         }
-    }, [isMounted, periode?.id])
+    }, [isMounted, periode?.id]);
 
     const [month, setMonth] = useState<any>(null);
     const [tab, setTab] = useState<string>('summary');
@@ -118,7 +122,7 @@ const Index = () => {
     const [selectedDetailRealisasi, setSelectedDetailRealisasi] = useState<any>(null);
 
     useEffect(() => {
-        setYear(router.query.year ?? new Date().getFullYear());
+        // setYear(router.query.year ?? new Date().getFullYear());
         setMonth(router.query.month ?? new Date().getMonth());
 
         // Only for Development
@@ -132,7 +136,7 @@ const Index = () => {
     }, []);
 
     useEffect(() => {
-        if (CurrentUser.instance_alias) {
+        if (CurrentUser.instance_alias && view && year) {
             getDetailInstance(CurrentUser.instance_alias as string, 1, year, view).then((res) => {
                 if (res.status === 'success') {
                     setInstance(res.data.instance);
@@ -150,7 +154,7 @@ const Index = () => {
                 router.push('/dashboard');
             }
         }
-    }, [CurrentUser, view]);
+    }, [CurrentUser, view, year]);
 
     useEffect(() => {
         if (Instance) {

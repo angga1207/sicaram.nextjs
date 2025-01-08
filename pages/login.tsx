@@ -82,6 +82,7 @@ const Login = () => {
                 }
             });
 
+            localStorage.removeItem('year');
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             localStorage.removeItem('userPassword');

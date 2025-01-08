@@ -67,12 +67,16 @@ const Index = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                if (localStorage.getItem('year')) {
+                    setYear(localStorage.getItem('year'));
+                } else {
+                    setYear(currentYear);
+                }
             } else {
                 setYear(periode?.start_year)
             }
         }
-    }, [isMounted, periode?.id])
+    }, [isMounted, periode?.id]);
 
     if (CurrentUser?.role_id === 9) {
         router.push('/dashboard');

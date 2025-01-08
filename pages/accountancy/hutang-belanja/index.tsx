@@ -103,7 +103,8 @@ const Page = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                // setYear(currentYear);
+                setYear(2024);
             } else {
                 setYear(periode?.start_year)
             }
@@ -156,7 +157,7 @@ const Page = () => {
 
     useEffect(() => {
         if (isMounted && arrKodeRekening?.length === 0) {
-            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null', 'where|code_2|=|2']).then((res: any) => {
+            GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
                 }
@@ -1802,76 +1803,190 @@ const Page = () => {
                                     </Fragment>
                                 ))}
                             </tbody>
-                            <tfoot className='hidden'>
+                            <tfoot className=''>
                                 <tr>
-                                    <td className='border'>
+                                    <td className='border p-4 bg-slate-200 sticky left-0'>
                                         <div className="flex justify-center font-semibold">
                                             Jumlah
                                         </div>
                                     </td>
-                                    <td className='border'>
+                                    <td colSpan={2} className='border p-4 bg-slate-200'>
                                         <div className="flex justify-center font-semibold">
-                                            Rp.
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.total_data)} Data
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td colSpan={3} className='border p-4 bg-slate-200'></td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div className="">
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.nilai_kontrak)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div className="">
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.kewajiban_tidak_terbayar_last_year)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td colSpan={2} className='border p-4 bg-slate-200'></td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.p1_jumlah)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td colSpan={2} className='border p-4 bg-slate-200'></td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.p2_jumlah)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td colSpan={2} className='border p-4 bg-slate-200'></td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.p3_jumlah)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.jumlah_pembayaran_hutang)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.kewajiban_tidak_terbayar)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.hutang_baru)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div className="">
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.pegawai)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.persediaan)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.perjadin)}
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className='border'>
-                                        <div className="flex justify-center font-semibold">
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
                                             Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.jasa)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.pemeliharaan)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.hibah)}
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.aset_tetap_tanah)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.aset_tetap_peralatan_mesin)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.aset_tetap_gedung_bangunan)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.aset_tetap_jalan_jaringan_irigasi)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.aset_tetap_lainnya)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.konstruksi_dalam_pekerjaan)}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className='border p-4 bg-slate-200'>
+                                        <div className="flex justify-between font-semibold">
+                                            Rp.
+                                            <div>
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.aset_lain_lain)}
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

@@ -32,6 +32,7 @@ import IconBookmark from '../Icon/IconBookmark';
 import IconPlus from '../Icon/IconPlus';
 import IconMinus from '../Icon/IconMinus';
 import { signOut, useSession } from 'next-auth/react';
+import Select from 'react-select';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -151,12 +152,45 @@ const Header = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                if (localStorage.getItem('year')) {
+                    setYear(localStorage.getItem('year'));
+                } else {
+                    setYear(currentYear);
+                }
             } else {
                 setYear(periode?.start_year)
             }
         }
     }, [isMounted, periode?.id])
+
+    // Selected Year
+    const [years, setYears] = useState<any>(null);
+    useEffect(() => {
+        if (isMounted) {
+            setYears([]);
+            if (periode?.id) {
+                if (year >= periode?.start_year && year <= periode?.end_year) {
+                    for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                        setYears((years: any) => [
+                            ...years,
+                            {
+                                label: i,
+                                value: i,
+                            },
+                        ]);
+                    }
+                }
+            }
+        }
+    }, [isMounted, year, periode?.id])
+
+    useEffect(() => {
+        if (isMounted) {
+            if (year) {
+                localStorage.setItem('year', year);
+            }
+        }
+    }, [year]);
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
@@ -630,6 +664,30 @@ const Header = () => {
 
                                 </ul>
                             </Dropdown>
+                        </div>
+
+
+                        <div className="">
+                            <Select
+                                className="w-[100px] rounded-xl"
+                                id="tahun"
+                                options={years}
+                                value={years?.find((option: any) => option.value == year)}
+                                onChange={(e: any) => {
+                                    localStorage.setItem('year', year);
+                                    setYear(e.value);
+                                    // window.location.reload();
+                                    // delay 1 second
+                                    if (year != e.value) {
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 1000);
+                                    }
+                                }}
+                                isSearchable={false}
+                                isClearable={false}
+                                isDisabled={(years?.length === 0)}
+                            />
                         </div>
 
                         <div>

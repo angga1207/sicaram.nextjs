@@ -339,6 +339,72 @@ export async function deletePerjadin(id: any) {
     }
 }
 
+export async function getUangJasaDiserahkan(instance: any = null, periode: any, year: any) {
+    try {
+        const res = await axios.get(baseUri + '/accountancy/blo/uang-jasa-diserahkan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                periode: periode,
+                year: year,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function storeUangJasaDiserahkan(dataInput: any, periode: any, year: any) {
+    try {
+        const res = await axios.post(baseUri + '/accountancy/blo/uang-jasa-diserahkan', {
+            periode: periode,
+            year: year,
+            data: dataInput,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function deleteUangJasaDiserahkan(id: any) {
+    try {
+        const res = await axios.delete(baseUri + '/accountancy/blo/uang-jasa-diserahkan', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            data: {
+                id: id
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
 export async function getHibah(instance: any = null, periode: any, year: any) {
     try {
         const res = await axios.get(baseUri + '/accountancy/blo/hibah', {

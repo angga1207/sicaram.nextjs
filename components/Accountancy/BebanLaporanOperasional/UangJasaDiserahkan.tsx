@@ -10,7 +10,7 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.css';
 import IconTrash from '@/components/Icon/IconTrash';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { deletePegawai, getPegawai, storePegawai } from '@/apis/Accountancy/BebanLaporanOperasional';
+import { deleteUangJasaDiserahkan, getUangJasaDiserahkan, storeUangJasaDiserahkan } from '@/apis/Accountancy/BebanLaporanOperasional';
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
 
@@ -28,7 +28,7 @@ const showAlert = async (icon: any, text: any) => {
     });
 };
 
-const Pegawai = (data: any) => {
+const UangJasaDiserahkan = (data: any) => {
     const paramData = data.data
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
@@ -78,8 +78,8 @@ const Pegawai = (data: any) => {
     const [isSaving, setIsSaving] = useState(false);
 
     const _getDatas = () => {
-        if (periode?.id && instance && year) {
-            getPegawai(instance, periode?.id, year).then((res: any) => {
+        if (periode?.id) {
+            getUangJasaDiserahkan(instance, periode?.id, year).then((res: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
@@ -228,9 +228,10 @@ const Pegawai = (data: any) => {
         }
     }, [isMounted, dataInput])
 
+
     const save = () => {
         setIsSaving(true);
-        storePegawai(dataInput, periode?.id, year).then((res: any) => {
+        storeUangJasaDiserahkan(dataInput, periode?.id, year).then((res: any) => {
             if (res.status == 'error validation') {
                 showAlert('error', 'Data gagal disimpan, pastikan semua data terisi dengan benar');
                 setIsSaving(false);
@@ -248,7 +249,7 @@ const Pegawai = (data: any) => {
     }
 
     const deleteData = (id: any) => {
-        deletePegawai(id).then((res: any) => {
+        deleteUangJasaDiserahkan(id).then((res: any) => {
             if (res.status == 'success') {
                 _getDatas();
                 showAlert('success', 'Data berhasil dihapus');
@@ -546,7 +547,6 @@ const Pegawai = (data: any) => {
                                     </td>
                                     <td className="border bg-yellow-300 border-slate-900">
                                         <InputRupiah
-                                            readOnly={true}
                                             dataValue={data.hutang}
                                             onChange={(value: any) => {
                                                 setDataInput((prev: any) => {
@@ -986,5 +986,5 @@ const Pegawai = (data: any) => {
     );
 }
 
-export default Pegawai;
+export default UangJasaDiserahkan;
 

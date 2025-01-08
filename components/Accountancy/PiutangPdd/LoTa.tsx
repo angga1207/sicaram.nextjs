@@ -351,7 +351,26 @@ const LoTa = (data: any) => {
                                                     <Select placeholder="Pilih Kode Rekening"
                                                         className='min-w-[400px]'
                                                         classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
+                                                        isDisabled={
+                                                            arrKodeRekening?.find((item: any, index: number) => {
+                                                                if (item.id === data.kode_rekening_id) {
+                                                                    if (item.code_6 === null) {
+                                                                        return true
+                                                                    } else {
+                                                                        return false
+                                                                    }
+                                                                } else {
+                                                                    return false
+                                                                }
+                                                            })
+                                                        }
+                                                        isOptionDisabled={(option: any) => {
+                                                            if (option.code_6 === null) {
+                                                                return true
+                                                            } else {
+                                                                return false
+                                                            }
+                                                        }}
                                                         onChange={(e: any) => {
                                                             setDataInput1((prev: any) => {
                                                                 const updated = [...prev];
@@ -366,6 +385,8 @@ const LoTa = (data: any) => {
                                                                     return {
                                                                         value: item.id,
                                                                         label: item.fullcode + ' - ' + item.name,
+                                                                        fullcode: item.fullcode,
+                                                                        code_6: item.code_6,
                                                                     }
                                                                 }
                                                             })
@@ -375,6 +396,8 @@ const LoTa = (data: any) => {
                                                                 return {
                                                                     value: item.id,
                                                                     label: item.fullcode + ' - ' + item.name,
+                                                                    fullcode: item.fullcode,
+                                                                    code_6: item.code_6,
                                                                 }
                                                             })
                                                         } />
@@ -426,6 +449,7 @@ const LoTa = (data: any) => {
 
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.anggaran_perubahan}
                                                     onChange={(value: any) => {
                                                         setDataInput1((prev: any) => {
@@ -611,7 +635,7 @@ const LoTa = (data: any) => {
                                         </div>
                                     </td>
                                     <td className="border p-4">
-                                        <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="flex justify-center gap-1 font-semibold text-end whitespace-nowrap">
                                             <div className="">
                                                 {parseFloat(totalData.lra_percent)?.toFixed(2)}
                                             </div>
@@ -671,7 +695,7 @@ const LoTa = (data: any) => {
                                         </div>
                                     </td>
                                     <td className="border p-4">
-                                        <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="flex justify-center gap-1 font-semibold text-end whitespace-nowrap">
                                             <div className="">
                                                 {parseFloat(totalData.laporan_operasional_percent)?.toFixed(2)}
                                             </div>

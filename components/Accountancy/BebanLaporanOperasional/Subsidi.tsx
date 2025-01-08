@@ -106,6 +106,8 @@ const Subsidi = (data: any) => {
                                 atribusi: 0,
                                 min_jukor: 0,
                                 beban_lo: 0,
+                                plus_total: 0,
+                                min_total: 0,
                             }
                         ])
                     }
@@ -145,6 +147,8 @@ const Subsidi = (data: any) => {
         atribusi: 0,
         min_jukor: 0,
         beban_lo: 0,
+        plus_total: 0,
+        min_total: 0,
     });
 
     const addDataInput = () => {
@@ -169,6 +173,8 @@ const Subsidi = (data: any) => {
             atribusi: 0,
             min_jukor: 0,
             beban_lo: 0,
+            plus_total: 0,
+            min_total: 0,
         }
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
@@ -180,11 +186,11 @@ const Subsidi = (data: any) => {
 
             const keysToSumPlus = ['saldo_awal', 'belanja_dibayar_dimuka_akhir', 'hutang', 'hibah', 'reklas_tambah_dari_rekening', 'reklas_tambah_dari_modal', 'plus_jukor'];
             const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
-            // updated[index]['plus_jukor'] = sumPlus;
+            updated[index]['plus_total'] = sumPlus;
 
             const keysToSumMinus = ['saldo_akhir', 'beban_tahun_lalu', 'belanja_dibayar_dimuka_awal', 'pembayaran_hutang', 'reklas_kurang_ke_rekening', 'reklas_kurang_ke_aset', 'atribusi', 'min_jukor'];
             const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
-            // updated[index]['min_jukor'] = sumMinus;
+            updated[index]['min_total'] = sumMinus;
 
             updated[index].beban_lo = (updated[index].realisasi_belanja + sumPlus) - sumMinus;
             return updated;
@@ -205,6 +211,7 @@ const Subsidi = (data: any) => {
                 updated['reklas_tambah_dari_rekening'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['reklas_tambah_dari_rekening']), 0);
                 updated['reklas_tambah_dari_modal'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['reklas_tambah_dari_modal']), 0);
                 updated['plus_jukor'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['plus_jukor']), 0);
+                updated['plus_total'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['plus_total']), 0);
 
                 updated['saldo_akhir'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
                 updated['beban_tahun_lalu'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_tahun_lalu']), 0);
@@ -215,6 +222,7 @@ const Subsidi = (data: any) => {
                 updated['atribusi'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['atribusi']), 0);
                 updated['min_jukor'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_jukor']), 0);
                 updated['beban_lo'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_lo']), 0);
+                updated['min_total'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_total']), 0);
                 return updated;
             })
         }
@@ -287,10 +295,10 @@ const Subsidi = (data: any) => {
                                 <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
                                     Realisasi Belanja
                                 </th>
-                                <th rowSpan={1} colSpan={7} className="text-center whitespace-nowrap border bg-yellow-300 text-slate-900 border-slate-900">
+                                <th rowSpan={1} colSpan={8} className="text-center whitespace-nowrap border bg-yellow-300 text-slate-900 border-slate-900">
                                     Mutasi Tambah
                                 </th>
-                                <th rowSpan={1} colSpan={8} className="text-center whitespace-nowrap border bg-green-300 text-slate-900 border-slate-900">
+                                <th rowSpan={1} colSpan={9} className="text-center whitespace-nowrap border bg-green-300 text-slate-900 border-slate-900">
                                     Mutasi Kurang
                                 </th>
                                 <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
@@ -319,6 +327,9 @@ const Subsidi = (data: any) => {
                                 <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
                                     Jukor
                                 </th>
+                                <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                                    Jumlah
+                                </th>
 
                                 <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
                                     Saldo Akhir {year - 1}
@@ -343,6 +354,9 @@ const Subsidi = (data: any) => {
                                 </th>
                                 <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
                                     Jukor
+                                </th>
+                                <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                                    Jumlah
                                 </th>
                             </tr>
                         </thead>
@@ -496,6 +510,7 @@ const Subsidi = (data: any) => {
                                     <td className="border">
                                         <InputRupiah
                                             dataValue={data.realisasi_belanja}
+                                            readOnly={true}
                                             onChange={(value: any) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
@@ -585,6 +600,19 @@ const Subsidi = (data: any) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     updated[index]['plus_jukor'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }} />
+                                    </td>
+                                    <td className="border bg-yellow-300 border-slate-900">
+                                        <InputRupiah
+                                            readOnly={true}
+                                            dataValue={data.plus_total}
+                                            onChange={(value: any) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    updated[index]['plus_total'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
@@ -682,6 +710,19 @@ const Subsidi = (data: any) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     updated[index]['min_jukor'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    return updated;
+                                                });
+                                            }} />
+                                    </td>
+                                    <td className="border bg-green-300 border-slate-900">
+                                        <InputRupiah
+                                            readOnly={true}
+                                            dataValue={data.min_total}
+                                            onChange={(value: any) => {
+                                                setDataInput((prev: any) => {
+                                                    const updated = [...prev];
+                                                    updated[index]['min_total'] = isNaN(value) ? 0 : value;
                                                     updatedData(updated, index);
                                                     return updated;
                                                 });
@@ -791,6 +832,17 @@ const Subsidi = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
+                                <td className="border p-4 bg-yellow-300 border-slate-900">
+                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="">
+                                            Rp.
+                                        </div>
+                                        <div className="">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.plus_total)}
+                                        </div>
+                                    </div>
+                                </td>
+
                                 <td className="border p-4 bg-green-300 border-slate-900">
                                     <div className="flex justify-between font-semibold text-end whitespace-nowrap">
                                         <div className="">
@@ -871,6 +923,17 @@ const Subsidi = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
+                                <td className="border p-4 bg-green-300 border-slate-900">
+                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="">
+                                            Rp.
+                                        </div>
+                                        <div className="">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.min_total)}
+                                        </div>
+                                    </div>
+                                </td>
+
                                 <td className="border p-4 border-slate-900">
                                     <div className="flex justify-between font-semibold text-end whitespace-nowrap">
                                         <div className="">

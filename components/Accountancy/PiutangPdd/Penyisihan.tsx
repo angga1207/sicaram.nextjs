@@ -767,6 +767,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_1}
                                                     onChange={(value: any) => {
                                                         setDataInput1((prev: any) => {
@@ -779,6 +780,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_2}
                                                     onChange={(value: any) => {
                                                         setDataInput1((prev: any) => {
@@ -791,6 +793,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_3}
                                                     onChange={(value: any) => {
                                                         setDataInput1((prev: any) => {
@@ -803,6 +806,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_4}
                                                     onChange={(value: any) => {
                                                         setDataInput1((prev: any) => {
@@ -1013,6 +1017,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_1}
                                                     onChange={(value: any) => {
                                                         setDataInput2((prev: any) => {
@@ -1025,6 +1030,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_2}
                                                     onChange={(value: any) => {
                                                         setDataInput2((prev: any) => {
@@ -1037,6 +1043,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_3}
                                                     onChange={(value: any) => {
                                                         setDataInput2((prev: any) => {
@@ -1049,6 +1056,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_4}
                                                     onChange={(value: any) => {
                                                         setDataInput2((prev: any) => {
@@ -1260,6 +1268,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_1}
                                                     onChange={(value: any) => {
                                                         setDataInput3((prev: any) => {
@@ -1272,6 +1281,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_2}
                                                     onChange={(value: any) => {
                                                         setDataInput3((prev: any) => {
@@ -1284,6 +1294,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_3}
                                                     onChange={(value: any) => {
                                                         setDataInput3((prev: any) => {
@@ -1296,6 +1307,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_4}
                                                     onChange={(value: any) => {
                                                         setDataInput3((prev: any) => {
@@ -1506,6 +1518,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_1}
                                                     onChange={(value: any) => {
                                                         setDataInput4((prev: any) => {
@@ -1518,6 +1531,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_2}
                                                     onChange={(value: any) => {
                                                         setDataInput4((prev: any) => {
@@ -1530,6 +1544,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_3}
                                                     onChange={(value: any) => {
                                                         setDataInput4((prev: any) => {
@@ -1542,6 +1557,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_4}
                                                     onChange={(value: any) => {
                                                         setDataInput4((prev: any) => {
@@ -1754,6 +1770,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_1}
                                                     onChange={(value: any) => {
                                                         setDataInput5((prev: any) => {
@@ -1766,6 +1783,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_2}
                                                     onChange={(value: any) => {
                                                         setDataInput5((prev: any) => {
@@ -1778,6 +1796,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_3}
                                                     onChange={(value: any) => {
                                                         setDataInput5((prev: any) => {
@@ -1790,6 +1809,7 @@ const Penyisihan = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.penyisihan_piutang_4}
                                                     onChange={(value: any) => {
                                                         setDataInput5((prev: any) => {

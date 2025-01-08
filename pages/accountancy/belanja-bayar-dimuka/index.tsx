@@ -20,7 +20,7 @@ import 'flatpickr/dist/flatpickr.css';
 
 import LoadingSicaram from '@/components/LoadingSicaram';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSave, faSpinner, faThList } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle, faPlus, faSave, faSpinner, faThList } from '@fortawesome/free-solid-svg-icons';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import IconArrowBackward from '@/components/Icon/IconArrowBackward';
 import { GlobalEndPoint } from '@/apis/serverConfig';
@@ -31,6 +31,7 @@ import PenyesuaianAset from '@/components/Accountancy/PenyesuaianAsetBeban/Penye
 import Atribusi from '@/components/Accountancy/PenyesuaianAsetBeban/Atribusi';
 import { deleteData, getData, storeData } from '@/apis/Accountancy/BelanjaBayarDimuka';
 import IconTrash from '@/components/Icon/IconTrash';
+import InputRupiah from '@/components/InputRupiah';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -104,7 +105,8 @@ const Page = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                // setYear(currentYear);
+                setYear(2024);
             } else {
                 setYear(periode?.start_year)
             }
@@ -157,7 +159,7 @@ const Page = () => {
 
     useEffect(() => {
         if (isMounted && arrKodeRekening?.length === 0) {
-            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null', 'where|code_2|=|2']).then((res: any) => {
+            GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02', 'where|code_4|=|02']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
                 }
@@ -251,14 +253,14 @@ const Page = () => {
                 updated[index]['jangka_waktu'] = monthRange;
             }
 
-            // if dateStart < now and dateStart same year with now
-            if (dateStart < new Date() && dateStart.getFullYear() == new Date().getFullYear()) {
-                const monthRangeToNow = (new Date().getFullYear() - dateStart.getFullYear()) * 12 + (new Date().getMonth() - dateStart.getMonth());
-                console.log(monthRangeToNow)
+            if ((dateStart.getFullYear() < dateEnd.getFullYear()) && (dateStart.getMonth() <= 12)) {
+                const monthRangeToNow = 12 - dateStart.getMonth();
                 updated[index]['sudah_jatuh_tempo'] = ((monthRangeToNow / monthRange) * parseFloat(data[index].kontrak_value)).toFixed(2);
             } else {
-                updated[index]['sudah_jatuh_tempo'] = 0;
+                const monthRangeToNow = dateEnd.getMonth() - dateStart.getMonth();
+                updated[index]['sudah_jatuh_tempo'] = ((monthRangeToNow / monthRange) * parseFloat(data[index].kontrak_value)).toFixed(2);
             }
+
 
             updated[index]['belum_jatuh_tempo'] = (parseFloat(data[index].kontrak_value) - parseFloat(updated[index]['sudah_jatuh_tempo'])).toFixed(2);
             return updated;
@@ -281,7 +283,11 @@ const Page = () => {
     const save = () => {
         setIsSaving(true);
         storeData(dataInput, periode?.id, year).then((res: any) => {
-            if (res.status == 'success') {
+            if (res.status == 'error validation') {
+                showAlert('error', 'Mohon lengkapi data terlebih dahulu');
+                setIsSaving(false);
+            }
+            else if (res.status == 'success') {
                 // showAlert('success', 'Data berhasil disimpan');
                 setIsUnsaved(false);
                 setIsSaving(false);
@@ -635,39 +641,6 @@ const Page = () => {
                                                 className="form-input w-[250px] placeholder:font-normal read-only:bg-slate-200"
                                                 value={input.jangka_waktu}
                                                 readOnly={true}
-                                            // onKeyDown={(e) => {
-                                            //     if (!(
-                                            //         (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                            //         (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                            //         e.keyCode == 8 ||
-                                            //         e.keyCode == 46 ||
-                                            //         e.keyCode == 37 ||
-                                            //         e.keyCode == 39 ||
-                                            //         e.keyCode == 188 ||
-                                            //         e.keyCode == 9 ||
-                                            //         // copy & paste
-                                            //         (e.keyCode == 67 && e.ctrlKey) ||
-                                            //         (e.keyCode == 86 && e.ctrlKey) ||
-                                            //         // command + c & command + v
-                                            //         (e.keyCode == 67 && e.metaKey) ||
-                                            //         (e.keyCode == 86 && e.metaKey) ||
-                                            //         // command + a
-                                            //         (e.keyCode == 65 && e.metaKey) ||
-                                            //         (e.keyCode == 65 && e.ctrlKey)
-                                            //     )) {
-                                            //         e.preventDefault();
-                                            //     }
-                                            // }}
-                                            // onChange={(e: any) => {
-                                            //     setDataInput((prev: any) => {
-                                            //         const updated = [...prev];
-                                            //         const value = parseFloat(e?.target?.value);
-                                            //         updated[index]['jangka_waktu'] = isNaN(value) ? 0 : value;
-                                            //         updatedData(updated, index);
-                                            //         return updated;
-                                            //     })
-                                            //     setIsUnsaved(true);
-                                            // }}
                                             />
                                         </td>
 
@@ -714,70 +687,62 @@ const Page = () => {
                                                 }} />
                                         </td>
                                         <td className='border border-slate-900'>
-                                            <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    Rp.
-                                                </div>
-                                                <input
-                                                    disabled={isSaving == true}
-                                                    type="text"
-                                                    onKeyDown={(e) => {
-                                                        if (!(
-                                                            (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                            (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                            e.keyCode == 8 ||
-                                                            e.keyCode == 46 ||
-                                                            e.keyCode == 37 ||
-                                                            e.keyCode == 39 ||
-                                                            e.keyCode == 188 ||
-                                                            e.keyCode == 9 ||
-                                                            // copy & paste
-                                                            (e.keyCode == 67 && e.ctrlKey) ||
-                                                            (e.keyCode == 86 && e.ctrlKey) ||
-                                                            // command + c & command + v
-                                                            (e.keyCode == 67 && e.metaKey) ||
-                                                            (e.keyCode == 86 && e.metaKey) ||
-                                                            // command + a
-                                                            (e.keyCode == 65 && e.metaKey) ||
-                                                            (e.keyCode == 65 && e.ctrlKey)
-                                                        )) {
-                                                            e.preventDefault();
-                                                        }
-                                                    }}
-                                                    value={input.kontrak_value}
-                                                    onChange={(e) => {
+                                            <InputRupiah
+                                                dataValue={input.kontrak_value}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['kontrak_value'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border border-slate-900'>
+                                            <div className="flex items-center gap-2">
+                                                <InputRupiah
+                                                    readOnly={true}
+                                                    dataValue={input.sudah_jatuh_tempo}
+                                                    onChange={(value: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
-                                                            const value = parseFloat(e?.target?.value);
-                                                            updated[index]['kontrak_value'] = isNaN(value) ? 0 : value;
+                                                            updated[index]['sudah_jatuh_tempo'] = isNaN(value) ? 0 : value;
                                                             updatedData(updated, index);
                                                             return updated;
-                                                        })
+                                                        });
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.kontrak_value)}
-                                                </div>
+                                                />
+                                                <Tippy
+                                                    content={`(${(new Date(input.kontrak_date_start).getFullYear() < new Date(input.kontrak_date_end).getFullYear()) ? 12 - new Date(input.kontrak_date_start).getMonth() : new Date(input.kontrak_date_end).getMonth() - new Date(input.kontrak_date_start).getMonth()}/${input.jangka_waktu}) x Nilai Kontrak`}
+                                                    placement='top'
+                                                    theme='info'
+                                                >
+                                                    <FontAwesomeIcon icon={faExclamationCircle} className='text-info w-6 h-6 cursor-pointer select-none' />
+                                                </Tippy>
                                             </div>
                                         </td>
                                         <td className='border border-slate-900'>
-                                            <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    Rp.
-                                                </div>
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200">
-                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.sudah_jatuh_tempo)}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className='border border-slate-900'>
-                                            <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                    Rp.
-                                                </div>
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200">
-                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(input.belum_jatuh_tempo)}
-                                                </div>
+                                            <div className="flex items-center gap-2">
+                                                <InputRupiah
+                                                    readOnly={true}
+                                                    dataValue={input.belum_jatuh_tempo}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['belum_jatuh_tempo'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
+                                                <Tippy
+                                                    content={`Nilai Kontrak - Sudah Jatuh Tempo`}
+                                                    placement='top'
+                                                    theme='info'
+                                                >
+                                                    <FontAwesomeIcon icon={faExclamationCircle} className='text-info w-6 h-6 cursor-pointer select-none' />
+                                                </Tippy>
                                             </div>
                                         </td>
                                     </tr>

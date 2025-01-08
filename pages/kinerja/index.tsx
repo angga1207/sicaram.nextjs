@@ -98,12 +98,16 @@ const Index = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                if (localStorage.getItem('year')) {
+                    setYear(localStorage.getItem('year'));
+                } else {
+                    setYear(currentYear);
+                }
             } else {
                 setYear(periode?.start_year)
             }
         }
-    }, [isMounted, periode?.id])
+    }, [isMounted, periode?.id]);
 
     const { t, i18n } = useTranslation();
 
@@ -238,14 +242,14 @@ const Index = () => {
 
     const backToInstances = () => {
         setInstance(null);
-        setYear(null);
+        // setYear(null);
         setDatas([]);
         setShowPrograms([]);
         setShowKegiatans([]);
         setShowSubKegiatans([]);
 
         if (router.query) {
-            router.query.year = '';
+            // router.query.year = '';
             router.query.month = '';
             router.query.instance = '';
             router.push(router);
@@ -323,7 +327,7 @@ const Index = () => {
             <div className="">
                 <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5">
                     <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase">
-                        Input Kinerja & Anggaran <br />
+                        Input Kinerja & Anggaran {year} <br />
                         {instances?.[instance - 1]?.name ?? '\u00A0'}
                     </h2>
                     <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
@@ -370,15 +374,23 @@ const Index = () => {
                             <>
                                 {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
                                     <>
-                                        <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={(e) => {
-                                            e.preventDefault();
-                                            backToInstances();
-                                        }} >
+                                        <button type="button" className="btn btn-secondary whitespace-nowrap"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                backToInstances();
+                                            }}
+                                        >
                                             <IconArrowBackward className="w-4 h-4" />
                                             <span className="ltr:ml-2 rtl:mr-2">
                                                 Kembali
                                             </span>
                                         </button>
+                                        {/* <Link href="/kinerja" className="btn btn-secondary whitespace-nowrap" >
+                                            <IconArrowBackward className="w-4 h-4" />
+                                            <span className="ltr:ml-2 rtl:mr-2">
+                                                Kembali
+                                            </span>
+                                        </Link> */}
                                     </>
                                 )}
 
@@ -526,7 +538,7 @@ const Index = () => {
                 </>
             )}
 
-            {instance && year && (
+            {instance && (
                 <div className='p-10'>
                     <div className="text-center text-md font-semibold mb-5">
                         Pilih Tahun

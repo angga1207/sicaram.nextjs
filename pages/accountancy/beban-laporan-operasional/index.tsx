@@ -27,6 +27,7 @@ import Persediaan from '@/components/Accountancy/BebanLaporanOperasional/Persedi
 import Jasa from '@/components/Accountancy/BebanLaporanOperasional/Jasa';
 import Hibah from '@/components/Accountancy/BebanLaporanOperasional/Hibah';
 import Subsidi from '@/components/Accountancy/BebanLaporanOperasional/Subsidi';
+import UangJasaDiserahkan from '@/components/Accountancy/BebanLaporanOperasional/UangJasaDiserahkan';
 
 
 
@@ -109,7 +110,8 @@ const Page = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+                // setYear(currentYear);
+                setYear(2024);
             } else {
                 setYear(periode?.start_year)
             }
@@ -176,30 +178,36 @@ const Page = () => {
                     }
                 });
             } else if (queryApp == 2) {
-                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02', 'where|code_4|=|02']).then((res: any) => {
+                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02']).then((res: any) => {
                     if (res.status === 'success') {
                         setArrKodeRekening(res.data);
                     }
                 });
             } else if (queryApp == 3) {
-                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02', 'where|code_4|=|03']).then((res: any) => {
+                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02']).then((res: any) => {
                     if (res.status === 'success') {
                         setArrKodeRekening(res.data);
                     }
                 });
             } else if (queryApp == 4) {
-                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02', 'where|code_4|=|04']).then((res: any) => {
+                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02']).then((res: any) => {
                     if (res.status === 'success') {
                         setArrKodeRekening(res.data);
                     }
                 });
             } else if (queryApp == 5) {
-                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|05']).then((res: any) => {
+                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|02', 'where|code_4|=|05']).then((res: any) => {
                     if (res.status === 'success') {
                         setArrKodeRekening(res.data);
                     }
                 });
             } else if (queryApp == 6) {
+                GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|05']).then((res: any) => {
+                    if (res.status === 'success') {
+                        setArrKodeRekening(res.data);
+                    }
+                });
+            } else if (queryApp == 7) {
                 GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'where|code_2|=|1', 'where|code_3|=|04']).then((res: any) => {
                     if (res.status === 'success') {
                         setArrKodeRekening(res.data);
@@ -298,7 +306,7 @@ const Page = () => {
                                     <button
                                         onClick={() => {
                                             if (queryApp != 0) {
-                                                router.push({
+                                                router.replace({
                                                     pathname: '/accountancy/beban-laporan-operasional',
                                                     query: { app: 0 },
                                                 });
@@ -316,7 +324,7 @@ const Page = () => {
                                     <button
                                         onClick={() => {
                                             if (queryApp != 1) {
-                                                router.push({
+                                                router.replace({
                                                     pathname: '/accountancy/beban-laporan-operasional',
                                                     query: { app: 1 },
                                                 });
@@ -396,7 +404,7 @@ const Page = () => {
                                         }}
                                         className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Hibah
+                                        Uang / Jasa Diserahkan
                                     </button>
                                 )}
                             </Tab>
@@ -409,6 +417,24 @@ const Page = () => {
                                                 router.push({
                                                     pathname: '/accountancy/beban-laporan-operasional',
                                                     query: { app: 6 },
+                                                });
+                                            }
+                                        }}
+                                        className={`uppercase font-semibold p-4 flex-grow whitespace-nowrap ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
+                                        Hibah
+                                    </button>
+                                )}
+                            </Tab>
+
+                            <Tab as={Fragment}>
+                                {({ selected }) => (
+                                    <button
+                                        onClick={() => {
+                                            if (queryApp != 7) {
+                                                router.push({
+                                                    pathname: '/accountancy/beban-laporan-operasional',
+                                                    query: { app: 7 },
                                                 });
                                             }
                                         }}
@@ -470,6 +496,17 @@ const Page = () => {
                                 <div className="pt-5">
                                     {(isMounted && instances.length > 0) && (
                                         <Perjadin
+                                            data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                            key={[year, instance]}
+                                        />
+                                    )}
+                                </div>
+                            </Tab.Panel>
+
+                            <Tab.Panel>
+                                <div className="pt-5">
+                                    {(isMounted && instances.length > 0) && (
+                                        <UangJasaDiserahkan
                                             data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
                                             key={[year, instance]}
                                         />

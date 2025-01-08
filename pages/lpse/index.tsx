@@ -33,26 +33,46 @@ const Index = () => {
     const [CurrentToken, setCurrentToken] = useState<any>([]);
 
     useEffect(() => {
-        if (document.cookie) {
-            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
-            user = user ? JSON.parse(user) : null;
-            setCurrentUser(user);
-
-            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
-            setCurrentToken(token);
-        }
-    }, [isMounted]);
-
-    useEffect(() => {
         dispatch(setPageTitle('Dashboard LPSE'));
     });
 
     // const CurrentToken = getCookie('token');
     const baseUri = BaseUri();
 
-    const [year, setYear] = useState<number>(new Date().getFullYear());
+    const [periode, setPeriode] = useState<any>({});
+    const [year, setYear] = useState<any>(new Date().getFullYear());
     const [datas, setDatas] = useState<any>(null);
     const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
+
+
+    useEffect(() => {
+        if (document.cookie) {
+            let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
+            user = user ? JSON.parse(user) : null;
+            setCurrentUser(user);
+        }
+        if (isMounted) {
+            const localPeriode = localStorage.getItem('periode');
+            if (localPeriode) {
+                setPeriode(JSON.parse(localPeriode ?? ""));
+            }
+        }
+    }, [isMounted]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (periode?.start_year <= currentYear) {
+                if (localStorage.getItem('year')) {
+                    setYear(localStorage.getItem('year'));
+                } else {
+                    setYear(currentYear);
+                }
+            } else {
+                setYear(periode?.start_year)
+            }
+        }
+    }, [isMounted, periode?.id]);
 
 
     const fetchLPSE = async () => {
@@ -76,10 +96,10 @@ const Index = () => {
     }
 
     useEffect(() => {
-        if (isMounted) {
+        if (isMounted && year) {
             fetchLPSE();
         }
-    }, [isMounted]);
+    }, [isMounted, year]);
 
     return (
         <>
