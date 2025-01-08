@@ -590,16 +590,16 @@ const Index = () => {
 
 
     // DEBUG TOOLS ANGGA
-    useEffect(() => {
-        // if (subKegiatan?.status == 'verified' || subKegiatan?.status_target == 'verified') {
-        setSubKegiatan((prev: any) => {
-            const updated = { ...prev };
-            updated.status = 'draft';
-            updated.status_target = 'verified';
-            return updated;
-        });
-        // }
-    }, [subKegiatan?.status]);
+    // useEffect(() => {
+    //     // if (subKegiatan?.status == 'verified' || subKegiatan?.status_target == 'verified') {
+    //     setSubKegiatan((prev: any) => {
+    //         const updated = { ...prev };
+    //         updated.status = 'draft';
+    //         updated.status_target = 'verified';
+    //         return updated;
+    //     });
+    //     // }
+    // }, [subKegiatan?.status]);
     // DEBUG TOOLS ANGGA
 
     // if (subKegiatan && subKegiatan.status != 'verified') {
