@@ -18,7 +18,7 @@ import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.4c.1";
+    const APP_VERSION = "2.4c.5";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
