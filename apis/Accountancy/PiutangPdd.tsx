@@ -11,7 +11,7 @@ const baseUri = BaseUri();
 
 export async function getRekap(instance: any = null, periode: any, year: any) {
     try {
-        const res = await axios.get(baseUri + '/accountancy/plo/pegawai', {
+        const res = await axios.get(baseUri + '/accountancy/plo/rekap', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,

@@ -127,69 +127,12 @@ const Rekap = (data: any) => {
     }, [isMounted, instance, year])
 
     const [totalData, setTotalData] = useState<any>({
-        realisasi_belanja: 0,
         saldo_awal: 0,
-        beban_dimuka: 0,
-        hutang: 0,
-        hibah: 0,
-        reklas_tambah: 0,
-        plus_jukor: 0,
         saldo_akhir: 0,
-        beban_tahun_lalu: 0,
-        beban_dimuka_last_year: 0,
-        pembayaran_hutang: 0,
-        reklas_kurang_dari_rekening: 0,
-        reklas_kurang_ke_modal: 0,
-        atribusi: 0,
-        min_jukor: 0,
-        beban_lo: 0,
+        piutang_bruto: 0,
+        penyisihan_piutang: 0,
+        beban_penyisihan: 0,
     });
-
-    const addDataInput = () => {
-        const newData = {
-            id: '',
-            instance_id: instance ?? '',
-            kode_rekening_id: '',
-            realisasi_belanja: 0,
-
-            saldo_awal: 0,
-            beban_dimuka: 0,
-            hutang: 0,
-            hibah: 0,
-            reklas_tambah: 0,
-            plus_jukor: 0,
-
-            saldo_akhir: 0,
-            beban_tahun_lalu: 0,
-            beban_dimuka_last_year: 0,
-            pembayaran_hutang: 0,
-            reklas_kurang_dari_rekening: 0,
-            reklas_kurang_ke_modal: 0,
-            atribusi: 0,
-            min_jukor: 0,
-            beban_lo: 0,
-        }
-        setDataInput((prevData: any) => [...prevData, newData]);
-        setIsUnsaved(true);
-    }
-
-    const updatedData = (data: any, index: number) => {
-        setDataInput((prev: any) => {
-            const updated = [...prev];
-
-            const keysToSumPlus = ['saldo_awal', 'beban_dimuka', 'hutang', 'hibah', 'reklas_tambah', 'plus_jukor'];
-            const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
-            // updated[index]['plus_jukor'] = sumPlus;
-
-            const keysToSumMinus = ['saldo_akhir', 'beban_tahun_lalu', 'beban_dimuka_last_year', 'pembayaran_hutang', 'reklas_kurang_dari_rekening', 'reklas_kurang_ke_modal', 'atribusi', 'min_jukor'];
-            const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
-            // updated[index]['min_jukor'] = sumMinus;
-
-            updated[index].beban_lo = (updated[index].realisasi_belanja + sumPlus) - sumMinus;
-            return updated;
-        })
-        setIsUnsaved(true);
-    }
 
     useEffect(() => {
         if (isMounted && dataInput.length > 0) {
@@ -218,72 +161,109 @@ const Rekap = (data: any) => {
         }
     }, [isMounted, dataInput])
 
-    const save = () => {
-        setIsSaving(true);
-        // storeRekap(dataInput, periode?.id, year).then((res: any) => {
-        //     if (res.status == 'error validation') {
-        //         showAlert('error', 'Data gagal disimpan, pastikan semua data terisi dengan benar');
-        //         setIsSaving(false);
-        //     }
-        //     else if (res.status == 'success') {
-        //         showAlert('success', 'Data berhasil disimpan');
-        //         setIsUnsaved(false);
-        //         setIsSaving(false);
-        //     } else {
-        //         showAlert('error', 'Data gagal disimpan');
-        //         setIsSaving(false);
-        //     }
-        //     _getDatas();
-        // });
-    }
-
-    // const deleteData = (id: any) => {
-    //     deleteRekap(id).then((res: any) => {
-    //         if (res.status == 'success') {
-    //             _getDatas();
-    //             showAlert('success', 'Data berhasil dihapus');
-    //         } else {
-    //             showAlert('error', 'Data gagal dihapus');
-    //         }
-    //     });
-    // }
-
     return (
         <>
-            <div className="table-responsive h-[calc(100vh-400px)] pb-5">
-            </div >
+            <div className="text-xl text-center font-semibold text-gray-600 mb-5">
+                Rekap Piutang Pendapatan Audited Per 31 Desember {year}
+            </div>
 
-            <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        addDataInput()
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-
-                {isSaving == false ? (
-                    <button type="button"
-                        onClick={(e) => {
-                            save()
-                        }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Rekap
-                    </button>
-                ) : (
-                    <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
-                    </button>
-                )}
-
-
+            <div className="table-responsive h-[calc(100vh-400px)] mb-5">
+                <table>
+                    <thead>
+                        <tr>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white">
+                                No
+                            </th>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Jenis Piutang
+                            </th>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Saldo Awal Tahun {year}
+                            </th>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Saldo Akhir Tahun {year}
+                            </th>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Piutang Bruto
+                            </th>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Penyisihan Piutang
+                            </th>
+                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Beban Penyisihan
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {dataInput.map((data: any, index: number) => (
+                            <tr key={index}>
+                                <td className="text-center whitespace-nowrap border">
+                                    {index + 1}
+                                </td>
+                                <td className="text-start uppercase font-semibold whitespace-nowrap border">
+                                    {data.uraian}
+                                </td>
+                                <td className="text-center whitespace-nowrap border">
+                                    <InputRupiah
+                                        readOnly={true}
+                                        dataValue={data.saldo_awal} />
+                                </td>
+                                <td className="text-center whitespace-nowrap border">
+                                    <InputRupiah
+                                        readOnly={true}
+                                        dataValue={data.saldo_akhir} />
+                                </td>
+                                <td className="text-center whitespace-nowrap border">
+                                    <InputRupiah
+                                        readOnly={true}
+                                        dataValue={data.piutang_bruto} />
+                                </td>
+                                <td className="text-center whitespace-nowrap border">
+                                    <InputRupiah
+                                        readOnly={true}
+                                        dataValue={data.penyisihan_piutang} />
+                                </td>
+                                <td className="text-center whitespace-nowrap border">
+                                    <InputRupiah
+                                        readOnly={true}
+                                        dataValue={data.beban_penyisihan} />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colSpan={2} className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                                Total
+                            </td>
+                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                                <InputRupiah
+                                    readOnly={true}
+                                    dataValue={totalData.saldo_awal} />
+                            </td>
+                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                                <InputRupiah
+                                    readOnly={true}
+                                    dataValue={totalData.saldo_akhir} />
+                            </td>
+                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                                <InputRupiah
+                                    readOnly={true}
+                                    dataValue={totalData.piutang_bruto} />
+                            </td>
+                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                                <InputRupiah
+                                    readOnly={true}
+                                    dataValue={totalData.penyisihan_piutang} />
+                            </td>
+                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                                <InputRupiah
+                                    readOnly={true}
+                                    dataValue={totalData.beban_penyisihan} />
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </>
     );

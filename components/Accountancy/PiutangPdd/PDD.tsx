@@ -499,13 +499,13 @@ const PDD = (data: any) => {
                                     Uraian
                                 </th>
                                 <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
-                                    Pendapatan Diteruma Dimuka Awal
+                                    Pendapatan Diterima Dimuka Awal
                                 </th>
                                 <th rowSpan={1} colSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white">
                                     Mutasi
                                 </th>
                                 <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
-                                    Pendapatan Diteruma Dimuka Akhir
+                                    Pendapatan Diterima Dimuka Akhir
                                 </th>
                             </tr>
                             <tr className='sticky top-[46px] z-[0]'>
