@@ -118,7 +118,7 @@ const Page = () => {
             <div className="mt-4">
                 <div className="flex items-center justify-center gap-x-6 gap-y-4 flex-wrap">
 
-                    <Tippy content="Import & Detail LRA" placement='bottom'>
+                    <Tippy content="Unggah & Detail LRA" placement='bottom'>
                         <Link
                             href="/accountancy/import-lra"
                             className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
@@ -131,7 +131,7 @@ const Page = () => {
                             >
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Import & Detail LRA
+                                Unggah & Detail LRA
                             </div>
                         </Link>
                     </Tippy>
@@ -260,6 +260,42 @@ const Page = () => {
                             </div>
                         </Link>
                     </Tippy>
+
+                    <Tippy content="Unggah Saldo Awal Neraca & LO" placement='bottom'>
+                        <Link
+                            href="/accountancy/import"
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
+
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/accountant-10.json"
+                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
+                            <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                Unggah Saldo Awal Neraca & LO
+                            </div>
+                        </Link>
+                    </Tippy>
+
+                    {/* <Tippy content="Laporan Akuntansi" placement='bottom'>
+                        <Link
+                            href="/accountancy/report"
+                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
+
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/accountant-11.json"
+                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
+                            <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                Laporan Akuntansi
+                            </div>
+                        </Link>
+                    </Tippy> */}
 
                     <Tippy content="Admin Only" placement='bottom' theme='default'>
                         <Link

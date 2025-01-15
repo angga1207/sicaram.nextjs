@@ -342,9 +342,10 @@ const InstancePageSlug = () => {
                         </label>
                         <div className="">
                             <input
+                                readOnly={([1, 2].includes(CurrentUser?.role_id)) ? false : true}
                                 type="text"
                                 id="instance-code"
-                                className="form-input"
+                                className="form-input read-only:bg-slate-200"
                                 autoComplete='off'
                                 placeholder='Kode Nomenklatur'
                                 value={instanceInput.code}
@@ -378,9 +379,10 @@ const InstancePageSlug = () => {
                         </label>
                         <div className="">
                             <input
+                                readOnly={([1, 2].includes(CurrentUser?.role_id)) ? false : true}
                                 type="text"
                                 id="instance-alias"
-                                className="form-input"
+                                className="form-input read-only:bg-slate-200"
                                 autoComplete='off'
                                 placeholder='Alias'
                                 value={instanceInput.alias}

@@ -522,6 +522,7 @@ const Persediaan = (data: any) => {
 
                                     <td className="border bg-yellow-300 border-slate-900">
                                         <InputRupiah
+                                            readOnly={true}
                                             dataValue={data.saldo_awal}
                                             onChange={(value: any) => {
                                                 setDataInput((prev: any) => {
@@ -621,6 +622,7 @@ const Persediaan = (data: any) => {
 
                                     <td className="border bg-green-300 border-slate-900">
                                         <InputRupiah
+                                            readOnly={true}
                                             dataValue={data.saldo_akhir}
                                             onChange={(value: any) => {
                                                 setDataInput((prev: any) => {

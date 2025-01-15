@@ -13,6 +13,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { deleteLoTa, getLoTa, storeLoTa } from '@/apis/Accountancy/PiutangPdd';
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
+import { isEmpty, min } from 'lodash';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -66,7 +67,26 @@ const LoTa = (data: any) => {
 
     useEffect(() => {
         if (paramData[1]?.length > 0) {
-            setArrKodeRekening(paramData[1])
+            const arrKodeRekening = paramData[1].map((data: any, index: number) => {
+                if (data.code_1 == 4) {
+                    return {
+                        id: data?.id,
+                        code_1: data?.code_1,
+                        code_2: data?.code_2,
+                        code_3: data?.code_3,
+                        code_4: data?.code_4,
+                        code_5: data?.code_5,
+                        code_6: data?.code_6,
+                        fullcode: data?.fullcode,
+                        name: data?.name,
+                        periode_id: data?.periode_id,
+                        year: data?.year,
+                    }
+                } else {
+                    return null;
+                }
+            }).filter((data: any) => data != null);
+            setArrKodeRekening(arrKodeRekening)
         }
         if (paramData[4]) {
             setInstance(paramData[4]);
@@ -171,7 +191,7 @@ const LoTa = (data: any) => {
             setDataInput1((prev: any) => {
                 const updated = [...prev];
                 updated[index].lra_percent = parseFloat(updated[index].anggaran_perubahan) !== 0 ? ((parseFloat(updated[index].lra) / parseFloat(updated[index].anggaran_perubahan)) * 100) : 0;
-                updated[index].laporan_operasional = (parseFloat(updated[index].lra) - parseFloat(updated[index].piutang_awal) + parseFloat(updated[index].piutang_akhir) - parseFloat(updated[index].pdd_akhir) + parseFloat(updated[index].pdd_awal)) + parseFloat(updated[index].penambahan_pengurangan_lo) - parseFloat(updated[index].reklas_koreksi_lo);
+                updated[index].laporan_operasional = (parseFloat(updated[index].lra) - parseFloat(updated[index].piutang_awal) + parseFloat(updated[index].piutang_akhir) - parseFloat(updated[index].pdd_akhir) + parseFloat(updated[index].pdd_awal)) + parseFloat(updated[index].penambahan_pengurangan_lo) + parseFloat(updated[index].reklas_koreksi_lo);
                 updated[index].laporan_operasional_percent = (parseFloat(updated[index].laporan_operasional) / parseFloat(updated[index].lra)) * 100;
                 updated[index].perbedaan_lo_lra = parseFloat(updated[index].laporan_operasional) - parseFloat(updated[index].lra);
 

@@ -189,19 +189,34 @@ const RekapBelanja = (data: any) => {
                                                 </div>
                                             </td>
                                             <td className='whitespace-nowrap text-end'>
-                                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.tanah)}
+                                                <InputRupiah
+                                                    dataValue={row.tanah}
+                                                    readOnly={true}
+                                                />
                                             </td>
                                             <td className='whitespace-nowrap text-end'>
-                                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.peralatan_mesin)}
+                                                <InputRupiah
+                                                    dataValue={row.peralatan_mesin}
+                                                    readOnly={true}
+                                                />
                                             </td>
                                             <td className='whitespace-nowrap text-end'>
-                                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.gedung_bangunan)}
+                                                <InputRupiah
+                                                    dataValue={row.gedung_bangunan}
+                                                    readOnly={true}
+                                                />
                                             </td>
                                             <td className='whitespace-nowrap text-end'>
-                                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.jalan_jaringan_irigasi)}
+                                                <InputRupiah
+                                                    dataValue={row.jalan_jaringan_irigasi}
+                                                    readOnly={true}
+                                                />
                                             </td>
                                             <td className='whitespace-nowrap text-end'>
-                                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.aset_tetap_lainnya)}
+                                                <InputRupiah
+                                                    dataValue={row.aset_tetap_lainnya}
+                                                    readOnly={true}
+                                                />
                                             </td>
                                             <td>
                                                 <div className="flex group">
@@ -262,7 +277,10 @@ const RekapBelanja = (data: any) => {
                                                 </div>
                                             </td>
                                             <td className='whitespace-nowrap'>
-                                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.aset_lain_lain)}
+                                                <InputRupiah
+                                                    dataValue={row.aset_lain_lain}
+                                                    readOnly={true}
+                                                />
                                             </td>
                                         </tr>
                                     )

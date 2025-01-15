@@ -57,7 +57,7 @@ const Page = () => {
     const router = useRouter();
 
     useEffect(() => {
-        dispatch(setPageTitle('Import LRA'));
+        dispatch(setPageTitle('Unggah LRA'));
     });
 
     const ref = useRef<any>(null);
@@ -170,7 +170,6 @@ const Page = () => {
             if (res.status == 'error validation') {
                 Object.keys(res.message).map((key: any) => {
                     let element = document.getElementById('error-' + key);
-                    console.log(element);
                     if (element) {
                         if (key) {
                             element.innerHTML = res.message[key][0];
@@ -345,7 +344,7 @@ const Page = () => {
                                         className="btn btn-success"
                                         disabled={isSaving == true}>
                                         <FontAwesomeIcon icon={faSave} className="h-5 w-5 mr-2" />
-                                        {isSaving ? 'Menunggah' : 'Unggah'}
+                                        {isSaving ? 'Mengunggah' : 'Unggah'}
                                     </button>
                                 </div>
                             </div>

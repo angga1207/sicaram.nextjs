@@ -109,6 +109,7 @@ const Rekap = (data: any) => {
 
     const [dataInput, setDataInput] = useState<any>([]);
     const [grandTotal, setGrandTotal] = useState<any>([]);
+    const [percentage, setPercentage] = useState<any>(0);
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -126,6 +127,12 @@ const Rekap = (data: any) => {
             _getDatas();
         }
     }, [isMounted, instance, periode?.id, year]);
+
+    useEffect(() => {
+        if (isMounted) {
+            setPercentage(grandTotal?.saldo_awal > 0 ? ((grandTotal?.saldo_akhir - grandTotal?.saldo_awal) / grandTotal?.saldo_awal * 100).toFixed(2) : 0);
+        }
+    }, [grandTotal])
 
     const _getDatas = () => {
         getRekap(instance, periode?.id, year).then((res) => {
@@ -428,8 +435,13 @@ const Rekap = (data: any) => {
                         <div className="w-[300px] font-semibold text-lg">
 
                             <Tippy content={(grandTotal.saldo_awal ? terbilang(grandTotal.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                <div className='cursor-pointer'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir - grandTotal?.saldo_awal)}
+                                <div className='flex items-center justify-between cursor-pointer'>
+                                    <div className="">
+                                        Rp.
+                                    </div>
+                                    <div className="">
+                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir - grandTotal?.saldo_awal)}
+                                    </div>
                                 </div>
                             </Tippy>
                         </div>
@@ -439,8 +451,13 @@ const Rekap = (data: any) => {
                             Persentase
                         </div>
                         <div className="w-[300px] font-semibold text-lg">
-                            <div className='cursor-pointer'>
-                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_awal > 0 ? ((grandTotal?.saldo_akhir - grandTotal?.saldo_awal) / grandTotal?.saldo_awal * 100) : 0)} %
+                            <div className='flex items-center justify-between cursor-pointer'>
+                                <div className="">
+                                    %
+                                </div>
+                                <div className="">
+                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(percentage)}
+                                </div>
                             </div>
                         </div>
                     </div>

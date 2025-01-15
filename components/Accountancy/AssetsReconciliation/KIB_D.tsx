@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faLink, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle, faLink, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -418,60 +418,99 @@ const KIB_D = (data: any) => {
                                                 </div>
                                             </td>
                                             <td className='border border-slate-900 sticky top-0 left-[300px] z-[1] bg-slate-50'>
-                                                <InputRupiah
-                                                    dataValue={row.saldo_awal}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['saldo_awal'] = isNaN(value) ? 0 : value;
-                                                        //     updatedData(updated, index);
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.saldo_awal}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['saldo_awal'] = isNaN(value) ? 0 : value;
+                                                            //     updatedData(updated, index);
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Saldo Awal dari Import Data'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
 
 
                                             {/* PLUS START */}
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_realisasi_belanja}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_realisasi_belanja'] = isNaN(value) ? 0 : value;
-                                                        //     updatedData(updated, index);
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_realisasi_belanja}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_realisasi_belanja'] = isNaN(value) ? 0 : value;
+                                                            //     updatedData(updated, index);
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Realisasi Belanja dari LRA'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_hutang_kegiatan}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_hutang_kegiatan'] = isNaN(value) ? 0 : value;
-                                                        //     updatedData(updated, index);
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
-
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_hutang_kegiatan}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_hutang_kegiatan'] = isNaN(value) ? 0 : value;
+                                                            //     updatedData(updated, index);
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Hutang Belanja (Aset Tetap Jalan, Jaringan & Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_atribusi}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_atribusi'] = isNaN(value) ? 0 : value;
-                                                        //     updatedData(updated, index);
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_atribusi}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_atribusi'] = isNaN(value) ? 0 : value;
+                                                            //     updatedData(updated, index);
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Atribusi Penyesuaian Aset dan Beban (Aset Tetap Jalan, Jaringan & Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
                                                 <InputRupiah
@@ -513,134 +552,234 @@ const KIB_D = (data: any) => {
                                                     }} />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_kib_a}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_kib_a'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_kib_a}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_kib_a'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Tanah)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_kib_b}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_kib_b'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_kib_b}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_kib_b'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Peralatan dan Mesin)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_kib_c}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_kib_c'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_kib_c}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_kib_c'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Gedung dan Bangunan)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_kib_d}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_kib_d'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_kib_d}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_kib_d'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Jalan, Jaringan dan Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_kib_e}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_kib_e'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_kib_e}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_kib_e'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Lainnya)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_kdp}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_kdp'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_kdp}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_kdp'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Konstruksi Dalam Pekerjaan)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_reklasifikasi_aset_lain_lain}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_reklasifikasi_aset_lain_lain'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_reklasifikasi_aset_lain_lain}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_reklasifikasi_aset_lain_lain'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Lain-lain)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_hibah_masuk}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_hibah_masuk'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_hibah_masuk}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_hibah_masuk'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Hibah Masuk di Penyesuaian Aset dan Beban (Aset Tetap Jalan, Jaringan & Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_penilaian}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_penilaian'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_penilaian}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_penilaian'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penilaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Jalan, Jaringan & Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.plus_mutasi_antar_opd}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['plus_mutasi_antar_opd'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.plus_mutasi_antar_opd}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['plus_mutasi_antar_opd'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Mutasi Aset di Penyesuaian Aset dan Beban (Aset Tetap Jalan, Jaringan & Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
                                                 <InputRupiah
@@ -711,137 +850,211 @@ const KIB_D = (data: any) => {
                                                     }} />
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_kib_a}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_kib_a'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_kib_a}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_kib_a'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Tanah)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_kib_b}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_kib_b'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_kib_b}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_kib_b'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Peralatan dan Mesin)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_kib_c}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_kib_c'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_kib_c}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_kib_c'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Gedung dan Bangunan)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_kib_d}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_kib_d'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_kib_d}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_kib_d'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Jalan, Jaringan dan Irigasi)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_kib_e}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_kib_e'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_kib_e}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_kib_e'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Lainnya)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_kdp}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_kdp'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_kdp}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_kdp'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Konstruksi Dalam Pekerjaan)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_reklasifikasi_beban_aset_lain_lain}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_reklasifikasi_beban_aset_lain_lain'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_reklasifikasi_beban_aset_lain_lain}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_reklasifikasi_beban_aset_lain_lain'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Lain-lain)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                {/* Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_penghapusan)} */}
-                                                {/* <div className="flex group">
-                                                    <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                                        Rp.
-                                                    </div>
-                                                    <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
-                                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_penghapusan)}
-                                                    </div>
-                                                    <div className="self-center ml-1">
-                                                        <Tippy content="Link Penghapusan Aset & Penjualan Aset" theme="bct" className="p-2">
-                                                            <Link href="/accountancy/penyesuaian-aset-beban?app=7" className="btn btn-primary px-2 rounded-full h-9 w-9">
-                                                                <FontAwesomeIcon icon={faLink} className="w-4 h-4 cursor-pointer" />
-                                                            </Link>
-                                                        </Tippy>
-                                                    </div>
-                                                </div> */}
-                                                <InputRupiah
-                                                    dataValue={row.min_penghapusan}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_penghapusan'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_penghapusan}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_penghapusan'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Penghapusan Aset di Penyesuaian Aset dan Beban (Aset Lain-lain)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
-                                                <InputRupiah
-                                                    dataValue={row.min_mutasi_antar_opd}
-                                                    readOnly={true}
-                                                    onChange={(value: any) => {
-                                                        // setDataInput((prev: any) => {
-                                                        //     const updated = [...prev];
-                                                        //     updated[index]['min_mutasi_antar_opd'] = isNaN(value) ? 0 : value;
-                                                        //     _calculateData(index)
-                                                        //     return updated;
-                                                        // });
-                                                    }} />
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <InputRupiah
+                                                        dataValue={row.min_mutasi_antar_opd}
+                                                        readOnly={true}
+                                                        onChange={(value: any) => {
+                                                            // setDataInput((prev: any) => {
+                                                            //     const updated = [...prev];
+                                                            //     updated[index]['min_mutasi_antar_opd'] = isNaN(value) ? 0 : value;
+                                                            //     _calculateData(index)
+                                                            //     return updated;
+                                                            // });
+                                                        }} />
+                                                    <Tippy
+                                                        content='Dari Mutasi Aset di Penyesuaian Aset dan Beban (Aset Lain-lain)'
+                                                        theme='info'
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExclamationCircle}
+                                                            className='w-6 h-6 text-info cursor-pointer' />
+                                                    </Tippy>
+                                                </div>
                                             </td>
                                             <td className='border border-slate-900'>
                                                 <InputRupiah

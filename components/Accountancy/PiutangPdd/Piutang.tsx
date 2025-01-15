@@ -124,6 +124,7 @@ const Piutang = (data: any) => {
                                 kode_rekening_id: '',
                                 saldo_awal: 0,
                                 koreksi_saldo_awal: 0,
+                                penghapusan_piutang: 0,
                                 mutasi_debet: 0,
                                 mutasi_kredit: 0,
                                 saldo_akhir: 0,
@@ -142,6 +143,7 @@ const Piutang = (data: any) => {
                                 kode_rekening_id: '',
                                 saldo_awal: 0,
                                 koreksi_saldo_awal: 0,
+                                penghapusan_piutang: 0,
                                 mutasi_debet: 0,
                                 mutasi_kredit: 0,
                                 saldo_akhir: 0,
@@ -160,6 +162,7 @@ const Piutang = (data: any) => {
                                 kode_rekening_id: '',
                                 saldo_awal: 0,
                                 koreksi_saldo_awal: 0,
+                                penghapusan_piutang: 0,
                                 mutasi_debet: 0,
                                 mutasi_kredit: 0,
                                 saldo_akhir: 0,
@@ -178,6 +181,7 @@ const Piutang = (data: any) => {
                                 kode_rekening_id: '',
                                 saldo_awal: 0,
                                 koreksi_saldo_awal: 0,
+                                penghapusan_piutang: 0,
                                 mutasi_debet: 0,
                                 mutasi_kredit: 0,
                                 saldo_akhir: 0,
@@ -196,6 +200,7 @@ const Piutang = (data: any) => {
                                 kode_rekening_id: '',
                                 saldo_awal: 0,
                                 koreksi_saldo_awal: 0,
+                                penghapusan_piutang: 0,
                                 mutasi_debet: 0,
                                 mutasi_kredit: 0,
                                 saldo_akhir: 0,
@@ -214,6 +219,7 @@ const Piutang = (data: any) => {
                                 kode_rekening_id: '',
                                 saldo_awal: 0,
                                 koreksi_saldo_awal: 0,
+                                penghapusan_piutang: 0,
                                 mutasi_debet: 0,
                                 mutasi_kredit: 0,
                                 saldo_akhir: 0,
@@ -248,6 +254,7 @@ const Piutang = (data: any) => {
     const [totalData, setTotalData] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -261,6 +268,7 @@ const Piutang = (data: any) => {
     const [totalData1, setTotalData1] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -274,6 +282,7 @@ const Piutang = (data: any) => {
     const [totalData2, setTotalData2] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -287,6 +296,7 @@ const Piutang = (data: any) => {
     const [totalData3, setTotalData3] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -300,6 +310,7 @@ const Piutang = (data: any) => {
     const [totalData4, setTotalData4] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -313,6 +324,7 @@ const Piutang = (data: any) => {
     const [totalData5, setTotalData5] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -326,6 +338,7 @@ const Piutang = (data: any) => {
     const [totalData6, setTotalData6] = useState<any>({
         saldo_awal: 0,
         koreksi_saldo_awal: 0,
+        penghapusan_piutang: 0,
         mutasi_debet: 0,
         mutasi_kredit: 0,
         saldo_akhir: 0,
@@ -345,6 +358,7 @@ const Piutang = (data: any) => {
             kode_rekening_id: '',
             saldo_awal: 0,
             koreksi_saldo_awal: 0,
+            penghapusan_piutang: 0,
             mutasi_debet: 0,
             mutasi_kredit: 0,
             saldo_akhir: 0,
@@ -376,7 +390,7 @@ const Piutang = (data: any) => {
                 setDataInput1((prev: any) => {
                     const updated = [...prev];
 
-                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
+                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) - parseFloat(updated[index]['penghapusan_piutang']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
 
                     const keyToSum2 = ['umur_piutang_1', 'umur_piutang_2', 'umur_piutang_3', 'umur_piutang_4'];
                     const sum2 = keyToSum2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -389,7 +403,7 @@ const Piutang = (data: any) => {
                 setDataInput2((prev: any) => {
                     const updated = [...prev];
 
-                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
+                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) - parseFloat(updated[index]['penghapusan_piutang']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
 
                     const keyToSum2 = ['umur_piutang_1', 'umur_piutang_2', 'umur_piutang_3', 'umur_piutang_4'];
                     const sum2 = keyToSum2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -402,7 +416,7 @@ const Piutang = (data: any) => {
                 setDataInput3((prev: any) => {
                     const updated = [...prev];
 
-                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
+                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) - parseFloat(updated[index]['penghapusan_piutang']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
 
                     const keyToSum2 = ['umur_piutang_1', 'umur_piutang_2', 'umur_piutang_3', 'umur_piutang_4'];
                     const sum2 = keyToSum2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -415,7 +429,7 @@ const Piutang = (data: any) => {
                 setDataInput4((prev: any) => {
                     const updated = [...prev];
 
-                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
+                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) - parseFloat(updated[index]['penghapusan_piutang']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
 
                     const keyToSum2 = ['umur_piutang_1', 'umur_piutang_2', 'umur_piutang_3', 'umur_piutang_4'];
                     const sum2 = keyToSum2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -428,7 +442,7 @@ const Piutang = (data: any) => {
                 setDataInput5((prev: any) => {
                     const updated = [...prev];
 
-                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
+                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) - parseFloat(updated[index]['penghapusan_piutang']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
 
                     const keyToSum2 = ['umur_piutang_1', 'umur_piutang_2', 'umur_piutang_3', 'umur_piutang_4'];
                     const sum2 = keyToSum2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -441,7 +455,7 @@ const Piutang = (data: any) => {
                 setDataInput6((prev: any) => {
                     const updated = [...prev];
 
-                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
+                    updated[index]['saldo_akhir'] = parseFloat(updated[index]['saldo_awal']) + parseFloat(updated[index]['koreksi_saldo_awal']) - parseFloat(updated[index]['penghapusan_piutang']) + parseFloat(updated[index]['mutasi_debet']) - parseFloat(updated[index]['mutasi_kredit']);
 
                     const keyToSum2 = ['umur_piutang_1', 'umur_piutang_2', 'umur_piutang_3', 'umur_piutang_4'];
                     const sum2 = keyToSum2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -460,6 +474,7 @@ const Piutang = (data: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = parseFloat(totalData1['saldo_awal'] ?? 0) + parseFloat(totalData2['saldo_awal'] ?? 0) + parseFloat(totalData3['saldo_awal'] ?? 0) + parseFloat(totalData4['saldo_awal'] ?? 0) + parseFloat(totalData5['saldo_awal'] ?? 0) + parseFloat(totalData6['saldo_awal'] ?? 0);
                 updated['koreksi_saldo_awal'] = parseFloat(totalData1['koreksi_saldo_awal'] ?? 0) + parseFloat(totalData2['koreksi_saldo_awal'] ?? 0) + parseFloat(totalData3['koreksi_saldo_awal'] ?? 0) + parseFloat(totalData4['koreksi_saldo_awal'] ?? 0) + parseFloat(totalData5['koreksi_saldo_awal'] ?? 0) + parseFloat(totalData6['koreksi_saldo_awal'] ?? 0);
+                updated['penghapusan_piutang'] = parseFloat(totalData1['penghapusan_piutang'] ?? 0) + parseFloat(totalData2['penghapusan_piutang'] ?? 0) + parseFloat(totalData3['penghapusan_piutang'] ?? 0) + parseFloat(totalData4['penghapusan_piutang'] ?? 0) + parseFloat(totalData5['penghapusan_piutang'] ?? 0) + parseFloat(totalData6['penghapusan_piutang'] ?? 0);
                 updated['mutasi_debet'] = parseFloat(totalData1['mutasi_debet'] ?? 0) + parseFloat(totalData2['mutasi_debet'] ?? 0) + parseFloat(totalData3['mutasi_debet'] ?? 0) + parseFloat(totalData4['mutasi_debet'] ?? 0) + parseFloat(totalData5['mutasi_debet'] ?? 0) + parseFloat(totalData6['mutasi_debet'] ?? 0);
                 updated['mutasi_kredit'] = parseFloat(totalData1['mutasi_kredit'] ?? 0) + parseFloat(totalData2['mutasi_kredit'] ?? 0) + parseFloat(totalData3['mutasi_kredit'] ?? 0) + parseFloat(totalData4['mutasi_kredit'] ?? 0) + parseFloat(totalData5['mutasi_kredit'] ?? 0) + parseFloat(totalData6['mutasi_kredit'] ?? 0);
                 updated['saldo_akhir'] = parseFloat(totalData1['saldo_akhir'] ?? 0) + parseFloat(totalData2['saldo_akhir'] ?? 0) + parseFloat(totalData3['saldo_akhir'] ?? 0) + parseFloat(totalData4['saldo_akhir'] ?? 0) + parseFloat(totalData5['saldo_akhir'] ?? 0) + parseFloat(totalData6['saldo_akhir'] ?? 0);
@@ -474,11 +489,13 @@ const Piutang = (data: any) => {
     }, [isMounted, totalData1, totalData2, totalData3, totalData4, totalData5, totalData6])
 
     useEffect(() => {
+        // penghapusan_piutang: 0,
         if (isMounted && dataInput1.length > 0) {
             setTotalData1((prev: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = dataInput1.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
                 updated['koreksi_saldo_awal'] = dataInput1.reduce((acc: any, obj: any) => acc + parseFloat(obj['koreksi_saldo_awal']), 0);
+                updated['penghapusan_piutang'] = dataInput1.reduce((acc: any, obj: any) => acc + parseFloat(obj['penghapusan_piutang']), 0);
                 updated['mutasi_debet'] = dataInput1.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_debet']), 0);
                 updated['mutasi_kredit'] = dataInput1.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_kredit']), 0);
                 updated['saldo_akhir'] = dataInput1.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
@@ -498,6 +515,7 @@ const Piutang = (data: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = dataInput2.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
                 updated['koreksi_saldo_awal'] = dataInput2.reduce((acc: any, obj: any) => acc + parseFloat(obj['koreksi_saldo_awal']), 0);
+                updated['penghapusan_piutang'] = dataInput2.reduce((acc: any, obj: any) => acc + parseFloat(obj['penghapusan_piutang']), 0);
                 updated['mutasi_debet'] = dataInput2.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_debet']), 0);
                 updated['mutasi_kredit'] = dataInput2.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_kredit']), 0);
                 updated['saldo_akhir'] = dataInput2.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
@@ -517,6 +535,7 @@ const Piutang = (data: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = dataInput3.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
                 updated['koreksi_saldo_awal'] = dataInput3.reduce((acc: any, obj: any) => acc + parseFloat(obj['koreksi_saldo_awal']), 0);
+                updated['penghapusan_piutang'] = dataInput3.reduce((acc: any, obj: any) => acc + parseFloat(obj['penghapusan_piutang']), 0);
                 updated['mutasi_debet'] = dataInput3.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_debet']), 0);
                 updated['mutasi_kredit'] = dataInput3.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_kredit']), 0);
                 updated['saldo_akhir'] = dataInput3.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
@@ -536,6 +555,7 @@ const Piutang = (data: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = dataInput4.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
                 updated['koreksi_saldo_awal'] = dataInput4.reduce((acc: any, obj: any) => acc + parseFloat(obj['koreksi_saldo_awal']), 0);
+                updated['penghapusan_piutang'] = dataInput4.reduce((acc: any, obj: any) => acc + parseFloat(obj['penghapusan_piutang']), 0);
                 updated['mutasi_debet'] = dataInput4.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_debet']), 0);
                 updated['mutasi_kredit'] = dataInput4.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_kredit']), 0);
                 updated['saldo_akhir'] = dataInput4.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
@@ -555,6 +575,7 @@ const Piutang = (data: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = dataInput5.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
                 updated['koreksi_saldo_awal'] = dataInput5.reduce((acc: any, obj: any) => acc + parseFloat(obj['koreksi_saldo_awal']), 0);
+                updated['penghapusan_piutang'] = dataInput5.reduce((acc: any, obj: any) => acc + parseFloat(obj['penghapusan_piutang']), 0);
                 updated['mutasi_debet'] = dataInput5.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_debet']), 0);
                 updated['mutasi_kredit'] = dataInput5.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_kredit']), 0);
                 updated['saldo_akhir'] = dataInput5.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
@@ -574,6 +595,7 @@ const Piutang = (data: any) => {
                 const updated = { ...prev };
                 updated['saldo_awal'] = dataInput6.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
                 updated['koreksi_saldo_awal'] = dataInput6.reduce((acc: any, obj: any) => acc + parseFloat(obj['koreksi_saldo_awal']), 0);
+                updated['penghapusan_piutang'] = dataInput6.reduce((acc: any, obj: any) => acc + parseFloat(obj['penghapusan_piutang']), 0);
                 updated['mutasi_debet'] = dataInput6.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_debet']), 0);
                 updated['mutasi_kredit'] = dataInput6.reduce((acc: any, obj: any) => acc + parseFloat(obj['mutasi_kredit']), 0);
                 updated['saldo_akhir'] = dataInput6.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
@@ -654,6 +676,9 @@ const Piutang = (data: any) => {
                                 <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
                                     Koreksi Saldo Awal
                                 </th>
+                                <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                    Penghapusan Penting
+                                </th>
                                 <th rowSpan={1} colSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white">
                                     Mutasi
                                 </th>
@@ -718,6 +743,11 @@ const Piutang = (data: any) => {
                                         <td className='border font-semibold bg-slate-200/50'>
                                             <InputRupiah
                                                 dataValue={totalData1.koreksi_saldo_awal}
+                                                readOnly={true} />
+                                        </td>
+                                        <td className='border font-semibold bg-slate-200/50'>
+                                            <InputRupiah
+                                                dataValue={totalData1.penghapusan_piutang}
                                                 readOnly={true} />
                                         </td>
                                         <td className='border font-semibold bg-slate-200/50'>
@@ -908,6 +938,18 @@ const Piutang = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    dataValue={data.penghapusan_piutang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput1((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['penghapusan_piutang'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }} />
+                                            </td>
+                                            <td className="border">
+                                                <InputRupiah
                                                     dataValue={data.mutasi_debet}
                                                     onChange={(value: any) => {
                                                         setDataInput1((prev: any) => {
@@ -1034,6 +1076,11 @@ const Piutang = (data: any) => {
                                         <td className='border font-semibold bg-slate-200/50'>
                                             <InputRupiah
                                                 dataValue={totalData2.koreksi_saldo_awal}
+                                                readOnly={true} />
+                                        </td>
+                                        <td className='border font-semibold bg-slate-200/50'>
+                                            <InputRupiah
+                                                dataValue={totalData2.penghapusan_piutang}
                                                 readOnly={true} />
                                         </td>
                                         <td className='border font-semibold bg-slate-200/50'>
@@ -1224,6 +1271,18 @@ const Piutang = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    dataValue={data.penghapusan_piutang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput2((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['penghapusan_piutang'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }} />
+                                            </td>
+                                            <td className="border">
+                                                <InputRupiah
                                                     dataValue={data.mutasi_debet}
                                                     onChange={(value: any) => {
                                                         setDataInput2((prev: any) => {
@@ -1349,6 +1408,11 @@ const Piutang = (data: any) => {
                                         <td className='border font-semibold bg-slate-200/50'>
                                             <InputRupiah
                                                 dataValue={totalData3.koreksi_saldo_awal}
+                                                readOnly={true} />
+                                        </td>
+                                        <td className='border font-semibold bg-slate-200/50'>
+                                            <InputRupiah
+                                                dataValue={totalData3.penghapusan_piutang}
                                                 readOnly={true} />
                                         </td>
                                         <td className='border font-semibold bg-slate-200/50'>
@@ -1539,6 +1603,18 @@ const Piutang = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    dataValue={data.penghapusan_piutang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput3((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['penghapusan_piutang'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }} />
+                                            </td>
+                                            <td className="border">
+                                                <InputRupiah
                                                     dataValue={data.mutasi_debet}
                                                     onChange={(value: any) => {
                                                         setDataInput3((prev: any) => {
@@ -1664,6 +1740,11 @@ const Piutang = (data: any) => {
                                         <td className='border font-semibold bg-slate-200/50'>
                                             <InputRupiah
                                                 dataValue={totalData4.koreksi_saldo_awal}
+                                                readOnly={true} />
+                                        </td>
+                                        <td className='border font-semibold bg-slate-200/50'>
+                                            <InputRupiah
+                                                dataValue={totalData4.penghapusan_piutang}
                                                 readOnly={true} />
                                         </td>
                                         <td className='border font-semibold bg-slate-200/50'>
@@ -1854,6 +1935,18 @@ const Piutang = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    dataValue={data.penghapusan_piutang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput4((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['penghapusan_piutang'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }} />
+                                            </td>
+                                            <td className="border">
+                                                <InputRupiah
                                                     dataValue={data.mutasi_debet}
                                                     onChange={(value: any) => {
                                                         setDataInput4((prev: any) => {
@@ -1979,6 +2072,11 @@ const Piutang = (data: any) => {
                                         <td className='border font-semibold bg-slate-200/50'>
                                             <InputRupiah
                                                 dataValue={totalData5.koreksi_saldo_awal}
+                                                readOnly={true} />
+                                        </td>
+                                        <td className='border font-semibold bg-slate-200/50'>
+                                            <InputRupiah
+                                                dataValue={totalData5.penghapusan_piutang}
                                                 readOnly={true} />
                                         </td>
                                         <td className='border font-semibold bg-slate-200/50'>
@@ -2171,6 +2269,18 @@ const Piutang = (data: any) => {
                                             </td>
                                             <td className="border">
                                                 <InputRupiah
+                                                    dataValue={data.penghapusan_piutang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput5((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['penghapusan_piutang'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }} />
+                                            </td>
+                                            <td className="border">
+                                                <InputRupiah
                                                     dataValue={data.mutasi_debet}
                                                     onChange={(value: any) => {
                                                         setDataInput5((prev: any) => {
@@ -2296,6 +2406,11 @@ const Piutang = (data: any) => {
                                         <td className='border font-semibold bg-slate-200/50'>
                                             <InputRupiah
                                                 dataValue={totalData6.koreksi_saldo_awal}
+                                                readOnly={true} />
+                                        </td>
+                                        <td className='border font-semibold bg-slate-200/50'>
+                                            <InputRupiah
+                                                dataValue={totalData6.penghapusan_piutang}
                                                 readOnly={true} />
                                         </td>
                                         <td className='border font-semibold bg-slate-200/50'>
@@ -2481,6 +2596,18 @@ const Piutang = (data: any) => {
                                                         setDataInput6((prev: any) => {
                                                             const updated = [...prev];
                                                             updated[index]['koreksi_saldo_awal'] = isNaN(value) ? 0 : value;
+                                                            updatedData(updated, index);
+                                                            return updated;
+                                                        });
+                                                    }} />
+                                            </td>
+                                            <td className="border">
+                                                <InputRupiah
+                                                    dataValue={data.penghapusan_piutang}
+                                                    onChange={(value: any) => {
+                                                        setDataInput6((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['penghapusan_piutang'] = isNaN(value) ? 0 : value;
                                                             updatedData(updated, index);
                                                             return updated;
                                                         });

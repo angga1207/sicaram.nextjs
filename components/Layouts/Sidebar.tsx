@@ -12,13 +12,13 @@ import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconMinus from '../../components/Icon/IconMinus';
 import IconMenuUsers from '../../components/Icon/Menu/IconMenuUsers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faMoneyBills, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faMoneyBills, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
 import { faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.4c.6";
+    const APP_VERSION = "2.4c.7";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -581,6 +581,42 @@ const Sidebar = () => {
                                         </>
                                     )}
 
+                                    {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
+                                        <>
+                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                                <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <span>
+                                                    BPKAD
+                                                </span>
+                                            </h2>
+
+                                            {([1, 2, 4].includes(CurrentUser?.role_id)) && (
+                                                <li className="menu nav-item">
+                                                    <Link href="/bpkad/import" className="group">
+                                                        <div className="flex items-center">
+                                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='shrink-0 group-hover:!text-primary' />
+                                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                                Import SIPD
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            )}
+                                            {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
+                                                <li className="menu nav-item">
+                                                    <Link href="/accountancy" className="group">
+                                                        <div className="flex items-center">
+                                                            <FontAwesomeIcon icon={faMoneyBills} className='shrink-0 group-hover:!text-primary' />
+                                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                                Akuntansi
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </>
+                                    )}
+
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
                                         <span>
@@ -592,113 +628,21 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <FontAwesomeIcon icon={faClipboardCheck} className='shrink-0 group-hover:!text-primary' />
                                                 <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                    Laporan
+                                                    Program Kegiatan
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
-
-                                    {([1, 12].includes(CurrentUser?.role_id)) && (
-                                        <>
-                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                                <IconMinus className="hidden h-5 w-4 flex-none" />
-                                                <span>
-                                                    Akuntansi
-                                                </span>
-                                            </h2>
-
-                                            <li className="menu nav-item">
-                                                <Link href="/accountancy" className="group">
-                                                    <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faMoneyBills} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                            Akuntansi
-                                                        </span>
-                                                    </div>
-                                                </Link>
-                                            </li>
-                                        </>
-                                    )}
-
-                                    {/* <li className="menu nav-item">
-                                        <Link href={`/accountancy`}
-                                            type="button"
-                                            className={`${currentMenu === 'accountancy' ? 'active' : ''} nav-link group w-full`}
-                                            onClick={() => toggleMenu('accountancy')}>
+                                    <li className="menu nav-item">
+                                        <Link href="/accountancy/report" className="group">
                                             <div className="flex items-center">
-                                                <FontAwesomeIcon icon={faHomeUser} className='shrink-0 group-hover:!text-primary' />
+                                                <FontAwesomeIcon icon={faClipboardCheck} className='shrink-0 group-hover:!text-primary' />
                                                 <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
                                                     Akuntansi
                                                 </span>
                                             </div>
-                                            <div className={currentMenu !== 'accountancy' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                <IconCaretDown />
-                                            </div>
                                         </Link>
-
-                                        <AnimateHeight duration={300} height={currentMenu === 'accountancy' ? 'auto' : 0}>
-                                            <ul className="sub-menu text-gray-500">
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        Rekonsiliasi Aset
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        Penyesuaian Aset dan Beban
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        LRA Pendapatan dan Belanja
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        Beban Laporan Operasional
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        Hutang
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        Belanja Bayar Dimuka
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/dashboard">
-                                                        Pendapatan LRA LO
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                        </AnimateHeight>
-                                    </li> */}
-
-                                    {([1, 2, 4].includes(CurrentUser?.role_id)) && (
-                                        <>
-                                            <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                                <IconMinus className="hidden h-5 w-4 flex-none" />
-                                                <span>
-                                                    BPKAD
-                                                </span>
-                                            </h2>
-
-                                            <li className="menu nav-item">
-                                                <Link href="/bpkad/import" className="group">
-                                                    <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faCloudUploadAlt} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                            Import SIPD
-                                                        </span>
-                                                    </div>
-                                                </Link>
-                                            </li>
-                                        </>
-                                    )}
-
+                                    </li>
 
                                     {([1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id)) && (
                                         <>
@@ -731,13 +675,6 @@ const Sidebar = () => {
                                                                 </Link>
                                                             </li>
                                                         )}
-                                                        {([1, 2, 3, 4, 5].includes(CurrentUser?.role_id)) && (
-                                                            <li>
-                                                                <Link href="/instances">
-                                                                    Daftar Perangkat Daerah
-                                                                </Link>
-                                                            </li>
-                                                        )}
                                                         {([1].includes(CurrentUser?.role_id)) && (
                                                             <li>
                                                                 <Link href="/roles">
@@ -749,6 +686,19 @@ const Sidebar = () => {
                                                 </AnimateHeight>
                                             </li>
                                         </>
+                                    )}
+
+                                    {([1, 2, 3, 4, 5].includes(CurrentUser?.role_id)) && (
+                                        <li className="menu nav-item">
+                                            <Link href="/instances" className="group">
+                                                <div className="flex items-center">
+                                                    <FontAwesomeIcon icon={faBriefcase} className='shrink-0 group-hover:!text-primary' />
+                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        Perangkat Daerah
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        </li>
                                     )}
                                 </>
                             )}

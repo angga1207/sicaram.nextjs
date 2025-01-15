@@ -169,7 +169,7 @@ const Page = () => {
             //         setArrKodeRekening(res.data);
             //     }
             // });
-            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null', 'where|code_2|=|2']).then((res: any) => {
+            GlobalEndPoint('kode_rekening', ['where|code_1|=|5', 'where|code_6|!=|null']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
                 }

@@ -135,6 +135,18 @@ const Penyusutan = (data: any) => {
         });
     }
 
+    const updatedData = (data: any, index: number) => {
+        setDataInput((prev: any) => {
+            const updated = [...prev];
+            // const keysToSumPlus = ['plus_aset_tetap_tanah', 'plus_aset_tetap_peralatan_mesin', 'plus_aset_tetap_gedung_bangunan', 'plus_aset_tetap_jalan_jaringan_irigasi', 'plus_aset_tetap_lainnya', 'plus_konstruksi_dalam_pekerjaan', 'plus_aset_lain_lain'];
+            // const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (updated[index][key] || 0), 0);
+            // updated[index]['plus_jumlah_penyesuaian'] = sumPlus;
+            updated[index]['akumulasi_penyusutan'] = parseFloat(updated[index]['akumulasi_penyusutan_last_year']) + parseFloat(updated[index]['mutasi_tambah']) - parseFloat(updated[index]['mutasi_kurang']);
+            return updated;
+        })
+        setIsUnsaved(true);
+    }
+
     useEffect(() => {
         if (isMounted && dataInput.length > 0) {
             setGrandTotal((prev: any) => {
@@ -209,6 +221,7 @@ const Penyusutan = (data: any) => {
                                                             updated[index]['akumulasi_penyusutan_last_year'] = isNaN(value) ? 0 : value;
                                                             return updated;
                                                         });
+                                                        updatedData(data, index);
                                                     }} />
                                             </td>
                                             <td className='border border-slate-900'>
@@ -220,6 +233,7 @@ const Penyusutan = (data: any) => {
                                                             updated[index]['mutasi_tambah'] = isNaN(value) ? 0 : value;
                                                             return updated;
                                                         });
+                                                        updatedData(data, index);
                                                     }} />
                                             </td>
                                             <td className='border border-slate-900'>
@@ -231,10 +245,12 @@ const Penyusutan = (data: any) => {
                                                             updated[index]['mutasi_kurang'] = isNaN(value) ? 0 : value;
                                                             return updated;
                                                         });
+                                                        updatedData(data, index);
                                                     }} />
                                             </td>
                                             <td className='border border-slate-900'>
                                                 <InputRupiah
+                                                    readOnly={true}
                                                     dataValue={data.akumulasi_penyusutan}
                                                     onChange={(value: any) => {
                                                         setDataInput((prev: any) => {

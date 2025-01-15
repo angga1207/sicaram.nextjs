@@ -80,7 +80,26 @@ const BarjasKeAset = (data: any) => {
 
     useEffect(() => {
         if (paramData[1]?.length > 0) {
-            setArrKodeRekening(paramData[1])
+            const arrKodeRekening = paramData[1].map((data: any, index: number) => {
+                if (data.code_2 == 1 && data.code_3 == '02') {
+                    return {
+                        id: data?.id,
+                        code_1: data?.code_1,
+                        code_2: data?.code_2,
+                        code_3: data?.code_3,
+                        code_4: data?.code_4,
+                        code_5: data?.code_5,
+                        code_6: data?.code_6,
+                        fullcode: data?.fullcode,
+                        name: data?.name,
+                        periode_id: data?.periode_id,
+                        year: data?.year,
+                    }
+                } else {
+                    return null;
+                }
+            }).filter((data: any) => data != null);
+            setArrKodeRekening(arrKodeRekening)
         }
         if (paramData[4]) {
             setInstance(paramData[4]);

@@ -808,107 +808,346 @@ const RekapAsetTetap = (data: any) => {
                                     Jumlah
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold sticky -bottom-5 left-[300px]'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.saldo_awal)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.saldo_awal)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_realisasi_belanja)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_realisasi_belanja)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_hutang_kegiatan)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_hutang_kegiatan)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_atribusi)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_atribusi)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_barang_habis_pakai)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_barang_habis_pakai)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_pemeliharaan)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_pemeliharaan)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_jasa)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_jasa)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_a)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_a)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_b)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_b)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_c)}
+
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_c)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_d)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_d)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_e)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_e)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kdp)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kdp)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_aset_lain_lain)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_aset_lain_lain)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_hibah_masuk)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_hibah_masuk)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_penilaian)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_penilaian)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_mutasi_antar_opd)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_mutasi_antar_opd)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_total)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_total)}
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_pembayaran_utang)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_pembayaran_utang)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_persediaan)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_persediaan)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_pemeliharaan)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_pemeliharaan)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_hibah)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_hibah)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_a)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_a)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_b)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_b)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_c)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_c)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_d)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_d)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_e)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_e)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kdp)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kdp)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_aset_lain_lain)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_aset_lain_lain)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_penghapusan)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_penghapusan)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_mutasi_antar_opd)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_mutasi_antar_opd)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_tptgr)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_tptgr)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_total)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_total)}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.saldo_akhir)}
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.saldo_akhir)}
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tfoot>
