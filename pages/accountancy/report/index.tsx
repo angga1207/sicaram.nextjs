@@ -24,6 +24,7 @@ import IconArrowBackward from '@/components/Icon/IconArrowBackward';
 import IconMenu from '@/components/Icon/IconMenu';
 import Neraca from '@/components/Accountancy/Report/Neraca';
 import LaporanOperasional from '@/components/Accountancy/Report/LaporanOperasional';
+import LPE from '@/components/Accountancy/Report/LPE';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -264,6 +265,19 @@ const Page = () => {
                                         </div>
                                     </div>
                                 </button>
+                                <button
+                                    type="button"
+                                    className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'lpe' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'
+                                        }`}
+                                    onClick={() => tabChanged('lpe')}
+                                >
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faClipboardCheck} className='w-4 h-4' />
+                                        <div className="ltr:ml-3 rtl:mr-3">
+                                            Laporan LPE
+                                        </div>
+                                    </div>
+                                </button>
                             </div>
                         </PerfectScrollbar>
                     </div>
@@ -305,6 +319,18 @@ const Page = () => {
                                     {(isMounted && instances.length > 0) && (
                                         <LaporanOperasional data={isMounted && [periode, year, instance, level, years, instances, levels]}
                                             key={[year, instance, level]}
+                                        />
+                                    )}
+                                </div>
+                            </>
+                        )}
+
+                        {selectedTab === 'lpe' && (
+                            <>
+                                <div className="">
+                                    {(isMounted && instances.length > 0) && (
+                                        <LPE data={isMounted && [periode, year, instance, level, years, instances, levels]}
+                                            key={[year, instance]}
                                         />
                                     )}
                                 </div>

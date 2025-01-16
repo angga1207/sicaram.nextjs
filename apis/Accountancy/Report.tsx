@@ -138,3 +138,51 @@ export async function downloadReportLaporanOperasional(data: any, instance: any,
         }
     }
 }
+
+export async function getReportLPE(instance: any = null, periode: any, year: any, level: any) {
+    try {
+        const res = await axios.get(baseUri + '/accountancy/report/lpe', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                periode: periode,
+                year: year,
+                // level: level,
+                level: 6,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function downloadReportLaporanLPE(data: any, instance: any, periode: any, year: any) {
+    try {
+        const res = await axios.post(baseUri + '/accountancy/report/lpe', { data: data }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                periode: periode,
+                year: year,
+            }
+        });
+        const response = await res.data;
+        return response;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
