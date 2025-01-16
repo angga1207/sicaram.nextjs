@@ -63,13 +63,10 @@ const Page = () => {
         dispatch(setPageTitle('Laporan Akuntansi'));
     });
 
-    const ref = useRef<any>(null);
-
     const [isMounted, setIsMounted] = useState(false);
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [years, setYears] = useState<any>([])
-    const [queryApp, setQueryApp] = useState<any>(null);
 
     useEffect(() => {
         setIsMounted(true);
@@ -93,12 +90,6 @@ const Page = () => {
             }
         }
     }, [isMounted]);
-
-    useEffect(() => {
-        if (isMounted) {
-            setQueryApp(router.query.app ?? 0);
-        }
-    }, [isMounted, router]);
 
     useEffect(() => {
         if (isMounted && periode?.id) {
@@ -142,30 +133,30 @@ const Page = () => {
     useEffect(() => {
         if (isMounted) {
             setLevels([
-                // {
-                //     label: '1 - Akun',
-                //     value: 1,
-                // },
-                // {
-                //     label: '2 - Kelompok',
-                //     value: 2,
-                // },
+                {
+                    label: '1 - Akun',
+                    value: 1,
+                },
+                {
+                    label: '2 - Kelompok',
+                    value: 2,
+                },
                 {
                     label: '3 - Jenis',
                     value: 3,
                 },
-                // {
-                //     label: '4 - Objek',
-                //     value: 4,
-                // },
-                // {
-                //     label: '5 - Rincian',
-                //     value: 5,
-                // },
-                // {
-                //     label: '6 - Sub Rincian',
-                //     value: 6,
-                // },
+                {
+                    label: '4 - Objek',
+                    value: 4,
+                },
+                {
+                    label: '5 - Rincian',
+                    value: 5,
+                },
+                {
+                    label: '6 - Sub Rincian',
+                    value: 6,
+                },
             ]);
         }
     }, [isMounted]);
@@ -298,102 +289,9 @@ const Page = () => {
                         {selectedTab === 'neraca' && (
                             <>
                                 <div className="">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-lg font-semibold">
-                                            Laporan Neraca
-                                        </h3>
-                                        <div className="">
-                                            <button type="button" className="btn btn-outline-primary">
-                                                <FontAwesomeIcon icon={faCloudDownloadAlt} className='w-4 h-4' />
-                                                <span className="ltr:ml-2 rtl:mr-2">
-                                                    Unduh Laporan Neraca
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-4">
-                                        <div className="">
-                                            <label htmlFor="instance">
-                                                Perangkat Daerah
-                                            </label>
-                                            <Select placeholder="Kabupaten Ogan Ilir"
-                                                id='instance'
-                                                className=''
-                                                onChange={(e: any) => {
-                                                    if ([9].includes(CurrentUser?.role_id)) {
-                                                        showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                    } else {
-                                                        setInstance(e?.value);
-                                                    }
-                                                }}
-                                                isLoading={instances?.length === 0}
-                                                isClearable={true}
-                                                isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
-                                                value={
-                                                    instances?.map((data: any, index: number) => {
-                                                        if (data.id == instance) {
-                                                            return {
-                                                                value: data.id,
-                                                                label: data.name,
-                                                            }
-                                                        }
-                                                    })
-                                                }
-                                                options={
-                                                    instances?.map((data: any, index: number) => {
-                                                        return {
-                                                            value: data.id,
-                                                            label: data.name,
-                                                        }
-                                                    })
-                                                } />
-                                            <div className='text-danger text-xs error-validation' id="error-instance"></div>
-                                        </div>
-
-                                        <div className="">
-                                            <label htmlFor="tahun">
-                                                Tahun
-                                            </label>
-                                            <Select
-                                                className=""
-                                                id="tahun"
-                                                options={years}
-                                                value={years?.find((option: any) => option.value === year)}
-                                                onChange={(e: any) => {
-                                                    setYear(e.value)
-                                                }}
-                                                isSearchable={false}
-                                                isClearable={false}
-                                                isDisabled={(years?.length === 0) || false}
-                                            />
-                                            <div className='text-danger text-xs error-validation' id="error-year"></div>
-                                        </div>
-
-                                        <div className="">
-                                            <label htmlFor="level">
-                                                Level
-                                            </label>
-                                            <Select
-                                                className=""
-                                                id="level"
-                                                options={levels}
-                                                value={levels?.find((option: any) => option.value === level)}
-                                                onChange={(e: any) => {
-                                                    setLevel(e.value)
-                                                }}
-                                                isSearchable={false}
-                                                isClearable={false}
-                                                isDisabled={(levels?.length === 0) || false}
-                                            />
-                                            <div className='text-danger text-xs error-validation' id="error-year"></div>
-                                        </div>
-                                    </div>
-                                    <div className="my-4 h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
-                                </div>
-                                <div className="">
 
                                     {(isMounted && instances.length > 0) && (
-                                        <Neraca data={isMounted && [periode, year, instance, level]}
+                                        <Neraca data={isMounted && [periode, year, instance, level, years, instances, levels]}
                                             key={[year, instance, level]}
                                         />
                                     )}
@@ -404,102 +302,8 @@ const Page = () => {
                         {selectedTab === 'lo' && (
                             <>
                                 <div className="">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-lg font-semibold">
-                                            Laporan Operasional
-                                        </h3>
-                                        <div className="">
-                                            <button type="button" className="btn btn-outline-primary">
-                                                <FontAwesomeIcon icon={faCloudDownloadAlt} className='w-4 h-4' />
-                                                <span className="ltr:ml-2 rtl:mr-2">
-                                                    Unduh Laporan Operasional
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
-                                        <div className="">
-                                            <label htmlFor="instance">
-                                                Perangkat Daerah
-                                            </label>
-                                            <Select placeholder="Kabupaten Ogan Ilir"
-                                                id='instance'
-                                                className=''
-                                                onChange={(e: any) => {
-                                                    if ([9].includes(CurrentUser?.role_id)) {
-                                                        showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                    } else {
-                                                        setInstance(e?.value);
-                                                    }
-                                                }}
-                                                isLoading={instances?.length === 0}
-                                                isClearable={true}
-                                                isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
-                                                value={
-                                                    instances?.map((data: any, index: number) => {
-                                                        if (data.id == instance) {
-                                                            return {
-                                                                value: data.id,
-                                                                label: data.name,
-                                                            }
-                                                        }
-                                                    })
-                                                }
-                                                options={
-                                                    instances?.map((data: any, index: number) => {
-                                                        return {
-                                                            value: data.id,
-                                                            label: data.name,
-                                                        }
-                                                    })
-                                                } />
-                                            <div className='text-danger text-xs error-validation' id="error-instance"></div>
-                                        </div>
-
-                                        <div className="">
-                                            <label htmlFor="tahun">
-                                                Tahun
-                                            </label>
-                                            <Select
-                                                className=""
-                                                id="tahun"
-                                                options={years}
-                                                value={years?.find((option: any) => option.value === year)}
-                                                onChange={(e: any) => {
-                                                    setYear(e.value)
-                                                }}
-                                                isSearchable={false}
-                                                isClearable={false}
-                                                isDisabled={(years?.length === 0) || false}
-                                            />
-                                            <div className='text-danger text-xs error-validation' id="error-year"></div>
-                                        </div>
-
-                                        <div className="hidden">
-                                            <label htmlFor="level">
-                                                Level
-                                            </label>
-                                            <Select
-                                                className=""
-                                                id="level"
-                                                options={levels}
-                                                value={levels?.find((option: any) => option.value === level)}
-                                                onChange={(e: any) => {
-                                                    setLevel(e.value)
-                                                }}
-                                                isSearchable={false}
-                                                isClearable={false}
-                                                isDisabled={(levels?.length === 0) || false}
-                                            />
-                                            <div className='text-danger text-xs error-validation' id="error-year"></div>
-                                        </div>
-                                    </div>
-                                    <div className="my-4 h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
-                                </div>
-                                <div className="">
-
                                     {(isMounted && instances.length > 0) && (
-                                        <LaporanOperasional data={isMounted && [periode, year, instance, level]}
+                                        <LaporanOperasional data={isMounted && [periode, year, instance, level, years, instances, levels]}
                                             key={[year, instance, level]}
                                         />
                                     )}

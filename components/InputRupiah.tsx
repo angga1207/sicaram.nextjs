@@ -26,7 +26,7 @@ const InputRupiah = (
             ) : (
                 <div className="flex group">
                     {isRealisasi === false && (
-                        <div className={`bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]`}>
+                        <div className={`bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] select-none`}>
                             Rp.
                         </div>
                     )}
