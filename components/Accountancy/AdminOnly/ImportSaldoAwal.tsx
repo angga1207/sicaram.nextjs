@@ -110,11 +110,28 @@ const ImportSaldoAwal = (data: any) => {
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSave = async () => {
+        let elements = document.getElementsByClassName('error-validation');
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].innerHTML = '';
+        }
         setIsSaving(true);
         const res = await storeSaldoAwal(instance, periode?.id, year, dataInput);
-        if (res.status == 'success') {
+        if (res.status == 'error validation') {
+            Object.keys(res.message).map((key: any) => {
+                let element = document.getElementById('error-' + key);
+                if (element) {
+                    if (key) {
+                        element.innerHTML = res.message[key][0];
+                    } else {
+                        element.innerHTML = '';
+                    }
+                }
+            });
+            showAlert('error', 'Terdapat form yang belum diisi dengan benar');
+            setIsSaving(false);
+        } else if (res.status == 'success') {
             showAlert('success', 'Data berhasil disimpan');
-            setIsUnsaved(false);
+            setIsSaving(false);
         } else {
             showAlert('error', 'Data gagal disimpan');
         }
@@ -122,10 +139,71 @@ const ImportSaldoAwal = (data: any) => {
 
     return (
         <>
-            <div className="">
+            <div className="space-y-5">
+                <div className="uppercase font-bold text-center underline">
+                    Form Unggah Saldo Awal Untuk Rekon Aset
+                </div>
+
+                <div className="">
+                    <label htmlFor="instance">
+                        Perangkat Daerah
+                    </label>
+                    <Select placeholder="Kabupaten Ogan Ilir"
+                        id='instance'
+                        className=''
+                        onChange={(e: any) => {
+                            if ([9].includes(CurrentUser?.role_id)) {
+                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                            } else {
+                                setInstance(e?.value);
+                            }
+                        }}
+                        isLoading={instances?.length === 0}
+                        isClearable={true}
+                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
+                        value={
+                            instances?.map((data: any, index: number) => {
+                                if (data.id == instance) {
+                                    return {
+                                        value: data.id,
+                                        label: data.name,
+                                    }
+                                }
+                            })
+                        }
+                        options={
+                            instances?.map((data: any, index: number) => {
+                                return {
+                                    value: data.id,
+                                    label: data.name,
+                                }
+                            })
+                        } />
+                    <div className='text-danger text-xs error-validation' id="error-instance"></div>
+                </div>
+
+                <div className="">
+                    <label htmlFor="tahun">
+                        Tahun
+                    </label>
+                    <Select
+                        className=""
+                        id="tahun"
+                        options={years}
+                        value={years?.find((option: any) => option.value === year)}
+                        onChange={(e: any) => {
+                            setYear(e.value)
+                        }}
+                        isSearchable={false}
+                        isClearable={false}
+                        isDisabled={(years?.length === 0) || (isSaving == true)}
+                    />
+                    <div className='text-danger text-xs error-validation' id="error-year"></div>
+                </div>
+
                 <div className="mb-5">
                     <label htmlFor="addonsRight" className='uppercase'>
-                        Berkas Saldo Awal {instances?.find((i: any) => i.id == instance)?.name ?? ''}
+                        Berkas Saldo Awal untuk Rekon Aset {instances?.find((i: any) => i.id == instance)?.name ?? ''}
                     </label>
                     <div className="flex">
                         <input id="addonsRight"
@@ -149,6 +227,7 @@ const ImportSaldoAwal = (data: any) => {
                             Unggah
                         </button>
                     </div>
+                    <div className='text-danger text-xs error-validation' id="error-file"></div>
                 </div>
             </div>
         </>

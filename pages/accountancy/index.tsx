@@ -118,9 +118,9 @@ const Page = () => {
             <div className="mt-4">
                 <div className="flex items-center justify-center gap-x-6 gap-y-4 flex-wrap">
 
-                    <Tippy content="Unggah & Detail LRA" placement='bottom'>
+                    <Tippy content="Unggah Berkas dari SIPD" placement='bottom'>
                         <Link
-                            href="/accountancy/import-lra"
+                            href="/accountancy/import"
                             className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
                             <Player
@@ -131,7 +131,7 @@ const Page = () => {
                             >
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Unggah & Detail LRA
+                                Unggah Berkas dari SIPD
                             </div>
                         </Link>
                     </Tippy>
@@ -261,7 +261,7 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    <Tippy content="Unggah Saldo Awal Neraca & LO" placement='bottom'>
+                    {/* <Tippy content="Unggah Saldo Awal Neraca & LO" placement='bottom'>
                         <Link
                             href="/accountancy/import"
                             className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
@@ -277,9 +277,9 @@ const Page = () => {
                                 Unggah Saldo Awal Neraca & LO
                             </div>
                         </Link>
-                    </Tippy>
+                    </Tippy> */}
 
-                    {/* <Tippy content="Laporan Akuntansi" placement='bottom'>
+                    <Tippy content="Laporan Akuntansi" placement='bottom'>
                         <Link
                             href="/accountancy/report"
                             className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
@@ -295,9 +295,9 @@ const Page = () => {
                                 Laporan Akuntansi
                             </div>
                         </Link>
-                    </Tippy> */}
+                    </Tippy>
 
-                    <Tippy content="Admin Only" placement='bottom' theme='default'>
+                    {/* <Tippy content="Admin Only" placement='bottom' theme='default'>
                         <Link
                             href="/accountancy/admin-only"
                             className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
@@ -313,7 +313,7 @@ const Page = () => {
                                 Admin Only
                             </div>
                         </Link>
-                    </Tippy>
+                    </Tippy> */}
 
                 </div>
             </div>
