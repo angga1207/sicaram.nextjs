@@ -372,7 +372,7 @@ const Page = () => {
 
                                 <button
                                     type="button"
-                                    className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'kode_rekening' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'
+                                    className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'lra' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'
                                         }`}
                                     onClick={() => tabChanged('lra')}
                                 >

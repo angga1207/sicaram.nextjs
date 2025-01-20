@@ -1,8 +1,8 @@
 import { isEmpty } from "lodash";
 
 const InputRupiah = (
-    { dataValue, onChange, isDisabled = false, readOnly = false, isRealisasi = false }:
-        { dataValue?: any, onChange?: any, isDisabled?: boolean, readOnly?: boolean, isRealisasi?: boolean }
+    { dataValue, onChange, isDisabled = false, readOnly = false, isRealisasi = false, onBlur, }:
+        { dataValue?: any, onChange?: any, isDisabled?: boolean, readOnly?: boolean, isRealisasi?: boolean, onBlur?: any }
 ) => {
 
     const handleChange = (e: any) => {
@@ -65,6 +65,11 @@ const InputRupiah = (
                         value={dataValue}
                         onChange={(e) => {
                             handleChange(e);
+                        }}
+                        onBlur={(e) => {
+                            if (onBlur) {
+                                onBlur(e);
+                            }
                         }}
                         disabled={isDisabled}
                         className={`form-input font-semibold text-end hidden group-focus-within:block group-hover:block disabled:bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] ltr:rounded-l-none rtl:rounded-r-none'}`} />
