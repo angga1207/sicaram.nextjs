@@ -152,9 +152,10 @@ const Index = () => {
                         return new Intl.NumberFormat('id-ID').format(value ?? 0) + ' %';
                     },
                 },
-                max: KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (prev.realisasi > current.realisasi) ? prev : current).realisasi == 0
-                    ? 100
-                    : KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (prev.realisasi > current.realisasi) ? prev : current).realisasi,
+                // max: KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (prev.realisasi > current.realisasi) ? prev : current).realisasi == 0
+                //     ? 100
+                //     : KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (prev.realisasi > current.realisasi) ? prev : current).realisasi,
+                max: 100,
             },
             fill: {
                 // opacity: 1,
@@ -199,6 +200,8 @@ const Index = () => {
             },
         },
     };
+
+    console.log(KinerjaSeries)
 
     return (
         <>
@@ -306,7 +309,7 @@ const Index = () => {
                         <div>
                             <div className="space-y-6">
 
-                                <div className="flex">
+                                <div className="flex items-center">
                                     <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-primary-light text-primary dark:bg-primary dark:text-primary-light">
                                         <IconBolt />
                                     </span>
@@ -314,7 +317,7 @@ const Index = () => {
                                         <div>
                                             Target
                                         </div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">
+                                        {/* <div className="text-xs text-white-dark dark:text-gray-500">
                                             {KinerjaSummary?.target?.updated_at ? (
                                                 <>
                                                     {new Date(KinerjaSummary?.target?.updated_at).toLocaleString('id-ID', {
@@ -324,10 +327,10 @@ const Index = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    -
+
                                                 </>
                                             )}
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto">
                                         {KinerjaSummary?.target ? (
@@ -342,7 +345,7 @@ const Index = () => {
                                     </span>
                                 </div>
 
-                                <div className="flex">
+                                <div className="flex items-center">
                                     <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-success-light text-success dark:bg-success dark:text-success-light">
                                         <FontAwesomeIcon icon={faToolbox} className="w-4 h-4" />
                                     </span>
@@ -360,15 +363,26 @@ const Index = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    -
+                                                    {KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (parseFloat(prev.realisasi) > parseFloat(current.realisasi)) ? prev : current).month_name}
                                                 </>
                                             )}
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">
-                                        {KinerjaSummary?.realisasi ? (
+                                        {/* {KinerjaSummary?.realisasi ? (
                                             <>
                                                 {new Intl.NumberFormat('id-ID').format(KinerjaSummary?.realisasi)} %
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="dots-loading text-sm">...</div>
+                                            </>
+                                        )} */}
+                                        {KinerjaSeries?.realisasi?.length > 0 ? (
+                                            <>
+                                                {new Intl.NumberFormat('id-ID', {
+                                                    maximumFractionDigits: 2,
+                                                }).format(KinerjaSeries?.realisasi?.reduce((prev: any, current: any) => (parseFloat(prev.realisasi) > parseFloat(current.realisasi)) ? prev : current).realisasi)} %
                                             </>
                                         ) : (
                                             <>
