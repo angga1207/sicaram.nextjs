@@ -113,42 +113,42 @@ const RincianBelanja = (
                 <thead className='sticky top-0 left-0 z-[1]'>
                     <tr>
                         <th rowSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[150px]'>
+                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[150px]'>
                             Kode Rekening
                         </th>
                         <th rowSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !min-w-[400px]'>
+                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !min-w-[400px]'>
                             Uraian
                         </th>
                         <th rowSpan={1} colSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !min-w-[250px]'>
+                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !min-w-[250px]'>
                             Koefisien
                         </th>
                         <th rowSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                             Harga (Rp)
                         </th>
                         <th rowSpan={1} colSpan={(month > 1 && month < 13) ? 3 : 2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                             Jumlah (Rp)
                         </th>
                     </tr>
                     <tr>
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                             Target
                         </th>
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                             Realisasi
                         </th>
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                             Anggaran
                         </th>
                         {month > 1 && month < 13 && (
-                            <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                            <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                                 Realisasi Terakhir
                             </th>
                         )}
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5  !border-slate-400 dark:!border-slate-100 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
                             Realisasi Bulan Ini
                         </th>
                     </tr>

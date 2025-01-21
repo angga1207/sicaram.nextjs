@@ -439,7 +439,7 @@ const Index = () => {
                                         Capaian Kinerja
                                     </p>
                                     <div className="btn w-full  border-0 bg-[#ebedf2] py-1 text-base text-[#515365] shadow-none dark:bg-black dark:text-[#bfc9d4]">
-                                        {(RankInstances[0]?.persentase_realisasi_kinerja ?? 0).toFixed(2)} %
+                                        {parseFloat(RankInstances[0]?.persentase_realisasi_kinerja ?? 0).toFixed(2)} %
                                     </div>
                                 </div>
                             </div>
@@ -569,7 +569,7 @@ const Index = () => {
                                                                     ></circle>
 
                                                                     <text x="50" y="50" font-family="Verdana" font-size="12" text-anchor="middle" alignment-baseline="middle" className="">
-                                                                        {item.persentase_realisasi_kinerja.toFixed(2)}%
+                                                                        {parseFloat(item.persentase_realisasi_kinerja).toFixed(2)}%
                                                                     </text>
 
                                                                 </svg>

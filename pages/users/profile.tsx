@@ -18,8 +18,8 @@ import 'tippy.js/dist/tippy.css';
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleLeft, faAngleDoubleRight, faBriefcase, faC, faCalendarAlt, faClock, faExclamationTriangle, faEye, faEyeSlash, faList, faLock, faLockOpen, faPenAlt, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
-import { faBell, faEnvelope, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { faAngleDoubleLeft, faAngleDoubleRight, faBriefcase, faBriefcaseClock, faC, faCalendarAlt, faClock, faExclamationTriangle, faEye, faEyeSlash, faList, faLock, faLockOpen, faPenAlt, faTag, faUserTag } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faEnvelope, faTrashAlt, faUser } from '@fortawesome/free-regular-svg-icons';
 
 import { updateUserWithPhoto } from '@/apis/storedata';
 import { fetchUserMe, fetchLogs, fetchNotif, markNotifAsRead, postSavePassword } from '@/apis/personal_profile';
@@ -199,8 +199,7 @@ const Profile = () => {
         })
     }
 
-    const saveProfile = async () => {
-        setSaveLoadingProfile(true);
+    const saveProfile = () => {
         const data = {
             id: CurrentUser?.id,
             fullname: dataInput.fullname,
@@ -209,40 +208,87 @@ const Profile = () => {
             foto: dataInput.photo,
             fotoPath: dataInput.photoFile,
             role: CurrentUser?.role_id,
-            password: dataInput.password ?? '',
-            password_confirmation: dataInput.password_confirmation ?? '',
         }
 
-        const res = await updateUserWithPhoto(data);
-        if (res.status == 'success') {
-            showAlert('success', res.message);
-            setCurrentUser(res.data);
-            sessionStorage.setItem('user', JSON.stringify(res.data));
-            setIsEditProfile(false);
-            setSaveLoadingProfile(false);
-        }
-        if (res.status == 'error validation') {
+        updateUserWithPhoto(data).then((res: any) => {
+            if (res.status == 'success') {
+                showAlert('success', res.message);
+                setCurrentUser(res.data);
+                sessionStorage.setItem('user', JSON.stringify(res.data));
 
-            Object.keys(res.message).map((key: any) => {
+                document.cookie = `user=${JSON.stringify(res.data)}; path=/; max-age=86400`;
+                setIsEditProfile(false);
+                setSaveLoadingProfile(false);
+            }
+            if (res.status == 'error validation') {
 
-                let element = document.getElementById(key);
-                if (element) {
-                    if (key) {
-                        element.classList.add('border-danger');
-                    } else {
-                        element.classList.remove('border-danger');
+                Object.keys(res.message).map((key: any) => {
+
+                    let element = document.getElementById(key);
+                    if (element) {
+                        if (key) {
+                            element.classList.add('border-danger');
+                        } else {
+                            element.classList.remove('border-danger');
+                        }
                     }
-                }
-            });
-            showAlert('error', res?.message[0] ?? 'Data gagal disimpan');
-            setSaveLoadingProfile(false);
-        }
+                });
+                showAlert('error', res?.message[0] ?? 'Data gagal disimpan');
+                setSaveLoadingProfile(false);
+            }
 
-        if (!res || res.status == 'error') {
-            showAlert('error', res?.message ?? 'Data gagal disimpan');
-            setSaveLoadingProfile(false);
-        }
+            if (!res || res.status == 'error') {
+                showAlert('error', res?.message ?? 'Data gagal disimpan');
+                setSaveLoadingProfile(false);
+            }
+        });
     }
+
+    // const saveProfile = async () => {
+    //     // setSaveLoadingProfile(true);
+    //     const data = {
+    //         id: CurrentUser?.id,
+    //         fullname: dataInput.fullname,
+    //         username: dataInput.username,
+    //         email: dataInput.email,
+    //         foto: dataInput.photo,
+    //         fotoPath: dataInput.photoFile,
+    //         role: CurrentUser?.role_id,
+    //         password: dataInput.password ?? '',
+    //         password_confirmation: dataInput.password_confirmation ?? '',
+    //     }
+    //     // console.log(data);
+
+    //     const res = await updateUserWithPhoto(data);
+    //     if (res.status == 'success') {
+    //         showAlert('success', res.message);
+    //         setCurrentUser(res.data);
+    //         sessionStorage.setItem('user', JSON.stringify(res.data));
+    //         setIsEditProfile(false);
+    //         setSaveLoadingProfile(false);
+    //     }
+    //     if (res.status == 'error validation') {
+
+    //         Object.keys(res.message).map((key: any) => {
+
+    //             let element = document.getElementById(key);
+    //             if (element) {
+    //                 if (key) {
+    //                     element.classList.add('border-danger');
+    //                 } else {
+    //                     element.classList.remove('border-danger');
+    //                 }
+    //             }
+    //         });
+    //         showAlert('error', res?.message[0] ?? 'Data gagal disimpan');
+    //         setSaveLoadingProfile(false);
+    //     }
+
+    //     if (!res || res.status == 'error') {
+    //         showAlert('error', res?.message ?? 'Data gagal disimpan');
+    //         setSaveLoadingProfile(false);
+    //     }
+    // }
 
     const [isEditPassword, setIsEditPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -286,21 +332,21 @@ const Profile = () => {
             return;
         }
 
-        if (inputPassword.old_password != '') {
-            let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
-            if (inputPassword.old_password != ups) {
-                showSweetAlert(
-                    'error',
-                    'Kata Sandi Lama Salah', 'Kata sandi lama yang Anda masukkan salah!',
-                    'OK',
-                    'Batal',
-                    () => {
-                        return;
-                    });
-                setSubmitPasswordLoading(false);
-                return;
-            }
-        }
+        // if (inputPassword.old_password != '') {
+        //     let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
+        //     if (inputPassword.old_password != ups) {
+        //         showSweetAlert(
+        //             'error',
+        //             'Kata Sandi Lama Salah', 'Kata sandi lama yang Anda masukkan salah!',
+        //             'OK',
+        //             'Batal',
+        //             () => {
+        //                 return;
+        //             });
+        //         setSubmitPasswordLoading(false);
+        //         return;
+        //     }
+        // }
 
         postSavePassword(inputPassword).then((res: any) => {
             if (res.status == 'success') {
@@ -404,7 +450,7 @@ const Profile = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="m-auto mt-5 flex max-w-[200px] flex-col space-y-1 font-semibold text-white-dark">
+                                <div className="m-auto mt-5 flex flex-col space-y-2 font-semibold text-white-dark">
                                     <div>
                                         <label className='text-xs mb-0.5'>
                                             Nama Lengkap
@@ -628,33 +674,61 @@ const Profile = () => {
                             && (
                                 <div className="mb-5">
                                     <div className="flex flex-col items-center justify-center">
-                                        <img src={CurrentUser?.photo} alt="img" className="mb-5 h-24 w-24 rounded-full object-cover bg-slate-200 p-0.5" />
+                                        <img
+                                            src={CurrentUser?.photo}
+                                            alt="img"
+                                            onError={(e: any) => e.target.src = '/favicon.png'}
+                                            className="mb-5 h-24 w-24 rounded-full object-contain bg-slate-200 p-0.5" />
                                         <p className="text-xl font-semibold text-primary">
                                             {CurrentUser?.fullname ?? ''}
                                         </p>
                                     </div>
-                                    <ul className="m-auto mt-5 flex max-w-[160px] flex-col space-y-4 font-semibold text-white-dark">
-                                        <li className="flex items-center gap-2">
+                                    <ul className="m-auto mt-5 flex flex-col space-y-4 font-semibold text-white-dark">
+                                        <li className="flex items-center gap-2 cursor-pointer">
+                                            <FontAwesomeIcon icon={faUser} className="w-5 h-5 shrink-0" />
+                                            @{CurrentUser?.username ?? ''}
+                                        </li>
+                                        <li className="flex items-center gap-2 cursor-pointer">
                                             <FontAwesomeIcon icon={faUserTag} className="w-5 h-5 shrink-0" />
                                             {CurrentUser?.role_name ?? ''}
                                         </li>
                                         <li>
-                                            <button className="flex items-center gap-2">
+                                            <button className="flex items-center gap-2 cursor-pointer">
                                                 <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5 shrink-0" />
-                                                <span className="truncate text-primary">
+                                                <span className="truncate">
                                                     {CurrentUser?.email ?? ''}
                                                 </span>
                                             </button>
                                         </li>
                                         {CurrentUser?.instance_name && (
                                             <>
-                                                <li className="flex items-center gap-2">
+                                                <li className="flex items-center gap-2 cursor-pointer">
                                                     <FontAwesomeIcon icon={faBriefcase} className="w-5 h-5 shrink-0" />
-                                                    <span className="whitespace-nowrap" dir="ltr">
-                                                        {CurrentUser?.instance_name ?? ''}
+                                                    <span className="whitespace-normal" dir="ltr">
+                                                        {CurrentUser?.instance_name ?? ''} ({CurrentUser?.instance_alias ?? ''})
+                                                    </span>
+                                                </li>
+                                                <li className="flex items-center gap-2 cursor-pointer">
+                                                    <FontAwesomeIcon icon={faBriefcase} className="w-5 h-5 shrink-0" />
+                                                    <span className="whitespace-normal capitalize" dir="ltr">
+                                                        {CurrentUser?.instance_type ?? ''}
                                                     </span>
                                                 </li>
                                             </>
+                                        )}
+                                        {CurrentUser?.sub_units?.length > 0 && (
+                                            <li className="flex items-center gap-2 cursor-pointer">
+                                                <FontAwesomeIcon icon={faBriefcaseClock} className="w-5 h-5 shrink-0" />
+                                                <div className='flex items-center flex-wrap gap-x-2'>
+                                                    {CurrentUser?.sub_units?.map((item: any, index: any) => (
+                                                        <Tippy content={item?.name}>
+                                                            <div className=''>
+                                                                {item?.name} ({item?.alias}) {index < CurrentUser?.sub_units?.length - 1 ? ',' : ''}
+                                                            </div>
+                                                        </Tippy>
+                                                    ))}
+                                                </div>
+                                            </li>
                                         )}
                                     </ul>
 
@@ -695,247 +769,265 @@ const Profile = () => {
                         {tab === 1 && (
                             <div className="mb-5">
                                 <div className="table-responsive font-semibold text-[#515365] dark:text-white-light h-[calc(100vh-300px)]">
-                                    <table className="">
-                                        <thead>
-                                            <tr className='!bg-slate-800 text-white'>
-                                                <th className='!w-[0px] !text-center'>
-                                                    <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4 shrink-0" />
-                                                </th>
-                                                <th className="text-center"></th>
-                                                <th className="text-center !w-[150px]"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="dark:text-white-dark">
+                                    {userLogs?.length > 0 && (
+                                        <table className="">
+                                            <thead>
+                                                <tr className='!bg-slate-800 text-white'>
+                                                    <th className='!w-[0px] !text-center'>
+                                                        <FontAwesomeIcon icon={faCalendarAlt} className="w-4 h-4 shrink-0" />
+                                                    </th>
+                                                    <th className="text-center"></th>
+                                                    <th className="text-center !w-[150px]"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="dark:text-white-dark">
 
-                                            {userLogs?.map((item: any, index: number) => (
-                                                <>
-                                                    <tr className='bg-slate-100 dark:bg-slate-700'>
-                                                        <td colSpan={3}>
-                                                            <div className="flex items-center gap-2">
-                                                                <div>
-                                                                    {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                                                                </div>
-
-                                                                {/* display OS from item?.user_agent */}
-                                                                <div className='flex items-center gap-2'>
+                                                {userLogs?.map((item: any, index: number) => (
+                                                    <>
+                                                        <tr className='bg-slate-100 dark:bg-slate-700'>
+                                                            <td colSpan={3}>
+                                                                <div className="flex items-center gap-2">
                                                                     <div>
-                                                                        |
+                                                                        {new Date(item?.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                                                                     </div>
-                                                                    {item?.device == 'Macintosh' && (
-                                                                        <Tippy content="Macintosh">
-                                                                            <FontAwesomeIcon icon={faApple} className="w-4.5 h-4.5 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {item?.device == 'Windows' && (
-                                                                        <Tippy content="Windows">
-                                                                            <FontAwesomeIcon icon={faWindows} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {item?.device == 'Linux' && (
-                                                                        <Tippy content="Linux">
-                                                                            <FontAwesomeIcon icon={faUbuntu} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {!['Macintosh', 'Windows', 'Linux'].includes(item?.device) && (
-                                                                        <>
-                                                                            {item?.device}
-                                                                        </>
-                                                                    )}
-                                                                </div>
 
-                                                                <div className='flex items-center gap-2'>
+                                                                    {/* display OS from item?.user_agent */}
+                                                                    <div className='flex items-center gap-2'>
+                                                                        <div>
+                                                                            |
+                                                                        </div>
+                                                                        {item?.device == 'Macintosh' && (
+                                                                            <Tippy content="Macintosh">
+                                                                                <FontAwesomeIcon icon={faApple} className="w-4.5 h-4.5 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {item?.device == 'Windows' && (
+                                                                            <Tippy content="Windows">
+                                                                                <FontAwesomeIcon icon={faWindows} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {item?.device == 'Linux' && (
+                                                                            <Tippy content="Linux">
+                                                                                <FontAwesomeIcon icon={faUbuntu} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {!['Macintosh', 'Windows', 'Linux'].includes(item?.device) && (
+                                                                            <>
+                                                                                {item?.device}
+                                                                            </>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <div className='flex items-center gap-2'>
+                                                                        <div>
+                                                                            |
+                                                                        </div>
+                                                                        {item?.browser == 'Chrome' && (
+                                                                            <Tippy content="Chrome">
+                                                                                <FontAwesomeIcon icon={faChrome} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {item?.browser == 'Firefox' && (
+                                                                            <Tippy content="Firefox">
+                                                                                <FontAwesomeIcon icon={faFirefox} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {item?.browser == 'Safari' && (
+                                                                            <Tippy content="Safari">
+                                                                                <FontAwesomeIcon icon={faSafari} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {item?.browser == 'Opera' && (
+                                                                            <Tippy content="Opera">
+                                                                                <FontAwesomeIcon icon={faOpera} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+                                                                        {item?.browser == 'Brave' && (
+                                                                            <Tippy content="Brave">
+                                                                                <FontAwesomeIcon icon={faBrave} className="w-4 h-4 shrink-0" />
+                                                                            </Tippy>
+                                                                        )}
+
+
+                                                                        {!['Chrome', 'Firefox', 'Safari', 'Opera', 'Brave'].includes(item?.browser) && (
+                                                                            <>
+                                                                                {item?.browser}
+                                                                            </>
+                                                                        )}
+                                                                    </div>
+
                                                                     <div>
-                                                                        |
+                                                                        | &nbsp;
+                                                                        {item?.ip_address}
                                                                     </div>
-                                                                    {item?.browser == 'Chrome' && (
-                                                                        <Tippy content="Chrome">
-                                                                            <FontAwesomeIcon icon={faChrome} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {item?.browser == 'Firefox' && (
-                                                                        <Tippy content="Firefox">
-                                                                            <FontAwesomeIcon icon={faFirefox} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {item?.browser == 'Safari' && (
-                                                                        <Tippy content="Safari">
-                                                                            <FontAwesomeIcon icon={faSafari} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {item?.browser == 'Opera' && (
-                                                                        <Tippy content="Opera">
-                                                                            <FontAwesomeIcon icon={faOpera} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
-                                                                    {item?.browser == 'Brave' && (
-                                                                        <Tippy content="Brave">
-                                                                            <FontAwesomeIcon icon={faBrave} className="w-4 h-4 shrink-0" />
-                                                                        </Tippy>
-                                                                    )}
 
-
-                                                                    {!['Chrome', 'Firefox', 'Safari', 'Opera', 'Brave'].includes(item?.browser) && (
-                                                                        <>
-                                                                            {item?.browser}
-                                                                        </>
-                                                                    )}
-                                                                </div>
-
-                                                                <div>
-                                                                    | &nbsp;
-                                                                    {item?.ip_address}
-                                                                </div>
-
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    {item?.logs?.map((log: any, index: number) => (
-                                                        <tr>
-                                                            <td></td>
-                                                            <td>
-                                                                <div className="flex items-center gap-x-2 text-slate-500">
-                                                                    <FontAwesomeIcon icon={faTag} className="w-4 h-4 shrink-0" />
-                                                                    <div className="">
-                                                                        {log?.description}
-                                                                    </div>
                                                                 </div>
                                                             </td>
-                                                            <td className="text-center">
-                                                                <div className="flex items-center gap-1 text-slate-400">
-                                                                    <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
-                                                                    <div>
-                                                                        {new Date(log?.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                                                        </tr>
+                                                        {item?.logs?.map((log: any, index: number) => (
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>
+                                                                    <div className="flex items-center gap-x-2 text-slate-500">
+                                                                        <FontAwesomeIcon icon={faTag} className="w-4 h-4 shrink-0" />
+                                                                        <div className="">
+                                                                            {log?.description}
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr >
-                                                    ))}
-                                                </>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <div className="flex items-center gap-1 text-slate-400">
+                                                                        <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
+                                                                        <div>
+                                                                            {new Date(log?.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr >
+                                                        ))}
+                                                    </>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    )}
+                                    {userLogs?.length == 0 && (
+                                        <div className='flex items-center justify-center w-full h-full'>
+                                            <div className="text-xl text-center text-slate-500 dark:text-white-light">
+                                                Tidak ada aktivitas terakhir
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="flex items-center justify-center gap-2 mt-4">
-                                    {userLogsPage > 1 && (
+                                {userLogs?.length > 0 && (
+                                    <div className="flex items-center justify-center gap-2 mt-4">
+                                        {userLogsPage > 1 && (
+                                            <button
+                                                onClick={() => {
+                                                    setUserLogsPage(userLogsPage - 1);
+                                                }}
+                                                className="btn btn-sm btn-primary"
+                                            >
+                                                <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-3 h-3 shrink-0" />
+                                            </button>
+                                        )}
+
+                                        <button
+                                            className="btn btn-sm btn-primary"
+                                        >
+                                            <span className='text-[10px]'>
+                                                {userLogsPage}
+                                            </span>
+                                        </button>
+
                                         <button
                                             onClick={() => {
-                                                setUserLogsPage(userLogsPage - 1);
+                                                setUserLogsPage(userLogsPage + 1);
                                             }}
                                             className="btn btn-sm btn-primary"
                                         >
-                                            <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-3 h-3 shrink-0" />
+                                            <FontAwesomeIcon icon={faAngleDoubleRight} className="w-3 h-3 shrink-0" />
                                         </button>
-                                    )}
-
-                                    <button
-                                        className="btn btn-sm btn-primary"
-                                    >
-                                        <span className='text-[10px]'>
-                                            {userLogsPage}
-                                        </span>
-                                    </button>
-
-                                    <button
-                                        onClick={() => {
-                                            setUserLogsPage(userLogsPage + 1);
-                                        }}
-                                        className="btn btn-sm btn-primary"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleDoubleRight} className="w-3 h-3 shrink-0" />
-                                    </button>
-                                </div>
+                                    </div>
+                                )}
                             </div>
                         )}
 
                         {tab === 2 && (
                             <div className="mb-5">
                                 <div className="table-responsive font-semibold text-[#515365] dark:text-white-light h-[calc(100vh-300px)]">
-                                    <table>
-                                        <tbody>
-                                            {notifications?.length > 0 && (
-                                                <>
-                                                    {notifications?.map((notif: any, index: number) => (
-                                                        <tr>
-                                                            <td className='!w-[250px]'>
-                                                                <div className="flex items-center gap-2">
-                                                                    <img src={notif?.photo} alt="img" className="w-8 h-8 rounded-full object-cover" />
-                                                                    <div className="">
-                                                                        <div>
-                                                                            {notif?.fullname}
-                                                                        </div>
-                                                                        <div className="text-[10px] text-slate-400 font-normal">
-                                                                            {notif?.user_role} |
-                                                                            <span className='mx-1 font-semibold text-slate-600 dark:text-white'>
-                                                                                {notif?.user_instance_alias}
-                                                                            </span>
-                                                                        </div>
+                                    {notifications?.length > 0 && (
+                                        <table>
+                                            <tbody>
+                                                {notifications?.map((notif: any, index: number) => (
+                                                    <tr>
+                                                        <td className='!w-[250px]'>
+                                                            <div className="flex items-center gap-2">
+                                                                <img src={notif?.photo} alt="img" className="w-8 h-8 rounded-full object-cover" />
+                                                                <div className="">
+                                                                    <div>
+                                                                        {notif?.fullname}
+                                                                    </div>
+                                                                    <div className="text-[10px] text-slate-400 font-normal">
+                                                                        {notif?.user_role} |
+                                                                        <span className='mx-1 font-semibold text-slate-600 dark:text-white'>
+                                                                            {notif?.user_instance_alias}
+                                                                        </span>
                                                                     </div>
                                                                 </div>
-                                                            </td>
-                                                            <td>
-                                                                <Link
-                                                                    href={notif?.uri}
-                                                                    className='hover:text-blue-500'
-                                                                >
-                                                                    <div className="">
-                                                                        {notif?.title}
-                                                                    </div>
-                                                                    <div className="font-normal">
-                                                                        {notif?.message}
-                                                                    </div>
-                                                                </Link>
-                                                            </td>
-                                                            <td className='!w-[150px]'>
-                                                                <div className="flex items-center gap-1">
-                                                                    <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
-                                                                    <div className="text-xs whitespace-nowrap">
-                                                                        {/* {notif?.time} */}
-                                                                        {new Date(notif?.date).toLocaleTimeString('id-ID', {
-                                                                            day: '2-digit',
-                                                                            month: '2-digit',
-                                                                            year: 'numeric',
-                                                                            hour: '2-digit',
-                                                                            minute: '2-digit'
-                                                                        })} WIB
-                                                                    </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <Link
+                                                                href={notif?.uri}
+                                                                className='hover:text-blue-500'
+                                                            >
+                                                                <div className="">
+                                                                    {notif?.title}
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </>
-                                            )}
-                                        </tbody>
-                                    </table>
+                                                                <div className="font-normal">
+                                                                    {notif?.message}
+                                                                </div>
+                                                            </Link>
+                                                        </td>
+                                                        <td className='!w-[150px]'>
+                                                            <div className="flex items-center gap-1">
+                                                                <FontAwesomeIcon icon={faClock} className="w-3 h-3 shrink-0" />
+                                                                <div className="text-xs whitespace-nowrap">
+                                                                    {/* {notif?.time} */}
+                                                                    {new Date(notif?.date).toLocaleTimeString('id-ID', {
+                                                                        day: '2-digit',
+                                                                        month: '2-digit',
+                                                                        year: 'numeric',
+                                                                        hour: '2-digit',
+                                                                        minute: '2-digit'
+                                                                    })} WIB
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    )}
+                                    {notifications?.length == 0 && (
+                                        <div className='flex items-center justify-center w-full h-full'>
+                                            <div className="text-xl text-center text-slate-500 dark:text-white-light">
+                                                Tidak ada pemberitahuan
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="flex items-center justify-center gap-2 mt-4">
-                                    {notificationPage > 1 && (
+                                {notifications?.length > 0 && (
+                                    <div className="flex items-center justify-center gap-2 mt-4">
+                                        {notificationPage > 1 && (
+                                            <button
+                                                onClick={() => {
+                                                    setNotificationPage(notificationPage - 1);
+                                                }}
+                                                className="btn btn-sm btn-primary"
+                                            >
+                                                <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-3 h-3 shrink-0" />
+                                            </button>
+                                        )}
+
+                                        <button
+                                            className="btn btn-sm btn-primary"
+                                        >
+                                            <span className='text-[10px]'>
+                                                {notificationPage}
+                                            </span>
+                                        </button>
+
                                         <button
                                             onClick={() => {
-                                                setNotificationPage(notificationPage - 1);
+                                                setNotificationPage(notificationPage + 1);
                                             }}
                                             className="btn btn-sm btn-primary"
                                         >
-                                            <FontAwesomeIcon icon={faAngleDoubleLeft} className="w-3 h-3 shrink-0" />
+                                            <FontAwesomeIcon icon={faAngleDoubleRight} className="w-3 h-3 shrink-0" />
                                         </button>
-                                    )}
-
-                                    <button
-                                        className="btn btn-sm btn-primary"
-                                    >
-                                        <span className='text-[10px]'>
-                                            {notificationPage}
-                                        </span>
-                                    </button>
-
-                                    <button
-                                        onClick={() => {
-                                            setNotificationPage(notificationPage + 1);
-                                        }}
-                                        className="btn btn-sm btn-primary"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleDoubleRight} className="w-3 h-3 shrink-0" />
-                                    </button>
-                                </div>
+                                    </div>
+                                )}
                             </div>
                         )}
 

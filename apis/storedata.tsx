@@ -31,29 +31,28 @@ export async function storeUser(data: any) {
     return dataRes;
 }
 
-export async function updateUserWithPhoto(data: any) {
-    const res = await axios.post(baseUri + '/users/' + data.id, {
-        'fullname': data.fullname,
-        'firstname': data.firstname,
-        'lastname': data.lastname,
-        'username': data.username,
-        'email': data.email,
-        'password': data.password,
-        'password_confirmation': data.password_confirmation,
-        'role': data.role,
-        'instance_id': data.instance_id,
-        'instance_ids': data.instance_ids,
-        'instance_type': data.instance_type,
-        // foto = path to file
-        'foto': data.fotoPath,
-    }, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${CurrentToken}`,
+export async function updateUserWithPhoto(params: any) {
+    try {
+        const formData = new FormData();
+        formData.append('fullname', params.fullname);
+        formData.append('username', params.username);
+        formData.append('email', params.email);
+        formData.append('role', params.role);
+        formData.append('foto', params.fotoPath);
+        const res = await axios.post(baseUri + '/users-me/update', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
         }
-    })
-    const dataRes = await res.data;
-    return dataRes;
+    }
 }
 
 export async function updateUser(data: any) {
