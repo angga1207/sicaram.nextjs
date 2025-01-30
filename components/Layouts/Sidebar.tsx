@@ -18,7 +18,7 @@ import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.4e.4";
+    const APP_VERSION = "2.5a.1";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -56,7 +56,6 @@ const Sidebar = () => {
 
         if (document.cookie) {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
-            console.log(user)
             if (user) {
                 user = user ? JSON.parse(user) : null;
                 setCurrentUser(user);

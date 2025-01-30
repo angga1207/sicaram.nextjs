@@ -70,7 +70,8 @@ import {
     faSpinner,
     faAngleDoubleUp,
     faLink,
-    faBars
+    faBars,
+    faCloudUploadAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import IconSend from '@/components/Icon/IconSend';
@@ -82,6 +83,8 @@ import LoadingSicaram from '@/components/LoadingSicaram';
 import Dropdown from '@/components/Dropdown';
 import InputRupiah from '@/components/InputRupiah';
 import RincianBelanja from '@/components/RealisasiProgram/RincianBelanja';
+import Summary from '@/components/RealisasiProgram/Summary';
+import ImportSIPD from '@/components/RealisasiProgram/ImportSIPD';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -213,6 +216,38 @@ const Index = () => {
     }, [route.query.slug]);
 
     useEffect(() => {
+        if (isMounted) {
+            setIsLoading(true);
+            setDatas(null);
+            setDataRealisasiSubKegiatan([]);
+            setSubKegiatan(null);
+            setDataRincian([]);
+            setDataBackEndError(null);
+            setDataBackEndMessage(null);
+
+            setDataKeterangan([]);
+            setActiveContracts([]);
+
+            if (subKegiatanId) {
+                getMasterData(subKegiatanId, year, month).then((data: any) => {
+                    if (data.status == 'success') {
+                        setDatas(data.data.data);
+                        setDataRealisasiSubKegiatan(data.data.realisasiSubKegiatan);
+                        setSubKegiatan(data.data.subkegiatan);
+                        setDataRincian(data.data.dataRincian)
+                        setDataBackEndError(data.data.data_error);
+                        setDataBackEndMessage(data.data.error_message);
+                    }
+                    if (data.status === 'error') {
+                        showAlert('error', 'Terjadi Kesalahan Server! Harap Hubungi Admin!');
+                    }
+                    setIsLoading(false);
+                });
+            }
+        }
+    }, [subKegiatanId, year, month]);
+
+    const refreshDataFromDatabase = () => {
         setIsLoading(true);
         setDatas(null);
         setDataRealisasiSubKegiatan([]);
@@ -233,6 +268,7 @@ const Index = () => {
                     setDataRincian(data.data.dataRincian)
                     setDataBackEndError(data.data.data_error);
                     setDataBackEndMessage(data.data.error_message);
+                    showAlert('success', 'Data Berhasil Diperbarui');
                 }
                 if (data.status === 'error') {
                     showAlert('error', 'Terjadi Kesalahan Server! Harap Hubungi Admin!');
@@ -240,8 +276,7 @@ const Index = () => {
                 setIsLoading(false);
             });
         }
-        setIsMounted(true);
-    }, [subKegiatanId, year, month]);
+    }
 
     useEffect(() => {
         if (dataRealisasiSubKegiatan.id && tab == 3) {
@@ -289,13 +324,18 @@ const Index = () => {
 
     const confirmSave = () => {
         if (subKegiatan?.status === 'verified') {
-            showAlert('info', 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"');
+            Swal.fire({
+                title: 'Peringatan!',
+                text: 'Data tidak dapat diubah karena Status Realisasi Sudah "Terverifikasi"',
+                icon: 'info',
+                confirmButtonText: 'Tutup'
+            });
             return;
         }
         if ([1, 2, 3, 4, 5, 9].includes(CurrentUser.role_id)) {
             Swal.fire({
                 title: 'Simpan Realisasi',
-                text: 'Aksi ini akan merubah data pada bulan ini dan bulan berikutnya yang belum Diverifikasi',
+                text: 'Aksi ini akan merubah data realisasi pada bulan ini dan tidak dapat dikembalikan!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Simpan',
@@ -481,7 +521,7 @@ const Index = () => {
         if (month > 1 && month < 13) {
             total = datas[0]?.realisasi_anggaran + datas[0]?.realisasi_anggaran_bulan_ini;
         }
-        if (dataRincian?.length > 0) {
+        if (dataRincian) {
             setDataRincian((prev: any) => {
                 const updated = prev;
                 updated.indicators[0].realisasi = total ?? 0;
@@ -720,23 +760,56 @@ const Index = () => {
 
                     <button
                         onClick={(e) => {
-                            if (unsaveKeteranganStatus) {
-                                e.preventDefault();
-                                Swal.fire({
-                                    title: 'Peringatan',
-                                    text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Ya, Lanjutkan',
-                                    cancelButtonText: 'Batal',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        setUnsaveKeteranganStatus(false);
-                                        setTab(2);
-                                    }
-                                });
-                            } else {
-                                setTab(2)
+                            if (isLoading === false) {
+                                if (unsaveKeteranganStatus) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Peringatan',
+                                        text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            setUnsaveKeteranganStatus(false);
+                                            setTab(5);
+                                        }
+                                    });
+                                } else {
+                                    setTab(5)
+                                }
+                            }
+                        }}
+                        className={`${tab === 5 ? 'text-white !outline-none before:!w-full bg-green-500' : 'bg-green-200 text-green-800'} rounded-tl grow !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-green-500 before:transition-all before:duration-700 hover:before:w-full`}
+                    >
+                        <FontAwesomeIcon icon={faCloudUploadAlt} className='w-4 h-4' />
+                        <span className='font-semibold whitespace-nowrap uppercase'>
+                            Unggah Realisasi (SIPD)
+                        </span>
+                    </button>
+
+                    <button
+                        onClick={(e) => {
+                            if (isLoading === false) {
+                                if (unsaveKeteranganStatus) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Peringatan',
+                                        text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            setUnsaveKeteranganStatus(false);
+                                            setTab(2);
+                                        }
+                                    });
+                                } else {
+                                    setTab(2)
+                                }
                             }
                         }}
                         className={`${tab === 2 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
@@ -749,9 +822,11 @@ const Index = () => {
 
                     <button
                         onClick={() => {
-                            setTab(3)
+                            if (isLoading === false) {
+                                setTab(3)
+                            }
                         }}
-                        className={`${tab === 3 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tr grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                        className={`${tab === 3 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
                     >
                         <FontAwesomeIcon icon={faThumbTack} className='w-4 h-4' />
                         <span className='font-semibold whitespace-nowrap uppercase'>
@@ -761,26 +836,28 @@ const Index = () => {
 
                     <button
                         onClick={(e) => {
-                            if (unsaveKeteranganStatus) {
-                                e.preventDefault();
-                                Swal.fire({
-                                    title: 'Peringatan',
-                                    text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Ya, Lanjutkan',
-                                    cancelButtonText: 'Batal',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        setUnsaveKeteranganStatus(false);
-                                        setTab(4);
-                                    }
-                                });
-                            } else {
-                                setTab(4)
+                            if (isLoading === false) {
+                                if (unsaveKeteranganStatus) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Peringatan',
+                                        text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            setUnsaveKeteranganStatus(false);
+                                            setTab(4);
+                                        }
+                                    });
+                                } else {
+                                    setTab(4)
+                                }
                             }
                         }}
-                        className={`${tab === 4 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tr grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                        className={`${tab === 4 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
                     >
                         <FontAwesomeIcon icon={faFileSignature} className='w-4 h-4' />
                         <span className='font-semibold whitespace-nowrap uppercase'>
@@ -790,26 +867,28 @@ const Index = () => {
 
                     <button
                         onClick={(e) => {
-                            if (unsaveKeteranganStatus) {
-                                e.preventDefault();
-                                Swal.fire({
-                                    title: 'Peringatan',
-                                    text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Ya, Lanjutkan',
-                                    cancelButtonText: 'Batal',
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        setUnsaveKeteranganStatus(false);
-                                        setTab(1);
-                                    }
-                                });
-                            } else {
-                                setTab(1);
+                            if (isLoading === false) {
+                                if (unsaveKeteranganStatus) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Peringatan',
+                                        text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            setUnsaveKeteranganStatus(false);
+                                            setTab(1);
+                                        }
+                                    });
+                                } else {
+                                    setTab(1);
+                                }
                             }
                         }}
-                        className={`${tab === 1 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tl grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                        className={`${tab === 1 ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tr grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
                     >
                         <FontAwesomeIcon icon={faListUl} className='w-4 h-4' />
                         <span className='font-semibold whitespace-nowrap uppercase'>
@@ -832,11 +911,25 @@ const Index = () => {
                                     datas: datas,
                                 }
                                 }
-                                // updateData={(e: any) => {
-                                //     setDatas(e);
-                                //     // updateTotalRealisasi();
-                                // }}
-                                updateData={setDatas}
+                                updateData={(dt: any) => {
+                                    setDatas(dt);
+
+                                    let total = 0;
+                                    if (month == 1) {
+                                        total = dt[0]?.realisasi_anggaran_bulan_ini;
+                                    }
+                                    if (month > 1 && month < 13) {
+                                        total = dt[0]?.realisasi_anggaran + dt[0]?.realisasi_anggaran_bulan_ini;
+                                    }
+                                    if (dataRincian) {
+                                        setDataRincian((prev: any) => {
+                                            const updated = prev;
+                                            updated.indicators[0].realisasi = total ?? 0;
+                                            return updated;
+                                        });
+                                    }
+
+                                }}
                                 isUnsave={setUnsaveStatus}
                             />
                         )}
@@ -844,317 +937,28 @@ const Index = () => {
                 )}
 
                 {tab === 1 && (
-                    <div className="flex flex-col xl:flex-col gap-4 mb-12 sm:mb-0 h-auto">
-                        <div className="table-responsive w-full">
-                            <table>
-                                <tbody>
-
-                                    <tr>
-                                        <td className='!w-[150px]'>
-                                            <div className='!text-end text-xs'>
-                                                Urusan Pemerintahan
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {dataRincian?.urusan_code} - {dataRincian?.urusan_name}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Bidang Urusan
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {dataRincian?.bidang_urusan_code} - {dataRincian?.bidang_urusan_name}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Perangkat Daerah
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {dataRincian?.instance_code} - {dataRincian?.instance_name}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Program
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {dataRincian?.program_code} - {dataRincian?.program_name}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Kegiatan
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {dataRincian?.kegiatan_code} - {dataRincian?.kegiatan_name}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Sub Kegiatan
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {dataRincian?.sub_kegiatan_code} - {dataRincian?.sub_kegiatan_name}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Sumber Dana
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="flex flex-wrap items-center gap-1 mr-3 w-[300px]">
-                                                {subKegiatan?.tag_sumber_dana?.length > 0 && (
-                                                    <>
-                                                        {subKegiatan?.tag_sumber_dana?.map((tag: any, index: any) => (
-                                                            <div className="text-xs border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white dark:border-blue-700 dark:hover:bg-blue-700 dark:text-blue-300 dark:hover:text-white px-2 py-1 rounded-md cursor-pointer whitespace-nowrap">
-                                                                <div className='font-semibold'>{tag?.tag_name}</div>
-                                                                <div className='text-center'>
-                                                                    Rp. {new Intl.NumberFormat('id-ID', { style: 'decimal', minimumFractionDigits: 0 }).format(tag?.nominal)}
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div className='!text-end text-xs'>
-                                                Bulan dan Tahun
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="text-xs font-semibold">
-                                                {new Date(year, month - 1).toLocaleString('id-ID',
-                                                    {
-                                                        month: 'long',
-                                                        year: 'numeric'
-                                                    }
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="table-responsive w-full">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th colSpan={100}>
-                                            <div className="text-center">
-                                                Indikator Kinerja Sub Kegiatan
-                                            </div>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th className='!text-center !text-xs'>
-                                            Indikator
-                                        </th>
-                                        <th className='!text-center !text-xs !w-[150px]'>
-                                            Target (Renstra)
-                                        </th>
-                                        <th className='!text-center !text-xs !w-[150px]'>
-                                            Target (Renja)
-                                        </th>
-                                        <th className='!text-center !text-xs !w-[150px]'>
-                                            Target (APBD)
-                                        </th>
-                                        <th className='!text-center !text-xs !w-[150px]'>
-                                            Realisasi
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dataRincian?.indicators?.length > 0 && (
-                                        <>
-                                            {dataRincian?.indicators?.map((indicator: any, index: any) => (
-                                                <tr key={index}>
-                                                    <td>
-                                                        <div className='text-xs'>
-                                                            {indicator?.name}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className='text-xs'>
-                                                            <div className="whitespace-nowrap">
-                                                                {indicator?.type === 'anggaran' && (
-                                                                    <>
-                                                                        Rp. {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(indicator?.target_renstra)}
-                                                                    </>
-                                                                )}
-                                                                {indicator?.type === 'kinerja' && (
-                                                                    <>
-                                                                        {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(indicator?.target_renstra ?? 0)} {indicator?.satuan_name_renstra}
-                                                                    </>
-                                                                )}
-                                                                {indicator?.type === 'persentase-kinerja' && (
-                                                                    <>
-                                                                        {indicator?.target_renstra} {indicator?.satuan_name_renstra}
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className='text-xs'>
-                                                            <div className="whitespace-nowrap">
-                                                                {indicator?.type === 'anggaran' && (
-                                                                    <>
-                                                                        Rp. {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(indicator?.target_renja)}
-                                                                    </>
-                                                                )}
-                                                                {indicator?.type === 'kinerja' && (
-                                                                    <>
-                                                                        {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(indicator?.target_renja ?? 0)} {indicator?.satuan_name_renja}
-                                                                    </>
-                                                                )}
-                                                                {indicator?.type === 'persentase-kinerja' && (
-                                                                    <>
-                                                                        {indicator?.target_renja} {indicator?.satuan_name_renja}
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className='text-xs'>
-                                                            <div className="whitespace-nowrap">
-                                                                {indicator?.type === 'anggaran' && (
-                                                                    <>
-                                                                        Rp. {new Intl.NumberFormat('id-ID', {
-                                                                            style: 'decimal',
-                                                                            minimumFractionDigits: 0,
-                                                                        }).format(indicator?.target)}
-                                                                    </>
-                                                                )}
-                                                                {indicator?.type === 'kinerja' && (
-                                                                    <>
-                                                                        {indicator?.target && (
-                                                                            <>
-                                                                                {new Intl.NumberFormat('id-ID', {
-                                                                                    style: 'decimal',
-                                                                                    minimumFractionDigits: 0,
-                                                                                }).format(indicator?.target ?? 0)} {indicator?.satuan_name}
-                                                                            </>
-                                                                        )}
-                                                                    </>
-                                                                )}
-                                                                {indicator?.type === 'persentase-kinerja' && (
-                                                                    <>
-                                                                        {indicator?.target} {indicator?.satuan_name}
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className='text-xs'>
-                                                            {index === 0 && (
-                                                                <InputRupiah
-                                                                    readOnly={true}
-                                                                    dataValue={indicator?.realisasi}
-                                                                    onChange={(e: any) => {
-                                                                        setUnsaveStatus(true);
-                                                                        setDataRincian((prev: any) => {
-                                                                            const updated = { ...prev };
-                                                                            updated.indicators[index].realisasi = e;
-                                                                            return updated;
-                                                                        });
-                                                                    }}
-                                                                />
-                                                            )}
-                                                            {index > 0 && (
-                                                                <input
-                                                                    value={indicator?.realisasi}
-                                                                    disabled={(subKegiatan?.status === 'verified' || subKegiatan?.status_target !== 'verified') ? true : false}
-                                                                    onChange={(e) => {
-                                                                        setUnsaveStatus(true);
-                                                                        setDataRincian((prev: any) => {
-                                                                            const updated = { ...prev };
-                                                                            updated['indicators'][index] = {
-                                                                                id: indicator?.id,
-                                                                                name: indicator?.name,
-                                                                                type: indicator?.type,
-                                                                                target: indicator?.target,
-                                                                                realisasi: e.target.value,
-                                                                                satuan_id: indicator?.satuan_id,
-                                                                                satuan_name: indicator?.satuan_name,
-                                                                                target_renstra: indicator?.target_renstra,
-                                                                                satuan_id_renstra: indicator?.satuan_id_renstra,
-                                                                                satuan_name_renstra: indicator?.satuan_name_renstra,
-                                                                                target_renja: indicator?.target_renja,
-                                                                                satuan_id_renja: indicator?.satuan_id_renja,
-                                                                                satuan_name_renja: indicator?.satuan_name_renja,
-                                                                            };
-                                                                            return updated;
-                                                                        });
-                                                                    }}
-                                                                    className='form-input px-1 py-0.5 text-xs font-normal disabled:bg-slate-200'
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div className="">
+                        {isMounted && (
+                            <Summary
+                                params={isMounted &&
+                                {
+                                    periode: periode,
+                                    year: year,
+                                    month: month,
+                                    subKegiatan: subKegiatan,
+                                    datas: dataRincian,
+                                }
+                                }
+                                updateData={setDataRincian}
+                                isUnsave={setUnsaveStatus}
+                                key={dataRincian}
+                            />
+                        )}
                     </div>
                 )}
 
                 {tab === 3 && (
-                    <div className='p-5'>
+                    <div className='p-5 h-[calc(100vh-250px)]'>
                         <div className="font-semibold text-md text-center">
                             Update Informasi Realisasi {subKegiatan?.fullcode} - {subKegiatan?.name}
                         </div>
@@ -1353,7 +1157,7 @@ const Index = () => {
                 )}
 
                 {tab === 4 && (
-                    <div className="p-5">
+                    <div className="p-5 h-[calc(100vh-250px)]">
                         <div className="grid grid-cols-2 gap-8">
 
                             <div className="col-span-2 md:col-span-1">
@@ -1370,19 +1174,26 @@ const Index = () => {
                                             }
                                         }}
                                         type="text"
+                                        disabled={loadingFetchKontrak || false}
                                         placeholder="Cari Nomor Kontrak..."
-                                        className="form-input"
+                                        className="form-input disabled:bg-slate-200"
                                     />
                                 </div>
-                                <div className="mt-5 space-y-5 overflow-x-auto overflow-auto h-[calc(100vh-360px)] border rounded">
+                                <div className="mt-5 space-y-5 overflow-x-auto overflow-auto h-[calc(100vh-350px)] border rounded">
 
-                                    {kontrakSPSEOptions?.length === 0 && (
-                                        <div className="text-center text-xl text-slate-400 p-10">
-                                            Tidak ada data kontrak yang ditemukan / Coba cari dengan kata kunci lain
+                                    {loadingFetchKontrak && (
+                                        <div className="text-center text-lg font-semibold text-blue-500 p-10">
+                                            Sedang Memuat Data Kontrak Dari LPSE...
                                         </div>
                                     )}
 
-                                    {kontrakSPSEOptions?.length > 0 && (
+                                    {(loadingFetchKontrak === false && kontrakSPSEOptions?.length === 0) && (
+                                        <div className="text-center text-xl text-slate-400 p-10">
+                                            Tidak ada data kontrak yang ditemukan / <br /> Coba cari dengan kata kunci lain
+                                        </div>
+                                    )}
+
+                                    {(loadingFetchKontrak === false && kontrakSPSEOptions?.length > 0) && (
                                         <>
                                             {kontrakSPSEOptions?.map((kontrak: any, index: any) => (
                                                 <div key={`list-kontrak-${index}`}
@@ -2063,6 +1874,28 @@ const Index = () => {
                     </div>
                 )}
 
+                {tab === 5 && (
+                    <div className="">
+                        {isMounted && (
+                            <ImportSIPD
+                                params={isMounted &&
+                                {
+                                    periode: periode,
+                                    year: year,
+                                    month: month,
+                                    subKegiatan: subKegiatan,
+                                }
+                                }
+                                updateData={(e: any) => {
+                                    // reload data
+                                    refreshDataFromDatabase();
+                                }}
+                                isUnsave={setUnsaveStatus}
+                            />
+                        )}
+                    </div>
+                )}
+
             </div>
 
             {isMounted && (
@@ -2094,7 +1927,7 @@ const Index = () => {
                             </div>
                         </div>
                         <div className="flex justify-end items-center gap-2 flex-wrap w-full md:w-1/2">
-                            {(tab === 1 || tab === 2) && (
+                            {(tab === 1 || tab === 2 || tab === 5) && (
                                 <>
                                     <Tippy content={`Tekan Untuk Melihat Log`}>
                                         <button
@@ -2238,7 +2071,7 @@ const Index = () => {
                                         </Dropdown>
                                     </div>
 
-                                    {(dataBackEndError === false && [1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser.role_id)) && (
+                                    {(dataBackEndError === false && [1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser.role_id) && (tab === 1 || tab === 2)) && (
                                         <button
                                             type='button'
                                             className='btn btn-sm dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white'
@@ -2253,8 +2086,7 @@ const Index = () => {
                                             {syncLoading ? 'Sedang Melakukan Singkron Data' : 'Singkron Data'}
                                         </button>
                                     )}
-
-                                    {dataBackEndError === false ? (
+                                    {(dataBackEndError === false && (tab === 1 || tab === 2)) ? (
                                         <button
                                             type='button'
                                             className='btn btn-sm dark:border-green-900 dark:shadow-black-dark-light bg-green-600 dark:bg-green-700 hover:bg-green-500 dark:hover:bg-green-800 text-white'

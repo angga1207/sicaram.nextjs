@@ -116,19 +116,21 @@ const Index = () => {
     const [years, setYears] = useState<any>(null);
     // const [year, setYear] = useState<any>(router.query.year ?? new Date().getFullYear());
     const [months, setMonths] = useState<any>([
-        { id: 1, name: 'Januari' },
-        { id: 2, name: 'Februari' },
-        { id: 3, name: 'Maret' },
-        { id: 4, name: 'April' },
-        { id: 5, name: 'Mei' },
-        { id: 6, name: 'Juni' },
-        { id: 7, name: 'Juli' },
-        { id: 8, name: 'Agustus' },
-        { id: 9, name: 'September' },
-        { id: 10, name: 'Oktober' },
-        { id: 11, name: 'November' },
-        { id: 12, name: 'Desember' },
+        { value: 1, label: 'Januari' },
+        { value: 2, label: 'Februari' },
+        { value: 3, label: 'Maret' },
+        { value: 4, label: 'April' },
+        { value: 5, label: 'Mei' },
+        { value: 6, label: 'Juni' },
+        { value: 7, label: 'Juli' },
+        { value: 8, label: 'Agustus' },
+        { value: 9, label: 'September' },
+        { value: 10, label: 'Oktober' },
+        { value: 11, label: 'November' },
+        { value: 12, label: 'Desember' },
     ]);
+
+    console.log(months)
 
     const [month, setMonth] = useState<any>(null);
     const [instance, setInstance] = useState<any>(null);
@@ -640,7 +642,7 @@ const Index = () => {
 
                                                                                     {showSubKegiatans.includes(subkegiatan?.id) && (
                                                                                         <>
-                                                                                            <div className="flex items-center gap-2 border-t border-slate-500 pt-3 mt-3">
+                                                                                            <div className="flex items-center gap-2 border-t border-slate-500 pt-3 mt-3 hidden">
 
                                                                                                 <div className="text-center">
                                                                                                     <div className="text-xs mb-1">
@@ -756,30 +758,25 @@ const Index = () => {
                                                                                                 </div>
                                                                                             </div>
 
-                                                                                            <div className="flex flex-col md:flex-row items-center justify-start gap-2 md:divide-x divide-indigo-500 overflow-x-auto pb-3 lg:pb-0">
+                                                                                            <div className="flex flex-col md:flex-row items-center justify-start gap-2 md:divide-x divide-indigo-500 pb-3 lg:pb-0">
                                                                                                 <div className="px-0 flex-none">
-                                                                                                    <select
-                                                                                                        className='form-select rw-[130px] border-indigo-400 bg-transparent font-normal mr-2'
-                                                                                                        onChange={(e) => {
-                                                                                                            setMonth(e.target.value);
-                                                                                                            router.query.month = e.target.value;
+
+                                                                                                    <Select
+                                                                                                        className="min-w-[200px]"
+                                                                                                        id="month"
+                                                                                                        options={months}
+                                                                                                        value={months?.find((option: any) => option.value === month)}
+                                                                                                        onChange={(e: any) => {
+                                                                                                            setMonth(e.value)
+                                                                                                            router.query.month = e.value;
                                                                                                             router.push(router);
                                                                                                         }}
-                                                                                                        value={month}>
-                                                                                                        <option value="" >Pilih Bulan</option>
-                                                                                                        {months?.map((item: any, index: number) => {
-                                                                                                            return (
-                                                                                                                <option
-                                                                                                                    key={'select-month-' + index}
-                                                                                                                    disabled={
-                                                                                                                        (year == new Date().getFullYear() && item.id > new Date().getMonth() + 1) || (year > new Date().getFullYear())
-                                                                                                                    }
-                                                                                                                    value={item?.id}>
-                                                                                                                    {item?.name}
-                                                                                                                </option>
-                                                                                                            )
-                                                                                                        })}
-                                                                                                    </select>
+                                                                                                        isSearchable={true}
+                                                                                                        isClearable={false}
+                                                                                                        menuPlacement={'top'}
+                                                                                                        classNamePrefix={'selectAngga'}
+                                                                                                        isDisabled={(months?.length === 0) || false}
+                                                                                                    />
                                                                                                 </div>
 
                                                                                                 {(periode?.id && year && month) && (

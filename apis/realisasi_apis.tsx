@@ -358,3 +358,29 @@ export async function deleteContract(id: any, no_kontrak: any, year: any, month:
         }
     }
 }
+
+
+export async function uploadRealisasiExcel(subKegiatanId: any, instance: any, periode: any, year: any, month: any, file: any) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('periode', periode);
+        formData.append('year', year);
+        formData.append('month', month);
+        formData.append('id', subKegiatanId);
+        formData.append('instance', instance);
+        const res = await axios.post(baseUri + '/caram/realisasi/' + subKegiatanId + '/upload/excel', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
