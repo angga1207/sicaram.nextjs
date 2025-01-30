@@ -315,7 +315,7 @@ const Login = () => {
 
                 <div className="relative flex w-full max-w-[1502px] flex-col justify-between overflow-hidden rounded-md bg-white/30 backdrop-blur-sm dark:bg-black/50 lg:min-h-[758px] lg:flex-row lg:gap-10 xl:gap-0">
 
-                    <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(239,18,98,1)_0%,rgba(67,97,238,1)_100%)] bg-opacity-100 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
+                    <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(0,171,85,1)_0%,rgba(0,150,238,1)_100%)] bg-opacity-100 p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
                         <div className="absolute inset-y-0 w-8 from-dark/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
                         <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
                             <div className="flex items-center">
@@ -348,12 +348,16 @@ const Login = () => {
                             <img src='/assets/images/logo-caram.png' alt="Logo" className="w-full h-20 object-contain" />
                             <div className="mb-2 text-center">
                                 <h1 className="text-xl font-bold !leading-snug tracking-widest text-slate-800 mb-3">
-                                    <span className='text-blue-600'>S</span>istem <span className='text-blue-600'>I</span>nformasi <span className='text-blue-600'>CA</span>paian <span className='text-blue-600'>R</span>ealisasi Pe<span className='text-blue-600'>M</span>bangunan
+                                    <span className='text-[#0096ee]'>S</span>ISTEM
+                                    <span className='text-[#0096ee] ml-3'>I</span>NFORMASI
+                                    <span className='text-[#0096ee] ml-3'>CA</span>PAIAN
+                                    <span className='text-[#0096ee] ml-3'>R</span>EALISASI PE
+                                    <span className='text-[#0096ee]'>M</span>BANGUNAN
                                 </h1>
                             </div>
                         </div>
                         <form
-                            className="space-y-5 dark:text-white"
+                            className="space-y-5 dark:text-white w-[400px] max-w-full"
                             onSubmit={submitForm}>
                             {submitLoading == false ? (
                                 <>
@@ -462,10 +466,9 @@ const Login = () => {
 
                             {serverStatus === true ? (
                                 <div className='relative'>
-                                    <div className={`${serverStatus ? 'bg-green-500' : 'bg-red-500'} absolute top-[2px] right-[2px] z-10 rounded-full w-4 h-4 animate-pulse`}></div>
                                     {submitLoading ? (
                                         <>
-                                            <button type="button" className="btn bg-gradient-to-r from-slate-300 from-40% via-slate-500 via-75% to-slate-300 to-100% border-0 text-white !mt-6 w-full uppercase cursor-pointer">
+                                            <button type="button" className="btn bg-[linear-gradient(225deg,rgba(0,171,85,1)_0%,rgba(0,150,238,1)_100%)] border-0 text-white !mt-6 w-full uppercase cursor-pointer">
                                                 <div className="flex items-center justify-center">
                                                     <div className="w-4 h-4 border-2 border-t-2 border-white rounded-full animate-spin"></div>
                                                     <span className="ltr:ml-3 rtl:mr-3">
@@ -480,7 +483,7 @@ const Login = () => {
                                                 <button
                                                     type="submit"
                                                     // disabled={recaptchaChecked ? false : true}
-                                                    className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                                    className="btn bg-[linear-gradient(225deg,rgba(0,171,85,1)_0%,rgba(0,150,238,1)_100%)] text-white !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                                     Masuk
                                                 </button>
                                             )}
@@ -489,7 +492,6 @@ const Login = () => {
                                 </div>
                             ) : (
                                 <div className='relative'>
-                                    <div className={`${serverStatus ? 'bg-green-500' : 'bg-red-500'} absolute top-[2px] right-[2px] z-10 rounded-full w-4 h-4 animate-pulse`}></div>
                                     <button type="button" className="btn bg-gradient-to-r from-slate-300 from-10% via-gray-500 via-30% to-slate-300 to-90% hover:from-40% hover:via-75% hover:to-slate-600 hover:to-100% transition duration-900 border-0 text-white hover:text-slate-700 !mt-6 w-full uppercase cursor-pointer">
                                         Server Offline
                                     </button>
