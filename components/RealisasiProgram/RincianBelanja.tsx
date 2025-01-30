@@ -45,7 +45,7 @@ import {
     faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
-import InputRupiah from "../InputRupiah";
+import InputRupiahRealisasi from "../InputRupiahRealisasi";
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -113,42 +113,42 @@ const RincianBelanja = (
                 <thead className='sticky top-0 left-0 z-[1]'>
                     <tr>
                         <th rowSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[150px]'>
+                            className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[150px]'>
                             Kode Rekening
                         </th>
                         <th rowSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !min-w-[400px]'>
+                            className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !min-w-[400px]'>
                             Uraian
                         </th>
                         <th rowSpan={1} colSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !min-w-[250px]'>
+                            className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !min-w-[250px]'>
                             Koefisien
                         </th>
                         <th rowSpan={2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                            className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                             Harga (Rp)
                         </th>
                         <th rowSpan={1} colSpan={(month > 1 && month < 13) ? 3 : 2}
-                            className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                            className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                             Jumlah (Rp)
                         </th>
                     </tr>
                     <tr>
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                             Target
                         </th>
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                             Realisasi
                         </th>
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                             Anggaran
                         </th>
                         {month > 1 && month < 13 && (
-                            <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                            <th className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                                 Realisasi Terakhir
                             </th>
                         )}
-                        <th className='!text-center !text-sm bg-slate-400 !px-2.5 !py-1.5 border !border-slate-900 dark:text-white whitespace-nowrap !w-[100px]'>
+                        <th className='!text-center !text-sm bg-slate-900 dark:!bg-slate-800 text-white !px-2.5 !py-3 border !border-white whitespace-nowrap !w-[100px]'>
                             Realisasi Bulan Ini
                         </th>
                     </tr>
@@ -226,12 +226,16 @@ const RincianBelanja = (
 
                                         <td className='border !border-slate-400 dark:!border-slate-100 !px-1'>
 
-                                            <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                            {/* <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
                                                 {new Intl.NumberFormat('id-ID', {
                                                     style: 'decimal',
                                                     minimumFractionDigits: 0,
                                                 }).format(data?.pagu ?? 0)}
-                                            </div>
+                                            </div> */}
+                                            <InputRupiahRealisasi
+                                                dataValue={data.pagu}
+                                                readOnly={true}
+                                            />
 
                                         </td>
 
@@ -239,43 +243,53 @@ const RincianBelanja = (
                                             <td className='border !border-slate-400 dark:!border-slate-100 !px-1'>
 
                                                 {data?.type == 'rekening' && (
-                                                    <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
-                                                        {new Intl.NumberFormat('id-ID', {
-                                                            style: 'decimal',
-                                                            minimumFractionDigits: 0,
-                                                        }).format(data?.realisasi_anggaran ?? 0)}
-                                                    </div>
+                                                    <InputRupiahRealisasi
+                                                        dataValue={data.realisasi_anggaran}
+                                                        readOnly={true}
+                                                    />
                                                 )}
 
                                                 {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length > 0) && (
-                                                    <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
-                                                        {new Intl.NumberFormat('id-ID', {
-                                                            style: 'decimal',
-                                                            minimumFractionDigits: 0,
-                                                        }).format(data?.realisasi_anggaran ?? 0)}
-                                                    </div>
+                                                    // <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                    //     {new Intl.NumberFormat('id-ID', {
+                                                    //         style: 'decimal',
+                                                    //         minimumFractionDigits: 0,
+                                                    //     }).format(data?.realisasi_anggaran ?? 0)}
+                                                    // </div>
+                                                    <InputRupiahRealisasi
+                                                        dataValue={data.realisasi_anggaran}
+                                                        readOnly={true}
+                                                    />
                                                 )}
 
                                                 {/* REALISASI ANGGARAN RINCIAN */}
                                                 {/* REALISASI BULAN KEMAREN */}
                                                 {(data?.type == 'target-kinerja' && data?.is_detail === true && data?.rincian_belanja?.length == 0) && (
-                                                    <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
-                                                        {new Intl.NumberFormat('id-ID', {
-                                                            style: 'decimal',
-                                                            minimumFractionDigits: 0,
-                                                        }).format(data?.realisasi_anggaran ?? 0)}
-                                                    </div>
+                                                    // <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                    //     {new Intl.NumberFormat('id-ID', {
+                                                    //         style: 'decimal',
+                                                    //         minimumFractionDigits: 0,
+                                                    //     }).format(data?.realisasi_anggaran ?? 0)}
+                                                    // </div>
+                                                    <InputRupiahRealisasi
+                                                        dataValue={data.realisasi_anggaran}
+                                                        readOnly={true}
+                                                    />
                                                 )}
 
                                                 {/* REALISASI ANGGARAN RINCIAN */}
                                                 {/* REALISASI BULAN KEMAREN */}
                                                 {(data?.type == 'target-kinerja' && data?.is_detail === false) && (
-                                                    <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
-                                                        {new Intl.NumberFormat('id-ID', {
-                                                            style: 'decimal',
-                                                            minimumFractionDigits: 0,
-                                                        }).format(data?.realisasi_anggaran ?? 0)}
-                                                    </div>
+                                                    // <div className="text-xs font-semibold whitespace-nowrap text-end px-2">
+                                                    //     {new Intl.NumberFormat('id-ID', {
+                                                    //         style: 'decimal',
+                                                    //         minimumFractionDigits: 0,
+                                                    //     }).format(data?.realisasi_anggaran ?? 0)}
+                                                    // </div>
+                                                    <InputRupiahRealisasi
+                                                        dataValue={data.realisasi_anggaran}
+                                                        readOnly={true}
+                                                    />
                                                 )}
 
                                             </td>
@@ -285,16 +299,14 @@ const RincianBelanja = (
                                             {/* REALISASI BULAN INI */}
 
                                             {data?.type === 'rekening' && (
-                                                <div className='text-xs font-semibold whitespace-nowrap text-end px-2'>
-                                                    {new Intl.NumberFormat('id-ID', {
-                                                        style: 'decimal',
-                                                        minimumFractionDigits: 0,
-                                                    }).format(data?.realisasi_anggaran_bulan_ini ?? 0)}
-                                                </div>
+                                                <InputRupiahRealisasi
+                                                    dataValue={data.realisasi_anggaran_bulan_ini}
+                                                    readOnly={true}
+                                                />
                                             )}
 
                                             {data?.type === 'target-kinerja' && (
-                                                <InputRupiah
+                                                <InputRupiahRealisasi
                                                     dataValue={data.realisasi_anggaran_bulan_ini}
                                                     onChange={(value: any) => {
                                                         if (subKegiatan?.status === 'verified') {

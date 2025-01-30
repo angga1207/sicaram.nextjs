@@ -126,7 +126,7 @@ const ImportSIPD = (
                             className="form-input" />
                     </div>
 
-                    <div className="self-end">
+                    <div className={`self-end ${file ? 'block' : 'hidden'}`}>
                         {isUploading && (
                             <div className="btn btn-primary">
                                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>

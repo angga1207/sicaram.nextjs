@@ -186,6 +186,14 @@ const Page = () => {
         setIsShowNoteMenu(false);
     };
 
+    useEffect(() => {
+        if (selectedTab === 'lra' && instance && year) {
+            _getDataLra(instance, periode?.id, year);
+        } else if (selectedTab === 'lra' && (!instance || !year)) {
+            setPreviewDataLRA([]);
+        }
+    }, [selectedTab == 'lra', instance, year]);
+
     function _getDataLra(instance: any, periode: any, year: any) {
         getData(instance, periode, year).then((res: any) => {
             if (res.status === 'success') {
@@ -633,55 +641,66 @@ const Page = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {
-                                                    previewDataLRA?.map((data: any, index: number) => {
-                                                        return (
-                                                            <tr key={index}>
-                                                                <td>
-                                                                    {data?.kode_rekening}
-                                                                </td>
-                                                                <td>
-                                                                    {data?.uraian}
-                                                                </td>
-                                                                <td>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span>
-                                                                            Rp.
-                                                                        </span>
-                                                                        <span className='whitespace-nowrap'>
-                                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.anggaran)}
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span>
-                                                                            Rp.
-                                                                        </span>
-                                                                        <span className='whitespace-nowrap'>
-                                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.realisasi)}
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div className="text-center">
-                                                                        {new Intl.NumberFormat('id-ID', {}).format(data?.realisasi_percentage)} %
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span>
-                                                                            Rp.
-                                                                        </span>
-                                                                        <span className='whitespace-nowrap'>
-                                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.realisasi_last_year)}
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })
-                                                }
+                                                {previewDataLRA?.length > 0 && (
+                                                    <>
+                                                        {
+                                                            previewDataLRA?.map((data: any, index: number) => {
+                                                                return (
+                                                                    <tr key={index}>
+                                                                        <td>
+                                                                            {data?.kode_rekening}
+                                                                        </td>
+                                                                        <td>
+                                                                            {data?.uraian}
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span>
+                                                                                    Rp.
+                                                                                </span>
+                                                                                <span className='whitespace-nowrap'>
+                                                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.anggaran)}
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span>
+                                                                                    Rp.
+                                                                                </span>
+                                                                                <span className='whitespace-nowrap'>
+                                                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.realisasi)}
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="text-center">
+                                                                                {new Intl.NumberFormat('id-ID', {}).format(data?.realisasi_percentage)} %
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span>
+                                                                                    Rp.
+                                                                                </span>
+                                                                                <span className='whitespace-nowrap'>
+                                                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(data.realisasi_last_year)}
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                            })
+                                                        }
+                                                    </>
+                                                )}
+                                                {previewDataLRA?.length === 0 && (
+                                                    <tr>
+                                                        <td colSpan={6} className='text-center'>
+                                                            Data tidak ditemukan
+                                                        </td>
+                                                    </tr>
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
