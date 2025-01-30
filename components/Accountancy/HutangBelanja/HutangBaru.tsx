@@ -148,6 +148,7 @@ const HutangBaru = (param: any) => {
 
                                 beban: 0,
                                 jangka_pendek: 0,
+                                total_hutang: 0,
                             }
                         ])
                     }
@@ -195,6 +196,7 @@ const HutangBaru = (param: any) => {
 
         beban: 0,
         jangka_pendek: 0,
+        total_hutang: 0,
     });
 
     const addDataInput = () => {
@@ -242,6 +244,7 @@ const HutangBaru = (param: any) => {
 
             beban: 0,
             jangka_pendek: 0,
+            total_hutang: 0,
         }
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
@@ -261,6 +264,7 @@ const HutangBaru = (param: any) => {
             const sumPlus2 = keysToSumPlus2.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
             updated[index]['jangka_pendek'] = sumPlus2;
 
+            updated[index]['total_hutang'] = parseFloat(updated[index]['beban']) + parseFloat(updated[index]['jangka_pendek']);
             return updated;
         })
         setIsUnsaved(true);
@@ -296,6 +300,7 @@ const HutangBaru = (param: any) => {
 
                 updated.beban = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban']), 0);
                 updated.jangka_pendek = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['jangka_pendek']), 0);
+                updated.total_hutang = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['total_hutang']), 0);
                 return updated;
             })
         }
@@ -373,16 +378,13 @@ const HutangBaru = (param: any) => {
                                     Jumlah Pembayaran
                                 </th>
                                 <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
-                                    Hutang Baru s.d 31 Des {year}
+                                    Utang Baru s.d 31 Des {year}
                                 </th>
                                 <th colSpan={14} rowSpan={2} className='text-center border border-slate-100 whitespace-nowrap'>
-                                    Hutang (Rp)
+                                    Utang (Rp)
                                 </th>
                                 <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
-                                    Beban (SUM Ijo)
-                                </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
-                                    Jangka Pendek (SUM Kuning)
+                                    Total Utang
                                 </th>
                             </tr>
                             <tr className="!bg-dark !text-white">
@@ -1058,28 +1060,11 @@ const HutangBaru = (param: any) => {
                                                 <div className='cursor-pointer'>
                                                     <InputRupiah
                                                         readOnly={true}
-                                                        dataValue={data.beban}
+                                                        dataValue={data.total_hutang}
                                                         onChange={(value: any) => {
                                                             setDataInput((prev: any) => {
                                                                 const updated = [...prev];
-                                                                updated[index]['beban'] = isNaN(value) ? 0 : value;
-                                                                updatedData(updated, index);
-                                                                return updated;
-                                                            });
-                                                        }} />
-                                                </div>
-                                            </Tippy>
-                                        </td>
-                                        <td className='border'>
-                                            <Tippy content="= (Aset Tetap Tanah) + (Aset Tetap Peralatan dan Mesin) + (Aset Tetap Gedung dan Bangunan) + (Aset Tetap Jalan Jaringan Irigasi) + (Aset Tetap Lainnya) + (Konstruksi Dalam Pekerjaan) + (Aset Lain-lain)" placement='top'>
-                                                <div className='cursor-pointer'>
-                                                    <InputRupiah
-                                                        readOnly={true}
-                                                        dataValue={data.jangka_pendek}
-                                                        onChange={(value: any) => {
-                                                            setDataInput((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['jangka_pendek'] = isNaN(value) ? 0 : value;
+                                                                updated[index]['total_hutang'] = isNaN(value) ? 0 : value;
                                                                 updatedData(updated, index);
                                                                 return updated;
                                                             });
@@ -1274,15 +1259,7 @@ const HutangBaru = (param: any) => {
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.beban)}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className='border p-4 bg-slate-200'>
-                                    <div className="flex justify-between font-semibold">
-                                        Rp.
-                                        <div>
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.jangka_pendek)}
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.total_hutang)}
                                         </div>
                                     </div>
                                 </td>
@@ -1312,7 +1289,7 @@ const HutangBaru = (param: any) => {
                         }}
                         className='btn btn-success whitespace-nowrap text-xs'>
                         <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Hutang Belanja
+                        Simpan Utang Baru
                     </button>
                 ) : (
                     <button type="button"

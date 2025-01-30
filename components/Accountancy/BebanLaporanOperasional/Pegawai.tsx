@@ -658,6 +658,7 @@ const Pegawai = (data: any) => {
                                     <td className="border bg-green-300 border-slate-900">
                                         <InputRupiah
                                             dataValue={data.pembayaran_hutang}
+                                            readOnly={true}
                                             onChange={(value: any) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];

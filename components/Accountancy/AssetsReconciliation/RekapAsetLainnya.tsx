@@ -315,7 +315,7 @@ const RekapAsetLainnya = (data: any) => {
                                     Realisasi Belanja
                                 </th>
                                 <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
-                                    Hutang Kegiatan {year}
+                                    Utang Kegiatan {year}
                                 </th>
                                 <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Atribusi
@@ -363,7 +363,7 @@ const RekapAsetLainnya = (data: any) => {
 
                                 {/* Kurang Start */}
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
-                                    Pembayaran Hutang
+                                    Pembayaran Utang
                                 </th>
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Reklasifikasi Ke Beban Persediaan

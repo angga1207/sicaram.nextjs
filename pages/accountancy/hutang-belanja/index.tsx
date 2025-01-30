@@ -68,7 +68,7 @@ const Page = () => {
     const router = useRouter();
 
     useEffect(() => {
-        dispatch(setPageTitle('Hutang Belanja'));
+        dispatch(setPageTitle('Utang Belanja'));
     });
 
     const ref = useRef<any>(null);
@@ -173,7 +173,7 @@ const Page = () => {
             <div className="">
                 <div className="flex flex-wrap gap-y-2 items-center justify-between mb-5">
                     <h2 className="text-xl leading-6 font-bold text-[#3b3f5c] dark:text-white-light xl:w-1/2 line-clamp-2 uppercase whitespace-nowrap">
-                        Hutang Belanja
+                        Utang Belanja
                         <br />
                         {instances?.find((i: any) => i.id == instance)?.name ?? 'Kabupaten Ogan Ilir'}
                     </h2>
@@ -251,7 +251,7 @@ const Page = () => {
                                     <button
                                         className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Pembayaran Hutang
+                                        Pembayaran Utang
                                     </button>
                                 )}
                             </Tab>
@@ -260,7 +260,7 @@ const Page = () => {
                                     <button
                                         className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Hutang Baru
+                                        Utang Baru
                                     </button>
                                 )}
                             </Tab>
@@ -269,7 +269,7 @@ const Page = () => {
                                     <button
                                         className={`uppercase whitespace-nowrap font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap Hutang
+                                        Rekap Utang
                                     </button>
                                 )}
                             </Tab>

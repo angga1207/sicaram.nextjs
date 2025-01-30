@@ -207,7 +207,7 @@ const Page = () => {
                         </Link>
                     </Tippy>
 
-                    <Tippy content="Hutang Belanja" placement='bottom' theme='default'>
+                    <Tippy content="Utang Belanja" placement='bottom' theme='default'>
                         <Link
                             href="/accountancy/hutang-belanja"
                             className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
@@ -220,7 +220,7 @@ const Page = () => {
                             >
                             </Player>
                             <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Hutang Belanja
+                                Utang Belanja
                             </div>
                         </Link>
                     </Tippy>

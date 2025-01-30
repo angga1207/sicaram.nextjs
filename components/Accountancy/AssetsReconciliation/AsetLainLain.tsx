@@ -313,7 +313,7 @@ const AsetLainLain = (data: any) => {
                                     Realisasi Belanja
                                 </th>
                                 <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
-                                    Hutang Kegiatan {year}
+                                    Utang Kegiatan {year}
                                 </th>
                                 <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Atribusi
@@ -361,7 +361,7 @@ const AsetLainLain = (data: any) => {
 
                                 {/* Kurang Start */}
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
-                                    Pembayaran Hutang
+                                    Pembayaran Utang
                                 </th>
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Reklasifikasi Ke Beban Persediaan
@@ -660,7 +660,7 @@ const AsetLainLain = (data: any) => {
                                             <td className='border border-slate-900'>
                                                 <InputRupiah
                                                     dataValue={row.min_pembayaran_utang}
-                                                    // readOnly={true}
+                                                    readOnly={true}
                                                     onChange={(value: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
