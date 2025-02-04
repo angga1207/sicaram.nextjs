@@ -18,7 +18,7 @@ import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.2";
+    const APP_VERSION = "2.5b.3";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -583,7 +583,7 @@ const Sidebar = () => {
                                         </>
                                     )}
 
-                                    {([1, 4, 12].includes(CurrentUser?.role_id)) && (
+                                    {([1, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                         <>
                                             <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                                 <IconMinus className="hidden h-5 w-4 flex-none" />
@@ -604,7 +604,7 @@ const Sidebar = () => {
                                                     </Link>
                                                 </li>
                                             )}
-                                            {([1, 2, 4, 12].includes(CurrentUser?.role_id)) && (
+                                            {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                                 <li className="menu nav-item">
                                                     <Link href="/accountancy" className="group">
                                                         <div className="flex items-center">
@@ -635,7 +635,7 @@ const Sidebar = () => {
                                             </div>
                                         </Link>
                                     </li>
-                                    {([1, 4, 12].includes(CurrentUser?.role_id)) && (
+                                    {([1, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                         <li className="menu nav-item">
                                             <Link href="/accountancy/report" className="group">
                                                 <div className="flex items-center">
