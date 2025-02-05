@@ -247,8 +247,6 @@ const PembayaranHutang = (param: any) => {
     const updatedData = (data: any, index: number) => {
         setDataInput((prev: any) => {
             const updated = [...prev];
-            updated[index].jumlah_pembayaran_hutang = parseFloat(updated[index].p1_jumlah) + parseFloat(updated[index].p2_jumlah);
-            updated[index].sisa_hutang = parseFloat(updated[index].kewajiban_tidak_terbayar) - parseFloat(updated[index].jumlah_pembayaran_hutang);
 
             const keysToSumPlus = ['pegawai', 'persediaan', 'perjadin', 'jasa', 'pemeliharaan', 'uang_jasa_diserahkan', 'hibah'];
             const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
@@ -259,6 +257,9 @@ const PembayaranHutang = (param: any) => {
             updated[index]['jangka_pendek'] = sumPlus2;
 
             updated[index]['total_hutang'] = parseFloat(updated[index]['beban']) + parseFloat(updated[index]['jangka_pendek']);
+
+            updated[index].jumlah_pembayaran_hutang = parseFloat(updated[index].p1_jumlah) + parseFloat(updated[index].p2_jumlah);
+            updated[index]['sisa_hutang'] = parseFloat(updated[index].kewajiban_tidak_terbayar_last_year) - parseFloat(updated[index].jumlah_pembayaran_hutang);
             return updated;
         })
         setIsUnsaved(true);

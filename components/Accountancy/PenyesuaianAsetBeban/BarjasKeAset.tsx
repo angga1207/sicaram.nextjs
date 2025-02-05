@@ -596,6 +596,7 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_aset_tetap_tanah'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -643,6 +644,7 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_aset_tetap_peralatan_mesin'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -690,6 +692,20 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_aset_tetap_gedung_bangunan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -737,6 +753,19 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_aset_tetap_jalan_jaringan_irigasi'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -784,6 +813,18 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_aset_tetap_lainnya'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -831,6 +872,17 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_konstruksi_dalam_pekerjaan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -878,6 +930,16 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_aset_lain_lain'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -925,6 +987,15 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['plus_jumlah_penyesuaian'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -977,6 +1048,14 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_pegawai'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1024,6 +1103,13 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_persediaan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1071,6 +1157,12 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_jasa'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1118,6 +1210,11 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_pemeliharaan'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1165,6 +1262,10 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_perjalanan_dinas'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1212,6 +1313,9 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_hibah'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1259,6 +1363,8 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_beban_lain_lain'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);
@@ -1306,6 +1412,7 @@ const BarjasKeAset = (data: any) => {
                                                     const updated = [...prev];
                                                     const value = parseFloat(e?.target?.value);
                                                     updated[index]['min_jumlah_penyesuaian'] = isNaN(value) ? 0 : value;
+                                                    updatedData(updated, index);
                                                     return updated;
                                                 })
                                                 setIsUnsaved(true);

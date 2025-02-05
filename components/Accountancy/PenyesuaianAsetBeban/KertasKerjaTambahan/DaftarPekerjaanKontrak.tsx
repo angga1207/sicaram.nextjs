@@ -195,6 +195,22 @@ const DaftarPekerjaanKontrak = (data: any) => {
         ]);
     }
 
+    const updatedData = (data: any, index: number) => {
+        setDataInput((prev: any) => {
+            const updated = [...prev];
+            // --------------------------- INI BELUM SUDAH YAA !!!!!!!!!!!!!!!!!!!!
+
+            // const keysToSumPlus = ['plus_aset_tetap_tanah', 'plus_aset_tetap_peralatan_mesin', 'plus_aset_tetap_gedung_bangunan', 'plus_aset_tetap_jalan_jaringan_irigasi', 'plus_aset_tetap_lainnya', 'plus_konstruksi_dalam_pekerjaan', 'plus_aset_lain_lain'];
+            // const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + parseFloat(updated[index][key] || 0), 0);
+            // updated[index]['plus_jumlah_penyesuaian'] = sumPlus;
+            // const keysToSumMinus = ['min_aset_tetap_tanah', 'min_aset_tetap_peralatan_mesin', 'min_aset_tetap_gedung_bangunan', 'min_aset_tetap_jalan_jaringan_irigasi', 'min_aset_tetap_lainnya', 'min_konstruksi_dalam_pekerjaan', 'min_aset_lain_lain'];
+            // const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + parseFloat(updated[index][key] || 0), 0);
+            // updated[index]['min_jumlah_penyesuaian'] = sumMinus;
+            return updated;
+        })
+        setIsUnsaved(true);
+    }
+
     useEffect(() => {
         if (isMounted && dataInput.length > 0) {
             setTotalData((prevState: any) => {

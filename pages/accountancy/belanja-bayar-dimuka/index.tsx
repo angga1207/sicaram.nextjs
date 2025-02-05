@@ -247,7 +247,7 @@ const Page = () => {
             const updated = [...prev];
             const dateStart = new Date(data[index].kontrak_date_start);
             const dateEnd = new Date(data[index].kontrak_date_end);
-            const monthRange = (dateEnd.getFullYear() - dateStart.getFullYear()) * 12 + (dateEnd.getMonth() - dateStart.getMonth());
+            const monthRange = ((dateEnd.getFullYear() - dateStart.getFullYear()) * 12 + (dateEnd.getMonth() - dateStart.getMonth())) + 1;
 
             if (monthRange >= 0) {
                 updated[index]['jangka_waktu'] = monthRange;
@@ -255,12 +255,12 @@ const Page = () => {
 
             if ((dateStart.getFullYear() < dateEnd.getFullYear()) && (dateStart.getMonth() <= 12)) {
                 const monthRangeToNow = 12 - dateStart.getMonth();
+                console.log(monthRangeToNow, monthRange);
                 updated[index]['sudah_jatuh_tempo'] = ((monthRangeToNow / monthRange) * parseFloat(data[index].kontrak_value)).toFixed(2);
             } else {
                 const monthRangeToNow = dateEnd.getMonth() - dateStart.getMonth();
                 updated[index]['sudah_jatuh_tempo'] = ((monthRangeToNow / monthRange) * parseFloat(data[index].kontrak_value)).toFixed(2);
             }
-
 
             updated[index]['belum_jatuh_tempo'] = (parseFloat(data[index].kontrak_value) - parseFloat(updated[index]['sudah_jatuh_tempo'])).toFixed(2);
             return updated;
