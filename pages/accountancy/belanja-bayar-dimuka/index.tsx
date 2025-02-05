@@ -255,7 +255,6 @@ const Page = () => {
 
             if ((dateStart.getFullYear() < dateEnd.getFullYear()) && (dateStart.getMonth() <= 12)) {
                 const monthRangeToNow = 12 - dateStart.getMonth();
-                console.log(monthRangeToNow, monthRange);
                 updated[index]['sudah_jatuh_tempo'] = ((monthRangeToNow / monthRange) * parseFloat(data[index].kontrak_value)).toFixed(2);
             } else {
                 const monthRangeToNow = dateEnd.getMonth() - dateStart.getMonth();
