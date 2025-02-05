@@ -247,7 +247,7 @@ const Page = () => {
             const updated = [...prev];
             const dateStart = new Date(data[index].kontrak_date_start);
             const dateEnd = new Date(data[index].kontrak_date_end);
-            const monthRange = ((dateEnd.getFullYear() - dateStart.getFullYear()) * 12 + (dateEnd.getMonth() - dateStart.getMonth())) + 1;
+            const monthRange = (dateEnd.getFullYear() - dateStart.getFullYear()) * 12 + (dateEnd.getMonth() - dateStart.getMonth());
 
             if (monthRange >= 0) {
                 updated[index]['jangka_waktu'] = monthRange;
