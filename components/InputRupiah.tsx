@@ -1,4 +1,9 @@
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tippy from "@tippyjs/react";
+import 'tippy.js/dist/tippy.css';
 import { isEmpty } from "lodash";
+import Swal from "sweetalert2";
 
 const InputRupiah = (
     { dataValue, onChange, isDisabled = false, readOnly = false, isRealisasi = false, onBlur, }:
@@ -27,9 +32,26 @@ const InputRupiah = (
                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                         Rp.
                     </div>
-                    <div className={`form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''}`}>
+                    <div className={`form-input w-[250px] rounded-none font-semibold text-end bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''}`}>
                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(dataValue)}
                     </div>
+                    {/* Copy Data */}
+                    <Tippy content="Salin Data" placement="top" theme="secondary">
+                        <div className={`bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] select-none cursor-pointer`}
+                            onClick={() => {
+                                navigator.clipboard.writeText(dataValue);
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Data berhasil disalin',
+                                    showConfirmButton: false,
+                                    timer: 5000
+                                });
+                            }}>
+                            <FontAwesomeIcon icon={faCopy} className="text-purple-600 cursor-pointer w-4 h-4" />
+                        </div>
+                    </Tippy>
                 </div>
             ) : (
                 <div className="flex group">
@@ -41,9 +63,7 @@ const InputRupiah = (
                     <input
                         type="text"
                         onFocus={(e) => {
-                            if (parseFloat(e.target.value) == 0) {
-                                e.target.select();
-                            }
+                            e.target.select();
                         }}
                         onKeyDown={(e) => {
                             if (!(
@@ -82,10 +102,27 @@ const InputRupiah = (
                             }
                         }}
                         disabled={isDisabled}
-                        className={`form-input font-semibold text-end hidden group-focus-within:block group-hover:block disabled:bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] ltr:rounded-l-none rtl:rounded-r-none'}`} />
-                    <div className={`form-input font-semibold text-end block group-focus-within:hidden group-hover:hidden ${isDisabled ? 'bg-slate-200' : ''} ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] ltr:rounded-l-none rtl:rounded-r-none'}`}>
+                        className={`form-input font-semibold text-end hidden group-focus-within:block group-hover:block disabled:bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] rounded-none'}`} />
+                    <div className={`form-input font-semibold text-end block group-focus-within:hidden group-hover:hidden ${isDisabled ? 'bg-slate-200' : ''} ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] rounded-none'}`}>
                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(dataValue)}
                     </div>
+                    {/* Copy Data */}
+                    <Tippy content="Salin Data" placement="top" theme="secondary">
+                        <div className={`bg-[#eee] flex justify-center items-center ltr:rounded-r-md rtl:rounded-l-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] select-none cursor-pointer`}
+                            onClick={() => {
+                                navigator.clipboard.writeText(dataValue);
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Data berhasil disalin',
+                                    showConfirmButton: false,
+                                    timer: 5000
+                                });
+                            }}>
+                            <FontAwesomeIcon icon={faCopy} className="text-purple-600 cursor-pointer w-4 h-4" />
+                        </div>
+                    </Tippy>
                 </div>
             )}
         </>

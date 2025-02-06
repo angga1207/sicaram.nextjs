@@ -56,7 +56,16 @@ const HutangBaru = (param: any) => {
         }
         setPeriode(paramData[2]);
         setYear(paramData[3]);
-        setYears(paramData[5]);
+        // setYears(paramData[5]);
+        let arrYears = [];
+        for (let i = 2015; i <= new Date().getFullYear() + 1; i++) {
+            arrYears.push({
+                value: i,
+                label: i
+            });
+        }
+        arrYears = arrYears.reverse();
+        setYears(arrYears);
     }, [isMounted]);
 
     const [instance, setInstance] = useState<any>((router.query.instance ?? null) ?? CurrentUser?.instance_id);

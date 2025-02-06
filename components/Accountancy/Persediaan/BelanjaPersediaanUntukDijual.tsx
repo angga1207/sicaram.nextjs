@@ -8,6 +8,7 @@ import IconTrash from '@/components/Icon/IconTrash';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { deleteBelanjaPersediaan, getBelanjaPersediaan, storeBelanjaPersediaan } from '@/apis/Accountancy/Persediaan';
+import InputRupiah from '@/components/InputRupiah';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -347,50 +348,20 @@ const BelanjaPersediaanUntukDijual = (data: any) => {
                                     </div>
                                 </td>
                                 <td className='border'>
-                                    <div className="flex group">
-                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            Rp.
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onKeyDown={(e) => {
-                                                if (!(
-                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                    e.keyCode == 8 ||
-                                                    e.keyCode == 46 ||
-                                                    e.keyCode == 37 ||
-                                                    e.keyCode == 39 ||
-                                                    e.keyCode == 188 ||
-                                                    e.keyCode == 9 ||
-                                                    // copy & paste
-                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                    // command + c & command + v
-                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                    // command + a
-                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                )) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
-                                            value={data.saldo_awal}
-                                            onChange={(e) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    const value = parseFloat(e?.target?.value);
-                                                    updated[index]['saldo_awal'] = isNaN(value) ? 0 : value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                            }}
-                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.saldo_awal)}
-                                        </div>
-                                    </div>
+                                    <InputRupiah
+                                        isDisabled={isSaving == true}
+                                        // readOnly={true}
+                                        dataValue={data.saldo_awal}
+                                        onChange={(value: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['saldo_awal'] = value;
+                                                updatedData(updated, index);
+                                                return updated;
+                                            });
+                                            setIsUnsaved(true);
+                                        }}
+                                    />
                                 </td>
                                 <td className='border'>
                                     <Select placeholder="Pilih Kode Rekening"
@@ -424,198 +395,84 @@ const BelanjaPersediaanUntukDijual = (data: any) => {
                                         } />
                                 </td>
                                 <td className='border'>
-                                    <div className="flex group">
-                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            Rp.
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onKeyDown={(e) => {
-                                                if (!(
-                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                    e.keyCode == 8 ||
-                                                    e.keyCode == 46 ||
-                                                    e.keyCode == 37 ||
-                                                    e.keyCode == 39 ||
-                                                    e.keyCode == 188 ||
-                                                    e.keyCode == 9 ||
-                                                    // copy & paste
-                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                    // command + c & command + v
-                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                    // command + a
-                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                )) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
-                                            value={data.realisasi_lra}
-                                            onChange={(e) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    const value = parseFloat(e?.target?.value);
-                                                    updated[index]['realisasi_lra'] = isNaN(value) ? 0 : value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                            }}
-                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.realisasi_lra)}
-                                        </div>
-                                    </div>
+                                    <InputRupiah
+                                        isDisabled={isSaving == true}
+                                        // readOnly={true}
+                                        dataValue={data.realisasi_lra}
+                                        onChange={(value: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['realisasi_lra'] = value;
+                                                updatedData(updated, index);
+                                                return updated;
+                                            });
+                                            setIsUnsaved(true);
+                                        }}
+                                    />
                                 </td>
                                 <td className='border'>
-                                    <div className="flex group">
-                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            Rp.
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onKeyDown={(e) => {
-                                                if (!(
-                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                    e.keyCode == 8 ||
-                                                    e.keyCode == 46 ||
-                                                    e.keyCode == 37 ||
-                                                    e.keyCode == 39 ||
-                                                    e.keyCode == 188 ||
-                                                    e.keyCode == 9 ||
-                                                    // copy & paste
-                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                    // command + c & command + v
-                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                    // command + a
-                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                )) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
-                                            value={data.hutang_belanja}
-                                            onChange={(e) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    const value = parseFloat(e?.target?.value);
-                                                    updated[index]['hutang_belanja'] = isNaN(value) ? 0 : value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                            }}
-                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.hutang_belanja)}
-                                        </div>
-                                    </div>
+                                    <InputRupiah
+                                        isDisabled={isSaving == true}
+                                        // readOnly={true}
+                                        dataValue={data.hutang_belanja}
+                                        onChange={(value: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['hutang_belanja'] = value;
+                                                updatedData(updated, index);
+                                                return updated;
+                                            });
+                                            setIsUnsaved(true);
+                                        }}
+                                    />
                                 </td>
                                 <td className='border'>
-                                    <div className="flex group">
-                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            Rp.
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onKeyDown={(e) => {
-                                                if (!(
-                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                    e.keyCode == 8 ||
-                                                    e.keyCode == 46 ||
-                                                    e.keyCode == 37 ||
-                                                    e.keyCode == 39 ||
-                                                    e.keyCode == 188 ||
-                                                    e.keyCode == 9 ||
-                                                    // copy & paste
-                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                    // command + c & command + v
-                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                    // command + a
-                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                )) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
-                                            value={data.perolehan_hibah}
-                                            onChange={(e) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    const value = parseFloat(e?.target?.value);
-                                                    updated[index]['perolehan_hibah'] = isNaN(value) ? 0 : value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                            }}
-                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.perolehan_hibah)}
-                                        </div>
-                                    </div>
+                                    <InputRupiah
+                                        isDisabled={isSaving == true}
+                                        // readOnly={true}
+                                        dataValue={data.perolehan_hibah}
+                                        onChange={(value: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['perolehan_hibah'] = value;
+                                                updatedData(updated, index);
+                                                return updated;
+                                            });
+                                            setIsUnsaved(true);
+                                        }}
+                                    />
                                 </td>
                                 <td className='border'>
-                                    <div className="flex group">
-                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            Rp.
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onKeyDown={(e) => {
-                                                if (!(
-                                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
-                                                    e.keyCode == 8 ||
-                                                    e.keyCode == 46 ||
-                                                    e.keyCode == 37 ||
-                                                    e.keyCode == 39 ||
-                                                    e.keyCode == 188 ||
-                                                    e.keyCode == 9 ||
-                                                    // copy & paste
-                                                    (e.keyCode == 67 && e.ctrlKey) ||
-                                                    (e.keyCode == 86 && e.ctrlKey) ||
-                                                    // command + c & command + v
-                                                    (e.keyCode == 67 && e.metaKey) ||
-                                                    (e.keyCode == 86 && e.metaKey) ||
-                                                    // command + a
-                                                    (e.keyCode == 65 && e.metaKey) ||
-                                                    (e.keyCode == 65 && e.ctrlKey)
-                                                )) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
-                                            value={data.saldo_akhir}
-                                            onChange={(e) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    const value = parseFloat(e?.target?.value);
-                                                    updated[index]['saldo_akhir'] = isNaN(value) ? 0 : value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                            }}
-                                            className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end hidden group-focus-within:block group-hover:block" />
-                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end block group-focus-within:hidden group-hover:hidden">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.saldo_akhir)}
-                                        </div>
-                                    </div>
+                                    <InputRupiah
+                                        isDisabled={isSaving == true}
+                                        // readOnly={true}
+                                        dataValue={data.saldo_akhir}
+                                        onChange={(value: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['saldo_akhir'] = value;
+                                                updatedData(updated, index);
+                                                return updated;
+                                            });
+                                            setIsUnsaved(true);
+                                        }}
+                                    />
                                 </td>
                                 <td className='border'>
-                                    <div className="flex group">
-                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
-                                            Rp.
-                                        </div>
-                                        <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200">
-                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.beban_hibah)}
-                                        </div>
-                                    </div>
+                                    <InputRupiah
+                                        // isDisabled={isSaving == true}
+                                        readOnly={true}
+                                        dataValue={data.beban_hibah}
+                                        onChange={(value: any) => {
+                                            setDataInput((prev: any) => {
+                                                const updated = [...prev];
+                                                updated[index]['beban_hibah'] = value;
+                                                updatedData(updated, index);
+                                                return updated;
+                                            });
+                                            setIsUnsaved(true);
+                                        }}
+                                    />
                                 </td>
 
                             </tr>

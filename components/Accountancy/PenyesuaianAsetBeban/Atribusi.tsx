@@ -82,7 +82,7 @@ const Atribusi = (data: any) => {
     useEffect(() => {
         if (paramData[1]?.length > 0) {
             const arrKodeRekening = paramData[1].map((data: any, index: number) => {
-                if (data.code_2 == 1 && data.code_3 == '02') {
+                if (data.code_2 == 2) {
                     return {
                         id: data?.id,
                         code_1: data?.code_1,
