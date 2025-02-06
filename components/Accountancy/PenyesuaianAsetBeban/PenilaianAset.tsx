@@ -741,7 +741,7 @@ const PenilaianAset = (data: any) => {
                             <td colSpan={1} className='border text-center p-3'>
                                 Total
                             </td>
-                            <td colSpan={3} className='border text-center p-3'>
+                            <td colSpan={([1, 2, 3, 4, 5, 10].includes(CurrentUser?.role_id)) ? 3 : 3} className='border text-center p-3'>
                                 {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.total_data)} Item
                             </td>
                             <td className='border text-end p-3'>
