@@ -193,7 +193,7 @@ const PenghapusanAset = (data: any) => {
         setDataInput((prevData: any) => {
             const updated = [...prevData];
             const keysToSum = ['persediaan', 'aset_tetap_tanah', 'aset_tetap_peralatan_mesin', 'aset_tetap_gedung_bangunan', 'aset_tetap_jalan_jaringan_irigasi', 'aset_tetap_lainnya', 'konstruksi_dalam_pekerjaan', 'aset_lainnya'];
-            const sumPenyesuaian = keysToSum.reduce((acc, key) => acc + (data[index][key] || 0), 0);
+            const sumPenyesuaian = keysToSum.reduce((acc, key) => acc + parseFloat(data[index][key] || 0), 0);
             updated[index]['jumlah_penyesuaian'] = sumPenyesuaian;
             return updated;
         })

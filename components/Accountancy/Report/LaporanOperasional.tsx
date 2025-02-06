@@ -128,7 +128,7 @@ const LaporanOperasional = (data: any) => {
                         Laporan Operasional
                     </h3>
                     <div className="">
-                        {instance && (
+                        {(instance && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
                                 onClick={() => {
                                     Swal.fire({

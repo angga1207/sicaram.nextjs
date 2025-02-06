@@ -1226,7 +1226,7 @@ const KIB_C = (data: any) => {
                                 confirmButtonText: 'Simpan',
                                 cancelButtonText: 'Batal',
                                 cancelButtonColor: '#3085d6',
-                                confirmButtonColor: '#d33',
+                                confirmButtonColor: '#00ab55',
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     _saveData();

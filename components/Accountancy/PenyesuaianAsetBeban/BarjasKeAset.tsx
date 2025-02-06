@@ -224,10 +224,10 @@ const BarjasKeAset = (data: any) => {
         setDataInput((prev: any) => {
             const updated = [...prev];
             const keysToSumPlus = ['plus_aset_tetap_tanah', 'plus_aset_tetap_peralatan_mesin', 'plus_aset_tetap_gedung_bangunan', 'plus_aset_tetap_jalan_jaringan_irigasi', 'plus_aset_tetap_lainnya', 'plus_konstruksi_dalam_pekerjaan', 'plus_aset_lain_lain'];
-            const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + (updated[index][key] || 0), 0);
+            const sumPlus = keysToSumPlus.reduce((acc: any, key: any) => acc + parseFloat(updated[index][key] || 0), 0);
             updated[index]['plus_jumlah_penyesuaian'] = sumPlus;
             const keysToSumMinus = ['min_beban_pegawai', 'min_beban_persediaan', 'min_beban_jasa', 'min_beban_pemeliharaan', 'min_beban_perjalanan_dinas', 'min_beban_hibah', 'min_beban_lain_lain'];
-            const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + (updated[index][key] || 0), 0);
+            const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + parseFloat(updated[index][key] || 0), 0);
             updated[index]['min_jumlah_penyesuaian'] = sumMinus;
             return updated;
         })

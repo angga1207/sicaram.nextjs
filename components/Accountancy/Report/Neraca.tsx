@@ -126,7 +126,7 @@ const Neraca = (data: any) => {
                         Laporan Neraca
                     </h3>
                     <div className="flex items-center gap-2">
-                        {instance && (
+                        {(instance && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
                                 onClick={() => {
                                     Swal.fire({
