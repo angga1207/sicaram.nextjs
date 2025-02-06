@@ -192,7 +192,7 @@ const Pemeliharaan = (data: any) => {
             const sumMinus = keysToSumMinus.reduce((acc: any, key: any) => acc + (parseFloat(updated[index][key]) || 0), 0);
             updated[index]['min_total'] = sumMinus;
 
-            updated[index].beban_lo = (updated[index].realisasi_belanja + sumPlus) - sumMinus;
+            updated[index].beban_lo = (parseFloat(updated[index].realisasi_belanja) + parseFloat(sumPlus)) - parseFloat(sumMinus);
             return updated;
         })
         setIsUnsaved(true);
