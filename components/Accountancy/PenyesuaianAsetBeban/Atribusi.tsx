@@ -72,6 +72,8 @@ const Atribusi = (data: any) => {
     const [instance, setInstance] = useState<any>((router.query.instance ?? null) ?? CurrentUser?.instance_id);
     const [instances, setInstances] = useState<any>([]);
     const [arrKodeRekening, setArrKodeRekening] = useState<any>([])
+    const [arrKodeRekening2, setArrKodeRekening2] = useState<any>([])
+    const [arrKodeRekening3, setArrKodeRekening3] = useState<any>([])
 
     useEffect(() => {
         if (paramData[0]?.length > 0) {
@@ -82,7 +84,7 @@ const Atribusi = (data: any) => {
     useEffect(() => {
         if (paramData[1]?.length > 0) {
             const arrKodeRekening = paramData[1].map((data: any, index: number) => {
-                if (data.code_2 == 2) {
+                if (data.code_2 == 1 && data.code_3 == '01') {
                     return {
                         id: data?.id,
                         code_1: data?.code_1,
@@ -101,6 +103,48 @@ const Atribusi = (data: any) => {
                 }
             }).filter((data: any) => data != null);
             setArrKodeRekening(arrKodeRekening)
+
+            const arrKodeRekening2 = paramData[1].map((data: any, index: number) => {
+                if (data.code_2 == 1 && data.code_3 == '02') {
+                    return {
+                        id: data?.id,
+                        code_1: data?.code_1,
+                        code_2: data?.code_2,
+                        code_3: data?.code_3,
+                        code_4: data?.code_4,
+                        code_5: data?.code_5,
+                        code_6: data?.code_6,
+                        fullcode: data?.fullcode,
+                        name: data?.name,
+                        periode_id: data?.periode_id,
+                        year: data?.year,
+                    }
+                } else {
+                    return null;
+                }
+            }).filter((data: any) => data != null);
+            setArrKodeRekening2(arrKodeRekening2)
+
+            const arrKodeRekening3 = paramData[1].map((data: any, index: number) => {
+                if (data.code_2 == 2) {
+                    return {
+                        id: data?.id,
+                        code_1: data?.code_1,
+                        code_2: data?.code_2,
+                        code_3: data?.code_3,
+                        code_4: data?.code_4,
+                        code_5: data?.code_5,
+                        code_6: data?.code_6,
+                        fullcode: data?.fullcode,
+                        name: data?.name,
+                        periode_id: data?.periode_id,
+                        year: data?.year,
+                    }
+                } else {
+                    return null;
+                }
+            }).filter((data: any) => data != null);
+            setArrKodeRekening3(arrKodeRekening3)
         }
         if (paramData[4]) {
             setInstance(paramData[4]);
@@ -378,10 +422,10 @@ const Atribusi = (data: any) => {
                                 Nama Rekening
                             </th>
                             <th className='whitespace-nowrap border text-center'>
-                                Belanja 2022 (Rp)
+                                Belanja {year} (Rp)
                             </th>
                             <th className='whitespace-nowrap border text-center'>
-                                Hutang 2022 (Rp)
+                                Hutang {year} (Rp)
                             </th>
                             <th className='whitespace-nowrap border text-center'>
                                 Jumlah (Rp)
@@ -396,10 +440,10 @@ const Atribusi = (data: any) => {
                                 Nama Rekening & Rincian Paket Pekerjaannya
                             </th>
                             <th className='whitespace-nowrap border text-center'>
-                                Belanja 2022 (Rp)
+                                Belanja {year} (Rp)
                             </th>
                             <th className='whitespace-nowrap border text-center'>
-                                Hutang 2022 (Rp)
+                                Hutang {year} (Rp)
                             </th>
                             <th className='whitespace-nowrap border text-center'>
                                 Jumlah (Rp)
@@ -414,10 +458,10 @@ const Atribusi = (data: any) => {
                                 Nama Rekening
                             </th>
                             <th className='whitespace-nowrap border text-center'>
-                                Belanja 2023 (Rp)
+                                Belanja {year} (Rp)
                             </th>
                             <th className='whitespace-nowrap border text-center'>
-                                Hutang 2023 (Rp)
+                                Hutang {year} (Rp)
                             </th>
                             <th className='whitespace-nowrap border text-center'>
                                 Jumlah (Rp)
@@ -672,12 +716,12 @@ const Atribusi = (data: any) => {
                                             setDataInput((prev: any) => {
                                                 const updated = [...prev];
                                                 updated[index]['bel_barjas_kode_rekening_id'] = e?.value;
-                                                updated[index]['bel_barjas_nama_rekening_rincian_paket'] = arrKodeRekening?.filter((data: any, index: number) => data?.id === e.value)[0].name
+                                                updated[index]['bel_barjas_nama_rekening_rincian_paket'] = arrKodeRekening2?.filter((data: any, index: number) => data?.id === e.value)[0].name
                                                 return updated;
                                             })
                                         }}
                                         value={
-                                            arrKodeRekening?.map((data: any, index: number) => {
+                                            arrKodeRekening2?.map((data: any, index: number) => {
                                                 if (data.id == input.bel_barjas_kode_rekening_id) {
                                                     return {
                                                         value: data.id,
@@ -687,7 +731,7 @@ const Atribusi = (data: any) => {
                                             })
                                         }
                                         options={
-                                            arrKodeRekening?.map((data: any, index: number) => {
+                                            arrKodeRekening2?.map((data: any, index: number) => {
                                                 return {
                                                     value: data.id,
                                                     label: data.fullcode + ' - ' + data.name,
@@ -787,12 +831,12 @@ const Atribusi = (data: any) => {
                                                 setDataInput((prev: any) => {
                                                     const updated = [...prev];
                                                     updated[index]['bel_modal_kode_rekening_id'] = e?.value;
-                                                    updated[index]['bel_modal_nama_rekening_rincian_paket'] = arrKodeRekening?.filter((data: any, index: number) => data?.id === e.value)[0].name
+                                                    updated[index]['bel_modal_nama_rekening_rincian_paket'] = arrKodeRekening3?.filter((data: any, index: number) => data?.id === e.value)[0].name
                                                     return updated;
                                                 })
                                             }}
                                             value={
-                                                arrKodeRekening?.map((data: any, index: number) => {
+                                                arrKodeRekening3?.map((data: any, index: number) => {
                                                     if (data.id == input.bel_modal_kode_rekening_id) {
                                                         return {
                                                             value: data.id,
@@ -802,7 +846,7 @@ const Atribusi = (data: any) => {
                                                 })
                                             }
                                             options={
-                                                arrKodeRekening?.map((data: any, index: number) => {
+                                                arrKodeRekening3?.map((data: any, index: number) => {
                                                     return {
                                                         value: data.id,
                                                         label: data.fullcode + ' - ' + data.name,

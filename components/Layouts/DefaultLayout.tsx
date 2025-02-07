@@ -10,6 +10,7 @@ import Setting from './Setting';
 import Portals from '../../components/Portals';
 import { useRouter } from 'next/router';
 import OfflineModal from '../OfflineModal';
+import Calculator from './Calculator';
 
 const DefaultLayout = ({ children }: PropsWithChildren) => {
     const router = useRouter();
@@ -101,6 +102,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
                     )}
                 </div>
                 {/* BEGIN APP SETTING LAUNCHER */}
+                {/* <Calculator /> */}
                 <Setting />
                 {/* END APP SETTING LAUNCHER */}
                 <div className={`${themeConfig.navbar} main-container min-h-screen text-black dark:text-white-dark`}>
