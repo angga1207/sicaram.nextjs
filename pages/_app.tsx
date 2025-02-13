@@ -107,7 +107,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
                     })
                     .then((result) => {
                         if (result.value) {
-                            
+                            // swalWithBootstrapButtons.fire('Aktif', 'Notifikasi berhasil diaktifkan', 'success');
+                            Notification.requestPermission().then((permission) => {
+                                if (permission === 'granted') {
+                                    showAlert('success', 'Notifikasi berhasil diaktifkan');
+                                }
+                            });
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
                             // swalWithBootstrapButtons.fire('Batal', 'Pengaktifan notifikasi dibatalkan', 'info');
                         }

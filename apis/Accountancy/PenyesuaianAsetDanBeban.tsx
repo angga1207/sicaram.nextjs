@@ -412,7 +412,7 @@ export async function deleteMutasiAset(id: any) {
 // Mutasi Aset
 
 // Dafter Pekerjaan
-export async function getDaftarPekerjaan(instance: any = null, periode: any, year: any) {
+export async function getDaftarPekerjaan(instance: any = null, periode: any, year: any, page: any) {
     try {
         const res = await axios.get(baseUri + '/accountancy/padb/6.2', {
             headers: {
@@ -420,6 +420,7 @@ export async function getDaftarPekerjaan(instance: any = null, periode: any, yea
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
+                page: page,
                 periode: periode,
                 year: year,
                 instance: instance,

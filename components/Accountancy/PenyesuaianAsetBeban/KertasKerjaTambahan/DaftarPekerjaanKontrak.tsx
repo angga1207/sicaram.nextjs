@@ -11,6 +11,7 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.css';
 import IconTrash from '@/components/Icon/IconTrash';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { forEach } from 'lodash';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -95,12 +96,18 @@ const DaftarPekerjaanKontrak = (data: any) => {
         kewajiban_tidak_terbayar_sd_desember: 0,
     });
 
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [maxPage, setMaxPage] = useState<number>(1)
+
     const _getDatas = () => {
         if (periode?.id) {
-            getDaftarPekerjaan(instance, periode?.id, year).then((res: any) => {
+            getDaftarPekerjaan(instance, periode?.id, year, currentPage).then((res: any) => {
                 if (res.status == 'success') {
-                    if (res.data.length > 0) {
-                        setDataInput(res.data);
+                    if (res.data.data.length > 0) {
+                        console.log(res.data.data)
+                        setDataInput(res.data.data);
+                        setCurrentPage(res.data.current_page ?? 1)
+                        setMaxPage(res.data.max_page.last_page ?? 1)
                     } else {
                         setDataInput([
                             {
@@ -154,7 +161,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
         else if (isMounted && periode?.id && year && instance) {
             _getDatas();
         }
-    }, [isMounted, instance, periode?.id, year]);
+    }, [isMounted, instance, periode?.id, year, currentPage]);
 
     const addDataInput = () => {
         setDataInput([
@@ -1100,36 +1107,62 @@ const DaftarPekerjaanKontrak = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        if (isSaving == false) {
-                            addDataInput()
-                        }
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-                {isSaving == false ? (
-                    <button type="button"
-                        onClick={(e) => {
-                            save()
+            <div className="flex items-center justify-between gap-4 mt-4 px-5">
+                <div className="">
+                    <Select
+                        placeholder="Halaman"
+                        className='w-[200px]'
+                        classNamePrefix={'selectAngga'}
+                        menuPlacement={'top'}
+                        isDisabled={isSaving == true}
+                        options={Array.from({ length: maxPage }, (_, index) => {
+                            return {
+                                value: index + 1,
+                                label: 'Halaman ' + (index + 1),
+                            }
+                        })}
+                        onChange={(e: any) => {
+                            setCurrentPage(e?.value)
                         }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Daftar Pekerjaan
-                    </button>
-                ) : (
+                        value={
+                            {
+                                value: currentPage,
+                                label: 'Halaman ' + currentPage,
+                            }
+                        }
+                    />
+                </div>
+                <div className="flex items-center justify-end gap-4">
                     <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
+                        disabled={isSaving == true}
+                        onClick={(e) => {
+                            if (isSaving == false) {
+                                addDataInput()
+                            }
+                        }}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                        Tambah Data
                     </button>
-                )}
+
+                    {isSaving == false ? (
+                        <button type="button"
+                            onClick={(e) => {
+                                save()
+                            }}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                            Simpan Daftar Pekerjaan
+                        </button>
+                    ) : (
+                        <button type="button"
+                            disabled={true}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                            Menyimpan..
+                        </button>
+                    )}
+                </div>
 
             </div>
         </>
