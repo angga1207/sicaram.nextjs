@@ -104,7 +104,6 @@ const DaftarPekerjaanKontrak = (data: any) => {
             getDaftarPekerjaan(instance, periode?.id, year, currentPage).then((res: any) => {
                 if (res.status == 'success') {
                     if (res.data.data.length > 0) {
-                        console.log(res.data.data)
                         setDataInput(res.data.data);
                         setCurrentPage(res.data.current_page ?? 1)
                         setMaxPage(res.data.max_page.last_page ?? 1)
@@ -151,6 +150,19 @@ const DaftarPekerjaanKontrak = (data: any) => {
     }
 
     useEffect(() => {
+        setDataInput([])
+        setTotalData({
+            total_data: 0,
+            nilai_belanja_kontrak: 0,
+
+            payment_1_jumlah: 0,
+            payment_2_jumlah: 0,
+            payment_3_jumlah: 0,
+            payment_4_jumlah: 0,
+
+            jumlah_pembayaran_sd_desember: 0,
+            kewajiban_tidak_terbayar_sd_desember: 0,
+        });
         if (isMounted && periode?.id && year && !instance) {
             if ([9].includes(CurrentUser?.role_id)) {
                 setInstance(CurrentUser?.instance_id ?? '');
@@ -375,7 +387,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border text-center font-semibold'>
-                                            {index + 1}
+                                            {((currentPage * 10) - 10) + (index + 1)}
                                         </td>
                                         <td>
                                             <div className="flex justify-center items-center gap-2">

@@ -97,9 +97,12 @@ const HibahKeluar = (data: any) => {
 
     });
 
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [maxPage, setMaxPage] = useState<number>(1)
+
     const _getDatas = () => {
         if (periode?.id) {
-            getHibahKeluar(instance, periode?.id, year).then((res: any) => {
+            getHibahKeluar(instance, periode?.id, year, currentPage).then((res: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
@@ -134,6 +137,20 @@ const HibahKeluar = (data: any) => {
 
 
     useEffect(() => {
+        setDataInput([])
+        setTotalData({
+            total_data: 0,
+            nilai: 0,
+
+            persediaan: 0,
+            aset_tetap_tanah: 0,
+            aset_tetap_peralatan_mesin: 0,
+            aset_tetap_gedung_bangunan: 0,
+            aset_tetap_jalan_jaringan_irigasi: 0,
+            aset_tetap_lainnya: 0,
+            konstruksi_dalam_pekerjaan: 0,
+            aset_lainnya: 0,
+        });
         if (isMounted && periode?.id && year && !instance) {
             if ([9].includes(CurrentUser?.role_id)) {
                 setInstance(CurrentUser?.instance_id ?? '');
@@ -144,7 +161,7 @@ const HibahKeluar = (data: any) => {
         else if (isMounted && periode?.id && year && instance) {
             _getDatas();
         }
-    }, [isMounted, instance, periode?.id, year]);
+    }, [isMounted, instance, periode?.id, year, currentPage]);
 
     const addDataInput = () => {
         setDataInput([
@@ -299,7 +316,9 @@ const HibahKeluar = (data: any) => {
                             dataInput.map((item: any, index: number) => {
                                 return (
                                     <tr key={index} className='text-center'>
-                                        <td className='border'>{index + 1}</td>
+                                        <td className='border'>
+                                            {((currentPage * 10) - 10) + (index + 1)}
+                                        </td>
                                         <td>
                                             <div className="flex justify-center items-center gap-2">
                                                 <Tippy content={`Dibuat Oleh : ${item.created_by ?? ''} | Diperbarui Oleh : ${item.updated_by ?? ''}`}
@@ -954,37 +973,63 @@ const HibahKeluar = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        if (isSaving == false) {
-                            addDataInput()
-                        }
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-                {isSaving == false ? (
-                    <button type="button"
-                        onClick={(e) => {
-                            save()
+            <div className="flex items-center justify-between gap-4 mt-4 px-5">
+                <div className="">
+                    <Select
+                        placeholder="Halaman"
+                        className='w-[200px]'
+                        classNamePrefix={'selectAngga'}
+                        menuPlacement={'top'}
+                        isDisabled={isSaving == true}
+                        options={Array.from({ length: maxPage }, (_, index) => {
+                            return {
+                                value: index + 1,
+                                label: 'Halaman ' + (index + 1),
+                            }
+                        })}
+                        onChange={(e: any) => {
+                            setCurrentPage(e?.value)
                         }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Hibah Keluar
-                    </button>
-                ) : (
+                        value={
+                            {
+                                value: currentPage,
+                                label: 'Halaman ' + currentPage,
+                            }
+                        }
+                    />
+                </div>
+                <div className="flex items-center justify-end gap-4">
                     <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
+                        disabled={isSaving == true}
+                        onClick={(e) => {
+                            if (isSaving == false) {
+                                addDataInput()
+                            }
+                        }}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                        Tambah Data
                     </button>
-                )}
 
+                    {isSaving == false ? (
+                        <button type="button"
+                            onClick={(e) => {
+                                save()
+                            }}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                            Simpan Hibah Keluar
+                        </button>
+                    ) : (
+                        <button type="button"
+                            disabled={true}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                            Menyimpan..
+                        </button>
+                    )}
+
+                </div>
             </div>
         </>
     );
