@@ -104,8 +104,10 @@ const HibahKeluar = (data: any) => {
         if (periode?.id) {
             getHibahKeluar(instance, periode?.id, year, currentPage).then((res: any) => {
                 if (res.status == 'success') {
-                    if (res.data.length > 0) {
-                        setDataInput(res.data);
+                    if (res.data.data.length > 0) {
+                        setDataInput(res.data.data);
+                        setCurrentPage(res.data.current_page ?? 1)
+                        setMaxPage(res.data.max_page.last_page ?? 1)
                     } else {
                         setDataInput([
                             {

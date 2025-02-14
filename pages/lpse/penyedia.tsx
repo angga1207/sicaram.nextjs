@@ -56,7 +56,11 @@ const Page = () => {
                 router.query.year = new Date().getFullYear().toString();
                 router.push(router)
             }
-            setYear(parseInt(router.query.year as string));
+            if (localStorage.getItem('year')) {
+                setYear(localStorage.getItem('year'));
+            } else {
+                setYear(parseInt(router.query.year as string));
+            }
         }
     }, [isMounted, periode?.id, router.query.year]);
 
@@ -156,7 +160,7 @@ const Page = () => {
                         <p className="text-sm text-gray-500">Daftar paket yang telah terumumkan dari Sirup</p>
                     </div>
                     <div className="">
-                        <select className="form-select !pr-10"
+                        {/* <select className="form-select !pr-10"
                             value={year}
                             onChange={(e) => setYear(parseInt(e.target.value))}
                         >
@@ -165,7 +169,7 @@ const Page = () => {
                                     {item?.label}
                                 </option>
                             ))}
-                        </select>
+                        </select> */}
                     </div>
                 </div>
 

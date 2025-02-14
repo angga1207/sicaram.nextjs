@@ -55,10 +55,10 @@ const Page = () => {
     useEffect(() => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
-            if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
+            if (localStorage.getItem('year')) {
+                setYear(localStorage.getItem('year'));
             } else {
-                setYear(periode?.start_year)
+                setYear(currentYear);
             }
         }
     }, [isMounted, periode?.id])
@@ -66,11 +66,8 @@ const Page = () => {
     const [slug, setSlug] = useState<any>(null);
 
     useEffect(() => {
-        if (isMounted) {
-            setYear(parseInt(router.query.year as string));
-        }
         setSlug(router.query.slug as string);
-    }, [router.query.year]);
+    }, [router.query.slug]);
 
     const CurrentToken = getCookie('token');
     const baseUri = BaseUri();
@@ -81,7 +78,13 @@ const Page = () => {
     const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
     const [isEmptyData, setIsEmptyData] = useState<boolean>(false);
 
-    const fetchData = async (slug: any) => {
+    useEffect(() => {
+        if (isMounted && year && slug) {
+            fetchData(slug, year);
+        }
+    }, [slug, isMounted, year]);
+
+    const fetchData = async (slug: any, year: any) => {
         if (slug) {
             setIsEmptyData(false);
             setIsLoadingData(true);
@@ -100,7 +103,7 @@ const Page = () => {
             if (data.data.length == 0) {
                 setIsEmptyData(true);
             }
-            if (data.data.data.length == 0) {
+            if (data?.data?.data?.length == 0) {
                 setIsEmptyData(true);
             }
             setIsLoadingData(false);
@@ -145,12 +148,6 @@ const Page = () => {
         setModalDetail(false);
         setDetail(null);
     }
-
-    useEffect(() => {
-        if (isMounted && year && periode?.id) {
-            fetchData(slug);
-        }
-    }, [slug, isMounted, year, periode?.id]);
 
 
     if (CurrentUser?.role_id >= 9) {

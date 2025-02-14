@@ -26,6 +26,7 @@ const Page = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [periode, setPeriode] = useState<any>({});
 
     useEffect(() => {
         setIsMounted(true);
@@ -36,23 +37,38 @@ const Page = () => {
     });
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
+
     useEffect(() => {
         if (document.cookie) {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
         }
+        if (isMounted) {
+            setPeriode(JSON.parse(localStorage.getItem('periode') ?? ""));
+        }
     }, [isMounted]);
 
-    const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
+    const [year, setYear] = useState<any>(null);
+    // const [year, setYear] = useState<number>(router.query.year ? parseInt(router.query.year as string) : new Date().getFullYear());
     const [slug, setSlug] = useState<any>(null);
 
+
     useEffect(() => {
-        if (isMounted) {
-            setYear(parseInt(router.query.year as string));
+        if (isMounted && periode?.id) {
+            const currentYear = new Date().getFullYear();
+            if (localStorage.getItem('year')) {
+                setYear(localStorage.getItem('year'));
+            } else {
+                setYear(currentYear);
+            }
         }
+    }, [isMounted, periode?.id])
+
+
+    useEffect(() => {
         setSlug(router.query.slug as string);
-    }, [router.query.year]);
+    }, [router.query.slug]);
 
     const CurrentToken = getCookie('token');
     const baseUri = BaseUri();
@@ -63,7 +79,13 @@ const Page = () => {
     const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
     const [isEmptyData, setIsEmptyData] = useState<boolean>(false);
 
-    const fetchData = async (slug: any) => {
+    useEffect(() => {
+        if (isMounted && year && slug) {
+            fetchData(slug, year);
+        }
+    }, [slug, isMounted, year]);
+
+    const fetchData = async (slug: any, year: any) => {
         if (slug) {
             setIsEmptyData(false);
             setIsLoadingData(true);
@@ -127,12 +149,6 @@ const Page = () => {
         setModalDetail(false);
         setDetail(null);
     }
-
-    useEffect(() => {
-        if (isMounted) {
-            fetchData(slug);
-        }
-    }, [slug, isMounted]);
 
 
     if (CurrentUser?.role_id >= 9) {
