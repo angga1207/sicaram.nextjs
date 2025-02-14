@@ -209,7 +209,7 @@ const Page = () => {
                                 e.preventDefault();
                                 if (search == '') {
                                     setDatas([]);
-                                    fetchData(slug);
+                                    fetchData(slug, year);
                                     return;
                                 }
                                 setDatas((prev) => {
@@ -228,7 +228,7 @@ const Page = () => {
                                         (e: any) => {
                                             if (e.target.value == '') {
                                                 setDatas([]);
-                                                fetchData(slug);
+                                                fetchData(slug, year);
                                             }
                                             setSearch(e.target.value)
                                         }
