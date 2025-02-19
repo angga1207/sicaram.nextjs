@@ -412,7 +412,7 @@ export async function deleteMutasiAset(id: any) {
 // Mutasi Aset
 
 // Dafter Pekerjaan
-export async function getDaftarPekerjaan(instance: any = null, periode: any, year: any, page: any) {
+export async function getDaftarPekerjaan(instance: any = null, periode: any, year: any) {
     try {
         const res = await axios.get(baseUri + '/accountancy/padb/6.2', {
             headers: {
@@ -420,7 +420,6 @@ export async function getDaftarPekerjaan(instance: any = null, periode: any, yea
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
-                page: page,
                 periode: periode,
                 year: year,
                 instance: instance,
@@ -480,7 +479,7 @@ export async function deleteDaftarPekerjaan(id: any) {
 // Dafter Pekerjaan
 
 // Hibah Masuk
-export async function getHibahMasuk(instance: any = null, periode: any, year: any, page: any) {
+export async function getHibahMasuk(instance: any = null, periode: any, year: any) {
     try {
         const res = await axios.get(baseUri + '/accountancy/padb/6.3', {
             headers: {
@@ -488,7 +487,6 @@ export async function getHibahMasuk(instance: any = null, periode: any, year: an
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
-                page: page,
                 periode: periode,
                 year: year,
                 instance: instance,
@@ -548,7 +546,7 @@ export async function deleteHibahMasuk(id: any) {
 // Hibah Masuk
 
 // Hibah Keluar
-export async function getHibahKeluar(instance: any = null, periode: any, year: any, page: any) {
+export async function getHibahKeluar(instance: any = null, periode: any, year: any) {
     try {
         const res = await axios.get(baseUri + '/accountancy/padb/6.4', {
             headers: {
@@ -556,7 +554,6 @@ export async function getHibahKeluar(instance: any = null, periode: any, year: a
                 Authorization: `Bearer ${CurrentToken}`,
             },
             params: {
-                page: page,
                 periode: periode,
                 year: year,
                 instance: instance,

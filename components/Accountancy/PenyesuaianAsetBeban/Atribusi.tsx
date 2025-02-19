@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -31,6 +31,9 @@ const Atribusi = (data: any) => {
     const [isMounted, setIsMounted] = useState(false);
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [maxPage, setMaxPage] = useState(1);
 
     useEffect(() => {
         setIsMounted(true);
@@ -161,6 +164,8 @@ const Atribusi = (data: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
+                        const maxPage = Math.ceil(res.data.length / perPage);
+                        setMaxPage(maxPage);
                     } else {
                         setDataInput([
                             {
@@ -505,631 +510,635 @@ const Atribusi = (data: any) => {
 
                     <tbody>
                         {dataInput?.map((input: any, index: number) => (
-                            <tr>
-                                {([9].includes(CurrentUser?.role_id) == false) && (
-                                    <td className='border'>
-                                        {/* Perangkat Daerah */}
-                                        <div className="">
-                                            <Select placeholder="Pilih Perangkat Daerah"
-                                                className='min-w-[300px]'
-                                                onChange={(e: any) => {
-                                                    if ([9].includes(CurrentUser?.role_id)) {
-                                                        showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                    } else {
+                            <>
+                                {(index >= (page - 1) * perPage && index < (page * perPage)) && (
+                                    <tr>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
+                                                        value={
+                                                            instances?.map((data: any, index: number) => {
+                                                                if (data.id == input.instance_id) {
+                                                                    return {
+                                                                        value: data.id,
+                                                                        label: data.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((data: any, index: number) => {
+                                                                return {
+                                                                    value: data.id,
+                                                                    label: data.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+
+
+                                        {/* BELANJA PEGAWAI */}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    isDisabled={isSaving == true}
+                                                    className='min-w-[400px]'
+                                                    onChange={(e: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
-                                                            updated[index]['instance_id'] = e?.value;
+                                                            updated[index]['bel_peg_kode_rekening_id'] = e?.value;
+                                                            updated[index]['bel_peg_nama_rekening'] = arrKodeRekening?.filter((data: any, index: number) => data?.id === e.value)[0].name
                                                             return updated;
                                                         })
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening?.map((data: any, index: number) => {
+                                                            if (data.id == input.bel_peg_kode_rekening_id) {
+                                                                return {
+                                                                    value: data.id,
+                                                                    label: data.fullcode + ' - ' + data.name,
+                                                                }
+                                                            }
+                                                        })
                                                     }
-                                                }}
-                                                isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
-                                                value={
-                                                    instances?.map((data: any, index: number) => {
-                                                        if (data.id == input.instance_id) {
+                                                    options={
+                                                        arrKodeRekening?.map((data: any, index: number) => {
                                                             return {
                                                                 value: data.id,
-                                                                label: data.name,
+                                                                label: data.fullcode + ' - ' + data.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {input?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(input.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Nama Barang / Pekerjaan */}
+                                            <div className="">
+                                                <div className="flex">
+                                                    <input
+                                                        disabled={isSaving == true}
+                                                        type="text"
+                                                        placeholder="Nama Barang / Pekerjaan"
+                                                        className="form-input min-w-[250px] placeholder:font-normal"
+                                                        value={input.bel_peg_nama_rekening}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['bel_peg_nama_rekening'] = e?.target?.value;
+                                                                return updated;
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Belanja Last Year */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.bel_peg_belanja_last_year}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_peg_belanja_last_year'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Hutang Last Year */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.bel_peg_hutang_last_year}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_peg_hutang_last_year'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Belanja Pegawai Jumlah */}
+                                            <InputRupiah
+                                                // isDisabled={isSaving == true}
+                                                readOnly={true}
+                                                dataValue={input.bel_peg_jumlah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_peg_jumlah'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+
+                                        <td className='bg-white !px-2'>
+                                            {/* Separator */}
+                                        </td>
+
+                                        {/* BELANJA BARANG DAN JASA */}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <Select placeholder="Pilih Kode Rekening"
+                                                className='min-w-[400px]'
+                                                onChange={(e: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_barjas_kode_rekening_id'] = e?.value;
+                                                        updated[index]['bel_barjas_nama_rekening_rincian_paket'] = arrKodeRekening2?.filter((data: any, index: number) => data?.id === e.value)[0].name
+                                                        return updated;
+                                                    })
+                                                }}
+                                                value={
+                                                    arrKodeRekening2?.map((data: any, index: number) => {
+                                                        if (data.id == input.bel_barjas_kode_rekening_id) {
+                                                            return {
+                                                                value: data.id,
+                                                                label: data.fullcode + ' - ' + data.name,
                                                             }
                                                         }
                                                     })
                                                 }
                                                 options={
-                                                    instances?.map((data: any, index: number) => {
+                                                    arrKodeRekening2?.map((data: any, index: number) => {
                                                         return {
                                                             value: data.id,
-                                                            label: data.name,
+                                                            label: data.fullcode + ' - ' + data.name,
                                                         }
                                                     })
                                                 } />
-                                        </div>
-                                    </td>
-                                )}
+                                        </td>
 
-
-                                {/* BELANJA PEGAWAI */}
-                                <td className='border'>
-                                    {/* Kode Rekening */}
-                                    <div className="flex items-center gap-2">
-                                        <Select placeholder="Pilih Kode Rekening"
-                                            isDisabled={isSaving == true}
-                                            className='min-w-[400px]'
-                                            onChange={(e: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['bel_peg_kode_rekening_id'] = e?.value;
-                                                    updated[index]['bel_peg_nama_rekening'] = arrKodeRekening?.filter((data: any, index: number) => data?.id === e.value)[0].name
-                                                    return updated;
-                                                })
-                                            }}
-                                            value={
-                                                arrKodeRekening?.map((data: any, index: number) => {
-                                                    if (data.id == input.bel_peg_kode_rekening_id) {
-                                                        return {
-                                                            value: data.id,
-                                                            label: data.fullcode + ' - ' + data.name,
-                                                        }
-                                                    }
-                                                })
-                                            }
-                                            options={
-                                                arrKodeRekening?.map((data: any, index: number) => {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.fullcode + ' - ' + data.name,
-                                                    }
-                                                })
-                                            } />
-
-
-                                        {input?.id && (
+                                        <td className='border'>
+                                            {/* Nama Barang / Pekerjaan */}
                                             <div className="">
-                                                <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-
-                                                            const swalWithBootstrapButtons = Swal.mixin({
-                                                                customClass: {
-                                                                    confirmButton: 'btn btn-danger',
-                                                                    cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                    popup: 'sweet-alerts',
-                                                                },
-                                                                buttonsStyling: false,
-                                                            });
-                                                            swalWithBootstrapButtons
-                                                                .fire({
-                                                                    title: 'Hapus Data?',
-                                                                    text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                    icon: 'question',
-                                                                    showCancelButton: true,
-                                                                    confirmButtonText: 'Ya, Hapus!',
-                                                                    cancelButtonText: 'Tidak!',
-                                                                    reverseButtons: true,
-                                                                    padding: '2em',
-                                                                })
-                                                                .then((result) => {
-                                                                    if (result.value) {
-                                                                        deleteData(input.id);
-                                                                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                        swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                    }
-                                                                });
+                                                <div className="flex">
+                                                    <input
+                                                        disabled={isSaving == true}
+                                                        type="text"
+                                                        placeholder="Nama Barang / Pekerjaan"
+                                                        className="form-input min-w-[250px] placeholder:font-normal"
+                                                        value={input.bel_barjas_nama_rekening_rincian_paket}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['bel_barjas_nama_rekening_rincian_paket'] = e?.target?.value;
+                                                                return updated;
+                                                            })
                                                         }}
-                                                        className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                        <IconTrash className='w-4 h-4' />
-                                                    </button>
-                                                </Tippy>
+                                                    />
+                                                </div>
                                             </div>
-                                        )}
+                                        </td>
 
-                                    </div>
-                                </td>
-
-                                <td className='border'>
-                                    {/* Nama Barang / Pekerjaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Nama Barang / Pekerjaan"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                value={input.bel_peg_nama_rekening}
-                                                onChange={(e: any) => {
+                                        <td className='border'>
+                                            {/* Belanja */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.bel_barjas_belanja}
+                                                onChange={(value: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];
-                                                        updated[index]['bel_peg_nama_rekening'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td className='border'>
-                                    {/* Belanja Last Year */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.bel_peg_belanja_last_year}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_peg_belanja_last_year'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Hutang Last Year */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.bel_peg_hutang_last_year}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_peg_hutang_last_year'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Belanja Pegawai Jumlah */}
-                                    <InputRupiah
-                                        // isDisabled={isSaving == true}
-                                        readOnly={true}
-                                        dataValue={input.bel_peg_jumlah}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_peg_jumlah'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-
-                                <td className='bg-white !px-2'>
-                                    {/* Separator */}
-                                </td>
-
-                                {/* BELANJA BARANG DAN JASA */}
-                                <td className='border'>
-                                    {/* Kode Rekening */}
-                                    <Select placeholder="Pilih Kode Rekening"
-                                        className='min-w-[400px]'
-                                        onChange={(e: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_barjas_kode_rekening_id'] = e?.value;
-                                                updated[index]['bel_barjas_nama_rekening_rincian_paket'] = arrKodeRekening2?.filter((data: any, index: number) => data?.id === e.value)[0].name
-                                                return updated;
-                                            })
-                                        }}
-                                        value={
-                                            arrKodeRekening2?.map((data: any, index: number) => {
-                                                if (data.id == input.bel_barjas_kode_rekening_id) {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.fullcode + ' - ' + data.name,
-                                                    }
-                                                }
-                                            })
-                                        }
-                                        options={
-                                            arrKodeRekening2?.map((data: any, index: number) => {
-                                                return {
-                                                    value: data.id,
-                                                    label: data.fullcode + ' - ' + data.name,
-                                                }
-                                            })
-                                        } />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Nama Barang / Pekerjaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Nama Barang / Pekerjaan"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                value={input.bel_barjas_nama_rekening_rincian_paket}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['bel_barjas_nama_rekening_rincian_paket'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td className='border'>
-                                    {/* Belanja */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.bel_barjas_belanja}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_barjas_belanja'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Hutang Last Year */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.bel_barjas_hutang}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_barjas_hutang'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Belanja Pegawai Jumlah */}
-                                    <InputRupiah
-                                        // isDisabled={isSaving == true}
-                                        readOnly={true}
-                                        dataValue={input.bel_barjas_jumlah}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_barjas_jumlah'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-
-                                <td className='bg-white !px-2'>
-                                    {/* Separator */}
-                                </td>
-
-                                {/* BELANJA MODAL */}
-                                <td className='border'>
-                                    {/* Kode Rekening */}
-                                    <div className="">
-                                        <Select placeholder="Pilih Kode Rekening"
-                                            className='min-w-[400px]'
-                                            onChange={(e: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['bel_modal_kode_rekening_id'] = e?.value;
-                                                    updated[index]['bel_modal_nama_rekening_rincian_paket'] = arrKodeRekening3?.filter((data: any, index: number) => data?.id === e.value)[0].name
-                                                    return updated;
-                                                })
-                                            }}
-                                            value={
-                                                arrKodeRekening3?.map((data: any, index: number) => {
-                                                    if (data.id == input.bel_modal_kode_rekening_id) {
-                                                        return {
-                                                            value: data.id,
-                                                            label: data.fullcode + ' - ' + data.name,
-                                                        }
-                                                    }
-                                                })
-                                            }
-                                            options={
-                                                arrKodeRekening3?.map((data: any, index: number) => {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.fullcode + ' - ' + data.name,
-                                                    }
-                                                })
-                                            } />
-                                    </div>
-                                </td>
-
-                                <td className='border'>
-                                    {/* Nama Barang / Pekerjaan */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Nama Barang / Pekerjaan"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                value={input.bel_modal_nama_rekening_rincian_paket}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['bel_modal_nama_rekening_rincian_paket'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td className='border'>
-                                    {/* Belanja */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.bel_modal_belanja}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_modal_belanja'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Hutang Last Year */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.bel_modal_hutang}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_modal_hutang'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-                                <td className='border'>
-                                    {/* Belanja Pegawai Jumlah */}
-                                    <InputRupiah
-                                        // isDisabled={isSaving == true}
-                                        readOnly={true}
-                                        dataValue={input.bel_modal_jumlah}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['bel_modal_jumlah'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-
-
-                                <td className='bg-white !px-2'>
-                                    {/* Separator */}
-                                </td>
-
-                                {/* KETERANGAN */}
-                                <td className='border'>
-                                    {/* Nomor Kontrak Pegawai / Barang Jasa */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Nomor Kontrak Pegawai / Barang Jasa"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                value={input.ket_no_kontrak_pegawai_barang_jasa}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['ket_no_kontrak_pegawai_barang_jasa'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td className='border'>
-                                    {/* Nomor SP2D Pegawai / Barang Jasa */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Nomor SP2D Pegawai / Barang Jasa"
-                                                className="form-input min-w-[250px] placeholder:font-normal"
-                                                value={input.ket_no_sp2d_pegawai_barang_jasa}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['ket_no_sp2d_pegawai_barang_jasa'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td className='bg-white !px-2'>
-                                    {/* Separator */}
-                                </td>
-
-
-                                {/* ATRIBUSI */}
-                                <td className='border'>
-                                    {/* Aset Tetap Tanah */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_aset_tetap_tanah}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_aset_tetap_tanah'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Aset Tetap Peralatan dan Mesin */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_aset_tetap_peralatan_mesin}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_aset_tetap_peralatan_mesin'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Aset Tetap Gedung dan Bangunan */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_aset_tetap_gedung_bangunan}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_aset_tetap_gedung_bangunan'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Aset Tetap Jalan Jaringan Irigasi */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_aset_tetap_jalan_jaringan_irigasi}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_aset_tetap_jalan_jaringan_irigasi'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Aset Tetap Lainnya */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_aset_tetap_tetap_lainnya}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_aset_tetap_tetap_lainnya'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Konstruksi Dalam Pekerjaan */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_konstruksi_dalam_pekerjaan}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_konstruksi_dalam_pekerjaan'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Aset Lain-lain */}
-                                    <InputRupiah
-                                        isDisabled={isSaving == true}
-                                        // readOnly={true}
-                                        dataValue={input.atri_aset_lain_lain}
-                                        onChange={(value: any) => {
-                                            setDataInput((prev: any) => {
-                                                const updated = [...prev];
-                                                updated[index]['atri_aset_lain_lain'] = value;
-                                                updatedData(updated, index);
-                                                return updated;
-                                            });
-                                            setIsUnsaved(true);
-                                        }}
-                                    />
-                                </td>
-                                <td className='border'>
-                                    {/* Keterangan Nomor Kontrak / SP2D */}
-                                    <div className="">
-                                        <div className="flex">
-                                            <input
-                                                disabled={isSaving == true}
-                                                type="text"
-                                                placeholder="Keterangan Nomor Kontrak / SP2D"
-                                                className="form-input min-w-[250px]"
-                                                value={input.atri_ket_no_kontrak_sp2d}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['atri_ket_no_kontrak_sp2d'] = e?.target?.value;
+                                                        updated[index]['bel_barjas_belanja'] = value;
                                                         updatedData(updated, index);
                                                         return updated;
-                                                    })
+                                                    });
+                                                    setIsUnsaved(true);
                                                 }}
                                             />
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Hutang Last Year */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.bel_barjas_hutang}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_barjas_hutang'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Belanja Pegawai Jumlah */}
+                                            <InputRupiah
+                                                // isDisabled={isSaving == true}
+                                                readOnly={true}
+                                                dataValue={input.bel_barjas_jumlah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_barjas_jumlah'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+
+                                        <td className='bg-white !px-2'>
+                                            {/* Separator */}
+                                        </td>
+
+                                        {/* BELANJA MODAL */}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='min-w-[400px]'
+                                                    onChange={(e: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['bel_modal_kode_rekening_id'] = e?.value;
+                                                            updated[index]['bel_modal_nama_rekening_rincian_paket'] = arrKodeRekening3?.filter((data: any, index: number) => data?.id === e.value)[0].name
+                                                            return updated;
+                                                        })
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening3?.map((data: any, index: number) => {
+                                                            if (data.id == input.bel_modal_kode_rekening_id) {
+                                                                return {
+                                                                    value: data.id,
+                                                                    label: data.fullcode + ' - ' + data.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening3?.map((data: any, index: number) => {
+                                                            return {
+                                                                value: data.id,
+                                                                label: data.fullcode + ' - ' + data.name,
+                                                            }
+                                                        })
+                                                    } />
+                                            </div>
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Nama Barang / Pekerjaan */}
+                                            <div className="">
+                                                <div className="flex">
+                                                    <input
+                                                        disabled={isSaving == true}
+                                                        type="text"
+                                                        placeholder="Nama Barang / Pekerjaan"
+                                                        className="form-input min-w-[250px] placeholder:font-normal"
+                                                        value={input.bel_modal_nama_rekening_rincian_paket}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['bel_modal_nama_rekening_rincian_paket'] = e?.target?.value;
+                                                                return updated;
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Belanja */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.bel_modal_belanja}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_modal_belanja'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Hutang Last Year */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.bel_modal_hutang}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_modal_hutang'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Belanja Pegawai Jumlah */}
+                                            <InputRupiah
+                                                // isDisabled={isSaving == true}
+                                                readOnly={true}
+                                                dataValue={input.bel_modal_jumlah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['bel_modal_jumlah'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+
+
+                                        <td className='bg-white !px-2'>
+                                            {/* Separator */}
+                                        </td>
+
+                                        {/* KETERANGAN */}
+                                        <td className='border'>
+                                            {/* Nomor Kontrak Pegawai / Barang Jasa */}
+                                            <div className="">
+                                                <div className="flex">
+                                                    <input
+                                                        disabled={isSaving == true}
+                                                        type="text"
+                                                        placeholder="Nomor Kontrak Pegawai / Barang Jasa"
+                                                        className="form-input min-w-[250px] placeholder:font-normal"
+                                                        value={input.ket_no_kontrak_pegawai_barang_jasa}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['ket_no_kontrak_pegawai_barang_jasa'] = e?.target?.value;
+                                                                return updated;
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='border'>
+                                            {/* Nomor SP2D Pegawai / Barang Jasa */}
+                                            <div className="">
+                                                <div className="flex">
+                                                    <input
+                                                        disabled={isSaving == true}
+                                                        type="text"
+                                                        placeholder="Nomor SP2D Pegawai / Barang Jasa"
+                                                        className="form-input min-w-[250px] placeholder:font-normal"
+                                                        value={input.ket_no_sp2d_pegawai_barang_jasa}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['ket_no_sp2d_pegawai_barang_jasa'] = e?.target?.value;
+                                                                return updated;
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className='bg-white !px-2'>
+                                            {/* Separator */}
+                                        </td>
+
+
+                                        {/* ATRIBUSI */}
+                                        <td className='border'>
+                                            {/* Aset Tetap Tanah */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_aset_tetap_tanah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_aset_tetap_tanah'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Aset Tetap Peralatan dan Mesin */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_aset_tetap_peralatan_mesin}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_aset_tetap_peralatan_mesin'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Aset Tetap Gedung dan Bangunan */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_aset_tetap_gedung_bangunan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_aset_tetap_gedung_bangunan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Aset Tetap Jalan Jaringan Irigasi */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_aset_tetap_jalan_jaringan_irigasi}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_aset_tetap_jalan_jaringan_irigasi'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Aset Tetap Lainnya */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_aset_tetap_tetap_lainnya}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_aset_tetap_tetap_lainnya'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Konstruksi Dalam Pekerjaan */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_konstruksi_dalam_pekerjaan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_konstruksi_dalam_pekerjaan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Aset Lain-lain */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.atri_aset_lain_lain}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['atri_aset_lain_lain'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            {/* Keterangan Nomor Kontrak / SP2D */}
+                                            <div className="">
+                                                <div className="flex">
+                                                    <input
+                                                        disabled={isSaving == true}
+                                                        type="text"
+                                                        placeholder="Keterangan Nomor Kontrak / SP2D"
+                                                        className="form-input min-w-[250px]"
+                                                        value={input.atri_ket_no_kontrak_sp2d}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['atri_ket_no_kontrak_sp2d'] = e?.target?.value;
+                                                                updatedData(updated, index);
+                                                                return updated;
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </>
                         ))}
 
 
@@ -1205,35 +1214,62 @@ const Atribusi = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        addDataInput()
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-
-                {isSaving == false ? (
+            <div className="flex items-center justify-between gap-4 mt-4 px-5">
+                <div className="flex items-center gap-2">
                     <button type="button"
                         onClick={(e) => {
-                            save()
+                            if (page > 1) {
+                                setPage(page - 1);
+                            }
                         }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Atribusi
+                        disabled={page == 1}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
                     </button>
-                ) : (
+
+                    {page} / {maxPage}
+
                     <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
+                        onClick={(e) => {
+                            if (page < maxPage) {
+                                setPage(page + 1);
+                            }
+                        }}
+                        disabled={page == maxPage}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
                     </button>
-                )}
+                </div>
+                <div className="flex items-center justify-end gap-4">
+                    <button type="button"
+                        disabled={isSaving == true}
+                        onClick={(e) => {
+                            addDataInput()
+                        }}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                        Tambah Data
+                    </button>
+
+
+                    {isSaving == false ? (
+                        <button type="button"
+                            onClick={(e) => {
+                                save()
+                            }}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                            Simpan Atribusi
+                        </button>
+                    ) : (
+                        <button type="button"
+                            disabled={true}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                            Menyimpan..
+                        </button>
+                    )}
+                </div>
             </div>
         </>
     );

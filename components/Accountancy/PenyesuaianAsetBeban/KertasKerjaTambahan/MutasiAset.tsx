@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -34,6 +34,9 @@ const MutasiAset = (data: any) => {
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [years, setYears] = useState<any>(null)
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [maxPage, setMaxPage] = useState(1);
 
     useEffect(() => {
         setIsMounted(true);
@@ -130,6 +133,8 @@ const MutasiAset = (data: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
+                        const maxPage = Math.ceil(res.data.length / perPage);
+                        setMaxPage(maxPage);
                     } else {
                         setDataInput([
                             {
@@ -377,9 +382,9 @@ const MutasiAset = (data: any) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            dataInput.length > 0 && dataInput.map((data: any, index: number) => {
-                                return (
+                        {dataInput.length > 0 && dataInput.map((data: any, index: number) => (
+                            <>
+                                {(index >= (page - 1) * perPage && index < (page * perPage)) && (
                                     <tr key={index}>
                                         <td className='whitespace-nowrap border text-center'>
                                             <div className="font-semibold">
@@ -1324,9 +1329,9 @@ const MutasiAset = (data: any) => {
                                         </td> */}
 
                                     </tr>
-                                )
-                            })
-                        }
+                                )}
+                            </>
+                        ))}
                     </tbody>
                     <tfoot className='sticky -bottom-5 left-0 z-[1]'>
                         <tr className='!bg-slate-300 !text-slate-800'>
@@ -1397,37 +1402,64 @@ const MutasiAset = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        if (isSaving == false) {
-                            addDataInput()
-                        }
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-                {isSaving == false ? (
+            <div className="flex items-center justify-between gap-4 mt-4 px-5">
+                <div className="flex items-center gap-2">
                     <button type="button"
                         onClick={(e) => {
-                            save()
+                            if (page > 1) {
+                                setPage(page - 1);
+                            }
                         }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Mutasi Aset
+                        disabled={page == 1}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
                     </button>
-                ) : (
-                    <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
-                    </button>
-                )}
 
+                    {page} / {maxPage}
+
+                    <button type="button"
+                        onClick={(e) => {
+                            if (page < maxPage) {
+                                setPage(page + 1);
+                            }
+                        }}
+                        disabled={page == maxPage}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                    </button>
+                </div>
+                <div className="flex items-center justify-end gap-4">
+                    <button type="button"
+                        disabled={isSaving == true}
+                        onClick={(e) => {
+                            if (isSaving == false) {
+                                addDataInput()
+                            }
+                        }}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                        Tambah Data
+                    </button>
+
+                    {isSaving == false ? (
+                        <button type="button"
+                            onClick={(e) => {
+                                save()
+                            }}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                            Simpan Mutasi Aset
+                        </button>
+                    ) : (
+                        <button type="button"
+                            disabled={true}
+                            className='btn btn-success whitespace-nowrap text-xs'>
+                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                            Menyimpan..
+                        </button>
+                    )}
+
+                </div>
             </div>
         </>
     );

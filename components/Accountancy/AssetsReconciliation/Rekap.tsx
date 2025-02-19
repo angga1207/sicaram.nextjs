@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { getRekap } from '@/apis/Accountancy/RekonsiliasiAset';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import LoadingSicaram from '@/components/LoadingSicaram';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -27,12 +28,14 @@ const Rekap = (data: any) => {
     const paramData = data.data
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [years, setYears] = useState<any>(null)
 
     useEffect(() => {
         setIsMounted(true);
+        setIsLoading(true);
     }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
@@ -135,11 +138,15 @@ const Rekap = (data: any) => {
     }, [grandTotal])
 
     const _getDatas = () => {
+        setIsLoading(true);
         getRekap(instance, periode?.id, year).then((res) => {
             if (res.status === 'success') {
                 setDataInput(res.data.datas);
                 setGrandTotal(res.data.grand_total);
             }
+            setIsLoading(false);
+        }).catch((err) => {
+            setIsLoading(false);
         });
     }
 
@@ -277,155 +284,162 @@ const Rekap = (data: any) => {
     return (
         <div>
             <div className="">
-                <div className="table-responsive mb-5">
-                    <table className="table-hover">
-                        <thead>
-                            <tr className='!bg-slate-900 !text-white'>
-                                <th className='text-center'>
-                                    No.
-                                </th>
-                                <th className='text-center'>
-                                    Uraian
-                                </th>
-                                <th className='text-center'>
-                                    Per 31 Desember {year - 1}
-                                </th>
-                                <th className='text-center'>
-                                    Mutasi Tambah
-                                </th>
-                                <th className='text-center'>
-                                    Mutasi Kurang
-                                </th>
-                                <th className='text-center'>
-                                    Per 31 Desember {year}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                dataInput?.map((item: any, index: any) => {
-                                    return (
-                                        <tr key={index} className='cursor-pointer'>
-                                            <td>{index + 1}</td>
-                                            <td>
-                                                {item.uraian}
-                                            </td>
-                                            <td className='border-x'>
-                                                <Tippy content={(item.saldo_awal ? terbilang(item.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                    <div className='flex items-center justify-between cursor-pointer'>
-                                                        <div>
-                                                            Rp.
+                {isLoading === true && (
+                    <div className="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
+                        {/* <FontAwesomeIcon icon={faSpinner} spin size="3x" className="h-80 w-80 animate-spin text-white" /> */}
+                        <LoadingSicaram />
+                    </div>
+                )}
+                {isLoading === false && (
+                    <div className="table-responsive mb-5">
+                        <table className="table-hover">
+                            <thead>
+                                <tr className='!bg-slate-900 !text-white'>
+                                    <th className='text-center'>
+                                        No.
+                                    </th>
+                                    <th className='text-center'>
+                                        Uraian
+                                    </th>
+                                    <th className='text-center'>
+                                        Per 31 Desember {year - 1}
+                                    </th>
+                                    <th className='text-center'>
+                                        Mutasi Tambah
+                                    </th>
+                                    <th className='text-center'>
+                                        Mutasi Kurang
+                                    </th>
+                                    <th className='text-center'>
+                                        Per 31 Desember {year}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    dataInput?.map((item: any, index: any) => {
+                                        return (
+                                            <tr key={index} className='cursor-pointer'>
+                                                <td>{index + 1}</td>
+                                                <td>
+                                                    {item.uraian}
+                                                </td>
+                                                <td className='border-x'>
+                                                    <Tippy content={(item.saldo_awal ? terbilang(item.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                            <div>
+                                                                Rp.
+                                                            </div>
+                                                            <div>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.saldo_awal)}
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.saldo_awal)}
+                                                    </Tippy>
+                                                </td>
+                                                <td className='border-x'>
+                                                    <Tippy content={(item.mutasi_tambah ? terbilang(item.mutasi_tambah) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                            <div>
+                                                                Rp.
+                                                            </div>
+                                                            <div>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.mutasi_tambah)}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Tippy>
-                                            </td>
-                                            <td className='border-x'>
-                                                <Tippy content={(item.mutasi_tambah ? terbilang(item.mutasi_tambah) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                    <div className='flex items-center justify-between cursor-pointer'>
-                                                        <div>
-                                                            Rp.
+                                                    </Tippy>
+                                                </td>
+                                                <td className='border-x'>
+                                                    <Tippy content={(item.mutasi_kurang ? terbilang(item.mutasi_kurang) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                            <div>
+                                                                Rp.
+                                                            </div>
+                                                            <div>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.mutasi_kurang)}
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.mutasi_tambah)}
+                                                    </Tippy>
+                                                </td>
+                                                <td className='border-x'>
+                                                    <Tippy content={(item.saldo_akhir ? terbilang(item.saldo_akhir) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                            <div>
+                                                                Rp.
+                                                            </div>
+                                                            <div>
+                                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.saldo_akhir)}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Tippy>
-                                            </td>
-                                            <td className='border-x'>
-                                                <Tippy content={(item.mutasi_kurang ? terbilang(item.mutasi_kurang) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                    <div className='flex items-center justify-between cursor-pointer'>
-                                                        <div>
-                                                            Rp.
-                                                        </div>
-                                                        <div>
-                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.mutasi_kurang)}
-                                                        </div>
-                                                    </div>
-                                                </Tippy>
-                                            </td>
-                                            <td className='border-x'>
-                                                <Tippy content={(item.saldo_akhir ? terbilang(item.saldo_akhir) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                    <div className='flex items-center justify-between cursor-pointer'>
-                                                        <div>
-                                                            Rp.
-                                                        </div>
-                                                        <div>
-                                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item.saldo_akhir)}
-                                                        </div>
-                                                    </div>
-                                                </Tippy>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                                                    </Tippy>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr className='!bg-slate-500 !text-white'>
+                                    <td>
 
-                        </tbody>
-                        <tfoot>
-                            <tr className='!bg-slate-500 !text-white'>
-                                <td>
+                                    </td>
+                                    <td className='font-semibold !text-end p-3'>
+                                        JUMLAH
+                                    </td>
+                                    <td className='p-3 font-semibold'>
+                                        <div className='flex items-center justify-between cursor-pointer'>
+                                            <div>
+                                                Rp.
+                                            </div>
 
-                                </td>
-                                <td className='font-semibold !text-end p-3'>
-                                    JUMLAH
-                                </td>
-                                <td className='p-3 font-semibold'>
-                                    <div className='flex items-center justify-between cursor-pointer'>
-                                        <div>
-                                            Rp.
+                                            <Tippy content={(grandTotal.saldo_awal ? terbilang(grandTotal.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_awal)}
+                                                </div>
+                                            </Tippy>
                                         </div>
+                                    </td>
+                                    <td className='p-3 font-semibold'>
+                                        <div className='flex items-center justify-between cursor-pointer'>
+                                            <div>
+                                                Rp.
+                                            </div>
+                                            <Tippy content={(grandTotal.mutasi_tambah ? terbilang(grandTotal.mutasi_tambah) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.mutasi_tambah)}
+                                                </div>
+                                            </Tippy>
+                                        </div>
+                                    </td>
+                                    <td className='p-3 font-semibold'>
+                                        <div className='flex items-center justify-between cursor-pointer'>
+                                            <div>
+                                                Rp.
+                                            </div>
 
-                                        <Tippy content={(grandTotal.saldo_awal ? terbilang(grandTotal.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                            <div>
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_awal)}
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                </td>
-                                <td className='p-3 font-semibold'>
-                                    <div className='flex items-center justify-between cursor-pointer'>
-                                        <div>
-                                            Rp.
+                                            <Tippy content={(grandTotal.mutasi_kurang ? terbilang(grandTotal.mutasi_kurang) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.mutasi_kurang)}
+                                                </div>
+                                            </Tippy>
                                         </div>
-                                        <Tippy content={(grandTotal.mutasi_tambah ? terbilang(grandTotal.mutasi_tambah) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                    </td>
+                                    <td className='p-3 font-semibold'>
+                                        <div className='flex items-center justify-between cursor-pointer'>
                                             <div>
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.mutasi_tambah)}
+                                                Rp.
                                             </div>
-                                        </Tippy>
-                                    </div>
-                                </td>
-                                <td className='p-3 font-semibold'>
-                                    <div className='flex items-center justify-between cursor-pointer'>
-                                        <div>
-                                            Rp.
+                                            <Tippy content={(grandTotal.saldo_akhir ? terbilang(grandTotal.saldo_akhir) : 'Nol') + ' Rupiah'} placement='top-end'>
+                                                <div>
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir)}
+                                                </div>
+                                            </Tippy>
                                         </div>
-
-                                        <Tippy content={(grandTotal.mutasi_kurang ? terbilang(grandTotal.mutasi_kurang) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                            <div>
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.mutasi_kurang)}
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                </td>
-                                <td className='p-3 font-semibold'>
-                                    <div className='flex items-center justify-between cursor-pointer'>
-                                        <div>
-                                            Rp.
-                                        </div>
-                                        <Tippy content={(grandTotal.saldo_akhir ? terbilang(grandTotal.saldo_akhir) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                            <div>
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir)}
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                )}
 
                 <div className="space-y-3">
                     <div className="flex items-center justify-end">
