@@ -28,7 +28,7 @@ const Neraca = (data: any) => {
     const paramData = data.data;
     const [periode, setPeriode] = useState(paramData[0]);
     const [year, setYear] = useState(paramData[1]);
-    const [instance, setInstance] = useState(paramData[2]);
+    const [instance, setInstance] = useState<any>(paramData[2]);
     const [level, setLevel] = useState(paramData[3]);
     const [years, setYears] = useState(paramData[4]);
     const [instances, setInstances] = useState(paramData[5]);
@@ -36,6 +36,8 @@ const Neraca = (data: any) => {
     const [datas, setDatas] = useState<any>([]);
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [CurrentUser, setCurrentUser] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -56,8 +58,9 @@ const Neraca = (data: any) => {
     }, [isMounted]);
 
     useEffect(() => {
-        if (isMounted && periode?.id, year, level) {
+        if (isMounted && periode?.id && year && level && (instance || instance === 0)) {
             setDatas([]);
+            setIsLoading(true);
             getReportNeraca(instance, periode?.id, year, level).then((res) => {
                 if (res.status === 'error') {
                     showAlert('error', 'Terjadi kesalahan');
@@ -82,6 +85,7 @@ const Neraca = (data: any) => {
                         setDatas(dt);
                     }
                 }
+                setIsLoading(false);
             });
         }
     }, [isMounted, year, instance, level]);
@@ -126,45 +130,58 @@ const Neraca = (data: any) => {
                         Laporan Neraca
                     </h3>
                     <div className="flex items-center gap-2">
-                        {(instance && datas?.length > 0) && (
+                        {((instance || instance === 0) && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
+                                disabled={isDownloading}
                                 onClick={() => {
-                                    Swal.fire({
-                                        title: 'Unduh Laporan Neraca',
-                                        text: 'Apakah Anda yakin ingin mengunduh laporan neraca ini?',
-                                        icon: 'question',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Ya, unduh!',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            if (datas.length > 0) {
-                                                downloadReportNeraca(datas, instance, periode?.id, year, level).then((res) => {
-                                                    if (res.status === 'error') {
-                                                        showAlert('error', 'Terjadi kesalahan');
-                                                    }
-                                                    else if (res.status === 'success') {
-                                                        const url = window.URL.createObjectURL(new Blob([res.data]));
-                                                        const link = document.createElement('a');
-                                                        link.href = url;
-                                                        link.setAttribute('download', 'true');
-                                                        link.setAttribute('href', res.data);
-                                                        document.body.appendChild(link);
-                                                        link.click();
-                                                        // console.log(res.data);
-                                                    }
-                                                });
-                                            } else {
-                                                showAlert('error', 'Data belum tersedia');
+                                    if (isDownloading == false) {
+                                        Swal.fire({
+                                            title: 'Unduh Laporan Neraca',
+                                            text: 'Apakah Anda yakin ingin mengunduh laporan neraca ini?',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Ya, unduh!',
+                                            cancelButtonText: 'Batal',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                if (datas.length > 0) {
+                                                    setIsDownloading(true);
+                                                    downloadReportNeraca(datas, instance, periode?.id, year, level).then((res) => {
+                                                        if (res.status === 'error') {
+                                                            showAlert('error', 'Terjadi kesalahan');
+                                                        }
+                                                        else if (res.status === 'success') {
+                                                            const url = window.URL.createObjectURL(new Blob([res.data]));
+                                                            const link = document.createElement('a');
+                                                            link.href = url;
+                                                            link.setAttribute('download', 'true');
+                                                            link.setAttribute('href', res.data);
+                                                            document.body.appendChild(link);
+                                                            link.click();
+                                                            // console.log(res.data);
+                                                        }
+                                                        setIsDownloading(false);
+                                                    });
+                                                } else {
+                                                    showAlert('error', 'Data belum tersedia');
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
                                 }}>
                                 <FontAwesomeIcon icon={faCloudDownloadAlt} className='w-4 h-4' />
                                 <span className="ltr:ml-2 rtl:mr-2">
-                                    Unduh Laporan Neraca
+                                    {isDownloading == false ? (
+                                        <>
+                                            Unduh Laporan Neraca
+                                        </>
+                                    ) : (
+                                        <>
+                                            Memproses...
+                                        </>
+                                    )}
                                 </span>
                             </button>
                         )}
@@ -175,7 +192,7 @@ const Neraca = (data: any) => {
                         <label htmlFor="instance">
                             Perangkat Daerah
                         </label>
-                        <Select placeholder="Kabupaten Ogan Ilir"
+                        <Select placeholder="Pilih Perangkat Daerah"
                             id='instance'
                             className=''
                             onChange={(e: any) => {
@@ -187,7 +204,7 @@ const Neraca = (data: any) => {
                             }}
                             isLoading={instances?.length === 0}
                             isClearable={true}
-                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                            isDisabled={isLoading || [9].includes(CurrentUser?.role_id) ? true : false}
                             value={
                                 instances?.map((data: any, index: number) => {
                                     if (data.id == instance) {
@@ -223,7 +240,7 @@ const Neraca = (data: any) => {
                             }}
                             isSearchable={false}
                             isClearable={false}
-                            isDisabled={(years?.length === 0) || false}
+                            isDisabled={isLoading || (years?.length === 0) || false}
                         />
                         <div className='text-danger text-xs error-validation' id="error-year"></div>
                     </div>
@@ -242,7 +259,7 @@ const Neraca = (data: any) => {
                             }}
                             isSearchable={false}
                             isClearable={false}
-                            isDisabled={(levels?.length === 0) || false}
+                            isDisabled={isLoading || (levels?.length === 0) || false}
                         />
                         <div className='text-danger text-xs error-validation' id="error-year"></div>
                     </div>
@@ -250,7 +267,7 @@ const Neraca = (data: any) => {
                 <div className="my-4 h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
             </div>
             <div className="table-responsive h-[calc(100vh-350px)]">
-                {instance && (
+                {(instance || instance === 0) && (
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white sticky top-0'>
@@ -332,7 +349,7 @@ const Neraca = (data: any) => {
                         </tbody>
                     </table>
                 )}
-                {!instance && (
+                {(!instance && instance !== 0) && (
                     <div className="flex items-center justify-center h-[calc(100vh-350px)]">
                         <div className="text-center">
                             <div className="text-3xl font-semibold">

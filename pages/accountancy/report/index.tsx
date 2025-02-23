@@ -176,7 +176,21 @@ const Page = () => {
         if (isMounted && !instance && instances?.length === 0) {
             GlobalEndPoint('instances').then((res: any) => {
                 if (res.status === 'success') {
-                    setInstances(res.data);
+                    let tempInstances = res.data;
+                    tempInstances = tempInstances.map((row: any) => {
+                        return {
+                            id: row.id,
+                            name: row.name,
+                        };
+                    });
+
+                    // push KABUPATEN OGAN ILIR with id 0 at the first index
+                    tempInstances.unshift({
+                        id: 0,
+                        name: 'KABUPATEN OGAN ILIR',
+                    });
+
+                    setInstances(tempInstances);
                 }
             });
         }
