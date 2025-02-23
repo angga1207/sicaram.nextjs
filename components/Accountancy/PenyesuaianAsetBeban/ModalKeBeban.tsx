@@ -223,6 +223,7 @@ const ModalKeBeban = (data: any) => {
         }
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
+        setMaxPage(Math.ceil((dataInput.length + 1) / perPage));
     }
 
     const updatedData = (data: any, index: number) => {
@@ -940,33 +941,37 @@ const ModalKeBeban = (data: any) => {
                     </button>
                 </div>
                 <div className="flex items-center justify-end gap-4">
-                    <button type="button"
-                        disabled={isSaving == true}
-                        onClick={(e) => {
-                            addDataInput()
-                        }}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                        Tambah Data
-                    </button>
-
-
-                    {isSaving == false ? (
-                        <button type="button"
-                            onClick={(e) => {
-                                save()
-                            }}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                            Simpan Modal Ke Beban
-                        </button>
-                    ) : (
-                        <button type="button"
-                            disabled={true}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                            Menyimpan..
-                        </button>
+                    {dataInput.length > 0 && (
+                        <>
+                            <button type="button"
+                                disabled={isSaving == true}
+                                onClick={(e) => {
+                                    if (isSaving == false) {
+                                        addDataInput()
+                                    }
+                                }}
+                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                Tambah Data
+                            </button>
+                            {isSaving == false ? (
+                                <button type="button"
+                                    onClick={(e) => {
+                                        save()
+                                    }}
+                                    className='btn btn-success whitespace-nowrap text-xs'>
+                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    Simpan Modal ke Beban
+                                </button>
+                            ) : (
+                                <button type="button"
+                                    disabled={true}
+                                    className='btn btn-success whitespace-nowrap text-xs'>
+                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    Menyimpan..
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

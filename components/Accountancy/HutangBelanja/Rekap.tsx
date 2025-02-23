@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fragment, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -38,6 +38,9 @@ const Rekap = (param: any) => {
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [years, setYears] = useState<any>(null)
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [maxPage, setMaxPage] = useState(1);
 
     useEffect(() => {
         setIsMounted(true);
@@ -102,6 +105,8 @@ const Rekap = (param: any) => {
                 if (res.status === 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
+                        const maxPage = Math.ceil(res.data.length / perPage);
+                        setMaxPage(maxPage);
                     } else {
                         setDataInput([
                             {
@@ -383,409 +388,413 @@ const Rekap = (param: any) => {
                         </thead>
                         <tbody>
                             {dataInput.map((data: any, index: number) => (
-                                <Fragment key={index}>
-                                    <tr className=''>
-                                        <td className='border'>
-                                            {/* Perangkat Daerah */}
-                                            <div className="flex items-center gap-2">
-                                                <Select placeholder="Pilih Perangkat Daerah"
-                                                    className='min-w-[300px]'
-                                                    onChange={(e: any) => {
-                                                        if ([9].includes(CurrentUser?.role_id)) {
-                                                            showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                        } else {
+                                <>
+                                    {(index >= (page - 1) * perPage && index < (page * perPage)) && (
+                                        <Fragment key={index}>
+                                            <tr className=''>
+                                                <td className='border'>
+                                                    {/* Perangkat Daerah */}
+                                                    <div className="flex items-center gap-2">
+                                                        <Select placeholder="Pilih Perangkat Daerah"
+                                                            className='min-w-[300px]'
+                                                            onChange={(e: any) => {
+                                                                if ([9].includes(CurrentUser?.role_id)) {
+                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                                } else {
+                                                                    setDataInput((prev: any) => {
+                                                                        const updated = [...prev];
+                                                                        updated[index]['instance_id'] = e?.value;
+                                                                        return updated;
+                                                                    })
+                                                                    setIsUnsaved(true);
+                                                                }
+                                                            }}
+                                                            isDisabled={true}
+                                                            required={true}
+                                                            value={
+                                                                instances?.map((item: any, index: number) => {
+                                                                    if (item.id == data.instance_id) {
+                                                                        return {
+                                                                            value: item.id,
+                                                                            label: item.name,
+                                                                        }
+                                                                    }
+                                                                })
+                                                            }
+                                                            options={
+                                                                instances?.map((item: any, index: number) => {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                })
+                                                            } />
+                                                    </div>
+                                                </td>
+                                                <td className='border'>
+                                                    <Select placeholder="Pilih Kode Rekening"
+                                                        className='w-[500px]'
+                                                        isDisabled={true}
+                                                        onChange={(e: any) => {
                                                             setDataInput((prev: any) => {
                                                                 const updated = [...prev];
-                                                                updated[index]['instance_id'] = e?.value;
+                                                                updated[index]['kode_rekening_id'] = e?.value;
                                                                 return updated;
                                                             })
                                                             setIsUnsaved(true);
-                                                        }
-                                                    }}
-                                                    isDisabled={true}
-                                                    required={true}
-                                                    value={
-                                                        instances?.map((item: any, index: number) => {
-                                                            if (item.id == data.instance_id) {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.name,
+                                                        }}
+                                                        value={
+                                                            arrKodeRekening?.map((item: any, index: number) => {
+                                                                if (item.id == data.kode_rekening_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.fullcode + ' - ' + item.name,
+                                                                    }
                                                                 }
-                                                            }
-                                                        })
-                                                    }
-                                                    options={
-                                                        instances?.map((item: any, index: number) => {
-                                                            return {
-                                                                value: item.id,
-                                                                label: item.name,
-                                                            }
-                                                        })
-                                                    } />
-                                            </div>
-                                        </td>
-                                        <td className='border'>
-                                            <Select placeholder="Pilih Kode Rekening"
-                                                className='w-[500px]'
-                                                isDisabled={true}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['kode_rekening_id'] = e?.value;
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }}
-                                                value={
-                                                    arrKodeRekening?.map((item: any, index: number) => {
-                                                        if (item.id == data.kode_rekening_id) {
-                                                            return {
-                                                                value: item.id,
-                                                                label: item.fullcode + ' - ' + item.name,
-                                                            }
+                                                            })
                                                         }
-                                                    })
-                                                }
-                                                options={
-                                                    arrKodeRekening?.map((data: any, index: number) => {
-                                                        return {
-                                                            value: data.id,
-                                                            label: data.fullcode + ' - ' + data.name,
-                                                        }
-                                                    })
-                                                } />
-                                        </td>
-                                        <td className='sticky left-0 z-[1] bg-slate-50 border'>
-                                            <Tippy content={data.type === 'pembayaran' ? 'Pembayaran Utang' : 'Utang Baru'} theme={data.type === 'pembayaran' ? 'success' : 'warning'}>
-                                                <input type="text"
-                                                    placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
-                                                    autoComplete='off'
-                                                    value={data.nama_kegiatan}
-                                                    readOnly={true}
-                                                    onChange={(e) => {
-                                                        setDataInput((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['nama_kegiatan'] = e.target.value;
-                                                            return updated;
-                                                        });
-                                                    }}
-                                                    className='form-input font-normal min-w-[250px] cursor-pointer' />
-                                            </Tippy>
-                                        </td>
-                                        <td className='border'>
-                                            <input type="text"
-                                                placeholder='Pelaksana Pekerjaan'
-                                                autoComplete='off'
-                                                value={data.pelaksana_pekerjaan}
-                                                readOnly={true}
-                                                onChange={(e) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['pelaksana_pekerjaan'] = e.target.value;
-                                                        return updated;
-                                                    });
-                                                }}
-                                                className='form-input font-normal min-w-[250px]' />
-                                        </td>
-                                        <td className='border'>
-                                            <input type="text"
-                                                placeholder='Nomor Kontrak'
-                                                autoComplete='off'
-                                                value={data.nomor_kontrak}
-                                                readOnly={true}
-                                                onChange={(e) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['nomor_kontrak'] = e.target.value;
-                                                        return updated;
-                                                    });
-                                                }}
-                                                className='form-input font-normal min-w-[250px]' />
-                                        </td>
-                                        <td className='border'>
-                                            <Select
-                                                className="min-w-[250px]"
-                                                id="tahun"
-                                                options={years}
-                                                placeholder="Pilih Tahun Kontrak"
-                                                value={years?.find((option: any) => option.value === data.tahun_kontrak)}
-                                                onChange={(e: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['tahun_kontrak'] = e.value;
-                                                        return updated;
-                                                    });
-                                                }}
-                                                isSearchable={false}
-                                                isClearable={false}
-                                                classNamePrefix={'selectAngga'}
-                                                isDisabled={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.nilai_kontrak}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.kewajiban_tidak_terbayar_last_year}
-                                                readOnly={true}
-                                            />
-                                        </td>
+                                                        options={
+                                                            arrKodeRekening?.map((data: any, index: number) => {
+                                                                return {
+                                                                    value: data.id,
+                                                                    label: data.fullcode + ' - ' + data.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </td>
+                                                <td className='sticky left-0 z-[1] bg-slate-50 border'>
+                                                    <Tippy content={data.type === 'pembayaran' ? 'Pembayaran Utang' : 'Utang Baru'} theme={data.type === 'pembayaran' ? 'success' : 'warning'}>
+                                                        <input type="text"
+                                                            placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
+                                                            autoComplete='off'
+                                                            value={data.nama_kegiatan}
+                                                            readOnly={true}
+                                                            onChange={(e) => {
+                                                                setDataInput((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['nama_kegiatan'] = e.target.value;
+                                                                    return updated;
+                                                                });
+                                                            }}
+                                                            className='form-input font-normal min-w-[250px] cursor-pointer' />
+                                                    </Tippy>
+                                                </td>
+                                                <td className='border'>
+                                                    <input type="text"
+                                                        placeholder='Pelaksana Pekerjaan'
+                                                        autoComplete='off'
+                                                        value={data.pelaksana_pekerjaan}
+                                                        readOnly={true}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['pelaksana_pekerjaan'] = e.target.value;
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        className='form-input font-normal min-w-[250px]' />
+                                                </td>
+                                                <td className='border'>
+                                                    <input type="text"
+                                                        placeholder='Nomor Kontrak'
+                                                        autoComplete='off'
+                                                        value={data.nomor_kontrak}
+                                                        readOnly={true}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['nomor_kontrak'] = e.target.value;
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        className='form-input font-normal min-w-[250px]' />
+                                                </td>
+                                                <td className='border'>
+                                                    <Select
+                                                        className="min-w-[250px]"
+                                                        id="tahun"
+                                                        options={years}
+                                                        placeholder="Pilih Tahun Kontrak"
+                                                        value={years?.find((option: any) => option.value === data.tahun_kontrak)}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['tahun_kontrak'] = e.value;
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        isSearchable={false}
+                                                        isClearable={false}
+                                                        classNamePrefix={'selectAngga'}
+                                                        isDisabled={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.nilai_kontrak}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.kewajiban_tidak_terbayar_last_year}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
 
 
-                                        {/* Pembayaran 1 Start */}
-                                        <td className='border'>
-                                            <input type="text"
-                                                placeholder='No SP2D'
-                                                autoComplete='off'
-                                                value={data.p1_nomor_sp2d}
-                                                readOnly={true}
-                                                onChange={(e) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['p1_nomor_sp2d'] = e.target.value;
-                                                        return updated;
-                                                    });
-                                                }}
-                                                className='form-input font-normal min-w-[250px]' />
-                                        </td>
-                                        <td className='border'>
-                                            <Flatpickr
-                                                placeholder='Pilih Tanggal Perjanjian'
-                                                options={{
-                                                    dateFormat: 'Y-m-d',
-                                                    position: 'auto right'
-                                                }}
-                                                className="form-input w-[250px] placeholder:font-normal"
-                                                value={data?.p1_tanggal}
-                                                disabled={true}
-                                                onChange={(date) => {
-                                                    let Ymd = new Date(date[0].toISOString());
-                                                    Ymd.setDate(Ymd.getDate() + 1);
-                                                    const newYmd = Ymd.toISOString().split('T')[0];
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['p1_tanggal'] = newYmd;
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }} />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.p1_jumlah}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        {/* Pembayaran 1 End */}
+                                                {/* Pembayaran 1 Start */}
+                                                <td className='border'>
+                                                    <input type="text"
+                                                        placeholder='No SP2D'
+                                                        autoComplete='off'
+                                                        value={data.p1_nomor_sp2d}
+                                                        readOnly={true}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['p1_nomor_sp2d'] = e.target.value;
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        className='form-input font-normal min-w-[250px]' />
+                                                </td>
+                                                <td className='border'>
+                                                    <Flatpickr
+                                                        placeholder='Pilih Tanggal Perjanjian'
+                                                        options={{
+                                                            dateFormat: 'Y-m-d',
+                                                            position: 'auto right'
+                                                        }}
+                                                        className="form-input w-[250px] placeholder:font-normal"
+                                                        value={data?.p1_tanggal}
+                                                        disabled={true}
+                                                        onChange={(date) => {
+                                                            let Ymd = new Date(date[0].toISOString());
+                                                            Ymd.setDate(Ymd.getDate() + 1);
+                                                            const newYmd = Ymd.toISOString().split('T')[0];
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['p1_tanggal'] = newYmd;
+                                                                return updated;
+                                                            })
+                                                            setIsUnsaved(true);
+                                                        }} />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.p1_jumlah}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                {/* Pembayaran 1 End */}
 
-                                        {/* Pembayaran 2 Start */}
-                                        <td className='border'>
-                                            <input type="text"
-                                                placeholder='No SP2D'
-                                                autoComplete='off'
-                                                value={data.p2_nomor_sp2d}
-                                                readOnly={true}
-                                                onChange={(e) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['p2_nomor_sp2d'] = e.target.value;
-                                                        return updated;
-                                                    });
-                                                }}
-                                                className='form-input font-normal min-w-[250px]' />
-                                        </td>
-                                        <td className='border'>
-                                            <Flatpickr
-                                                placeholder='Pilih Tanggal Perjanjian'
-                                                options={{
-                                                    dateFormat: 'Y-m-d',
-                                                    position: 'auto right'
-                                                }}
-                                                className="form-input w-[250px] placeholder:font-normal"
-                                                value={data?.p2_tanggal}
-                                                disabled={true}
-                                                onChange={(date) => {
-                                                    let Ymd = new Date(date[0].toISOString());
-                                                    Ymd.setDate(Ymd.getDate() + 1);
-                                                    const newYmd = Ymd.toISOString().split('T')[0];
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['p2_tanggal'] = newYmd;
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }} />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.p2_jumlah}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        {/* Pembayaran 2 End */}
+                                                {/* Pembayaran 2 Start */}
+                                                <td className='border'>
+                                                    <input type="text"
+                                                        placeholder='No SP2D'
+                                                        autoComplete='off'
+                                                        value={data.p2_nomor_sp2d}
+                                                        readOnly={true}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['p2_nomor_sp2d'] = e.target.value;
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        className='form-input font-normal min-w-[250px]' />
+                                                </td>
+                                                <td className='border'>
+                                                    <Flatpickr
+                                                        placeholder='Pilih Tanggal Perjanjian'
+                                                        options={{
+                                                            dateFormat: 'Y-m-d',
+                                                            position: 'auto right'
+                                                        }}
+                                                        className="form-input w-[250px] placeholder:font-normal"
+                                                        value={data?.p2_tanggal}
+                                                        disabled={true}
+                                                        onChange={(date) => {
+                                                            let Ymd = new Date(date[0].toISOString());
+                                                            Ymd.setDate(Ymd.getDate() + 1);
+                                                            const newYmd = Ymd.toISOString().split('T')[0];
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['p2_tanggal'] = newYmd;
+                                                                return updated;
+                                                            })
+                                                            setIsUnsaved(true);
+                                                        }} />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.p2_jumlah}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                {/* Pembayaran 2 End */}
 
-                                        {/* Pembayaran 3 Start */}
-                                        <td className='border'>
-                                            <input type="text"
-                                                placeholder='No SP2D'
-                                                autoComplete='off'
-                                                value={data.p3_nomor_sp2d}
-                                                onChange={(e) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['p3_nomor_sp2d'] = e.target.value;
-                                                        return updated;
-                                                    });
-                                                }}
-                                                readOnly={true}
-                                                className='form-input font-normal min-w-[250px]' />
-                                        </td>
-                                        <td className='border'>
-                                            <Flatpickr
-                                                placeholder='Pilih Tanggal Perjanjian'
-                                                options={{
-                                                    dateFormat: 'Y-m-d',
-                                                    position: 'auto right'
-                                                }}
-                                                className="form-input w-[250px] placeholder:font-normal"
-                                                value={data?.p3_tanggal}
-                                                disabled={true}
-                                                onChange={(date) => {
-                                                    let Ymd = new Date(date[0].toISOString());
-                                                    Ymd.setDate(Ymd.getDate() + 1);
-                                                    const newYmd = Ymd.toISOString().split('T')[0];
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['p3_tanggal'] = newYmd;
-                                                        return updated;
-                                                    })
-                                                    setIsUnsaved(true);
-                                                }} />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.p3_jumlah}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        {/* Pembayaran 3 End */}
+                                                {/* Pembayaran 3 Start */}
+                                                <td className='border'>
+                                                    <input type="text"
+                                                        placeholder='No SP2D'
+                                                        autoComplete='off'
+                                                        value={data.p3_nomor_sp2d}
+                                                        onChange={(e) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['p3_nomor_sp2d'] = e.target.value;
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                        readOnly={true}
+                                                        className='form-input font-normal min-w-[250px]' />
+                                                </td>
+                                                <td className='border'>
+                                                    <Flatpickr
+                                                        placeholder='Pilih Tanggal Perjanjian'
+                                                        options={{
+                                                            dateFormat: 'Y-m-d',
+                                                            position: 'auto right'
+                                                        }}
+                                                        className="form-input w-[250px] placeholder:font-normal"
+                                                        value={data?.p3_tanggal}
+                                                        disabled={true}
+                                                        onChange={(date) => {
+                                                            let Ymd = new Date(date[0].toISOString());
+                                                            Ymd.setDate(Ymd.getDate() + 1);
+                                                            const newYmd = Ymd.toISOString().split('T')[0];
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['p3_tanggal'] = newYmd;
+                                                                return updated;
+                                                            })
+                                                            setIsUnsaved(true);
+                                                        }} />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.p3_jumlah}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                {/* Pembayaran 3 End */}
 
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.jumlah_pembayaran_hutang}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.kewajiban_tidak_terbayar}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.hutang_baru}
-                                                readOnly={true}
-                                            />
-                                        </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.jumlah_pembayaran_hutang}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.kewajiban_tidak_terbayar}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.hutang_baru}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
 
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.pegawai}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.persediaan}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.perjadin}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.jasa}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.pemeliharaan}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.uang_jasa_diserahkan}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.hibah}
-                                                readOnly={true}
-                                            />
-                                        </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.pegawai}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.persediaan}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.perjadin}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.jasa}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.pemeliharaan}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.uang_jasa_diserahkan}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.hibah}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
 
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.aset_tetap_tanah}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.aset_tetap_peralatan_mesin}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.aset_tetap_gedung_bangunan}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.aset_tetap_jalan_jaringan_irigasi}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.aset_tetap_lainnya}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.konstruksi_dalam_pekerjaan}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.aset_lain_lain}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                        <td className='border'>
-                                            <InputRupiah
-                                                dataValue={data.total_hutang}
-                                                readOnly={true}
-                                            />
-                                        </td>
-                                    </tr>
-                                </Fragment>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.aset_tetap_tanah}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.aset_tetap_peralatan_mesin}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.aset_tetap_gedung_bangunan}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.aset_tetap_jalan_jaringan_irigasi}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.aset_tetap_lainnya}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.konstruksi_dalam_pekerjaan}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.aset_lain_lain}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                                <td className='border'>
+                                                    <InputRupiah
+                                                        dataValue={data.total_hutang}
+                                                        readOnly={true}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </Fragment>
+                                    )}
+                                </>
                             ))}
                         </tbody>
                         <tfoot className=''>
@@ -996,38 +1005,36 @@ const Rekap = (param: any) => {
                 )}
             </div>
 
-            {/* <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        if (isSaving == false) {
-                            addDataInput()
-                        }
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-                {isSaving == false ? (
+            <div className="flex items-center justify-between gap-4 mt-4 px-5">
+                <div className="flex items-center gap-2">
                     <button type="button"
                         onClick={(e) => {
-                            save()
+                            if (page > 1) {
+                                setPage(page - 1);
+                            }
                         }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Utang Belanja
+                        disabled={page == 1}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
                     </button>
-                ) : (
-                    <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
-                    </button>
-                )}
 
-            </div> */}
+                    {page} / {maxPage}
+
+                    <button type="button"
+                        onClick={(e) => {
+                            if (page < maxPage) {
+                                setPage(page + 1);
+                            }
+                        }}
+                        disabled={page == maxPage}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                    </button>
+                </div>
+                <div className="flex items-center justify-end gap-4">
+                    <div className=""></div>
+                </div>
+            </div>
         </>
     );
 }

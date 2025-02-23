@@ -30,7 +30,7 @@ const Index = () => {
 
     return (
         <>
-            SICARAM OGAN ILIR
+            {/* SICARAM OGAN ILIR */}
         </>
     );
 }

@@ -12,6 +12,7 @@ const initialState = {
     navbar: themeConfig.navbar,
     locale: themeConfig.locale,
     semidark: themeConfig.semidark,
+    showMoney: themeConfig.showMoney,
     languageList: [
         { code: 'en', name: 'English' },
         { code: 'id', name: 'Indonesia' },
@@ -61,6 +62,11 @@ const themeConfigSlice = createSlice({
             state.rtlClass = payload;
             document.querySelector('html')?.setAttribute('dir', state.rtlClass || 'ltr');
         },
+        toggleShowMoney(state, { payload }) {
+            payload = payload === true || payload === 'true' ? true : false;
+            localStorage.setItem('showMoney', payload);
+            state.showMoney = payload;
+        },
         toggleAnimation(state, { payload }) {
             payload = payload || state.animation; // animate__fadeIn, animate__fadeInDown, animate__fadeInUp, animate__fadeInLeft, animate__fadeInRight, animate__slideInDown, animate__slideInLeft, animate__slideInRight, animate__zoomIn
             payload = payload?.trim();
@@ -92,6 +98,6 @@ const themeConfigSlice = createSlice({
     },
 });
 
-export const { toggleTheme, toggleMenu, toggleLayout, toggleRTL, toggleAnimation, toggleNavbar, toggleSemidark, toggleLocale, toggleSidebar, setPageTitle } = themeConfigSlice.actions;
+export const { toggleTheme, toggleMenu, toggleLayout, toggleRTL, toggleShowMoney, toggleAnimation, toggleNavbar, toggleSemidark, toggleLocale, toggleSidebar, setPageTitle } = themeConfigSlice.actions;
 
 export default themeConfigSlice.reducer;

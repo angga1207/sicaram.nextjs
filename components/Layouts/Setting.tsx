@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../store';
-import { toggleAnimation, toggleLayout, toggleMenu, toggleNavbar, toggleRTL, toggleTheme, toggleSemidark } from '../../store/themeConfigSlice';
+import { toggleAnimation, toggleLayout, toggleMenu, toggleNavbar, toggleRTL, toggleTheme, toggleSemidark, toggleShowMoney } from '../../store/themeConfigSlice';
 import IconSettings from '../Icon/IconSettings';
 import IconX from '../Icon/IconX';
 import IconSun from '../Icon/IconSun';
 import IconMoon from '../Icon/IconMoon';
 import IconLaptop from '../Icon/IconLaptop';
+import IconEye from '../Icon/IconEye';
 
 const Setting = () => {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
@@ -123,20 +124,6 @@ const Setting = () => {
                         </div>
                     </div>
 
-                    {/* <div className="mb-3 rounded-md border border-dashed border-white-light p-3 dark:border-[#1b2e4b]">
-                        <h5 className="mb-1 text-base leading-none dark:text-white">Direction</h5>
-                        <p className="text-xs text-white-dark">Select the direction for your app.</p>
-                        <div className="mt-3 flex gap-2">
-                            <button type="button" className={`${themeConfig.rtlClass === 'ltr' ? 'btn-primary' : 'btn-outline-primary'} btn flex-auto`} onClick={() => dispatch(toggleRTL('ltr'))}>
-                                LTR
-                            </button>
-
-                            <button type="button" className={`${themeConfig.rtlClass === 'rtl' ? 'btn-primary' : 'btn-outline-primary'} btn flex-auto`} onClick={() => dispatch(toggleRTL('rtl'))}>
-                                RTL
-                            </button>
-                        </div>
-                    </div> */}
-
                     <div className="mb-3 rounded-md border border-dashed border-white-light p-3 dark:border-[#1b2e4b]">
                         <h5 className="mb-1 text-base leading-none dark:text-white">
                             Navbar
@@ -198,6 +185,27 @@ const Setting = () => {
                             </select>
                         </div>
                     </div>
+
+                    <div className="mb-3 rounded-md border border-dashed border-white-light p-3 dark:border-[#1b2e4b]">
+                        <h5 className="mb-1 text-base leading-none dark:text-white">
+                            Mode Tampilan Uang
+                        </h5>
+                        <p className="text-xs text-white-dark">
+                            Pilih mode tampilan uang untuk aplikasi Anda.
+                        </p>
+                        <div className="mt-3 flex gap-2">
+                            <button type="button" className={`${themeConfig.showMoney === true ? 'btn-primary' : 'btn-outline-primary'} btn flex-auto`} onClick={() => dispatch(toggleShowMoney(true))}>
+                                <IconEye className="w-5 h-5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                Tamplikan
+                            </button>
+
+                            <button type="button" className={`${themeConfig.showMoney === false ? 'btn-primary' : 'btn-outline-primary'} btn flex-auto`} onClick={() => dispatch(toggleShowMoney(false))}>
+                                <IconX className="w-5 h-5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                Sembunyikan
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </nav>
         </div>
