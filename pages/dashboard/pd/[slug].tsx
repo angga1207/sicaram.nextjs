@@ -1,6 +1,6 @@
 import { IRootState } from '@/store';
 import { useRouter } from 'next/router';
-import { setPageTitle } from '@/store/themeConfigSlice';
+import { setPageTitle, toggleShowMoney } from '@/store/themeConfigSlice';
 import { faAngleDoubleDown, faBriefcase, faCartArrowDown, faChartLine, faClock, faExclamationTriangle, faExternalLinkAlt, faFileSignature, faGlobeAsia, faNoteSticky, faPenClip, faPercent, faProjectDiagram, faSackDollar, faShare, faSign, faStar, faSuitcase, faTachometerAltAverage, faThumbsUp, faToolbox, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useEffect, useState } from 'react';
@@ -31,7 +31,7 @@ import { colors } from 'react-select/dist/declarations/src/theme';
 import IconX from '@/components/Icon/IconX';
 import { format } from 'path';
 import LoadingSicaram from '@/components/LoadingSicaram';
-import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
+import { faEyeSlash, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 
 
 import Lightbox from "yet-another-react-lightbox";
@@ -40,6 +40,7 @@ import "yet-another-react-lightbox/styles.css";
 import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 const Index = () => {
+    const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
     const router = useRouter();
     useEffect(() => {
@@ -243,7 +244,7 @@ const Index = () => {
             stroke: {
                 lineCap: 'round'
             },
-            labels: ['Capaian Keuangan'],
+            labels: ['Capaian Belanja'],
         },
     };
 
@@ -417,18 +418,18 @@ const Index = () => {
                 tickAmount: 7,
                 labels: {
                     formatter: (value: number) => {
-                        // return value / 1000000 + 'Jt';
-                        // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-
-                        // return jt / m / t
-                        if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
-                        } else if (value >= 1000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
-                        } else if (value >= 1000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                        if (themeConfig.showMoney) {
+                            if (value >= 1000000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
+                            } else if (value >= 1000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
+                            } else if (value >= 1000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                            } else {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            }
                         } else {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            return 'Rp. ' + '-';
                         }
                     },
                     offsetX: isRtl ? -30 : -10,
@@ -745,18 +746,18 @@ const Index = () => {
                 tickAmount: 7,
                 labels: {
                     formatter: (value: number) => {
-                        // return value / 1000000 + 'Jt';
-                        // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-
-                        // return jt / m / t
-                        if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
-                        } else if (value >= 1000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
-                        } else if (value >= 1000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                        if (themeConfig.showMoney) {
+                            if (value >= 1000000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
+                            } else if (value >= 1000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
+                            } else if (value >= 1000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                            } else {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            }
                         } else {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            return 'Rp. ' + '-';
                         }
                     },
                     offsetX: isRtl ? -30 : -10,
@@ -1022,18 +1023,18 @@ const Index = () => {
                 tickAmount: 7,
                 labels: {
                     formatter: (value: number) => {
-                        // return value / 1000000 + 'Jt';
-                        // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-
-                        // return jt / m / t
-                        if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
-                        } else if (value >= 1000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
-                        } else if (value >= 1000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                        if (themeConfig.showMoney) {
+                            if (value >= 1000000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
+                            } else if (value >= 1000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
+                            } else if (value >= 1000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                            } else {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            }
                         } else {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            return 'Rp. ' + '-';
                         }
                     },
                     offsetX: isRtl ? -30 : -10,
@@ -1299,18 +1300,18 @@ const Index = () => {
                 tickAmount: 7,
                 labels: {
                     formatter: (value: number) => {
-                        // return value / 1000000 + 'Jt';
-                        // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-
-                        // return jt / m / t
-                        if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
-                        } else if (value >= 1000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
-                        } else if (value >= 1000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                        if (themeConfig.showMoney) {
+                            if (value >= 1000000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
+                            } else if (value >= 1000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
+                            } else if (value >= 1000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                            } else {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            }
                         } else {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            return 'Rp. ' + '-';
                         }
                     },
                     offsetX: isRtl ? -30 : -10,
@@ -1550,8 +1551,18 @@ const Index = () => {
                                                     month: 'long',
                                                     day: 'numeric',
                                                 })}>
-                                                    <div className="cursor-pointer">
-                                                        Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.anggaran ?? 0)}
+                                                    <div className="cursor-pointer"
+                                                        onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
+                                                        {themeConfig.showMoney ? (
+                                                            <>
+                                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.anggaran ?? 0)}
+                                                            </>
+                                                        ) : (
+                                                            <div className='flex items-center gap-x-2'>
+                                                                Rp.
+                                                                <FontAwesomeIcon icon={faEyeSlash} className='w-5 h-5' />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </Tippy>
                                             </td>
@@ -1567,8 +1578,18 @@ const Index = () => {
                                                     month: 'long',
                                                     day: 'numeric',
                                                 })}>
-                                                    <div className="cursor-pointer">
-                                                        Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi ?? 0)}
+                                                    <div className="cursor-pointer"
+                                                        onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
+                                                        {themeConfig.showMoney ? (
+                                                            <>
+                                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi ?? 0)}
+                                                            </>
+                                                        ) : (
+                                                            <div className='flex items-center gap-x-2'>
+                                                                Rp.
+                                                                <FontAwesomeIcon icon={faEyeSlash} className='w-5 h-5' />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </Tippy>
                                             </td>
@@ -1694,7 +1715,7 @@ const Index = () => {
                                 `grow min-w-[150px] w-auto bg-white dark:bg-slate-900 rounded-tr-lg !border-white-light !border-b-white text-primary !outline-none dark:!border-[#191e3a] dark:!border-b-black dark:hover:border-b-black' -mb-[1px] flex items-center justify-center border border-transparent p-3.5 hover:text-primary`}
                             type="button">
                             <FontAwesomeIcon icon={faUsers} className="w-4 h-4 mr-2" />
-                            Admin
+                            Pengguna
                         </button>
 
                     </div>
@@ -1705,7 +1726,7 @@ const Index = () => {
                                 <div className="">
                                     <div className="text-center">
                                         <div className="">
-                                            Capaian Keuangan
+                                            Capaian Belanja
                                         </div>
                                         {AnggaranSummary.anggaran_updated_at && (
                                             <div className="text-xs">
@@ -1786,7 +1807,7 @@ const Index = () => {
                         <div className="relative panel rounded-t-none">
                             <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between">
                                 <h5 className="text-lg font-semibold">
-                                    Capaian Keuangan Kabupaten Ogan Ilir
+                                    Capaian Belanja
                                 </h5>
                                 <div className="flex items-center gap-x-1 overflow-x-auto w-full md:w-auto md:overflow-x-hidden">
                                     <div className="relative group">
@@ -1879,7 +1900,7 @@ const Index = () => {
                         <div className="relative panel rounded-t-none">
                             <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between">
                                 <h5 className="text-lg font-semibold">
-                                    Capaian Keuangan Kabupaten Ogan Ilir
+                                    Capaian Belanja
                                 </h5>
                                 <div className="flex items-center gap-x-1 overflow-x-auto w-full md:w-auto md:overflow-x-hidden">
                                     <div className="relative group">
@@ -1976,7 +1997,7 @@ const Index = () => {
                                     <thead>
                                         <tr>
                                             <th className="ltr:rounded-l-md rtl:rounded-r-md bg-dark text-white dark:bg-slate-800">
-                                                Admin
+                                                Pengguna
                                             </th>
                                             <th className='bg-dark text-white dark:bg-slate-800'>
                                                 Email
@@ -2124,7 +2145,16 @@ const Index = () => {
                                                             Anggaran
                                                         </div>
                                                         <div className='self-end text-dark dark:text-slate-400 group-hover:text-white'>
-                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(program?.anggaran)}
+                                                            {themeConfig.showMoney ? (
+                                                                <>
+                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(program?.anggaran)}
+                                                                </>
+                                                            ) : (
+                                                                <div className='flex items-center gap-x-2'>
+                                                                    Rp.
+                                                                    <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </Tippy>
@@ -2254,7 +2284,16 @@ const Index = () => {
                                                                         {(selectedProgram?.summary?.target_anggaran ||
                                                                             selectedProgram?.summary?.target_anggaran === 0) ? (
                                                                             <>
-                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedProgram?.summary?.target_anggaran)}
+                                                                                {themeConfig.showMoney ? (
+                                                                                    <>
+                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedProgram?.summary?.target_anggaran)}
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                        Rp.
+                                                                                        <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                    </div>
+                                                                                )}
                                                                             </>
                                                                         ) : (
                                                                             <div className="dots-loading text-xs">...</div>
@@ -2292,7 +2331,17 @@ const Index = () => {
                                                                         {(selectedProgram?.summary?.realisasi_anggaran ||
                                                                             selectedProgram?.summary?.realisasi_anggaran === 0) ? (
                                                                             <>
-                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedProgram?.summary?.realisasi_anggaran)}
+                                                                                {themeConfig.showMoney ? (
+                                                                                    <>
+                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedProgram?.summary?.realisasi_anggaran)}
+
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                        Rp.
+                                                                                        <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                    </div>
+                                                                                )}
                                                                             </>
                                                                         ) : (
                                                                             <div className="dots-loading text-xs">...</div>
@@ -2320,7 +2369,7 @@ const Index = () => {
                                                                 </div>
                                                                 <div className="h-2 w-full rounded-full bg-dark-light shadow dark:bg-[#1b2e4b]">
                                                                     <div
-                                                                        className="h-full w-full rounded-full bg-gradient-to-r from-[#75f8ff] to-[#24efec]"
+                                                                        className="h-full w-full rounded-full bg-gradient-to-r from-[#75f8ff] to-[#24efec] max-w-full"
                                                                         style={{ width: selectedProgram?.summary?.persentase_realisasi_anggaran + '%' }}></div>
                                                                 </div>
                                                             </div>
@@ -2444,7 +2493,16 @@ const Index = () => {
                                                                     Anggaran
                                                                 </div>
                                                                 <div className='self-end text-dark dark:text-slate-400 group-hover:text-white'>
-                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(kegiatan?.anggaran)}
+                                                                    {themeConfig.showMoney ? (
+                                                                        <>
+                                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(kegiatan?.anggaran)}
+                                                                        </>
+                                                                    ) : (
+                                                                        <div className='flex items-center gap-x-2'>
+                                                                            Rp.
+                                                                            <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         </Tippy>
@@ -2570,7 +2628,16 @@ const Index = () => {
                                                                                 {(selectedKegiatan?.summary?.target_anggaran ||
                                                                                     selectedKegiatan?.summary?.target_anggaran === 0) ? (
                                                                                     <>
-                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedKegiatan?.summary?.target_anggaran)}
+                                                                                        {themeConfig.showMoney ? (
+                                                                                            <>
+                                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedKegiatan?.summary?.target_anggaran)}
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            <div className='flex items-center gap-x-2'>
+                                                                                                Rp.
+                                                                                                <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                            </div>
+                                                                                        )}
                                                                                     </>
                                                                                 ) : (
                                                                                     <div className="dots-loading text-xs">...</div>
@@ -2608,7 +2675,16 @@ const Index = () => {
                                                                                 {(selectedKegiatan?.summary?.realisasi_anggaran ||
                                                                                     selectedKegiatan?.summary?.realisasi_anggaran === 0) ? (
                                                                                     <>
-                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedKegiatan?.summary?.realisasi_anggaran)}
+                                                                                        {themeConfig.showMoney ? (
+                                                                                            <>
+                                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedKegiatan?.summary?.realisasi_anggaran)}
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            <div className='flex items-center gap-x-2'>
+                                                                                                Rp.
+                                                                                                <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                            </div>
+                                                                                        )}
                                                                                     </>
                                                                                 ) : (
                                                                                     <div className="dots-loading text-xs">...</div>
@@ -2636,7 +2712,7 @@ const Index = () => {
                                                                         </div>
                                                                         <div className="h-2 w-full rounded-full bg-dark-light shadow dark:bg-[#1b2e4b]">
                                                                             <div
-                                                                                className="h-full w-full rounded-full bg-gradient-to-r from-[#75f8ff] to-[#24efec]"
+                                                                                className="h-full w-full rounded-full bg-gradient-to-r from-[#75f8ff] to-[#24efec] max-w-full"
                                                                                 style={{ width: selectedKegiatan?.summary?.persentase_realisasi_anggaran + '%' }}></div>
                                                                         </div>
                                                                     </div>
@@ -2760,7 +2836,16 @@ const Index = () => {
                                                                             Anggaran
                                                                         </div>
                                                                         <div className='self-end text-dark dark:text-slate-400 group-hover:text-white'>
-                                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(subKegiatan?.anggaran)}
+                                                                            {themeConfig.showMoney ? (
+                                                                                <>
+                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(subKegiatan?.anggaran)}
+                                                                                </>
+                                                                            ) : (
+                                                                                <div className='flex items-center gap-x-2'>
+                                                                                    Rp.
+                                                                                    <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                </div>
+                                                                            )}
                                                                         </div>
                                                                     </div>
                                                                 </Tippy>
@@ -2887,7 +2972,16 @@ const Index = () => {
                                                                                         {(selectedSubKegiatan?.summary?.target_anggaran ||
                                                                                             selectedSubKegiatan?.summary?.target_anggaran === 0) ? (
                                                                                             <>
-                                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedSubKegiatan?.summary?.target_anggaran)}
+                                                                                                {themeConfig.showMoney ? (
+                                                                                                    <>
+                                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedSubKegiatan?.summary?.target_anggaran)}
+                                                                                                    </>
+                                                                                                ) : (
+                                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                                        Rp.
+                                                                                                        <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                                    </div>
+                                                                                                )}
                                                                                             </>
                                                                                         ) : (
                                                                                             <div className="dots-loading text-xs">...</div>
@@ -2925,7 +3019,16 @@ const Index = () => {
                                                                                         {(selectedSubKegiatan?.summary?.realisasi_anggaran ||
                                                                                             selectedSubKegiatan?.summary?.realisasi_anggaran === 0) ? (
                                                                                             <>
-                                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedSubKegiatan?.summary?.realisasi_anggaran)}
+                                                                                                {themeConfig.showMoney ? (
+                                                                                                    <>
+                                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(selectedSubKegiatan?.summary?.realisasi_anggaran)}
+                                                                                                    </>
+                                                                                                ) : (
+                                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                                        Rp.
+                                                                                                        <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                                    </div>
+                                                                                                )}
                                                                                             </>
                                                                                         ) : (
                                                                                             <div className="dots-loading text-xs">...</div>
@@ -2953,7 +3056,7 @@ const Index = () => {
                                                                                 </div>
                                                                                 <div className="h-2 w-full rounded-full bg-dark-light shadow dark:bg-[#1b2e4b]">
                                                                                     <div
-                                                                                        className="h-full w-full rounded-full bg-gradient-to-r from-[#75f8ff] to-[#24efec]"
+                                                                                        className="h-full w-full rounded-full bg-gradient-to-r from-[#75f8ff] to-[#24efec] max-w-full"
                                                                                         style={{ width: selectedSubKegiatan?.summary?.persentase_realisasi_anggaran + '%' }}></div>
                                                                                 </div>
                                                                             </div>
@@ -3165,10 +3268,28 @@ const Index = () => {
                                                                         )}
                                                                     </td>
                                                                     <td className='!text-end'>
-                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.pagu)}
+                                                                        {themeConfig.showMoney ? (
+                                                                            <>
+                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.pagu)}
+                                                                            </>
+                                                                        ) : (
+                                                                            <div className='flex items-center gap-x-2'>
+                                                                                Rp.
+                                                                                <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                            </div>
+                                                                        )}
                                                                     </td>
                                                                     <td className='!text-end'>
-                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}
+                                                                        {themeConfig.showMoney ? (
+                                                                            <>
+                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}
+                                                                            </>
+                                                                        ) : (
+                                                                            <div className='flex items-center gap-x-2'>
+                                                                                Rp.
+                                                                                <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                            </div>
+                                                                        )}
                                                                     </td>
                                                                     <td>
                                                                         <div className="!whitespace-nowrap">
@@ -3189,10 +3310,28 @@ const Index = () => {
                                                                                 {rincian?.title}
                                                                             </td>
                                                                             <td className='!text-end !whitespace-nowrap'>
-                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.pagu)}
+                                                                                {themeConfig.showMoney ? (
+                                                                                    <>
+                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.pagu)}
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                        Rp.
+                                                                                        <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                    </div>
+                                                                                )}
                                                                             </td>
                                                                             <td className='!text-end !whitespace-nowrap'>
-                                                                                Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.realisasi_anggaran)}
+                                                                                {themeConfig.showMoney ? (
+                                                                                    <>
+                                                                                        Rp. {new Intl.NumberFormat('id-ID', {}).format(rincian?.realisasi_anggaran)}
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <div className='flex items-center gap-x-2'>
+                                                                                        Rp.
+                                                                                        <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                    </div>
+                                                                                )}
                                                                             </td>
                                                                             <td>
                                                                                 <div className="!whitespace-nowrap">
@@ -3218,13 +3357,40 @@ const Index = () => {
                                                                                     {keterangan?.koefisien_realisasi + ' ' + keterangan?.satuan_name}
                                                                                 </td>
                                                                                 <td className="!text-end !whitespace-nowrap">
-                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.harga_satuan)}
+                                                                                    {themeConfig.showMoney ? (
+                                                                                        <>
+                                                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.harga_satuan)}
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        <div className='flex items-center gap-x-2'>
+                                                                                            Rp.
+                                                                                            <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                        </div>
+                                                                                    )}
                                                                                 </td>
                                                                                 <td className="!text-end !whitespace-nowrap">
-                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.pagu)}
+                                                                                    {themeConfig.showMoney ? (
+                                                                                        <>
+                                                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.pagu)}
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        <div className='flex items-center gap-x-2'>
+                                                                                            Rp.
+                                                                                            <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                        </div>
+                                                                                    )}
                                                                                 </td>
                                                                                 <td className="!text-end !whitespace-nowrap">
-                                                                                    Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.realisasi_anggaran_keterangan)}
+                                                                                    {themeConfig.showMoney ? (
+                                                                                        <>
+                                                                                            Rp. {new Intl.NumberFormat('id-ID', {}).format(keterangan?.realisasi_anggaran_keterangan)}
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        <div className='flex items-center gap-x-2'>
+                                                                                            Rp.
+                                                                                            <FontAwesomeIcon icon={faEyeSlash} className='w-4 h-4' />
+                                                                                        </div>
+                                                                                    )}
                                                                                 </td>
                                                                                 <td>
                                                                                     <div className="!whitespace-nowrap">

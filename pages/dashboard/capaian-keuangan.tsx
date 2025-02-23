@@ -1,6 +1,6 @@
 import { IRootState } from '@/store';
 import { useRouter } from 'next/router';
-import { setPageTitle } from '@/store/themeConfigSlice';
+import { setPageTitle, toggleShowMoney } from '@/store/themeConfigSlice';
 import { faAngleDoubleRight, faCartArrowDown, faExclamationTriangle, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
@@ -25,12 +25,14 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchdashboard';
 import Link from 'next/link';
 import LoadingSicaram from '@/components/LoadingSicaram';
+import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 
 const Index = () => {
+    const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
     const router = useRouter();
     useEffect(() => {
-        dispatch(setPageTitle('Capaian Keuangan'));
+        dispatch(setPageTitle('Capaian Belanja'));
     });
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -116,12 +118,12 @@ const Index = () => {
     const chartAnggaran: any = {
         series: [
             {
-                name: 'Target Anggaran',
+                name: 'Anggaran Belanja',
                 // data: [168000, 268000, 327000, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 data: AnggaranSeries?.target?.map((item: any) => item.target),
             },
             {
-                name: 'Realisasi Anggaran',
+                name: 'Realisasi Belanja',
                 // data: [165000, 225000, 268000, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 data: AnggaranSeries?.realisasi?.map((item: any) => item.realisasi),
             },
@@ -200,18 +202,18 @@ const Index = () => {
                 tickAmount: 7,
                 labels: {
                     formatter: (value: number) => {
-                        // return value / 1000000 + 'Jt';
-                        // return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
-
-                        // return jt / m / t
-                        if (value >= 1000000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
-                        } else if (value >= 1000000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
-                        } else if (value >= 1000000) {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                        if (themeConfig.showMoney) {
+                            if (value >= 1000000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
+                            } else if (value >= 1000000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000) + ' M';
+                            } else if (value >= 1000000) {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000) + ' Jt';
+                            } else {
+                                return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            }
                         } else {
-                            return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value);
+                            return 'Rp. ' + '-';
                         }
                     },
                     offsetX: isRtl ? -30 : -10,
@@ -289,7 +291,7 @@ const Index = () => {
                     <div className="col-span-10 lg:col-span-7 relative panel">
                         <div className="flex flex-col md:flex-row gap-y-3 items-center justify-between">
                             <h5 className="text-lg font-semibold">
-                                Capaian Keuangan Kabupaten Ogan Ilir
+                                Capaian Belanja Kabupaten Ogan Ilir
                             </h5>
                             <div className="flex items-center gap-x-1 overflow-x-auto w-full sm:w-auto sm:overflow-hidden">
                                 <div className="relative group">
@@ -384,7 +386,7 @@ const Index = () => {
                         <div className="mb-5 flex items-center justify-between dark:text-white-light">
                             <h5 className="">
                                 <div className="text-base font-semibold">
-                                    Capaian Keuangan
+                                    Capaian Belanja
                                 </div>
                                 <span className='font-normal text-xs'>
                                     Per 1 Januari hingga Saat Ini
@@ -400,7 +402,7 @@ const Index = () => {
                                     </span>
                                     <div className="flex-1 px-3">
                                         <div>
-                                            Anggaran
+                                            Anggaran Belanja
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
                                             {AnggaranSummary?.target?.updated_at ? (
@@ -417,15 +419,25 @@ const Index = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <span className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto">
+                                    <span
+                                        className="whitespace-pre px-1 text-base text-primary ltr:ml-auto rtl:mr-auto cursor-pointer"
+                                        onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
                                         {AnggaranSummary?.target ? (
                                             <>
-                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target)}
+                                                {themeConfig.showMoney === true ? (
+                                                    <>
+                                                        Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.target)}
+                                                    </>
+                                                ) : (
+                                                    <div className='flex items-center gap-x-2'>
+                                                        <span className='flex items-center gap-x-2'>
+                                                            Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </>
                                         ) : (
-                                            <>
-                                                <div className="dots-loading text-sm">...</div>
-                                            </>
+                                            <div className="dots-loading text-sm">...</div>
                                         )}
                                     </span>
                                 </div>
@@ -436,7 +448,7 @@ const Index = () => {
                                     </span>
                                     <div className="flex-1 px-3">
                                         <div>
-                                            Realisasi
+                                            Realisasi Belanja
                                         </div>
                                         <div className="text-xs text-white-dark dark:text-gray-500">
                                             {AnggaranSummary?.realisasi?.updated_at ? (
@@ -453,10 +465,21 @@ const Index = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto">
+                                    <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto cursor-pointer"
+                                        onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
                                         {AnggaranSummary?.realisasi ? (
                                             <>
-                                                Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi)}
+                                                {themeConfig.showMoney === true ? (
+                                                    <>
+                                                        Rp. {new Intl.NumberFormat('id-ID').format(AnggaranSummary?.realisasi)}
+                                                    </>
+                                                ) : (
+                                                    <div className='flex items-center gap-x-2'>
+                                                        <span className='flex items-center gap-x-2'>
+                                                            Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </>
                                         ) : (
                                             <>
@@ -471,7 +494,7 @@ const Index = () => {
                                         <IconBox />
                                     </span>
                                     <div className="flex-1 px-3">
-                                        Capaian Realisasi
+                                        Persentase Realisasi
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-slate-800 dark:text-white font-semibold ltr:ml-auto rtl:mr-auto">
                                         {AnggaranSummary?.percent ? (
@@ -504,7 +527,7 @@ const Index = () => {
 
                 <div className="grid grid-cols-10 gap-4">
                     <div className="col-span-10 mb-0 text-center font-bold text-xl">
-                        Capaian Keuangan
+                        Capaian Belanja
                         <br />
                         Perangkat Daerah Kabupaten Ogan Ilir
                     </div>
@@ -573,13 +596,29 @@ const Index = () => {
                                                             <Tippy content="Nilai Anggaran" theme='dark'>
                                                                 <div className="text-lg font-semibold flex flex-col md:flex-row justify-center items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Anggaran: </span>
-                                                                    Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
+                                                                    {themeConfig.showMoney ? (
+                                                                        <>
+                                                                            Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                                                        </>
+                                                                    )}
                                                                 </div>
                                                             </Tippy>
                                                             <Tippy content="Nilai Realisasi" theme='dark'>
                                                                 <div className="text-lg font-semibold flex flex-col md:flex-row justify-center items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
                                                                     <span className="text-slate-800 dark:text-white">Realisasi: </span>
-                                                                    Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
+                                                                    {themeConfig.showMoney ? (
+                                                                        <>
+                                                                            Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                                                        </>
+                                                                    )}
                                                                 </div>
                                                             </Tippy>
                                                             <div className="flex items-center justify-center flex-wrap gap-4">
