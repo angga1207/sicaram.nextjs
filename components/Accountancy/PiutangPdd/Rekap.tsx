@@ -139,23 +139,12 @@ const Rekap = (data: any) => {
             setTotalData((prev: any) => {
                 const updated = { ...prev };
 
-                updated['realisasi_belanja'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['realisasi_belanja']), 0);
                 updated['saldo_awal'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_awal']), 0);
-                updated['beban_dimuka'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_dimuka']), 0);
-                updated['hutang'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['hutang']), 0);
-                updated['hibah'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['hibah']), 0);
-                updated['reklas_tambah'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['reklas_tambah']), 0);
-                updated['plus_jukor'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['plus_jukor']), 0);
                 updated['saldo_akhir'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['saldo_akhir']), 0);
+                updated['piutang_bruto'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['piutang_bruto']), 0);
+                updated['penyisihan_piutang'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['penyisihan_piutang']), 0);
+                updated['beban_penyisihan'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_penyisihan']), 0);
 
-                updated['beban_tahun_lalu'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_tahun_lalu']), 0);
-                updated['beban_dimuka_last_year'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_dimuka_last_year']), 0);
-                updated['pembayaran_hutang'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['pembayaran_hutang']), 0);
-                updated['reklas_kurang_dari_rekening'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['reklas_kurang_dari_rekening']), 0);
-                updated['reklas_kurang_ke_modal'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['reklas_kurang_ke_modal']), 0);
-                updated['atribusi'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['atribusi']), 0);
-                updated['min_jukor'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['min_jukor']), 0);
-                updated['beban_lo'] = dataInput.reduce((acc: any, obj: any) => acc + parseFloat(obj['beban_lo']), 0);
                 return updated;
             })
         }

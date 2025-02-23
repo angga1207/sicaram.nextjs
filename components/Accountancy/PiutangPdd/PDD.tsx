@@ -470,1406 +470,1388 @@ const PDD = (data: any) => {
     return (
         <>
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
-                {!instance && (
-                    <div className="flex items-center p-3.5 rounded text-white bg-gradient-to-r from-[#BD194D] to-[#004fe6]">
-                        <div className="grow flex items-center justify-center gap-3 ltr:pr-2 rtl:pl-2">
-                            <strong className="ltr:mr-1 rtl:ml-1">
-                                Peringatan!
-                            </strong>
-                            <div>
-                                Pilih Perangkat Daerah Terlebih Dahulu.
-                            </div>
-                        </div>
-                        <button type="button" className="ltr:ml-auto rtl:mr-auto hover:opacity-80">
-                            <IconX className="w-6 h-6" />
-                        </button>
-                    </div>
-                )}
-
-                {instance && (
-                    <table className="table-striped">
-                        <thead>
-                            <tr className='sticky top-0 bg-slate-900 text-white z-[1]'>
-                                {([9].includes(CurrentUser?.role_id) == false) && (
-                                    <th rowSpan={2} className='text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]'>
-                                        Nama Perangkat Daerah
-                                    </th>
-                                )}
-                                <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
-                                    Uraian
+                <table className="table-striped">
+                    <thead>
+                        <tr className='sticky top-0 bg-slate-900 text-white z-[1]'>
+                            {([9].includes(CurrentUser?.role_id) == false) && (
+                                <th rowSpan={2} className='text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]'>
+                                    Nama Perangkat Daerah
                                 </th>
-                                <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
-                                    Pendapatan Diterima Dimuka Awal
-                                </th>
-                                <th rowSpan={1} colSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white">
-                                    Mutasi
-                                </th>
-                                <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
-                                    Pendapatan Diterima Dimuka Akhir
-                                </th>
-                            </tr>
-                            <tr className='sticky top-[46px] z-[0]'>
-                                <th className="text-center border bg-slate-900 text-white min-w-[200px]">
-                                    Berkurang
-                                </th>
-                                <th className="text-center border bg-slate-900 text-white min-w-[200px]">
-                                    Bertambah
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {(dataInput1.length > 0 || dataInput2.length > 0 || dataInput3.length > 0 || dataInput4.length > 0 || dataInput5.length > 0 || dataInput6.length > 0) ? (
-                                <>
-                                    {/* PENDAPATAN PAJAK DAERAH */}
-                                    <tr>
-                                        <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                            <div className="flex items-center justify-between">
-                                                <div className="">
-                                                    PENDAPATAN PAJAK DAERAH
-                                                </div>
-                                                <button type="button"
-                                                    disabled={isSaving == true}
-                                                    onClick={(e) => {
-                                                        addDataInput(1)
-                                                    }}
-                                                    className='btn btn-primary whitespace-nowrap text-xs'>
-                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                                                    Tambah Data
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData1.pendapatan_diterima_dimuka_awal}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData1.mutasi_berkurang}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData1.mutasi_bertambah}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData1.pendapatan_diterima_dimuka_akhir}
-                                                readOnly={true} />
-                                        </td>
-                                    </tr>
-                                    {dataInput1.map((data: any, index: any) => (
-                                        <tr key={index}>
-                                            {([9].includes(CurrentUser?.role_id) == false) && (
-                                                <td className='border'>
-                                                    {/* Perangkat Daerah */}
-                                                    <div className="">
-                                                        <Select placeholder="Pilih Perangkat Daerah"
-                                                            className='min-w-[300px]'
-                                                            onChange={(e: any) => {
-                                                                if ([9].includes(CurrentUser?.role_id)) {
-                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                                } else {
-                                                                    setDataInput1((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated[index]['instance_id'] = e?.value;
-                                                                        return updated;
-                                                                    })
-                                                                    setIsUnsaved(true);
-                                                                }
-                                                            }}
-                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
-                                                            value={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    if (item.id == data.instance_id) {
-                                                                        return {
-                                                                            value: item.id,
-                                                                            label: item.name,
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                            options={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.name,
-                                                                    }
-                                                                })
-                                                            } />
-                                                    </div>
-                                                </td>
-                                            )}
-                                            <td className='border'>
-                                                {/* Kode Rekening */}
-                                                <div className="flex items-center gap-2">
-                                                    <Select placeholder="Pilih Kode Rekening"
-                                                        className='min-w-[400px]'
-                                                        classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
-                                                        onChange={(e: any) => {
-                                                            setDataInput1((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['kode_rekening_id'] = e?.value;
-                                                                return updated;
-                                                            })
-                                                            setIsUnsaved(true);
-                                                        }}
-                                                        value={
-                                                            arrKodeRekening1?.map((item: any, index: number) => {
-                                                                if (item.id == data.kode_rekening_id) {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.fullcode + ' - ' + item.name,
-                                                                    }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            arrKodeRekening1?.map((item: any, index: number) => {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.fullcode + ' - ' + item.name,
-                                                                }
-                                                            })
-                                                        } />
-
-
-                                                    {data?.id && (
-                                                        <div className="">
-                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-
-                                                                        const swalWithBootstrapButtons = Swal.mixin({
-                                                                            customClass: {
-                                                                                confirmButton: 'btn btn-danger',
-                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                                popup: 'sweet-alerts',
-                                                                            },
-                                                                            buttonsStyling: false,
-                                                                        });
-                                                                        swalWithBootstrapButtons
-                                                                            .fire({
-                                                                                title: 'Hapus Data?',
-                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                                icon: 'question',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonText: 'Ya, Hapus!',
-                                                                                cancelButtonText: 'Tidak!',
-                                                                                reverseButtons: true,
-                                                                                padding: '2em',
-                                                                            })
-                                                                            .then((result) => {
-                                                                                if (result.value) {
-                                                                                    deleteData(data.id);
-                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                                }
-                                                                            });
-                                                                    }}
-                                                                    className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                    <IconTrash className='w-4 h-4' />
-                                                                </button>
-                                                            </Tippy>
-                                                        </div>
-                                                    )}
-
-                                                </div>
-                                            </td>
-
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.pendapatan_diterima_dimuka_awal}
-                                                    onChange={(value: any) => {
-                                                        setDataInput1((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.mutasi_berkurang}
-                                                    onChange={(value: any) => {
-                                                        setDataInput1((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.mutasi_bertambah}
-                                                    onChange={(value: any) => {
-                                                        setDataInput1((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.pendapatan_diterima_dimuka_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDataInput1((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                    {/* HASIL RETRIBUSI DAERAH */}
-                                    <tr>
-                                        <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                            <div className="flex items-center justify-between">
-                                                <div className="">
-                                                    HASIL RETRIBUSI DAERAH
-                                                </div>
-                                                <button type="button"
-                                                    disabled={isSaving == true}
-                                                    onClick={(e) => {
-                                                        addDataInput(2)
-                                                    }}
-                                                    className='btn btn-primary whitespace-nowrap text-xs'>
-                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                                                    Tambah Data
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData2.pendapatan_diterima_dimuka_awal}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData2.mutasi_berkurang}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData2.mutasi_bertambah}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData2.pendapatan_diterima_dimuka_akhir}
-                                                readOnly={true} />
-                                        </td>
-                                    </tr>
-                                    {dataInput2.map((data: any, index: any) => (
-                                        <tr key={index}>
-                                            {([9].includes(CurrentUser?.role_id) == false) && (
-                                                <td className='border'>
-                                                    {/* Perangkat Daerah */}
-                                                    <div className="">
-                                                        <Select placeholder="Pilih Perangkat Daerah"
-                                                            className='min-w-[300px]'
-                                                            onChange={(e: any) => {
-                                                                if ([9].includes(CurrentUser?.role_id)) {
-                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                                } else {
-                                                                    setDataInput2((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated[index]['instance_id'] = e?.value;
-                                                                        return updated;
-                                                                    })
-                                                                    setIsUnsaved(true);
-                                                                }
-                                                            }}
-                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
-                                                            value={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    if (item.id == data.instance_id) {
-                                                                        return {
-                                                                            value: item.id,
-                                                                            label: item.name,
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                            options={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.name,
-                                                                    }
-                                                                })
-                                                            } />
-                                                    </div>
-                                                </td>
-                                            )}
-                                            <td className='border'>
-                                                {/* Kode Rekening */}
-                                                <div className="flex items-center gap-2">
-                                                    <Select placeholder="Pilih Kode Rekening"
-                                                        className='min-w-[400px]'
-                                                        classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
-                                                        onChange={(e: any) => {
-                                                            setDataInput2((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['kode_rekening_id'] = e?.value;
-                                                                return updated;
-                                                            })
-                                                            setIsUnsaved(true);
-                                                        }}
-                                                        value={
-                                                            arrKodeRekening2?.map((item: any, index: number) => {
-                                                                if (item.id == data.kode_rekening_id) {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.fullcode + ' - ' + item.name,
-                                                                    }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            arrKodeRekening2?.map((item: any, index: number) => {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.fullcode + ' - ' + item.name,
-                                                                }
-                                                            })
-                                                        } />
-
-
-                                                    {data?.id && (
-                                                        <div className="">
-                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-
-                                                                        const swalWithBootstrapButtons = Swal.mixin({
-                                                                            customClass: {
-                                                                                confirmButton: 'btn btn-danger',
-                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                                popup: 'sweet-alerts',
-                                                                            },
-                                                                            buttonsStyling: false,
-                                                                        });
-                                                                        swalWithBootstrapButtons
-                                                                            .fire({
-                                                                                title: 'Hapus Data?',
-                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                                icon: 'question',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonText: 'Ya, Hapus!',
-                                                                                cancelButtonText: 'Tidak!',
-                                                                                reverseButtons: true,
-                                                                                padding: '2em',
-                                                                            })
-                                                                            .then((result) => {
-                                                                                if (result.value) {
-                                                                                    deleteData(data.id);
-                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                                }
-                                                                            });
-                                                                    }}
-                                                                    className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                    <IconTrash className='w-4 h-4' />
-                                                                </button>
-                                                            </Tippy>
-                                                        </div>
-                                                    )}
-
-                                                </div>
-                                            </td>
-
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.pendapatan_diterima_dimuka_awal}
-                                                    onChange={(value: any) => {
-                                                        setDataInput2((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.mutasi_berkurang}
-                                                    onChange={(value: any) => {
-                                                        setDataInput2((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.mutasi_bertambah}
-                                                    onChange={(value: any) => {
-                                                        setDataInput2((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.pendapatan_diterima_dimuka_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDataInput2((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                    {/*  HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH  */}
-                                    <tr>
-                                        <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                            <div className="flex items-center justify-between">
-                                                <div className="">
-                                                    HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH
-                                                </div>
-                                                <button type="button"
-                                                    disabled={isSaving == true}
-                                                    onClick={(e) => {
-                                                        addDataInput(3)
-                                                    }}
-                                                    className='btn btn-primary whitespace-nowrap text-xs'>
-                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                                                    Tambah Data
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData3.pendapatan_diterima_dimuka_awal}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData3.mutasi_berkurang}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData3.mutasi_bertambah}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData3.pendapatan_diterima_dimuka_akhir}
-                                                readOnly={true} />
-                                        </td>
-                                    </tr>
-                                    {dataInput3.map((data: any, index: any) => (
-                                        <tr key={index}>
-                                            {([9].includes(CurrentUser?.role_id) == false) && (
-                                                <td className='border'>
-                                                    {/* Perangkat Daerah */}
-                                                    <div className="">
-                                                        <Select placeholder="Pilih Perangkat Daerah"
-                                                            className='min-w-[300px]'
-                                                            onChange={(e: any) => {
-                                                                if ([9].includes(CurrentUser?.role_id)) {
-                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                                } else {
-                                                                    setDataInput3((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated[index]['instance_id'] = e?.value;
-                                                                        return updated;
-                                                                    })
-                                                                    setIsUnsaved(true);
-                                                                }
-                                                            }}
-                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
-                                                            value={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    if (item.id == data.instance_id) {
-                                                                        return {
-                                                                            value: item.id,
-                                                                            label: item.name,
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                            options={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.name,
-                                                                    }
-                                                                })
-                                                            } />
-                                                    </div>
-                                                </td>
-                                            )}
-                                            <td className='border'>
-                                                {/* Kode Rekening */}
-                                                <div className="flex items-center gap-2">
-                                                    <Select placeholder="Pilih Kode Rekening"
-                                                        className='min-w-[400px]'
-                                                        classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
-                                                        onChange={(e: any) => {
-                                                            setDataInput3((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['kode_rekening_id'] = e?.value;
-                                                                return updated;
-                                                            })
-                                                            setIsUnsaved(true);
-                                                        }}
-                                                        value={
-                                                            arrKodeRekening3?.map((item: any, index: number) => {
-                                                                if (item.id == data.kode_rekening_id) {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.fullcode + ' - ' + item.name,
-                                                                    }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            arrKodeRekening3?.map((item: any, index: number) => {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.fullcode + ' - ' + item.name,
-                                                                }
-                                                            })
-                                                        } />
-
-
-                                                    {data?.id && (
-                                                        <div className="">
-                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-
-                                                                        const swalWithBootstrapButtons = Swal.mixin({
-                                                                            customClass: {
-                                                                                confirmButton: 'btn btn-danger',
-                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                                popup: 'sweet-alerts',
-                                                                            },
-                                                                            buttonsStyling: false,
-                                                                        });
-                                                                        swalWithBootstrapButtons
-                                                                            .fire({
-                                                                                title: 'Hapus Data?',
-                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                                icon: 'question',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonText: 'Ya, Hapus!',
-                                                                                cancelButtonText: 'Tidak!',
-                                                                                reverseButtons: true,
-                                                                                padding: '2em',
-                                                                            })
-                                                                            .then((result) => {
-                                                                                if (result.value) {
-                                                                                    deleteData(data.id);
-                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                                }
-                                                                            });
-                                                                    }}
-                                                                    className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                    <IconTrash className='w-4 h-4' />
-                                                                </button>
-                                                            </Tippy>
-                                                        </div>
-                                                    )}
-
-                                                </div>
-                                            </td>
-
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.pendapatan_diterima_dimuka_awal}
-                                                    onChange={(value: any) => {
-                                                        setDataInput3((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.mutasi_berkurang}
-                                                    onChange={(value: any) => {
-                                                        setDataInput3((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.mutasi_bertambah}
-                                                    onChange={(value: any) => {
-                                                        setDataInput3((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.pendapatan_diterima_dimuka_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDataInput3((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                    {/*  LAIN-LAIN PAD YANG SAH  */}
-                                    <tr>
-                                        <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                            <div className="flex items-center justify-between">
-                                                <div className="">
-                                                    LAIN-LAIN PAD YANG SAH
-                                                </div>
-                                                <button type="button"
-                                                    disabled={isSaving == true}
-                                                    onClick={(e) => {
-                                                        addDataInput(4)
-                                                    }}
-                                                    className='btn btn-primary whitespace-nowrap text-xs'>
-                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                                                    Tambah Data
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData4.pendapatan_diterima_dimuka_awal}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData4.mutasi_berkurang}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData4.mutasi_bertambah}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData4.pendapatan_diterima_dimuka_akhir}
-                                                readOnly={true} />
-                                        </td>
-                                    </tr>
-                                    {dataInput4.map((data: any, index: any) => (
-                                        <tr key={index}>
-                                            {([9].includes(CurrentUser?.role_id) == false) && (
-                                                <td className='border'>
-                                                    {/* Perangkat Daerah */}
-                                                    <div className="">
-                                                        <Select placeholder="Pilih Perangkat Daerah"
-                                                            className='min-w-[300px]'
-                                                            onChange={(e: any) => {
-                                                                if ([9].includes(CurrentUser?.role_id)) {
-                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                                } else {
-                                                                    setDataInput4((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated[index]['instance_id'] = e?.value;
-                                                                        return updated;
-                                                                    })
-                                                                    setIsUnsaved(true);
-                                                                }
-                                                            }}
-                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
-                                                            value={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    if (item.id == data.instance_id) {
-                                                                        return {
-                                                                            value: item.id,
-                                                                            label: item.name,
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                            options={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.name,
-                                                                    }
-                                                                })
-                                                            } />
-                                                    </div>
-                                                </td>
-                                            )}
-                                            <td className='border'>
-                                                {/* Kode Rekening */}
-                                                <div className="flex items-center gap-2">
-                                                    <Select placeholder="Pilih Kode Rekening"
-                                                        className='min-w-[400px]'
-                                                        classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
-                                                        onChange={(e: any) => {
-                                                            setDataInput4((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['kode_rekening_id'] = e?.value;
-                                                                return updated;
-                                                            })
-                                                            setIsUnsaved(true);
-                                                        }}
-                                                        value={
-                                                            arrKodeRekening4?.map((item: any, index: number) => {
-                                                                if (item.id == data.kode_rekening_id) {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.fullcode + ' - ' + item.name,
-                                                                    }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            arrKodeRekening4?.map((item: any, index: number) => {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.fullcode + ' - ' + item.name,
-                                                                }
-                                                            })
-                                                        } />
-
-
-                                                    {data?.id && (
-                                                        <div className="">
-                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-
-                                                                        const swalWithBootstrapButtons = Swal.mixin({
-                                                                            customClass: {
-                                                                                confirmButton: 'btn btn-danger',
-                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                                popup: 'sweet-alerts',
-                                                                            },
-                                                                            buttonsStyling: false,
-                                                                        });
-                                                                        swalWithBootstrapButtons
-                                                                            .fire({
-                                                                                title: 'Hapus Data?',
-                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                                icon: 'question',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonText: 'Ya, Hapus!',
-                                                                                cancelButtonText: 'Tidak!',
-                                                                                reverseButtons: true,
-                                                                                padding: '2em',
-                                                                            })
-                                                                            .then((result) => {
-                                                                                if (result.value) {
-                                                                                    deleteData(data.id);
-                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                                }
-                                                                            });
-                                                                    }}
-                                                                    className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                    <IconTrash className='w-4 h-4' />
-                                                                </button>
-                                                            </Tippy>
-                                                        </div>
-                                                    )}
-
-                                                </div>
-                                            </td>
-
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.pendapatan_diterima_dimuka_awal}
-                                                    onChange={(value: any) => {
-                                                        setDataInput4((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.mutasi_berkurang}
-                                                    onChange={(value: any) => {
-                                                        setDataInput4((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.mutasi_bertambah}
-                                                    onChange={(value: any) => {
-                                                        setDataInput4((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.pendapatan_diterima_dimuka_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDataInput4((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                    {/*  TRANSFER PEMERINTAH PUSAT  */}
-                                    <tr>
-                                        <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                            <div className="flex items-center justify-between">
-                                                <div className="">
-                                                    TRANSFER PEMERINTAH PUSAT
-                                                </div>
-                                                <button type="button"
-                                                    disabled={isSaving == true}
-                                                    onClick={(e) => {
-                                                        addDataInput(5)
-                                                    }}
-                                                    className='btn btn-primary whitespace-nowrap text-xs'>
-                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                                                    Tambah Data
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData5.pendapatan_diterima_dimuka_awal}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData5.mutasi_berkurang}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData5.mutasi_bertambah}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData5.pendapatan_diterima_dimuka_akhir}
-                                                readOnly={true} />
-                                        </td>
-                                    </tr>
-                                    {dataInput5.map((data: any, index: any) => (
-                                        <tr key={index}>
-                                            {([9].includes(CurrentUser?.role_id) == false) && (
-                                                <td className='border'>
-                                                    {/* Perangkat Daerah */}
-                                                    <div className="">
-                                                        <Select placeholder="Pilih Perangkat Daerah"
-                                                            menuPlacement={'top'}
-                                                            className='min-w-[300px]'
-                                                            onChange={(e: any) => {
-                                                                if ([9].includes(CurrentUser?.role_id)) {
-                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                                } else {
-                                                                    setDataInput5((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated[index]['instance_id'] = e?.value;
-                                                                        return updated;
-                                                                    })
-                                                                    setIsUnsaved(true);
-                                                                }
-                                                            }}
-                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
-                                                            value={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    if (item.id == data.instance_id) {
-                                                                        return {
-                                                                            value: item.id,
-                                                                            label: item.name,
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                            options={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.name,
-                                                                    }
-                                                                })
-                                                            } />
-                                                    </div>
-                                                </td>
-                                            )}
-                                            <td className='border'>
-                                                {/* Kode Rekening */}
-                                                <div className="flex items-center gap-2">
-                                                    <Select placeholder="Pilih Kode Rekening"
-                                                        menuPlacement={'top'}
-                                                        className='min-w-[400px]'
-                                                        classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
-                                                        onChange={(e: any) => {
-                                                            setDataInput5((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['kode_rekening_id'] = e?.value;
-                                                                return updated;
-                                                            })
-                                                            setIsUnsaved(true);
-                                                        }}
-                                                        value={
-                                                            arrKodeRekening5?.map((item: any, index: number) => {
-                                                                if (item.id == data.kode_rekening_id) {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.fullcode + ' - ' + item.name,
-                                                                    }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            arrKodeRekening5?.map((item: any, index: number) => {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.fullcode + ' - ' + item.name,
-                                                                }
-                                                            })
-                                                        } />
-
-
-                                                    {data?.id && (
-                                                        <div className="">
-                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-
-                                                                        const swalWithBootstrapButtons = Swal.mixin({
-                                                                            customClass: {
-                                                                                confirmButton: 'btn btn-danger',
-                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                                popup: 'sweet-alerts',
-                                                                            },
-                                                                            buttonsStyling: false,
-                                                                        });
-                                                                        swalWithBootstrapButtons
-                                                                            .fire({
-                                                                                title: 'Hapus Data?',
-                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                                icon: 'question',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonText: 'Ya, Hapus!',
-                                                                                cancelButtonText: 'Tidak!',
-                                                                                reverseButtons: true,
-                                                                                padding: '2em',
-                                                                            })
-                                                                            .then((result) => {
-                                                                                if (result.value) {
-                                                                                    deleteData(data.id);
-                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                                }
-                                                                            });
-                                                                    }}
-                                                                    className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                    <IconTrash className='w-4 h-4' />
-                                                                </button>
-                                                            </Tippy>
-                                                        </div>
-                                                    )}
-
-                                                </div>
-                                            </td>
-
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.pendapatan_diterima_dimuka_awal}
-                                                    onChange={(value: any) => {
-                                                        setDataInput5((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.mutasi_berkurang}
-                                                    onChange={(value: any) => {
-                                                        setDataInput5((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.mutasi_bertambah}
-                                                    onChange={(value: any) => {
-                                                        setDataInput5((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.pendapatan_diterima_dimuka_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDataInput5((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                    {/*  TRANSFER ANTAR DAERAH  */}
-                                    <tr>
-                                        <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                            <div className="flex items-center justify-between">
-                                                <div className="">
-                                                    TRANSFER ANTAR DAERAH
-                                                </div>
-                                                <button type="button"
-                                                    disabled={isSaving == true}
-                                                    onClick={(e) => {
-                                                        addDataInput(6)
-                                                    }}
-                                                    className='btn btn-primary whitespace-nowrap text-xs'>
-                                                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                                                    Tambah Data
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData6.pendapatan_diterima_dimuka_awal}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData6.mutasi_berkurang}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData6.mutasi_bertambah}
-                                                readOnly={true} />
-                                        </td>
-                                        <td className='border font-semibold bg-slate-200/50'>
-                                            <InputRupiah
-                                                dataValue={totalData6.pendapatan_diterima_dimuka_akhir}
-                                                readOnly={true} />
-                                        </td>
-                                    </tr>
-                                    {dataInput6.map((data: any, index: any) => (
-                                        <tr key={index}>
-                                            {([9].includes(CurrentUser?.role_id) == false) && (
-                                                <td className='border'>
-                                                    {/* Perangkat Daerah */}
-                                                    <div className="">
-                                                        <Select placeholder="Pilih Perangkat Daerah"
-                                                            menuPlacement={'top'}
-                                                            className='min-w-[300px]'
-                                                            onChange={(e: any) => {
-                                                                if ([9].includes(CurrentUser?.role_id)) {
-                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                                } else {
-                                                                    setDataInput6((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated[index]['instance_id'] = e?.value;
-                                                                        return updated;
-                                                                    })
-                                                                    setIsUnsaved(true);
-                                                                }
-                                                            }}
-                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
-                                                            value={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    if (item.id == data.instance_id) {
-                                                                        return {
-                                                                            value: item.id,
-                                                                            label: item.name,
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                            options={
-                                                                instances?.map((item: any, index: number) => {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.name,
-                                                                    }
-                                                                })
-                                                            } />
-                                                    </div>
-                                                </td>
-                                            )}
-                                            <td className='border'>
-                                                {/* Kode Rekening */}
-                                                <div className="flex items-center gap-2">
-                                                    <Select placeholder="Pilih Kode Rekening"
-                                                        className='min-w-[400px]'
-                                                        classNamePrefix={'selectAngga'}
-                                                        isDisabled={isSaving == true}
-                                                        menuPlacement={'top'}
-                                                        onChange={(e: any) => {
-                                                            setDataInput6((prev: any) => {
-                                                                const updated = [...prev];
-                                                                updated[index]['kode_rekening_id'] = e?.value;
-                                                                return updated;
-                                                            })
-                                                            setIsUnsaved(true);
-                                                        }}
-                                                        value={
-                                                            arrKodeRekening6?.map((item: any, index: number) => {
-                                                                if (item.id == data.kode_rekening_id) {
-                                                                    return {
-                                                                        value: item.id,
-                                                                        label: item.fullcode + ' - ' + item.name,
-                                                                    }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            arrKodeRekening6?.map((item: any, index: number) => {
-                                                                return {
-                                                                    value: item.id,
-                                                                    label: item.fullcode + ' - ' + item.name,
-                                                                }
-                                                            })
-                                                        } />
-
-
-                                                    {data?.id && (
-                                                        <div className="">
-                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-
-                                                                        const swalWithBootstrapButtons = Swal.mixin({
-                                                                            customClass: {
-                                                                                confirmButton: 'btn btn-danger',
-                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                                popup: 'sweet-alerts',
-                                                                            },
-                                                                            buttonsStyling: false,
-                                                                        });
-                                                                        swalWithBootstrapButtons
-                                                                            .fire({
-                                                                                title: 'Hapus Data?',
-                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                                icon: 'question',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonText: 'Ya, Hapus!',
-                                                                                cancelButtonText: 'Tidak!',
-                                                                                reverseButtons: true,
-                                                                                padding: '2em',
-                                                                            })
-                                                                            .then((result) => {
-                                                                                if (result.value) {
-                                                                                    deleteData(data.id);
-                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                                }
-                                                                            });
-                                                                    }}
-                                                                    className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                    <IconTrash className='w-4 h-4' />
-                                                                </button>
-                                                            </Tippy>
-                                                        </div>
-                                                    )}
-
-                                                </div>
-                                            </td>
-
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.pendapatan_diterima_dimuka_awal}
-                                                    onChange={(value: any) => {
-                                                        setDataInput6((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    dataValue={data.mutasi_berkurang}
-                                                    onChange={(value: any) => {
-                                                        setDataInput6((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.mutasi_bertambah}
-                                                    onChange={(value: any) => {
-                                                        setDataInput6((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                            <td className="border">
-                                                <InputRupiah
-                                                    readOnly={true}
-                                                    dataValue={data.pendapatan_diterima_dimuka_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDataInput6((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }} />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </>
-                            ) : (
-                                <tr>
-                                    <td colSpan={12} className='border text-center'>
-                                        <div className="font-semibold text-md uppercase">
-                                            Sedang Memuat Data
-                                            <span className='dots-loading'>
-                                                ...
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
                             )}
-
-                        </tbody>
-                        {(dataInput1.length > 0 || dataInput2.length > 0 || dataInput3.length > 0 || dataInput4.length > 0 || dataInput5.length > 0 || dataInput6.length > 0) && (
-                            <tfoot>
+                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Uraian
+                            </th>
+                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Pendapatan Diterima Dimuka Awal
+                            </th>
+                            <th rowSpan={1} colSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white">
+                                Mutasi
+                            </th>
+                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                                Pendapatan Diterima Dimuka Akhir
+                            </th>
+                        </tr>
+                        <tr className='sticky top-[46px] z-[0]'>
+                            <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                                Berkurang
+                            </th>
+                            <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                                Bertambah
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {(dataInput1.length > 0 || dataInput2.length > 0 || dataInput3.length > 0 || dataInput4.length > 0 || dataInput5.length > 0 || dataInput6.length > 0) ? (
+                            <>
+                                {/* PENDAPATAN PAJAK DAERAH */}
                                 <tr>
-                                    <td className='border p-4'></td>
-                                    <td className="border p-4 bg-slate-50 dark:bg-slate-900">
-                                        <div className="text-end font-semibold">
-                                            Jumlah
+                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
+                                        <div className="flex items-center justify-between">
+                                            <div className="">
+                                                PENDAPATAN PAJAK DAERAH
+                                            </div>
+                                            <button type="button"
+                                                disabled={isSaving == true}
+                                                onClick={(e) => {
+                                                    addDataInput(1)
+                                                }}
+                                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                Tambah Data
+                                            </button>
                                         </div>
                                     </td>
-                                    <td className="border p-4">
-                                        <div className="flex justify-between font-semibold text-end whitespace-nowrap">
-                                            <div className="">
-                                                Rp.
-                                            </div>
-                                            <div className="">
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.pendapatan_diterima_dimuka_awal)}
-                                            </div>
-                                        </div>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData1.pendapatan_diterima_dimuka_awal}
+                                            readOnly={true} />
                                     </td>
-                                    <td className="border p-4">
-                                        <div className="flex justify-between font-semibold text-end whitespace-nowrap">
-                                            <div className="">
-                                                Rp.
-                                            </div>
-                                            <div className="">
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.mutasi_berkurang)}
-                                            </div>
-                                        </div>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData1.mutasi_berkurang}
+                                            readOnly={true} />
                                     </td>
-                                    <td className="border p-4">
-                                        <div className="flex justify-between font-semibold text-end whitespace-nowrap">
-                                            <div className="">
-                                                Rp.
-                                            </div>
-                                            <div className="">
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.mutasi_bertambah)}
-                                            </div>
-                                        </div>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData1.mutasi_bertambah}
+                                            readOnly={true} />
                                     </td>
-                                    <td className="border p-4">
-                                        <div className="flex justify-between font-semibold text-end whitespace-nowrap">
-                                            <div className="">
-                                                Rp.
-                                            </div>
-                                            <div className="">
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.pendapatan_diterima_dimuka_akhir)}
-                                            </div>
-                                        </div>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData1.pendapatan_diterima_dimuka_akhir}
+                                            readOnly={true} />
                                     </td>
                                 </tr>
-                            </tfoot>
+                                {dataInput1.map((data: any, index: any) => (
+                                    <tr key={index}>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput1((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                                setIsUnsaved(true);
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        value={
+                                                            instances?.map((item: any, index: number) => {
+                                                                if (item.id == data.instance_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((item: any, index: number) => {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='min-w-[400px]'
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={isSaving == true}
+                                                    onChange={(e: any) => {
+                                                        setDataInput1((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening1?.map((item: any, index: number) => {
+                                                            if (item.id == data.kode_rekening_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.fullcode + ' - ' + item.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening1?.map((item: any, index: number) => {
+                                                            return {
+                                                                value: item.id,
+                                                                label: item.fullcode + ' - ' + item.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {data?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(data.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.pendapatan_diterima_dimuka_awal}
+                                                onChange={(value: any) => {
+                                                    setDataInput1((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.mutasi_berkurang}
+                                                onChange={(value: any) => {
+                                                    setDataInput1((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.mutasi_bertambah}
+                                                onChange={(value: any) => {
+                                                    setDataInput1((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.pendapatan_diterima_dimuka_akhir}
+                                                onChange={(value: any) => {
+                                                    setDataInput1((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                {/* HASIL RETRIBUSI DAERAH */}
+                                <tr>
+                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
+                                        <div className="flex items-center justify-between">
+                                            <div className="">
+                                                HASIL RETRIBUSI DAERAH
+                                            </div>
+                                            <button type="button"
+                                                disabled={isSaving == true}
+                                                onClick={(e) => {
+                                                    addDataInput(2)
+                                                }}
+                                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                Tambah Data
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData2.pendapatan_diterima_dimuka_awal}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData2.mutasi_berkurang}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData2.mutasi_bertambah}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData2.pendapatan_diterima_dimuka_akhir}
+                                            readOnly={true} />
+                                    </td>
+                                </tr>
+                                {dataInput2.map((data: any, index: any) => (
+                                    <tr key={index}>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput2((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                                setIsUnsaved(true);
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        value={
+                                                            instances?.map((item: any, index: number) => {
+                                                                if (item.id == data.instance_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((item: any, index: number) => {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='min-w-[400px]'
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={isSaving == true}
+                                                    onChange={(e: any) => {
+                                                        setDataInput2((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening2?.map((item: any, index: number) => {
+                                                            if (item.id == data.kode_rekening_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.fullcode + ' - ' + item.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening2?.map((item: any, index: number) => {
+                                                            return {
+                                                                value: item.id,
+                                                                label: item.fullcode + ' - ' + item.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {data?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(data.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.pendapatan_diterima_dimuka_awal}
+                                                onChange={(value: any) => {
+                                                    setDataInput2((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.mutasi_berkurang}
+                                                onChange={(value: any) => {
+                                                    setDataInput2((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.mutasi_bertambah}
+                                                onChange={(value: any) => {
+                                                    setDataInput2((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.pendapatan_diterima_dimuka_akhir}
+                                                onChange={(value: any) => {
+                                                    setDataInput2((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                {/*  HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH  */}
+                                <tr>
+                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
+                                        <div className="flex items-center justify-between">
+                                            <div className="">
+                                                HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH
+                                            </div>
+                                            <button type="button"
+                                                disabled={isSaving == true}
+                                                onClick={(e) => {
+                                                    addDataInput(3)
+                                                }}
+                                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                Tambah Data
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData3.pendapatan_diterima_dimuka_awal}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData3.mutasi_berkurang}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData3.mutasi_bertambah}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData3.pendapatan_diterima_dimuka_akhir}
+                                            readOnly={true} />
+                                    </td>
+                                </tr>
+                                {dataInput3.map((data: any, index: any) => (
+                                    <tr key={index}>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput3((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                                setIsUnsaved(true);
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        value={
+                                                            instances?.map((item: any, index: number) => {
+                                                                if (item.id == data.instance_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((item: any, index: number) => {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='min-w-[400px]'
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={isSaving == true}
+                                                    onChange={(e: any) => {
+                                                        setDataInput3((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening3?.map((item: any, index: number) => {
+                                                            if (item.id == data.kode_rekening_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.fullcode + ' - ' + item.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening3?.map((item: any, index: number) => {
+                                                            return {
+                                                                value: item.id,
+                                                                label: item.fullcode + ' - ' + item.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {data?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(data.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.pendapatan_diterima_dimuka_awal}
+                                                onChange={(value: any) => {
+                                                    setDataInput3((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.mutasi_berkurang}
+                                                onChange={(value: any) => {
+                                                    setDataInput3((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.mutasi_bertambah}
+                                                onChange={(value: any) => {
+                                                    setDataInput3((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.pendapatan_diterima_dimuka_akhir}
+                                                onChange={(value: any) => {
+                                                    setDataInput3((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                {/*  LAIN-LAIN PAD YANG SAH  */}
+                                <tr>
+                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
+                                        <div className="flex items-center justify-between">
+                                            <div className="">
+                                                LAIN-LAIN PAD YANG SAH
+                                            </div>
+                                            <button type="button"
+                                                disabled={isSaving == true}
+                                                onClick={(e) => {
+                                                    addDataInput(4)
+                                                }}
+                                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                Tambah Data
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData4.pendapatan_diterima_dimuka_awal}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData4.mutasi_berkurang}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData4.mutasi_bertambah}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData4.pendapatan_diterima_dimuka_akhir}
+                                            readOnly={true} />
+                                    </td>
+                                </tr>
+                                {dataInput4.map((data: any, index: any) => (
+                                    <tr key={index}>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput4((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                                setIsUnsaved(true);
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        value={
+                                                            instances?.map((item: any, index: number) => {
+                                                                if (item.id == data.instance_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((item: any, index: number) => {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='min-w-[400px]'
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={isSaving == true}
+                                                    onChange={(e: any) => {
+                                                        setDataInput4((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening4?.map((item: any, index: number) => {
+                                                            if (item.id == data.kode_rekening_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.fullcode + ' - ' + item.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening4?.map((item: any, index: number) => {
+                                                            return {
+                                                                value: item.id,
+                                                                label: item.fullcode + ' - ' + item.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {data?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(data.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.pendapatan_diterima_dimuka_awal}
+                                                onChange={(value: any) => {
+                                                    setDataInput4((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.mutasi_berkurang}
+                                                onChange={(value: any) => {
+                                                    setDataInput4((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.mutasi_bertambah}
+                                                onChange={(value: any) => {
+                                                    setDataInput4((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.pendapatan_diterima_dimuka_akhir}
+                                                onChange={(value: any) => {
+                                                    setDataInput4((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                {/*  TRANSFER PEMERINTAH PUSAT  */}
+                                <tr>
+                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
+                                        <div className="flex items-center justify-between">
+                                            <div className="">
+                                                TRANSFER PEMERINTAH PUSAT
+                                            </div>
+                                            <button type="button"
+                                                disabled={isSaving == true}
+                                                onClick={(e) => {
+                                                    addDataInput(5)
+                                                }}
+                                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                Tambah Data
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData5.pendapatan_diterima_dimuka_awal}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData5.mutasi_berkurang}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData5.mutasi_bertambah}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData5.pendapatan_diterima_dimuka_akhir}
+                                            readOnly={true} />
+                                    </td>
+                                </tr>
+                                {dataInput5.map((data: any, index: any) => (
+                                    <tr key={index}>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        menuPlacement={'top'}
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput5((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                                setIsUnsaved(true);
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        value={
+                                                            instances?.map((item: any, index: number) => {
+                                                                if (item.id == data.instance_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((item: any, index: number) => {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    menuPlacement={'top'}
+                                                    className='min-w-[400px]'
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={isSaving == true}
+                                                    onChange={(e: any) => {
+                                                        setDataInput5((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening5?.map((item: any, index: number) => {
+                                                            if (item.id == data.kode_rekening_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.fullcode + ' - ' + item.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening5?.map((item: any, index: number) => {
+                                                            return {
+                                                                value: item.id,
+                                                                label: item.fullcode + ' - ' + item.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {data?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(data.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.pendapatan_diterima_dimuka_awal}
+                                                onChange={(value: any) => {
+                                                    setDataInput5((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.mutasi_berkurang}
+                                                onChange={(value: any) => {
+                                                    setDataInput5((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.mutasi_bertambah}
+                                                onChange={(value: any) => {
+                                                    setDataInput5((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.pendapatan_diterima_dimuka_akhir}
+                                                onChange={(value: any) => {
+                                                    setDataInput5((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                    </tr>
+                                ))}
+
+                                {/*  TRANSFER ANTAR DAERAH  */}
+                                <tr>
+                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
+                                        <div className="flex items-center justify-between">
+                                            <div className="">
+                                                TRANSFER ANTAR DAERAH
+                                            </div>
+                                            <button type="button"
+                                                disabled={isSaving == true}
+                                                onClick={(e) => {
+                                                    addDataInput(6)
+                                                }}
+                                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                Tambah Data
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData6.pendapatan_diterima_dimuka_awal}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData6.mutasi_berkurang}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData6.mutasi_bertambah}
+                                            readOnly={true} />
+                                    </td>
+                                    <td className='border font-semibold bg-slate-200/50'>
+                                        <InputRupiah
+                                            dataValue={totalData6.pendapatan_diterima_dimuka_akhir}
+                                            readOnly={true} />
+                                    </td>
+                                </tr>
+                                {dataInput6.map((data: any, index: any) => (
+                                    <tr key={index}>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                {/* Perangkat Daerah */}
+                                                <div className="">
+                                                    <Select placeholder="Pilih Perangkat Daerah"
+                                                        menuPlacement={'top'}
+                                                        className='min-w-[300px]'
+                                                        onChange={(e: any) => {
+                                                            if ([9].includes(CurrentUser?.role_id)) {
+                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                            } else {
+                                                                setDataInput6((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['instance_id'] = e?.value;
+                                                                    return updated;
+                                                                })
+                                                                setIsUnsaved(true);
+                                                            }
+                                                        }}
+                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        value={
+                                                            instances?.map((item: any, index: number) => {
+                                                                if (item.id == data.instance_id) {
+                                                                    return {
+                                                                        value: item.id,
+                                                                        label: item.name,
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                        options={
+                                                            instances?.map((item: any, index: number) => {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
+                                                                }
+                                                            })
+                                                        } />
+                                                </div>
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            {/* Kode Rekening */}
+                                            <div className="flex items-center gap-2">
+                                                <Select placeholder="Pilih Kode Rekening"
+                                                    className='min-w-[400px]'
+                                                    classNamePrefix={'selectAngga'}
+                                                    isDisabled={isSaving == true}
+                                                    menuPlacement={'top'}
+                                                    onChange={(e: any) => {
+                                                        setDataInput6((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['kode_rekening_id'] = e?.value;
+                                                            return updated;
+                                                        })
+                                                        setIsUnsaved(true);
+                                                    }}
+                                                    value={
+                                                        arrKodeRekening6?.map((item: any, index: number) => {
+                                                            if (item.id == data.kode_rekening_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.fullcode + ' - ' + item.name,
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                    options={
+                                                        arrKodeRekening6?.map((item: any, index: number) => {
+                                                            return {
+                                                                value: item.id,
+                                                                label: item.fullcode + ' - ' + item.name,
+                                                            }
+                                                        })
+                                                    } />
+
+
+                                                {data?.id && (
+                                                    <div className="">
+                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+
+                                                                    const swalWithBootstrapButtons = Swal.mixin({
+                                                                        customClass: {
+                                                                            confirmButton: 'btn btn-danger',
+                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                            popup: 'sweet-alerts',
+                                                                        },
+                                                                        buttonsStyling: false,
+                                                                    });
+                                                                    swalWithBootstrapButtons
+                                                                        .fire({
+                                                                            title: 'Hapus Data?',
+                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonText: 'Ya, Hapus!',
+                                                                            cancelButtonText: 'Tidak!',
+                                                                            reverseButtons: true,
+                                                                            padding: '2em',
+                                                                        })
+                                                                        .then((result) => {
+                                                                            if (result.value) {
+                                                                                deleteData(data.id);
+                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                            }
+                                                                        });
+                                                                }}
+                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
+                                                                <IconTrash className='w-4 h-4' />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        </td>
+
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.pendapatan_diterima_dimuka_awal}
+                                                onChange={(value: any) => {
+                                                    setDataInput6((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_awal'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                dataValue={data.mutasi_berkurang}
+                                                onChange={(value: any) => {
+                                                    setDataInput6((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_berkurang'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.mutasi_bertambah}
+                                                onChange={(value: any) => {
+                                                    setDataInput6((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['mutasi_bertambah'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.pendapatan_diterima_dimuka_akhir}
+                                                onChange={(value: any) => {
+                                                    setDataInput6((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['pendapatan_diterima_dimuka_akhir'] = isNaN(value) ? 0 : value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }} />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </>
+                        ) : (
+                            <tr>
+                                <td colSpan={12} className='border text-center'>
+                                    <div className="font-semibold text-md uppercase">
+                                        Sedang Memuat Data
+                                        <span className='dots-loading'>
+                                            ...
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
                         )}
-                    </table>
-                )}
+
+                    </tbody>
+                    {(dataInput1.length > 0 || dataInput2.length > 0 || dataInput3.length > 0 || dataInput4.length > 0 || dataInput5.length > 0 || dataInput6.length > 0) && (
+                        <tfoot>
+                            <tr>
+                                <td className='border p-4'></td>
+                                <td className="border p-4 bg-slate-50 dark:bg-slate-900">
+                                    <div className="text-end font-semibold">
+                                        Jumlah
+                                    </div>
+                                </td>
+                                <td className="border p-4">
+                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="">
+                                            Rp.
+                                        </div>
+                                        <div className="">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.pendapatan_diterima_dimuka_awal)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="border p-4">
+                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="">
+                                            Rp.
+                                        </div>
+                                        <div className="">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.mutasi_berkurang)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="border p-4">
+                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="">
+                                            Rp.
+                                        </div>
+                                        <div className="">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.mutasi_bertambah)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="border p-4">
+                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                        <div className="">
+                                            Rp.
+                                        </div>
+                                        <div className="">
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.pendapatan_diterima_dimuka_akhir)}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    )}
+                </table>
             </div>
 
             {instance && (
