@@ -34,6 +34,8 @@ const LPE = (data: any) => {
     const [levels, setLevels] = useState(paramData[6]);
     const [datas, setDatas] = useState<any>([]);
     const [isUnsaved, setIsUnsaved] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
 
@@ -57,8 +59,9 @@ const LPE = (data: any) => {
 
 
     useEffect(() => {
-        if (isMounted && periode?.id, year, level) {
+        if (isMounted && periode?.id && year && (instance || instance === 0)) {
             setDatas([]);
+            setIsLoading(true);
             getReportLPE(instance, periode?.id, year, level).then((res) => {
                 if (res.status === 'error') {
                     showAlert('error', 'Terjadi kesalahan');
@@ -66,6 +69,7 @@ const LPE = (data: any) => {
                 else if (res.status === 'success') {
                     setDatas(res.data);
                 }
+                setIsLoading(false);
             });
         }
     }, [isMounted, year, instance, level]);
@@ -86,7 +90,7 @@ const LPE = (data: any) => {
                         Laporan LPE
                     </h3>
                     <div className="">
-                        {instance && (
+                        {((instance || instance === 0) && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
                                 onClick={() => {
                                     Swal.fire({
@@ -156,7 +160,7 @@ const LPE = (data: any) => {
                             }}
                             isLoading={instances?.length === 0}
                             isClearable={true}
-                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                            isDisabled={isLoading || [9].includes(CurrentUser?.role_id) ? true : false}
                             value={
                                 instances?.map((data: any, index: number) => {
                                     if (data.id == instance) {
@@ -192,7 +196,7 @@ const LPE = (data: any) => {
                             }}
                             isSearchable={false}
                             isClearable={false}
-                            isDisabled={(years?.length === 0) || false}
+                            isDisabled={isLoading || (years?.length === 0) || false}
                         />
                         <div className='text-danger text-xs error-validation' id="error-year"></div>
                     </div>
@@ -202,7 +206,7 @@ const LPE = (data: any) => {
             </div>
 
             <div className="table-responsive h-[calc(100vh-350px)]">
-                {instance && (
+                {(instance || instance === 0) && (
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white sticky top-0'>
@@ -218,7 +222,7 @@ const LPE = (data: any) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {datas.map((data: any, index: number) => (
+                            {datas?.map((data: any, index: number) => (
                                 <tr key={index} className='!bg-white dark:!bg-[#1a202c]'>
                                     <td className='!text-left'>
                                         <div className={`select-none cursor-pointer ${data.level == 2 ? 'pl-10' : 'font-semibold'}`}>
@@ -256,7 +260,7 @@ const LPE = (data: any) => {
                         </tbody>
                     </table>
                 )}
-                {!instance && (
+                {(!instance && instance !== 0) && (
                     <div className="flex items-center justify-center h-[calc(100vh-350px)]">
                         <div className="text-center">
                             <div className="text-3xl font-semibold">

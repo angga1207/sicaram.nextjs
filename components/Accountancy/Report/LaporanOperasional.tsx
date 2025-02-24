@@ -34,6 +34,8 @@ const LaporanOperasional = (data: any) => {
     const [levels, setLevels] = useState(paramData[6]);
     const [datas, setDatas] = useState<any>([]);
     const [isUnsaved, setIsUnsaved] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
 
@@ -57,8 +59,9 @@ const LaporanOperasional = (data: any) => {
 
 
     useEffect(() => {
-        if (isMounted && periode?.id, year, level) {
+        if (isMounted && periode?.id && year && level && (instance || instance === 0)) {
             setDatas([]);
+            setIsLoading(true);
             getReportLaporanOperasional(instance, periode?.id, year, level).then((res) => {
                 if (res.status === 'error') {
                     showAlert('error', 'Terjadi kesalahan');
@@ -84,6 +87,7 @@ const LaporanOperasional = (data: any) => {
                         setDatas(dt);
                     }
                 }
+                setIsLoading(false);
             });
         }
     }, [isMounted, year, instance, level]);
@@ -128,45 +132,57 @@ const LaporanOperasional = (data: any) => {
                         Laporan Operasional
                     </h3>
                     <div className="">
-                        {(instance && datas?.length > 0) && (
+                        {((instance || instance === 0) && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
                                 onClick={() => {
-                                    Swal.fire({
-                                        title: 'Unduh Laporan Operasional',
-                                        text: 'Apakah Anda yakin ingin mengunduh laporan operasional ini?',
-                                        icon: 'question',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Ya, unduh!',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            if (datas.length > 0) {
-                                                downloadReportLaporanOperasional(datas, instance, periode?.id, year, level).then((res) => {
-                                                    if (res.status === 'error') {
-                                                        showAlert('error', 'Terjadi kesalahan');
-                                                    }
-                                                    else if (res.status === 'success') {
-                                                        const url = window.URL.createObjectURL(new Blob([res.data]));
-                                                        const link = document.createElement('a');
-                                                        link.href = url;
-                                                        link.setAttribute('download', 'true');
-                                                        link.setAttribute('href', res.data);
-                                                        document.body.appendChild(link);
-                                                        link.click();
-                                                        // console.log(res.data);
-                                                    }
-                                                });
-                                            } else {
-                                                showAlert('error', 'Data belum tersedia');
+                                    if (isDownloading == false) {
+                                        Swal.fire({
+                                            title: 'Unduh Laporan Operasional',
+                                            text: 'Apakah Anda yakin ingin mengunduh laporan operasional ini?',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Ya, unduh!',
+                                            cancelButtonText: 'Batal',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                if (datas.length > 0) {
+                                                    setIsDownloading(true);
+                                                    downloadReportLaporanOperasional(datas, instance, periode?.id, year, level).then((res) => {
+                                                        if (res.status === 'error') {
+                                                            showAlert('error', 'Terjadi kesalahan');
+                                                        }
+                                                        else if (res.status === 'success') {
+                                                            const url = window.URL.createObjectURL(new Blob([res.data]));
+                                                            const link = document.createElement('a');
+                                                            link.href = url;
+                                                            link.setAttribute('download', 'true');
+                                                            link.setAttribute('href', res.data);
+                                                            document.body.appendChild(link);
+                                                            link.click();
+                                                            // console.log(res.data);
+                                                        }
+                                                        setIsDownloading(false);
+                                                    });
+                                                } else {
+                                                    showAlert('error', 'Data belum tersedia');
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
                                 }}>
                                 <FontAwesomeIcon icon={faCloudDownloadAlt} className='w-4 h-4' />
                                 <span className="ltr:ml-2 rtl:mr-2">
-                                    Unduh Laporan Operasional
+                                    {isDownloading == false ? (
+                                        <>
+                                            Unduh Laporan Operasional
+                                        </>
+                                    ) : (
+                                        <>
+                                            Memproses...
+                                        </>
+                                    )}
                                 </span>
                             </button>
                         )}
@@ -189,7 +205,7 @@ const LaporanOperasional = (data: any) => {
                             }}
                             isLoading={instances?.length === 0}
                             isClearable={true}
-                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                            isDisabled={isLoading || [9].includes(CurrentUser?.role_id) ? true : false}
                             value={
                                 instances?.map((data: any, index: number) => {
                                     if (data.id == instance) {
@@ -225,7 +241,7 @@ const LaporanOperasional = (data: any) => {
                             }}
                             isSearchable={false}
                             isClearable={false}
-                            isDisabled={(years?.length === 0) || false}
+                            isDisabled={isLoading || (years?.length === 0) || false}
                         />
                         <div className='text-danger text-xs error-validation' id="error-year"></div>
                     </div>
@@ -244,7 +260,7 @@ const LaporanOperasional = (data: any) => {
                             }}
                             isSearchable={false}
                             isClearable={false}
-                            isDisabled={(levels?.length === 0) || false}
+                            isDisabled={isLoading || (levels?.length === 0) || false}
                         />
                         <div className='text-danger text-xs error-validation' id="error-year"></div>
                     </div>
@@ -253,7 +269,7 @@ const LaporanOperasional = (data: any) => {
             </div>
 
             <div className="table-responsive h-[calc(100vh-350px)]">
-                {instance && (
+                {(instance || instance === 0) && (
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white sticky top-0'>
@@ -369,7 +385,7 @@ const LaporanOperasional = (data: any) => {
                         </tbody>
                     </table>
                 )}
-                {!instance && (
+                {(!instance && instance !== 0) && (
                     <div className="flex items-center justify-center h-[calc(100vh-350px)]">
                         <div className="text-center">
                             <div className="text-3xl font-semibold">

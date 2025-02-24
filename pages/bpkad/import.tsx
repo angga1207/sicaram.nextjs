@@ -340,7 +340,25 @@ const Page = () => {
                                     </div>
                                 </div>
                                 <div className="w-[350px]">
-                                    {item?.message}
+                                    {/* {item?.message} */}
+                                    <div className='font-semibold'>
+                                        {item?.message?.note ?? item?.message?.message ?? '-'}
+                                    </div>
+                                    <div className='font-semibold'>
+                                        Data Tidak Terunggah : {item?.message?.missing_data_count ?? 0}
+                                    </div>
+                                    <div>
+                                        <div className='font-semibold mb-2 border-b-2'>
+                                            Missing Data :
+                                        </div>
+                                        <div>
+                                            {item?.message?.missing_data?.map((item: any) => (
+                                                <div className='mb-1 border-b'>
+                                                    {item?.kode_sub_kegiatan} - {item?.nama_sub_kegiatan}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -362,11 +380,11 @@ const Page = () => {
                                                     relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
                                         >
                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                            Import APBD
+                                            Import REKAP 5
                                         </button>
                                     )}
                                 </Tab>
-                                <Tab as={Fragment}>
+                                {/* <Tab as={Fragment}>
                                     {({ selected }) => (
                                         <button
                                             onClick={(e) => {
@@ -379,7 +397,7 @@ const Page = () => {
                                             Import Target Belanja
                                         </button>
                                     )}
-                                </Tab>
+                                </Tab> */}
                             </Tab.List>
                             <Tab.Panels>
 

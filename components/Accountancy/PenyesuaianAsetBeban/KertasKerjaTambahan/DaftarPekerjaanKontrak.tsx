@@ -214,6 +214,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
         ]);
         setIsUnsaved(true);
         setMaxPage(Math.ceil((dataInput.length + 1) / perPage));
+        setPage(maxPage);
     }
 
     const updatedData = (data: any, index: number) => {

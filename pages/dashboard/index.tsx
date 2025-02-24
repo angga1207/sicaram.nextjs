@@ -208,7 +208,7 @@ const Index = () => {
             stroke: {
                 lineCap: 'round'
             },
-            labels: ['Capaian Keuangan'],
+            labels: ['Capaian Belanja'],
         },
     };
 
@@ -351,12 +351,12 @@ const Index = () => {
                                         )}
 
                                         <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-300'>
-                                            Capaian Keuangan
+                                            Capaian Belanja
                                         </div>
                                         <div className="flex items-center justify-center">
                                             <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
                                                 <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
-                                                Klik untuk Melihat Rincian Capaian Keuangan
+                                                Klik untuk Melihat Rincian Capaian Belanja
                                             </div>
                                         </div>
                                     </Link>
