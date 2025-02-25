@@ -25,6 +25,7 @@ import IconMenu from '@/components/Icon/IconMenu';
 import Neraca from '@/components/Accountancy/Report/Neraca';
 import LaporanOperasional from '@/components/Accountancy/Report/LaporanOperasional';
 import LPE from '@/components/Accountancy/Report/LPE';
+import LRA from '@/components/Accountancy/Report/LRA';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -253,6 +254,19 @@ const Page = () => {
                         <div className="my-4 h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
                         <PerfectScrollbar className="relative h-full grow ltr:-mr-3.5 ltr:pr-3.5 rtl:-ml-3.5 rtl:pl-3.5">
                             <div className="space-y-1">
+                                {/* <button
+                                    type="button"
+                                    className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'lra' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'
+                                        }`}
+                                    onClick={() => tabChanged('lra')}
+                                >
+                                    <div className="flex items-center">
+                                        <FontAwesomeIcon icon={faClipboardCheck} className='w-4 h-4' />
+                                        <div className="ltr:ml-3 rtl:mr-3">
+                                            Laporan LRA
+                                        </div>
+                                    </div>
+                                </button> */}
                                 <button
                                     type="button"
                                     className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'neraca' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'
@@ -313,6 +327,19 @@ const Page = () => {
                     </div>
 
                     <div className="min-h-[400px] sm:min-h-[300px]">
+
+                        {selectedTab === 'lra' && (
+                            <>
+                                <div className="">
+
+                                    {(isMounted && instances.length > 0) && (
+                                        <LRA data={isMounted && [periode, year, instance, level, years, instances, levels]}
+                                            key={[year, instance, level]}
+                                        />
+                                    )}
+                                </div>
+                            </>
+                        )}
 
                         {selectedTab === 'neraca' && (
                             <>

@@ -18,7 +18,7 @@ import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.20";
+    const APP_VERSION = "2.5b.21";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -167,16 +167,18 @@ const Sidebar = () => {
                                         </span>
                                     </h2> */}
 
-                                    <li className="menu nav-item">
-                                        <Link href="/Menu/MasterData" className="group">
-                                            <div className="flex items-center">
-                                                <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                                    Master Data
-                                                </span>
-                                            </div>
-                                        </Link>
-                                    </li>
+                                    {([1, 9].includes(CurrentUser?.role_id)) && (
+                                        <li className="menu nav-item">
+                                            <Link href="/Menu/MasterData" className="group">
+                                                <div className="flex items-center">
+                                                    <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
+                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        Master Data
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    )}
 
 
                                     {([1, 2, 3, 4, 5, 10].includes(CurrentUser?.role_id)) && (

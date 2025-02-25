@@ -23,7 +23,7 @@ const showAlert = async (icon: any, text: any) => {
         padding: '10px 20px',
     });
 };
-const Neraca = (data: any) => {
+const LRA = (data: any) => {
     const [isMounted, setIsMounted] = useState(false);
     const paramData = data.data;
     const [periode, setPeriode] = useState(paramData[0]);
@@ -94,19 +94,6 @@ const Neraca = (data: any) => {
         setDatas((prev: any) => {
             const updated = [...prev];
             const currentData = updated[index];
-
-            // if (currentData.code_6 !== null) {
-            //     const parentIndex = updated.findIndex((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (currentData.code_3 === item.code_3) && (currentData.code_4 === item.code_4) && (currentData.code_5 === item.code_5) && (item.code_6 === null));
-            //     updated[parentIndex].saldo_akhir = updated.filter((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (currentData.code_3 === item.code_3) && (currentData.code_4 === item.code_4) && (currentData.code_5 === item.code_5) && (item.code_6 !== null)).reduce((acc: any, item: any) => acc + parseFloat(item.saldo_akhir), 0);
-            // }
-            // if (currentData.code_5 !== null) {
-            //     const parentIndex = updated.findIndex((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (currentData.code_3 === item.code_3) && (currentData.code_4 === item.code_4) && (item.code_5 === null));
-            //     updated[parentIndex].saldo_akhir = updated.filter((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (currentData.code_3 === item.code_3) && (currentData.code_4 === item.code_4) && (item.code_5 !== null) && (item.code_6 !== null)).reduce((acc: any, item: any) => acc + parseFloat(item.saldo_akhir), 0);
-            // }
-            // if (currentData.code_4 !== null) {
-            //     const parentIndex = updated.findIndex((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (currentData.code_3 === item.code_3) && (item.code_4 === null));
-            //     updated[parentIndex].saldo_akhir = updated.filter((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (currentData.code_3 === item.code_3) && (item.code_4 !== null) && (item.code_5 !== null) && (item.code_6 !== null)).reduce((acc: any, item: any) => acc + parseFloat(item.saldo_akhir), 0);
-            // }
             if (currentData.code_3 !== null) {
                 const parentIndex = updated.findIndex((item: any) => (currentData.code_1 === item.code_1) && (currentData.code_2 === item.code_2) && (item.code_3 === null));
                 // alert(parentIndex);
@@ -127,9 +114,9 @@ const Neraca = (data: any) => {
             <div className="">
                 <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold">
-                        Laporan Neraca
+                        Laporan LRA
                     </h3>
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         {((instance || instance === 0) && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
                                 disabled={isDownloading}
@@ -185,7 +172,7 @@ const Neraca = (data: any) => {
                                 </span>
                             </button>
                         )}
-                    </div>
+                    </div> */}
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-4">
                     <div className="">
@@ -366,4 +353,4 @@ const Neraca = (data: any) => {
     )
 }
 
-export default Neraca;
+export default LRA;

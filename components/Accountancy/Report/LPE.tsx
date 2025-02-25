@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useEffect, useState } from 'react';
-import { downloadReportLaporanLPE, getReportLPE } from '@/apis/Accountancy/Report';
+import { downloadReportLaporanLPE, getReportLPE, resetReportLPE, saveReportLPE } from '@/apis/Accountancy/Report';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 import InputRupiahSingleSave from '@/components/InputRupiahSingleSave';
+import InputRupiah from '@/components/InputRupiah';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -74,12 +75,39 @@ const LPE = (data: any) => {
         }
     }, [isMounted, year, instance, level]);
 
-    const updatedData = (data: any, index: number) => {
+    const calculateData = (data: any, index: number) => {
+        const key0SaldoAwal = data[0].saldo_awal;
+        const key1SaldoAwal = data[1].saldo_awal;
+        const key2SaldoAwal = data[2].saldo_awal;
+        // const key3SaldoAwal = data[3].saldo_awal;
+
+        const key4SaldoAwal = data[4].saldo_awal;
+        const key5SaldoAwal = data[5].saldo_awal;
+        const key6SaldoAwal = data[6].saldo_awal;
+
+        const totalSaldoAwalKey3 = parseFloat(key4SaldoAwal) + parseFloat(key5SaldoAwal) + parseFloat(key6SaldoAwal);
+        const totalSaldoAwalKey7 = parseFloat(key0SaldoAwal) + parseFloat(key1SaldoAwal) + parseFloat(key2SaldoAwal) + totalSaldoAwalKey3;
+
+        // const key0SaldoAkhir = data[0].saldo_akhir;
+        const key1SaldoAkhir = data[1].saldo_akhir;
+        const key2SaldoAkhir = data[2].saldo_akhir;
+        // const key3SaldoAkhir = data[3].saldo_akhir;
+        const key4SaldoAkhir = data[4].saldo_akhir;
+        const key5SaldoAkhir = data[5].saldo_akhir;
+        const key6SaldoAkhir = data[6].saldo_akhir;
+        const totalSaldoAkhirKey3 = parseFloat(key4SaldoAkhir) + parseFloat(key5SaldoAkhir) + parseFloat(key6SaldoAkhir);
+        const totalSaldoAkhirKey7 = totalSaldoAwalKey7 + parseFloat(key1SaldoAkhir) + parseFloat(key2SaldoAkhir) + totalSaldoAkhirKey3;
+
         setDatas((prev: any) => {
             const updated = [...prev];
+            updated[3].saldo_awal = totalSaldoAwalKey3;
+            updated[7].saldo_awal = totalSaldoAwalKey7;
+
+            updated[0].saldo_akhir = totalSaldoAwalKey7;
+            updated[3].saldo_akhir = totalSaldoAkhirKey3;
+            updated[7].saldo_akhir = totalSaldoAkhirKey7;
             return updated;
         })
-        setIsUnsaved(true);
     }
 
     return (
@@ -90,54 +118,58 @@ const LPE = (data: any) => {
                         Laporan LPE
                     </h3>
                     <div className="">
+
                         {((instance || instance === 0) && datas?.length > 0) && (
                             <button type="button" className="btn btn-outline-primary"
                                 onClick={() => {
-                                    Swal.fire({
-                                        title: 'Unduh Laporan LPE',
-                                        text: 'Apakah Anda yakin ingin mengunduh laporan LPE ini?',
-                                        icon: 'question',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Ya, unduh!',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            showAlert('info', 'Fitur belum tersedia');
-                                            Swal.fire({
-                                                'title': 'Fitur belum tersedia',
-                                                'text': 'Fitur ini akan segera hadir',
-                                                'icon': 'info',
-                                                'confirmButtonText': 'Tutup',
-                                                'confirmButtonColor': '#3085d6',
-                                                'showCancelButton': false,
-                                            });
-                                            // if (datas.length > 0) {
-                                            //     downloadReportLaporanLPE(datas, instance, periode?.id, year).then((res) => {
-                                            //         if (res.status === 'error') {
-                                            //             showAlert('error', 'Terjadi kesalahan');
-                                            //         }
-                                            //         else if (res.status === 'success') {
-                                            //             const url = window.URL.createObjectURL(new Blob([res.data]));
-                                            //             const link = document.createElement('a');
-                                            //             link.href = url;
-                                            //             link.setAttribute('download', 'true');
-                                            //             link.setAttribute('href', res.data);
-                                            //             document.body.appendChild(link);
-                                            //             link.click();
-                                            //             // console.log(res.data);
-                                            //         }
-                                            //     });
-                                            // } else {
-                                            //     showAlert('error', 'Data belum tersedia');
-                                            // }
-                                        }
-                                    });
+                                    if (isDownloading == false) {
+                                        Swal.fire({
+                                            title: 'Unduh Laporan Operasional',
+                                            text: 'Apakah Anda yakin ingin mengunduh laporan operasional ini?',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Ya, unduh!',
+                                            cancelButtonText: 'Batal',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                if (datas.length > 0) {
+                                                    setIsDownloading(true);
+                                                    downloadReportLaporanLPE(datas, instance, periode?.id, year).then((res) => {
+                                                        if (res.status === 'error') {
+                                                            showAlert('error', 'Terjadi kesalahan');
+                                                        }
+                                                        else if (res.status === 'success') {
+                                                            const url = window.URL.createObjectURL(new Blob([res.data]));
+                                                            const link = document.createElement('a');
+                                                            link.href = url;
+                                                            link.setAttribute('download', 'true');
+                                                            link.setAttribute('href', res.data);
+                                                            document.body.appendChild(link);
+                                                            link.click();
+                                                            // console.log(res.data);
+                                                        }
+                                                        setIsDownloading(false);
+                                                    });
+                                                } else {
+                                                    showAlert('error', 'Data belum tersedia');
+                                                }
+                                            }
+                                        });
+                                    }
                                 }}>
                                 <FontAwesomeIcon icon={faCloudDownloadAlt} className='w-4 h-4' />
                                 <span className="ltr:ml-2 rtl:mr-2">
-                                    Unduh Laporan LPE
+                                    {isDownloading == false ? (
+                                        <>
+                                            Unduh Laporan Operasional
+                                        </>
+                                    ) : (
+                                        <>
+                                            Memproses...
+                                        </>
+                                    )}
                                 </span>
                             </button>
                         )}
@@ -230,41 +262,167 @@ const LPE = (data: any) => {
                                         </div>
                                     </td>
                                     <td className='!text-right'>
-                                        <Tippy content={data.notes ?? data.uraian}
-                                            placement='top-end'
-                                            arrow={false}>
-                                            <div className="cursor-pointer">
-                                                <InputRupiahSingleSave
-                                                    readOnly={true}
-                                                    dataValue={data.saldo_akhir}
-                                                    onChange={(e: any) => {
-                                                        const value = e.target.value;
-                                                        updatedData({ ...data, saldo_akhir: value }, index);
-                                                    }}
-                                                />
-                                            </div>
-                                        </Tippy>
+                                        {([0, 1, 2, 3, 7].includes(index)) && (
+                                            <Tippy content={data.notes ?? data.uraian}
+                                                placement='top-end'
+                                                arrow={false}>
+                                                <div className="cursor-pointer">
+                                                    <InputRupiah
+                                                        readOnly={true}
+                                                        dataValue={data.saldo_akhir}
+                                                    />
+                                                </div>
+                                            </Tippy>
+                                        )}
+                                        {([4, 5, 6].includes(index)) && (
+                                            <Tippy content={data.notes ?? data.uraian}
+                                                placement='top-end'
+                                                arrow={false}>
+                                                <div className="cursor-pointer">
+                                                    <InputRupiah
+                                                        dataValue={data.saldo_akhir}
+                                                        readOnly={data.id === null ? true : false}
+                                                        onChange={(e: any) => {
+                                                            const value = e;
+                                                            setDatas((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index].saldo_akhir = parseFloat(value);
+                                                                calculateData(updated, index);
+                                                                return updated;
+                                                            });
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Tippy>
+                                        )}
                                     </td>
                                     <td className='!text-right'>
-                                        <InputRupiahSingleSave
-                                            readOnly={true}
-                                            dataValue={data.saldo_awal}
-                                            onChange={(e: any) => {
-                                                const value = e.target.value;
-                                                updatedData({ ...data, saldo_awal: value }, index);
-                                            }}
-                                        />
+                                        {([0, 1, 2, 4, 5, 6].includes(index)) && (
+                                            <InputRupiah
+                                                dataValue={data.saldo_awal}
+                                                readOnly={data.id === null ? true : false}
+                                                onChange={(e: any) => {
+                                                    const value = e;
+                                                    setDatas((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index].saldo_awal = parseFloat(value);
+                                                        calculateData(updated, index);
+                                                        return updated;
+                                                    });
+                                                }}
+                                            />
+                                        )}
+                                        {([0, 1, 2, 4, 5, 6].includes(index)) == false && (
+                                            <InputRupiah
+                                                readOnly={true}
+                                                dataValue={data.saldo_awal}
+                                            />
+                                        )}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
+                        {(instance || instance !== 0) && (
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={100} className='p-4'>
+                                        {/* save button */}
+                                        <div className='flex items-center justify-end gap-x-2'>
+                                            <button type="button" className="btn btn-primary"
+                                                onClick={() => {
+                                                    Swal.fire({
+                                                        title: 'Reset Manual Update',
+                                                        text: 'Apakah Anda yakin ingin mengembalikan data ini?',
+                                                        icon: 'question',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Ya!',
+                                                        cancelButtonText: 'Batal',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            if (datas.length > 0) {
+                                                                setIsUnsaved(false);
+                                                                resetReportLPE(instance, periode?.id, year).then((res) => {
+                                                                    if (res.status === 'error') {
+                                                                        showAlert('error', 'Terjadi kesalahan');
+                                                                    }
+                                                                    else if (res.status === 'success') {
+                                                                        showAlert('success', 'Data berhasil dikembalikan');
+                                                                        setIsLoading(true);
+                                                                        getReportLPE(instance, periode?.id, year, level).then((res) => {
+                                                                            if (res.status === 'error') {
+                                                                                showAlert('error', 'Terjadi kesalahan');
+                                                                            }
+                                                                            else if (res.status === 'success') {
+                                                                                setDatas(res.data);
+                                                                            }
+                                                                            setIsLoading(false);
+                                                                        });
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                showAlert('error', 'Data belum tersedia');
+                                                            }
+                                                        }
+                                                    });
+                                                }}>
+                                                Reset Manual
+                                            </button>
+
+                                            <button type="button" className="btn btn-success"
+                                                onClick={() => {
+                                                    Swal.fire({
+                                                        title: 'Simpan Perubahan',
+                                                        text: 'Apakah Anda yakin ingin menyimpan perubahan ini?',
+                                                        icon: 'question',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Ya, simpan!',
+                                                        cancelButtonText: 'Batal',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            if (datas.length > 0) {
+                                                                setIsUnsaved(false);
+                                                                saveReportLPE(datas, instance, periode?.id, year).then((res) => {
+                                                                    if (res.status === 'error') {
+                                                                        showAlert('error', 'Terjadi kesalahan');
+                                                                    }
+                                                                    else if (res.status === 'success') {
+                                                                        showAlert('success', 'Data berhasil disimpan');
+                                                                        setIsLoading(true);
+                                                                        getReportLPE(instance, periode?.id, year, level).then((res) => {
+                                                                            if (res.status === 'error') {
+                                                                                showAlert('error', 'Terjadi kesalahan');
+                                                                            }
+                                                                            else if (res.status === 'success') {
+                                                                                setDatas(res.data);
+                                                                            }
+                                                                            setIsLoading(false);
+                                                                        });
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                showAlert('error', 'Data belum tersedia');
+                                                            }
+                                                        }
+                                                    });
+                                                }}>
+                                                Simpan Perubahan
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        )}
                     </table>
                 )}
                 {(!instance && instance !== 0) && (
                     <div className="flex items-center justify-center h-[calc(100vh-350px)]">
                         <div className="text-center">
                             <div className="text-3xl font-semibold">
-                                Laporan Kabupaten Belum Tersedia
+                                Laporan Kabupaten Telah Tersedia
                             </div>
                             <div className="text-lg font-semibold">
                                 Silahkan pilih Perangkat Daerah terlebih dahulu

@@ -193,7 +193,7 @@ const LaporanOperasional = (data: any) => {
                         <label htmlFor="instance">
                             Perangkat Daerah
                         </label>
-                        <Select placeholder="Kabupaten Ogan Ilir"
+                        <Select placeholder="Pilih Perangkat Daerah"
                             id='instance'
                             className=''
                             onChange={(e: any) => {
@@ -389,7 +389,7 @@ const LaporanOperasional = (data: any) => {
                     <div className="flex items-center justify-center h-[calc(100vh-350px)]">
                         <div className="text-center">
                             <div className="text-3xl font-semibold">
-                                Laporan Kabupaten Belum Tersedia
+                                Laporan Kabupaten Telah Tersedia
                             </div>
                             <div className="text-lg font-semibold">
                                 Silahkan pilih Perangkat Daerah terlebih dahulu

@@ -39,7 +39,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import { faFileAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
-const Index = () => {
+const DashboardOPD = () => {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -84,10 +84,6 @@ const Index = () => {
         }
     }, [isMounted, periode?.id]);
 
-    if (CurrentUser?.role_id === 9) {
-        router.push('/dashboard');
-    }
-
     const [slug, setSlug] = useState<any>(null);
     const [month, setMonth] = useState<any>(null);
     const [tab, setTab] = useState<string>('summary');
@@ -130,13 +126,14 @@ const Index = () => {
     const [selectedDetailRealisasi, setSelectedDetailRealisasi] = useState<any>(null);
 
     useEffect(() => {
-        // setYear(router.query.year ?? new Date().getFullYear());
-        setMonth(router.query.month ?? new Date().getMonth());
-        setSlug(router.query.slug as string);
-    });
+        if (isMounted) {
+            setMonth(router.query.month ?? new Date().getMonth());
+            setSlug(router.query.slug as string);
+        }
+    }, [isMounted, router.query.slug]);
 
     useEffect(() => {
-        if (slug && isMounted && periode?.id && year) {
+        if (CurrentUser.role_id !== 9 && slug && isMounted && periode?.id && year) {
             setLoadingDataPrograms(true);
             getDetailInstance(router.query.slug as string, periode?.id, year, view).then((res) => {
                 if (res.status === 'success') {
@@ -153,6 +150,23 @@ const Index = () => {
 
         }
     }, [slug, view, isMounted, periode?.id, year]);
+
+    useEffect(() => {
+        if (CurrentUser.role_id === 9 && CurrentUser.instance_alias && view && year) {
+            getDetailInstance(CurrentUser.instance_alias as string, 1, year, view).then((res) => {
+                if (res.status === 'success') {
+                    setInstance(res.data.instance);
+                    setAdmins(res.data.admins)
+                    setAnggaranSeries(res.data.main_anggaran);
+                    setAnggaranSummary(res.data.summary_anggaran);
+                    setKinerjaSeries(res.data.main_kinerja);
+                    setKinerjaSummary(res.data.summary_kinerja);
+                    setDataPrograms(res.data.programs);
+                    setSlug(CurrentUser.instance_alias);
+                }
+            });
+        }
+    }, [CurrentUser, view, year]);
 
     useEffect(() => {
         if (Instance) {
@@ -644,7 +658,7 @@ const Index = () => {
     const pickProgram = (data: any) => {
         setSelectedProgram(data);
         setLoadingDataKegiatans(true);
-        getDetailProgram(slug, data.id, periode?.id, year, view).then((res) => {
+        getDetailProgram(slug ?? data.instance_alias, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedProgram((prevState: any) => ({
@@ -921,7 +935,7 @@ const Index = () => {
     const pickKegiatan = (data: any) => {
         setSelectedKegiatan(data);
         setLoadingDataSubKegiatans(true);
-        getDetaiKegiatan(slug, data.id, periode?.id, year, view).then((res) => {
+        getDetaiKegiatan(slug ?? data.instance_alias, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedKegiatan((prevState: any) => ({
@@ -1197,7 +1211,7 @@ const Index = () => {
     const pickSubKegiatan = (data: any) => {
         setSelectedSubKegiatan(data);
         setLoadingDetailRealisasi(true);
-        getDetailSubKegiatan(slug, data.id, periode?.id, year, view).then((res) => {
+        getDetailSubKegiatan(slug ?? data.instance_alias, data.id, periode?.id, year, view).then((res) => {
             if (res.status === 'success') {
                 // push to data.data to selectedProgram
                 setSelectedSubKegiatan((prevState: any) => ({
@@ -4077,4 +4091,4 @@ const Index = () => {
     );
 }
 
-export default Index;
+export default DashboardOPD;

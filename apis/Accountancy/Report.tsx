@@ -164,9 +164,54 @@ export async function getReportLPE(instance: any = null, periode: any, year: any
     }
 }
 
+export async function saveReportLPE(data: any, instance: any, periode: any, year: any) {
+    try {
+        const res = await axios.post(baseUri + '/accountancy/report/lpe', {
+            data: data,
+            instance: instance,
+            periode: periode,
+            year: year,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        const response = await res.data;
+        return response;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function resetReportLPE(instance: any, periode: any, year: any) {
+    try {
+        const res = await axios.post(baseUri + '/accountancy/report/lpe/reset', {
+            instance: instance,
+            periode: periode,
+            year: year,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        const response = await res.data;
+        return response;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
 export async function downloadReportLaporanLPE(data: any, instance: any, periode: any, year: any) {
     try {
-        const res = await axios.post(baseUri + '/accountancy/report/lpe', { data: data }, {
+        const res = await axios.post(baseUri + '/accountancy/report/lpe/download', { data: data }, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
