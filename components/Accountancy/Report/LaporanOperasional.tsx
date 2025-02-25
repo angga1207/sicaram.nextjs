@@ -32,6 +32,7 @@ const LaporanOperasional = (data: any) => {
     const [years, setYears] = useState(paramData[4]);
     const [instances, setInstances] = useState(paramData[5]);
     const [levels, setLevels] = useState(paramData[6]);
+    const [rawDatas, setRawDatas] = useState<any>([]);
     const [datas, setDatas] = useState<any>([]);
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -68,6 +69,7 @@ const LaporanOperasional = (data: any) => {
                 }
                 else if (res.status === 'success') {
                     // setDatas(res.data);
+                    setRawDatas(res.data);
                     if (level === 6) {
                         setDatas(res.data);
                     } else if (level === 5) {
@@ -90,7 +92,34 @@ const LaporanOperasional = (data: any) => {
                 setIsLoading(false);
             });
         }
-    }, [isMounted, year, instance, level]);
+    }, [isMounted, year, instance]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id && year && level && (instance || instance === 0)) {
+            if (rawDatas.length > 0) {
+                if (level === 6) {
+                    setDatas(rawDatas);
+                } else if (level === 5) {
+                    const dt = rawDatas.filter((data: any) => data.code_6 === null);
+                    setDatas(dt);
+                } else if (level === 4) {
+                    const dt = rawDatas.filter((data: any) => data.code_5 === null);
+                    setDatas(dt);
+                } else if (level === 3) {
+                    const dt = rawDatas.filter((data: any) => data.code_4 === null);
+                    setDatas(dt);
+                } else if (level === 2) {
+                    const dt = rawDatas.filter((data: any) => data.code_3 === null);
+                    setDatas(dt);
+                } else if (level === 1) {
+                    const dt = rawDatas.filter((data: any) => data.code_2 === null);
+                    setDatas(dt);
+                }
+            }
+        }
+    }, [level]);
+
+
 
     const updatedData = (data: any, index: number) => {
         setDatas((prev: any) => {
@@ -371,7 +400,7 @@ const LaporanOperasional = (data: any) => {
                                             <td>
                                                 <div className="flex items-center justify-between">
                                                     <div className="">
-                                                        {data.saldo_awal === 0 ? 0 : new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(((data.saldo_akhir - data.saldo_awal) / data.saldo_awal) * 100)}
+                                                        {data.saldo_awal === 0 ? '0,00' : new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(((data.saldo_akhir - data.saldo_awal) / data.saldo_awal) * 100)}
                                                     </div>
                                                     <div className="">
                                                         %

@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -34,6 +34,9 @@ const PenjualanAset = (data: any) => {
     const [isMounted, setIsMounted] = useState(false);
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [maxPage, setMaxPage] = useState(1);
 
     useEffect(() => {
         setIsMounted(true);
@@ -101,6 +104,8 @@ const PenjualanAset = (data: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
+                        const maxPage = Math.ceil(res.data.length / perPage);
+                        setMaxPage(maxPage);
                     } else {
                         setDataInput([
                             {
@@ -194,6 +199,8 @@ const PenjualanAset = (data: any) => {
         }
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
+        setMaxPage(Math.ceil((dataInput.length + 1) / perPage));
+        setPage(Math.ceil((dataInput.length + 1) / perPage));
     }
 
     const updatedData = (data: any, index: number) => {
@@ -239,7 +246,6 @@ const PenjualanAset = (data: any) => {
                 return updated;
             });
         }
-        console.log(totalData);
     }, [isMounted, dataInput])
 
     const save = () => {
@@ -373,408 +379,410 @@ const PenjualanAset = (data: any) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            dataInput.map((data: any, index: number) => (
-                                <tr key={index} className='text-center'>
-                                    <td>
-                                        <div className="flex justify-center items-center gap-2">
-                                            <Tippy content={`Dibuat Oleh : ${data.created_by ?? ''} | Diperbarui Oleh : ${data.updated_by ?? ''}`}
-                                                theme='info'
-                                                placement='top-start'>
-                                                <button className='text-info select-none'>
-                                                    <FontAwesomeIcon icon={faUser} className='w-3.5 h-3.5' />
-                                                </button>
-                                            </Tippy>
+                        {dataInput.map((data: any, index: number) => (
+                            <>
+                                {(index >= (page - 1) * perPage && index < (page * perPage)) && (
+                                    <tr key={index} className='text-center'>
+                                        <td>
+                                            <div className="flex justify-center items-center gap-2">
+                                                <Tippy content={`Dibuat Oleh : ${data.created_by ?? ''} | Diperbarui Oleh : ${data.updated_by ?? ''}`}
+                                                    theme='info'
+                                                    placement='top-start'>
+                                                    <button className='text-info select-none'>
+                                                        <FontAwesomeIcon icon={faUser} className='w-3.5 h-3.5' />
+                                                    </button>
+                                                </Tippy>
 
-                                            <Tippy content='Hapus Data'
-                                                theme='danger'>
-                                                <button
-                                                    className='text-danger select-none'
-                                                    onClick={(e) => {
-                                                        Swal.fire({
-                                                            title: 'Hapus Data',
-                                                            text: 'Apakah Anda yakin ingin menghapus data ini?',
-                                                            icon: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#d33',
-                                                            cancelButtonColor: '#3085d6',
-                                                            confirmButtonText: 'Ya',
-                                                            cancelButtonText: 'Tidak',
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                if (data.id) {
-                                                                    deleteData(data.id);
-                                                                } else {
-                                                                    // showAlert('info', 'Data ini belum tersimpan');
-                                                                    setDataInput((prev: any) => {
-                                                                        const updated = [...prev];
-                                                                        updated.splice(index, 1);
-                                                                        return updated;
-                                                                    });
+                                                <Tippy content='Hapus Data'
+                                                    theme='danger'>
+                                                    <button
+                                                        className='text-danger select-none'
+                                                        onClick={(e) => {
+                                                            Swal.fire({
+                                                                title: 'Hapus Data',
+                                                                text: 'Apakah Anda yakin ingin menghapus data ini?',
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#d33',
+                                                                cancelButtonColor: '#3085d6',
+                                                                confirmButtonText: 'Ya',
+                                                                cancelButtonText: 'Tidak',
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    if (data.id) {
+                                                                        deleteData(data.id);
+                                                                    } else {
+                                                                        // showAlert('info', 'Data ini belum tersimpan');
+                                                                        setDataInput((prev: any) => {
+                                                                            const updated = [...prev];
+                                                                            updated.splice(index, 1);
+                                                                            return updated;
+                                                                        });
+                                                                    }
+                                                                }
+                                                            });
+                                                        }}
+                                                    >
+                                                        <IconTrash className='w-5 h-5' />
+                                                    </button>
+                                                </Tippy>
+                                            </div>
+                                        </td>
+                                        {([9].includes(CurrentUser?.role_id) == false) && (
+                                            <td className='border'>
+                                                <Select placeholder="Pilih Perangkat Daerah"
+                                                    className='min-w-[300px]'
+                                                    onChange={(e: any) => {
+                                                        if ([9].includes(CurrentUser?.role_id)) {
+                                                            showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                        } else {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['instance_id'] = e?.value;
+                                                                return updated;
+                                                            })
+                                                        }
+                                                    }}
+                                                    isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
+                                                    value={
+                                                        instances?.map((item: any, index: number) => {
+                                                            if (item.id == data.instance_id) {
+                                                                return {
+                                                                    value: item.id,
+                                                                    label: item.name,
                                                                 }
                                                             }
-                                                        });
-                                                    }}
-                                                >
-                                                    <IconTrash className='w-5 h-5' />
-                                                </button>
-                                            </Tippy>
-                                        </div>
-                                    </td>
-                                    {([9].includes(CurrentUser?.role_id) == false) && (
-                                        <td className='border'>
-                                            <Select placeholder="Pilih Perangkat Daerah"
-                                                className='min-w-[300px]'
-                                                onChange={(e: any) => {
-                                                    if ([9].includes(CurrentUser?.role_id)) {
-                                                        showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                    } else {
-                                                        setDataInput((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['instance_id'] = e?.value;
-                                                            return updated;
                                                         })
                                                     }
-                                                }}
-                                                isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
-                                                value={
-                                                    instances?.map((item: any, index: number) => {
-                                                        if (item.id == data.instance_id) {
+                                                    options={
+                                                        instances?.map((item: any, index: number) => {
                                                             return {
                                                                 value: item.id,
                                                                 label: item.name,
                                                             }
-                                                        }
+                                                        })
+                                                    } />
+                                            </td>
+                                        )}
+                                        <td className='border'>
+                                            <input type="text"
+                                                placeholder='Kelompok Barang / Aset'
+                                                autoComplete='off'
+                                                value={data.kelompok_barang_aset}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setDataInput((prevData: any) => {
+                                                        const updated = [...prevData];
+                                                        updated[index].kelompok_barang_aset = value;
+                                                        return updated;
                                                     })
-                                                }
-                                                options={
-                                                    instances?.map((item: any, index: number) => {
-                                                        return {
-                                                            value: item.id,
-                                                            label: item.name,
-                                                        }
-                                                    })
-                                                } />
+                                                    setIsUnsaved(true);
+                                                }}
+                                                className='form-input w-[250px] font-normal' />
                                         </td>
-                                    )}
-                                    <td className='border'>
-                                        <input type="text"
-                                            placeholder='Kelompok Barang / Aset'
-                                            autoComplete='off'
-                                            value={data.kelompok_barang_aset}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                setDataInput((prevData: any) => {
-                                                    const updated = [...prevData];
-                                                    updated[index].kelompok_barang_aset = value;
-                                                    return updated;
-                                                })
-                                                setIsUnsaved(true);
-                                            }}
-                                            className='form-input w-[250px] font-normal' />
-                                    </td>
-                                    <td className='border'>
-                                        <input type="text"
-                                            placeholder='Nama Barang'
-                                            autoComplete='off'
-                                            value={data.nama_barang}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                setDataInput((prevData: any) => {
-                                                    const updated = [...prevData];
-                                                    updated[index].nama_barang = value;
-                                                    return updated;
-                                                })
-                                                setIsUnsaved(true);
-                                            }}
-                                            className='form-input w-[250px] font-normal' />
-                                    </td>
-                                    <td className='border'>
-                                        <input type="number"
-                                            min="2000"
-                                            max="2099"
-                                            placeholder='Tahun Perolehan'
-                                            autoComplete='off'
-                                            value={data.tahun_perolehan}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                setDataInput((prevData: any) => {
-                                                    const updated = [...prevData];
-                                                    updated[index].tahun_perolehan = value;
-                                                    return updated;
-                                                })
-                                                setIsUnsaved(true);
-                                            }}
-                                            className='form-input w-[250px] font-normal' />
-                                    </td>
-                                    <td className="border">
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.harga_perolehan}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['harga_perolehan'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="border">
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.akumulasi_penyusutan}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['akumulasi_penyusutan'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="border">
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.harga_jual}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['harga_jual'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="border">
-                                        <InputRupiah
-                                            // isDisabled={isSaving == true}
-                                            readOnly={true}
-                                            dataValue={data.surplus}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['surplus'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <input type="text"
-                                            placeholder='Nomor Berita Acara'
-                                            autoComplete='off'
-                                            value={data.nomor_berita_acara}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                setDataInput((prevData: any) => {
-                                                    const updated = [...prevData];
-                                                    updated[index].nomor_berita_acara = value;
-                                                    return updated;
-                                                })
-                                                setIsUnsaved(true);
-                                            }}
-                                            className='form-input w-[250px] font-normal' />
-                                    </td>
-                                    <td className='border'>
-                                        <Flatpickr
-                                            placeholder='Tanggal Berita Acara'
-                                            options={{
-                                                dateFormat: 'Y-m-d',
-                                                position: 'auto right'
-                                            }}
-                                            className="form-input w-[200px]"
-                                            value={data?.tanggal_berita_acara}
-                                            onChange={(date) => {
-                                                let Ymd = new Date(date[0].toISOString());
-                                                Ymd.setDate(Ymd.getDate() + 1);
-                                                const newYmd = Ymd.toISOString().split('T')[0];
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['tanggal_berita_acara'] = newYmd;
-                                                    return updated;
-                                                })
-                                                setIsUnsaved(true);
-                                            }} />
-                                    </td>
-                                    <td className='border'>
-                                        <input type="text"
-                                            placeholder='Keterangan'
-                                            autoComplete='off'
-                                            value={data.keterangan}
-                                            onChange={(e) => {
-                                                const value = e.target.value;
-                                                setDataInput((prevData: any) => {
-                                                    const updated = [...prevData];
-                                                    updated[index].keterangan = value;
-                                                    return updated;
-                                                })
-                                                setIsUnsaved(true);
-                                            }}
-                                            className='form-input w-[250px] font-normal' />
-                                    </td>
+                                        <td className='border'>
+                                            <input type="text"
+                                                placeholder='Nama Barang'
+                                                autoComplete='off'
+                                                value={data.nama_barang}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setDataInput((prevData: any) => {
+                                                        const updated = [...prevData];
+                                                        updated[index].nama_barang = value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                                className='form-input w-[250px] font-normal' />
+                                        </td>
+                                        <td className='border'>
+                                            <input type="number"
+                                                min="2000"
+                                                max="2099"
+                                                placeholder='Tahun Perolehan'
+                                                autoComplete='off'
+                                                value={data.tahun_perolehan}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setDataInput((prevData: any) => {
+                                                        const updated = [...prevData];
+                                                        updated[index].tahun_perolehan = value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                                className='form-input w-[250px] font-normal' />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.harga_perolehan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['harga_perolehan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.akumulasi_penyusutan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['akumulasi_penyusutan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.harga_jual}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['harga_jual'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className="border">
+                                            <InputRupiah
+                                                // isDisabled={isSaving == true}
+                                                readOnly={true}
+                                                dataValue={data.surplus}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['surplus'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <input type="text"
+                                                placeholder='Nomor Berita Acara'
+                                                autoComplete='off'
+                                                value={data.nomor_berita_acara}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setDataInput((prevData: any) => {
+                                                        const updated = [...prevData];
+                                                        updated[index].nomor_berita_acara = value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                                className='form-input w-[250px] font-normal' />
+                                        </td>
+                                        <td className='border'>
+                                            <Flatpickr
+                                                placeholder='Tanggal Berita Acara'
+                                                options={{
+                                                    dateFormat: 'Y-m-d',
+                                                    position: 'auto right'
+                                                }}
+                                                className="form-input w-[200px]"
+                                                value={data?.tanggal_berita_acara}
+                                                onChange={(date) => {
+                                                    let Ymd = new Date(date[0].toISOString());
+                                                    Ymd.setDate(Ymd.getDate() + 1);
+                                                    const newYmd = Ymd.toISOString().split('T')[0];
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['tanggal_berita_acara'] = newYmd;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }} />
+                                        </td>
+                                        <td className='border'>
+                                            <input type="text"
+                                                placeholder='Keterangan'
+                                                autoComplete='off'
+                                                value={data.keterangan}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setDataInput((prevData: any) => {
+                                                        const updated = [...prevData];
+                                                        updated[index].keterangan = value;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }}
+                                                className='form-input w-[250px] font-normal' />
+                                        </td>
 
-                                    <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
+                                        <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
 
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.persediaan}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['persediaan'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.aset_tetap_tanah}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['aset_tetap_tanah'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.aset_tetap_peralatan_mesin}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['aset_tetap_peralatan_mesin'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.aset_tetap_gedung_bangunan}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['aset_tetap_gedung_bangunan'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.aset_tetap_jalan_jaringan_irigasi}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['aset_tetap_jalan_jaringan_irigasi'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.aset_tetap_lainnya}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['aset_tetap_lainnya'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.konstruksi_dalam_pekerjaan}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['konstruksi_dalam_pekerjaan'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className='border'>
-                                        <InputRupiah
-                                            isDisabled={isSaving == true}
-                                            // readOnly={true}
-                                            dataValue={data.aset_lainnya}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['aset_lainnya'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.persediaan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['persediaan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.aset_tetap_tanah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['aset_tetap_tanah'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.aset_tetap_peralatan_mesin}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['aset_tetap_peralatan_mesin'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.aset_tetap_gedung_bangunan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['aset_tetap_gedung_bangunan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.aset_tetap_jalan_jaringan_irigasi}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['aset_tetap_jalan_jaringan_irigasi'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.aset_tetap_lainnya}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['aset_tetap_lainnya'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.konstruksi_dalam_pekerjaan}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['konstruksi_dalam_pekerjaan'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='border'>
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={data.aset_lainnya}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['aset_lainnya'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
 
-                                    <td className='border'>
-                                        <InputRupiah
-                                            // isDisabled={isSaving == true}
-                                            readOnly={true}
-                                            dataValue={data.jumlah_penyesuaian}
-                                            onChange={(value: any) => {
-                                                setDataInput((prev: any) => {
-                                                    const updated = [...prev];
-                                                    updated[index]['jumlah_penyesuaian'] = value;
-                                                    updatedData(updated, index);
-                                                    return updated;
-                                                });
-                                                setIsUnsaved(true);
-                                            }}
-                                        />
-                                    </td>
-                                </tr>
-                            ))
-                        }
+                                        <td className='border'>
+                                            <InputRupiah
+                                                // isDisabled={isSaving == true}
+                                                readOnly={true}
+                                                dataValue={data.jumlah_penyesuaian}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['jumlah_penyesuaian'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                    </tr>
+                                )}
+                            </>
+                        ))}
                     </tbody>
                     <tfoot>
                         <tr>
@@ -834,35 +842,96 @@ const PenjualanAset = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                <button type="button"
-                    disabled={isSaving == true}
-                    onClick={(e) => {
-                        addDataInput()
-                    }}
-                    className='btn btn-primary whitespace-nowrap text-xs'>
-                    <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                    Tambah Data
-                </button>
-
-
-                {isSaving == false ? (
+            <div className="flex items-center justify-between gap-4 mt-4 px-5">
+                <div className="flex items-center gap-2">
                     <button type="button"
                         onClick={(e) => {
-                            save()
+                            if (page > 1) {
+                                setPage(page - 1);
+                            }
                         }}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                        Simpan Penghapusan Aset
+                        disabled={page == 1}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
                     </button>
-                ) : (
+
+                    <div className="flex align-center justify-center gap-1">
+                        <input
+                            type="number"
+                            className="form-input min-w-1 text-center py-0 px-1"
+                            value={page}
+                            onChange={(e: any) => {
+                                const value = e.target.value;
+                                if (value < 1) {
+                                    setPage(1);
+                                } else if (value > maxPage) {
+                                    setPage(maxPage);
+                                }
+                                else {
+                                    setPage(parseInt(e.target.value));
+                                }
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            onClick={(e: any) => e.target.select()}
+                            min={1}
+                            max={maxPage} />
+                        <div>
+                            <input
+                                type="text"
+                                className="form-input min-w-1 text-center py-0 px-1"
+                                value={'/ ' + maxPage}
+                                readOnly={true}
+                                min={1}
+                                max={maxPage} />
+                        </div>
+                    </div>
+
                     <button type="button"
-                        disabled={true}
-                        className='btn btn-success whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                        Menyimpan..
+                        onClick={(e) => {
+                            if (page < maxPage) {
+                                setPage(page + 1);
+                            }
+                        }}
+                        disabled={page == maxPage}
+                        className='btn btn-primary whitespace-nowrap text-xs'>
+                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
                     </button>
-                )}
+                </div>
+                <div className="flex items-center justify-end gap-4">
+                    {dataInput.length > 0 && (
+                        <>
+                            <button type="button"
+                                disabled={isSaving == true}
+                                onClick={(e) => {
+                                    if (isSaving == false) {
+                                        addDataInput()
+                                    }
+                                }}
+                                className='btn btn-primary whitespace-nowrap text-xs'>
+                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                Tambah Data
+                            </button>
+
+                            {isSaving == false ? (
+                                <button type="button"
+                                    onClick={(e) => {
+                                        save()
+                                    }}
+                                    className='btn btn-success whitespace-nowrap text-xs'>
+                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    Simpan
+                                </button>
+                            ) : (
+                                <button type="button"
+                                    disabled={true}
+                                    className='btn btn-success whitespace-nowrap text-xs'>
+                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    Menyimpan..
+                                </button>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
         </>
     );

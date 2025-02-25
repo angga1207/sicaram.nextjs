@@ -184,7 +184,7 @@ const Jasa = (data: any) => {
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
         setMaxPage(Math.ceil((dataInput.length + 1) / perPage));
-        setPage(maxPage);
+        setPage(Math.ceil((dataInput.length + 1) / perPage));
     }
 
     const updatedData = (data: any, index: number) => {
@@ -1003,7 +1003,7 @@ const Jasa = (data: any) => {
                     </button>
                 </div>
                 <div className="flex items-center justify-end gap-4">
-                    {dataInput.length > 0 && (
+                    {(dataInput.length > 0 && instance) && (
                         <>
                             <button type="button"
                                 disabled={isSaving == true}

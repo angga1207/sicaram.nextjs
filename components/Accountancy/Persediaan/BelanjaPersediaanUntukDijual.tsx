@@ -124,7 +124,7 @@ const BelanjaPersediaanUntukDijual = (data: any) => {
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
         setMaxPage(Math.ceil((dataInput.length + 1) / perPage));
-        setPage(maxPage);
+        setPage(Math.ceil((dataInput.length + 1) / perPage));
     }
 
     const [totalData, setTotalData] = useState<any>({

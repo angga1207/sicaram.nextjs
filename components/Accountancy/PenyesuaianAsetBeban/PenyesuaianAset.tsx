@@ -225,6 +225,7 @@ const PenyesuaianAset = (data: any) => {
         setDataInput((prevData: any) => [...prevData, newData]);
         setIsUnsaved(true);
         setMaxPage(Math.ceil((dataInput.length + 1) / perPage));
+        setPage(Math.ceil((dataInput.length + 1) / perPage));
     }
 
     const updatedData = (data: any, index: number) => {
@@ -926,7 +927,36 @@ const PenyesuaianAset = (data: any) => {
                         <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
                     </button>
 
-                    {page} / {maxPage}
+                    <div className="flex align-center justify-center gap-1">
+                        <input
+                            type="number"
+                            className="form-input min-w-1 text-center py-0 px-1"
+                            value={page}
+                            onChange={(e: any) => {
+                                const value = e.target.value;
+                                if (value < 1) {
+                                    setPage(1);
+                                } else if (value > maxPage) {
+                                    setPage(maxPage);
+                                }
+                                else {
+                                    setPage(parseInt(e.target.value));
+                                }
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            onClick={(e: any) => e.target.select()}
+                            min={1}
+                            max={maxPage} />
+                        <div>
+                            <input
+                                type="text"
+                                className="form-input min-w-1 text-center py-0 px-1"
+                                value={'/ ' + maxPage}
+                                readOnly={true}
+                                min={1}
+                                max={maxPage} />
+                        </div>
+                    </div>
 
                     <button type="button"
                         onClick={(e) => {
@@ -953,6 +983,7 @@ const PenyesuaianAset = (data: any) => {
                                 <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
                                 Tambah Data
                             </button>
+
                             {isSaving == false ? (
                                 <button type="button"
                                     onClick={(e) => {
@@ -960,7 +991,7 @@ const PenyesuaianAset = (data: any) => {
                                     }}
                                     className='btn btn-success whitespace-nowrap text-xs'>
                                     <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                                    Simpan Penyesuaian Aset
+                                    Simpan
                                 </button>
                             ) : (
                                 <button type="button"
