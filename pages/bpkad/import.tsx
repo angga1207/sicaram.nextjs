@@ -176,6 +176,7 @@ const Page = () => {
     const [messageApbd, setMessageApbd] = useState<any>('')
     const [fileTargetBelanja, setFileTargetBelanja] = useState<any>(null)
     const [messageTargetBelanja, setMessageTargetBelanja] = useState<any>('')
+    const [fileRekap5, setFileRekap5] = useState<any>(null)
     const [isUploading, setIsUploading] = useState<any>(false)
 
     const [logs, setLogs] = useState<any>([])
@@ -228,6 +229,41 @@ const Page = () => {
 
             if (res.data.status === 'success') {
                 showAlert('success', 'Data berhasil diupload')
+                setFileApbd(null)
+            } else {
+                showAlert('error', 'Data gagal diupload')
+            }
+            setIsUploading(false)
+            getLogs()
+        } catch (e) {
+            setIsUploading(false)
+            console.log(e)
+        }
+    }
+
+    const uploadRekap5 = async () => {
+        if (isUploading) {
+            showAlert('error', 'Sedang dalam proses upload, mohon tunggu');
+            return
+        }
+        setIsUploading(true)
+        try {
+            const formData = new FormData()
+            formData.append('file', fileRekap5)
+            formData.append('month', month)
+            formData.append('year', year)
+            formData.append('periode', periode?.id)
+
+            const res = await axios.post(BaseUri() + '/caram/upload-rekap5-program', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${CurrentToken}`,
+                }
+            })
+
+            if (res.data.status === 'success') {
+                showAlert('success', 'Data berhasil diupload')
+                setFileRekap5(null)
             } else {
                 showAlert('error', 'Data gagal diupload')
             }
@@ -304,12 +340,17 @@ const Page = () => {
                             Upload History &nbsp;
                             {menu === 1 && (
                                 <>
-                                    APBD
+                                    Rekap 5 Ke Pagu
                                 </>
                             )}
                             {menu === 2 && (
                                 <>
                                     Target Belanja
+                                </>
+                            )}
+                            {menu === 3 && (
+                                <>
+                                    Rekap 5 ke Program Kegiatan
                                 </>
                             )}
                         </div>
@@ -374,13 +415,27 @@ const Page = () => {
                                     {({ selected }) => (
                                         <button
                                             onClick={(e) => {
+                                                setMenu(3)
+                                            }}
+                                            className={`${selected ? 'text-primary !outline-none before:!w-full' : ''} grow
+                                                    relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
+                                        >
+                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
+                                            REKAP 5 ke Master Sub Kegiatan
+                                        </button>
+                                    )}
+                                </Tab>
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            onClick={(e) => {
                                                 setMenu(1)
                                             }}
                                             className={`${selected ? 'text-primary !outline-none before:!w-full' : ''} grow
                                                     relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
                                         >
                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                            Import REKAP 5
+                                            REKAP 5 Ke Pagu
                                         </button>
                                     )}
                                 </Tab>
@@ -403,6 +458,70 @@ const Page = () => {
 
                                 <Tab.Panel>
                                     <div className="active pt-5">
+
+                                        <div className="mt-4">
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                onChange={(e: any) => {
+                                                    setFileRekap5(e.target.files[0])
+                                                }}
+                                                accept='.xls,.xlsx'
+                                                id="fileRekap5" />
+                                            <label htmlFor="fileRekap5" className="btn btn-primary cursor-pointer">
+                                                Pilih Rekap 5
+                                            </label>
+
+                                            {fileRekap5 && (
+                                                <div className="mt-4">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="">
+                                                            <div className="line-clamp-1 text-md">
+                                                                {fileRekap5.name}
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    setFileRekap5(null)
+                                                                }}
+                                                                className="btn btn-danger px-0.5 py-0.5 rounded-full btn-xs">
+                                                                <IconX className='w-4 h-4' />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+
+
+                                        {fileRekap5 && (
+                                            <>
+                                                <div className="">
+                                                    {isUploading == false && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                uploadRekap5()
+                                                            }}
+                                                            className="btn btn-success">
+                                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
+                                                            Upload Rekap 5 ke Program Kegiatan
+                                                        </button>
+                                                    )}
+                                                    {isUploading == true && (
+                                                        <button className="btn btn-success">
+                                                            <FontAwesomeIcon icon={faSpinner} className='w-5 h-5 mr-2 animate-spin' />
+                                                            Sedang Upload
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+
+                                <Tab.Panel>
+                                    <div className="pt-5">
                                         <div className="flex items-center gap-4">
                                             <div className="grow">
                                                 <Select
@@ -483,7 +602,7 @@ const Page = () => {
                                                             }}
                                                             className="btn btn-success">
                                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                                            Upload Apbd
+                                                            Upload Rekap 5 ke Pagu
                                                         </button>
                                                     )}
                                                     {isUploading == true && (
@@ -498,7 +617,7 @@ const Page = () => {
                                     </div>
                                 </Tab.Panel>
 
-                                <Tab.Panel>
+                                {/* <Tab.Panel>
                                     <div className='pt-5'>
                                         <div className="flex items-center gap-4">
                                             <div className="grow">
@@ -581,7 +700,7 @@ const Page = () => {
                                             </div>
                                         )}
                                     </div>
-                                </Tab.Panel>
+                                </Tab.Panel> */}
 
                             </Tab.Panels>
                         </Tab.Group>
