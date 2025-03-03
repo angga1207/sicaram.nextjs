@@ -7,10 +7,18 @@ const InputRupiahSingleSave = (
 ) => {
 
     const handleChange = (e: any) => {
+        // const value = e.target.value;
+        // let positiveAndNegativeValue = value.replace(/[^0-9-]/g, '');
+        // positiveAndNegativeValue = isEmpty(positiveAndNegativeValue) ? 0 : positiveAndNegativeValue;
+        // onChange(positiveAndNegativeValue);
+
         const value = e.target.value;
-        let positiveAndNegativeValue = value.replace(/[^0-9-]/g, '');
-        positiveAndNegativeValue = isEmpty(positiveAndNegativeValue) ? 0 : positiveAndNegativeValue;
-        onChange(positiveAndNegativeValue);
+        let composedValue = value.replace(/[^0-9.-]/g, '');
+        // only accept 1 dot
+        // only accept 2 decimal
+        composedValue = composedValue.replace(/(\.\d{2})\d+/, '$1');
+        composedValue = isEmpty(composedValue) ? 0 : composedValue;
+        onChange(composedValue);
     }
 
     const handleSave = () => {
@@ -61,7 +69,9 @@ const InputRupiahSingleSave = (
                                     (e.keyCode == 86 && e.metaKey) ||
                                     // command + a
                                     (e.keyCode == 65 && e.metaKey) ||
-                                    (e.keyCode == 65 && e.ctrlKey)
+                                    (e.keyCode == 65 && e.ctrlKey) ||
+                                    // dot
+                                    e.keyCode == 190
                                 )) {
                                     e.preventDefault();
                                 }

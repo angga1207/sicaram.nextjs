@@ -373,7 +373,7 @@ const Persediaan = (data: any) => {
                                                                 setIsUnsaved(true);
                                                             }
                                                         }}
-                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false)}
+                                                        isDisabled={([9].includes(CurrentUser?.role_id) ? true : ((isSaving == true) || instance ? true : false))}
                                                         value={
                                                             instances?.map((item: any, index: number) => {
                                                                 if (item.id == data.instance_id) {
@@ -400,7 +400,7 @@ const Persediaan = (data: any) => {
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
-                                                    isDisabled={isSaving == true ? true : data.kode_rekening_id ? true : false}
+                                                    isDisabled={data.editable ? false : (isSaving == true ? true : data.kode_rekening_id ? true : false)}
                                                     onChange={(e: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
@@ -502,7 +502,7 @@ const Persediaan = (data: any) => {
                                         <td className="border">
                                             <InputRupiah
                                                 dataValue={data.realisasi_belanja}
-                                                readOnly={true}
+                                                readOnly={!data.id ? false : data.editable ? false : true}
                                                 onChange={(value: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];

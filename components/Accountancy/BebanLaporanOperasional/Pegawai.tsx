@@ -400,7 +400,8 @@ const Pegawai = (data: any) => {
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
-                                                    isDisabled={isSaving == true ? true : data.kode_rekening_id ? true : false}
+                                                    // isDisabled={isSaving == true ? true : data.kode_rekening_id ? true : false}
+                                                    isDisabled={data.kode_rekening_id == 508 ? false : (isSaving == true ? true : data.kode_rekening_id ? true : false)}
                                                     onChange={(e: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];

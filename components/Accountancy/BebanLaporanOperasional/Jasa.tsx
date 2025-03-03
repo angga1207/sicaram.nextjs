@@ -401,7 +401,7 @@ const Jasa = (data: any) => {
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
-                                                    isDisabled={isSaving == true ? true : data.kode_rekening_id ? true : false}
+                                                    isDisabled={data.editable ? false : (isSaving == true ? true : data.kode_rekening_id ? true : false)}
                                                     onChange={(e: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
@@ -503,7 +503,7 @@ const Jasa = (data: any) => {
                                         <td className="border">
                                             <InputRupiah
                                                 dataValue={data.realisasi_belanja}
-                                                readOnly={true}
+                                                readOnly={!data.id ? false : data.editable ? false : true}
                                                 onChange={(value: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];
