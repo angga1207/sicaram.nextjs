@@ -358,7 +358,7 @@ const Page = () => {
 
                     <div className="flex flex-col gap-2 pr-4 h-[calc(100vh-350px)] overflow-y-auto overflow-x-hidden">
                         {logs?.map((item: any, index: number) => (
-                            <div className="col-span-2 md:col-span-1 flex items-center gap-2 p-4 cursor-pointer border rounded hover:bg-slate-100">
+                            <div className={`col-span-2 md:col-span-1 flex items-start gap-2 p-4 cursor-pointer border rounded ${item?.status == 'success' ? 'hover:bg-slate-100' : 'bg-red-100 hover:bg-red-200'}`}>
                                 <div className="flex-none mr-1">
                                     <FontAwesomeIcon icon={faFolderClosed} className='w-8 h-8' />
                                 </div>
@@ -366,16 +366,21 @@ const Page = () => {
                                     <div className="line-clamp-1 font-semibold">
                                         {item?.file_name}
                                     </div>
-                                    <div className="flex items-center">
+                                    <div className="flex flex-col">
                                         <div className="mr-1">
                                             {new Date(item?.created_at).toLocaleString('id-ID', {
                                                 day: 'numeric',
                                                 month: 'long',
                                                 year: 'numeric',
                                             })}
+                                            &nbsp;
+                                            {new Date(item?.created_at).toLocaleString('id-ID', {
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                            })}
+                                            &nbsp;WIB
                                         </div>
-                                        -
-                                        <div className="ml-1">
+                                        <div className="">
                                             {item?.author}
                                         </div>
                                     </div>
@@ -386,20 +391,25 @@ const Page = () => {
                                         {item?.message?.note ?? item?.message?.message ?? '-'}
                                     </div>
                                     <div className='font-semibold'>
+                                        Data Terunggah : {item?.message?.datas_count ?? 0}
+                                    </div>
+                                    <div className='font-semibold'>
                                         Data Tidak Terunggah : {item?.message?.missing_data_count ?? 0}
                                     </div>
-                                    <div>
-                                        <div className='font-semibold mb-2 border-b-2'>
-                                            Missing Data :
-                                        </div>
+                                    {item?.message?.missing_data?.length > 0 && (
                                         <div>
-                                            {item?.message?.missing_data?.map((item: any) => (
-                                                <div className='mb-1 border-b'>
-                                                    {item?.kode_sub_kegiatan} - {item?.nama_sub_kegiatan}
-                                                </div>
-                                            ))}
+                                            <div className='font-semibold mb-2 border-b-2'>
+                                                Missing Data :
+                                            </div>
+                                            <div>
+                                                {item?.message?.missing_data?.map((item: any) => (
+                                                    <div className='mb-1 border-b'>
+                                                        {item?.kode_sub_kegiatan} - {item?.nama_sub_kegiatan}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         ))}

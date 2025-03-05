@@ -238,7 +238,7 @@ const Piutang = (data: any) => {
     }
 
     useEffect(() => {
-        if (isMounted && periode?.id && year && !instance) {
+        if (isMounted && periode?.id && year) {
             if ([9].includes(CurrentUser?.role_id)) {
                 setInstance(CurrentUser?.instance_id ?? '');
             } else {
