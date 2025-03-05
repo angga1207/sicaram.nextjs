@@ -493,10 +493,10 @@ const PDD = (data: any) => {
                         </tr>
                         <tr className='sticky top-[46px] z-[0]'>
                             <th className="text-center border bg-slate-900 text-white min-w-[200px]">
-                                Berkurang
+                                Bertambah
                             </th>
                             <th className="text-center border bg-slate-900 text-white min-w-[200px]">
-                                Bertambah
+                                Berkurang
                             </th>
                         </tr>
                     </thead>
