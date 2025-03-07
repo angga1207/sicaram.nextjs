@@ -656,7 +656,7 @@ const Piutang = (data: any) => {
                                 Koreksi Saldo Awal
                             </th>
                             <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
-                                Penghapusan Penting
+                                Penghapusan Piutang
                             </th>
                             <th rowSpan={1} colSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white">
                                 Mutasi

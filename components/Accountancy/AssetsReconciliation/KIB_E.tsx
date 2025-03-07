@@ -280,6 +280,12 @@ const KIB_E = (data: any) => {
         }
     }, [isMounted && dataInput]);
 
+    const [percentage, setPercentage] = useState<any>(0);
+    useEffect(() => {
+        if (isMounted) {
+            setPercentage(grandTotal?.saldo_awal > 0 ? ((grandTotal?.saldo_akhir - grandTotal?.saldo_awal) / grandTotal?.saldo_awal * 100).toFixed(2) : 0);
+        }
+    }, [grandTotal])
 
     return (
         <div>
@@ -1216,6 +1222,36 @@ const KIB_E = (data: any) => {
                 </div>
 
                 <div className="flex items-center justify-end gap-2">
+                    <div className="flex flex-col items-end">
+                        <div className="">
+                            Kenaikan / Penurunan
+                        </div>
+                        <div className="w-[200px] font-semibold">
+                            <div className='flex items-center justify-between cursor-pointer'>
+                                <div className="">
+                                    Rp.
+                                </div>
+                                <div className="">
+                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir - grandTotal?.saldo_awal)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                        <div className="">
+                            Persentase
+                        </div>
+                        <div className="w-[200px] font-semibold">
+                            <div className='flex items-center justify-end gap-1 cursor-pointer'>
+                                <div className="">
+                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(percentage)}
+                                </div>
+                                <div className="">
+                                    %
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button
                         onClick={(e) => {
                             // confirm swal
