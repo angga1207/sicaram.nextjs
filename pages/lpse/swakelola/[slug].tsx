@@ -21,6 +21,7 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import Dropdown from '@/components/Dropdown';
 import IconHorizontalDots from '@/components/Icon/IconHorizontalDots';
 import IconX from '@/components/Icon/IconX';
+import { useSession } from 'next-auth/react';
 
 const Page = () => {
     const dispatch = useDispatch();
@@ -70,7 +71,14 @@ const Page = () => {
         setSlug(router.query.slug as string);
     }, [router.query.slug]);
 
-    const CurrentToken = getCookie('token');
+    const [CurrentToken, setCurrentToken] = useState<any>(null);
+    const session = useSession();
+    useEffect(() => {
+        if (isMounted && session.status === 'authenticated') {
+            const token = session?.data?.user?.name;
+            setCurrentToken(token);
+        }
+    }, [isMounted, session]);
     const baseUri = BaseUri();
 
     const [datas, setDatas] = useState<any[]>([]);

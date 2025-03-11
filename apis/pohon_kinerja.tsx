@@ -1,11 +1,13 @@
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 import { getCookie } from 'cookies-next';
+import { getSession } from "next-auth/react";
 const baseUri = BaseUri();
-const CurrentToken = getCookie('token');
 
 export async function getIndex(periode: number, instance: any = null) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/pohon-kinerja-list';
         const res = await axios.get(uri, {
@@ -31,6 +33,8 @@ export async function getIndex(periode: number, instance: any = null) {
 
 export async function postSave(dataInput: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/pohon-kinerja-list/' + dataInput.id;
         const res = await axios.post(uri, dataInput, {
@@ -52,6 +56,8 @@ export async function postSave(dataInput: any) {
 
 export async function postDelete(id: number, periode: any, instance: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/pohon-kinerja-list/' + id + '/delete';
         const res = await axios.post(uri, {

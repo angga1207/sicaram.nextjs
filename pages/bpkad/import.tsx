@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderClosed } from '@fortawesome/free-regular-svg-icons';
 import { faCloudUploadAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { BaseUri } from '@/apis/serverConfig';
+import { useSession } from 'next-auth/react';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -98,12 +99,13 @@ const Page = () => {
     }, [isMounted, periode?.id])
 
     const [CurrentToken, setCurrentToken] = useState<any>(null);
+    const session = useSession();
     useEffect(() => {
-        if (isMounted) {
-            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
+        if (isMounted && session.status === 'authenticated') {
+            const token = session?.data?.user?.name;
             setCurrentToken(token);
         }
-    }, [isMounted]);
+    }, [isMounted, session]);
 
 
     const [menu, setMenu] = useState<any>(1);

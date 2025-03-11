@@ -29,6 +29,7 @@ import { faBriefcase, faGlobeAsia, faMoneyCheckDollar, faSackDollar } from '@for
 import IconLaptop from '@/components/Icon/IconLaptop';
 import { BaseUri } from '@/apis/serverConfig';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -82,14 +83,18 @@ const Index = () => {
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     const [CurrentToken, setCurrentToken] = useState<any>(null);
+    const session = useSession();
+    useEffect(() => {
+        if (isMounted && session.status === 'authenticated') {
+            const token = session?.data?.user?.name;
+            setCurrentToken(token);
+        }
+    }, [isMounted, session]);
     useEffect(() => {
         if (document.cookie) {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
-
-            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
-            setCurrentToken(token);
         }
         if (isMounted) {
             const localPeriode = localStorage.getItem('periode');

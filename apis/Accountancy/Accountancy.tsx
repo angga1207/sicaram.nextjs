@@ -1,15 +1,16 @@
 import { getCookie } from 'cookies-next';
 import axios from "axios";
 import { BaseUri } from "../serverConfig";
+import { getSession } from 'next-auth/react';
 
-
-const CurrentToken = getCookie('token');
 // const BaseUri = 'https://simoedanep.in/api';
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 const baseUri = BaseUri();
 
 export async function getData(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/lra', {
             headers: {
                 'Content-Type': 'application/json',
@@ -33,6 +34,8 @@ export async function getData(instance: any = null, periode: any, year: any) {
 
 export async function storeData(instance: any, periode: any, year: any, file: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const formData = new FormData();
         formData.append('file', file);
         formData.append('instance', instance ?? 0);
@@ -56,6 +59,8 @@ export async function storeData(instance: any, periode: any, year: any, file: an
 
 export async function resetData(instance: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/lra/reset', {
             instance: instance,
             periode: periode,

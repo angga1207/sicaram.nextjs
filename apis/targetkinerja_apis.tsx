@@ -1,14 +1,16 @@
 import axios from "axios";
 import { getCookie } from 'cookies-next';
 import { BaseUri } from "./serverConfig";
+import { getSession } from "next-auth/react";
 const baseUri = BaseUri();
 
 var FormData = require('form-data');
-const CurrentToken = getCookie('token');
 
 
 export async function getMasterData(id: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/target-kinerja/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -31,6 +33,8 @@ export async function getMasterData(id: any, year: any, month: any) {
 
 export async function Save(id: any, datas: any, periode: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/target-kinerja/' + id, {
             data: datas,
             periode: periode,
@@ -54,6 +58,8 @@ export async function Save(id: any, datas: any, periode: any, year: any, month: 
 
 export async function fetchLogs(id: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/target-kinerja/' + id + '/logs', {
             headers: {
                 'Content-Type': 'application/json',
@@ -75,6 +81,8 @@ export async function fetchLogs(id: any, year: any, month: any) {
 
 export async function sendRequestVerification(id: any, data: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/target-kinerja/' + id + '/logs', {
             message: data?.message,
             status: 'sent',
@@ -97,6 +105,8 @@ export async function sendRequestVerification(id: any, data: any, year: any, mon
 
 export async function sendReplyVerification(id: any, data: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/target-kinerja/' + id + '/logs', {
             message: data?.message,
             status: data?.status,
@@ -120,6 +130,8 @@ export async function sendReplyVerification(id: any, data: any, year: any, month
 
 export async function DeleteRincianBelanja(id: any, periode: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/caram/target-kinerja-delete-rincian/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -143,6 +155,8 @@ export async function DeleteRincianBelanja(id: any, periode: any, year: any, mon
 
 export async function DeleteTargetKinerja(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/caram/target-kinerja-delete/' + id, {
             headers: {
                 'Content-Type': 'application/json',

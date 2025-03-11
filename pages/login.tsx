@@ -12,7 +12,7 @@ import IconUser from '../components/Icon/IconUser';
 import IconLockDots from '../components/Icon/IconLockDots';
 import { BaseUri, GlobalEndPoint, serverCheck } from '@/apis/serverConfig';
 import axios from "axios";
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut, getSession } from 'next-auth/react';
 
 import React from "react";
 import { setCookie } from 'cookies-next';
@@ -62,10 +62,13 @@ const Login = () => {
 
     useEffect(() => {
         if (isMounted) {
+            const getSes = getSession();
+            const MyToken = mySession?.data?.user?.name;
+
             const res = axios.post(BaseUri() + '/bdsm', {}, {
                 headers: {
                     'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${MyToken}`,
                 }
             }).then((res) => {
                 const data = res.data;
@@ -88,38 +91,21 @@ const Login = () => {
             localStorage.removeItem('userPassword');
             localStorage.removeItem('locked');
 
-
-            if (document.cookie) {
-                let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
-
-                let cookieUser = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
-                cookieUser = cookieUser ? JSON.parse(cookieUser) : null;
-                setUser(cookieUser);
-
-                let locked = document.cookie.split(';').find((row) => row.trim().startsWith('locked='))?.split('=')[1];
-                let ups = document.cookie.split(';').find((row) => row.trim().startsWith('ups='))?.split('=')[1];
-
-                if (mySession.status == 'authenticated') {
-                    if (user?.role_id === 9) {
-                        router.push('/dashboard/pd');
-                    } else {
-                        router.push('/dashboard');
-                    }
-                }
-            } else {
-                document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                if (mySession.status == 'authenticated') {
-                    signOut();
-                }
-            }
+            document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
             setAttemps(parseInt(localStorage.getItem('attemps') ?? '0'));
         }
     }, [isMounted]);
+
+    useEffect(() => {
+        if (mySession.status == 'authenticated') {
+            if (user?.role_id === 9) {
+                router.push('/dashboard/pd');
+            } else {
+                router.push('/dashboard');
+            }
+        }
+    }, [isMounted, mySession])
 
     useEffect(() => {
         if (isMounted) {
@@ -259,39 +245,36 @@ const Login = () => {
             showSweetAlert('error', 'Error', 'Username atau Password salah!', 'OK', 'Batal', () => { });
             setSubmitLoading(false);
             return;
-        }
+        } else {
+            if (json.status == 'success') {
+                setAttemps(0);
+                localStorage.setItem('attemps', '0');
+                localStorage.setItem('periode_id', formData.periode);
 
-        if (json.status == 'success') {
-            setAttemps(0);
-            localStorage.setItem('attemps', '0');
+                // save to cookie 34560000 / 86400
+                // document.cookie = `token=${data.token}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+                // document.cookie = `mytoken=${data.token}; path=/'token'; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+                document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+                document.cookie = `ups=${formData.password}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
+                document.cookie = `locked=false; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
 
+                let callbackUrl = '/dashboard';
 
-            localStorage.setItem('periode_id', formData.periode);
+                if (data.user.role_id === 9) {
+                    callbackUrl = '/dashboard/pd';
+                } else {
+                    callbackUrl = '/dashboard';
+                }
 
-            // save to cookie 34560000 / 86400
-            document.cookie = `token=${data.token}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
-            document.cookie = `mytoken=${data.token}; path=/'token'; max-age=34560000; Secure; priority=high; SameSite=Strict`;
-            document.cookie = `user=${JSON.stringify(data.user)}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
-            document.cookie = `ups=${formData.password}; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
-            document.cookie = `locked=false; path=/; max-age=34560000; Secure; priority=high; SameSite=Strict`;
-
-            let callbackUrl = '/dashboard';
-
-            if (data.user.role_id === 9) {
-                callbackUrl = '/dashboard/pd';
-            } else {
-                callbackUrl = '/dashboard';
+                const auth = await signIn("credentials", {
+                    id: data.user.id,
+                    name: data.token,
+                    // redirect: false,
+                    callbackUrl: callbackUrl,
+                });
             }
-
-            const auth = await signIn("credentials", {
-                id: data.user.id,
-                username: data.user.username,
-                fullname: data.user.fullname,
-                token: data.token,
-                // redirect: false,
-                callbackUrl: callbackUrl,
-            });
         }
+
     }
 
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);

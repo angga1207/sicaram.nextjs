@@ -1,15 +1,16 @@
 import { getCookie } from 'cookies-next';
 import axios from "axios";
 import { BaseUri } from "../serverConfig";
+import { getSession } from 'next-auth/react';
 
-
-const CurrentToken = getCookie('token');
 // const BaseUri = 'https://simoedanep.in/api';
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 const baseUri = BaseUri();
 
 export async function getPenyesuaianBebanBarjas(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/1', {
             headers: {
                 'Content-Type': 'application/json',
@@ -33,6 +34,8 @@ export async function getPenyesuaianBebanBarjas(instance: any = null, periode: a
 
 export async function storePenyesuaianBebanBarjas(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/1', {
             periode: periode,
             year: year,
@@ -55,6 +58,8 @@ export async function storePenyesuaianBebanBarjas(dataInput: any, periode: any, 
 
 export async function deletePenyesuaianBebanBarjas(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/1', {
             headers: {
                 'Content-Type': 'application/json',
@@ -77,6 +82,8 @@ export async function deletePenyesuaianBebanBarjas(id: any) {
 
 export async function getModalKeBeban(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/2', {
             headers: {
                 'Content-Type': 'application/json',
@@ -100,6 +107,8 @@ export async function getModalKeBeban(instance: any = null, periode: any, year: 
 
 export async function storeModalKeBeban(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/2', {
             periode: periode,
             year: year,
@@ -122,6 +131,8 @@ export async function storeModalKeBeban(dataInput: any, periode: any, year: any)
 
 export async function deleteModalKeBeban(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/2', {
             headers: {
                 'Content-Type': 'application/json',
@@ -144,6 +155,8 @@ export async function deleteModalKeBeban(id: any) {
 
 export async function getBarjasKeAset(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/3', {
             headers: {
                 'Content-Type': 'application/json',
@@ -167,6 +180,8 @@ export async function getBarjasKeAset(instance: any = null, periode: any, year: 
 
 export async function storeBarjasKeAset(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/3', {
             periode: periode,
             year: year,
@@ -189,6 +204,8 @@ export async function storeBarjasKeAset(dataInput: any, periode: any, year: any)
 
 export async function deleteBarjasKeAset(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/3', {
             headers: {
                 'Content-Type': 'application/json',
@@ -211,6 +228,8 @@ export async function deleteBarjasKeAset(id: any) {
 
 export async function getPenyesuaianAset(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/4', {
             headers: {
                 'Content-Type': 'application/json',
@@ -234,6 +253,8 @@ export async function getPenyesuaianAset(instance: any = null, periode: any, yea
 
 export async function storePenyesuaianAset(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/4', {
             periode: periode,
             year: year,
@@ -256,6 +277,8 @@ export async function storePenyesuaianAset(dataInput: any, periode: any, year: a
 
 export async function deletePenyesuaianAset(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/4', {
             headers: {
                 'Content-Type': 'application/json',
@@ -278,6 +301,8 @@ export async function deletePenyesuaianAset(id: any) {
 
 export async function getAtribusi(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/5', {
             headers: {
                 'Content-Type': 'application/json',
@@ -301,6 +326,8 @@ export async function getAtribusi(instance: any = null, periode: any, year: any)
 
 export async function storeAtribusi(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/5', {
             periode: periode,
             year: year,
@@ -323,6 +350,8 @@ export async function storeAtribusi(dataInput: any, periode: any, year: any) {
 
 export async function deleteAtribusi(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/5', {
             headers: {
                 'Content-Type': 'application/json',
@@ -347,6 +376,8 @@ export async function deleteAtribusi(id: any) {
 // Mutasi Aset
 export async function getMutasiAset(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/6.1', {
             headers: {
                 'Content-Type': 'application/json',
@@ -369,6 +400,8 @@ export async function getMutasiAset(instance: any = null, periode: any, year: an
 }
 export async function storeMutasiAset(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/6.1', {
             periode: periode,
             year: year,
@@ -391,6 +424,8 @@ export async function storeMutasiAset(dataInput: any, periode: any, year: any) {
 
 export async function deleteMutasiAset(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/6.1', {
             headers: {
                 'Content-Type': 'application/json',
@@ -414,6 +449,8 @@ export async function deleteMutasiAset(id: any) {
 // Dafter Pekerjaan
 export async function getDaftarPekerjaan(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/6.2', {
             headers: {
                 'Content-Type': 'application/json',
@@ -436,6 +473,8 @@ export async function getDaftarPekerjaan(instance: any = null, periode: any, yea
 }
 export async function storeDaftarPekerjaan(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/6.2', {
             periode: periode,
             year: year,
@@ -458,6 +497,8 @@ export async function storeDaftarPekerjaan(dataInput: any, periode: any, year: a
 
 export async function deleteDaftarPekerjaan(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/6.2', {
             headers: {
                 'Content-Type': 'application/json',
@@ -481,6 +522,8 @@ export async function deleteDaftarPekerjaan(id: any) {
 // Hibah Masuk
 export async function getHibahMasuk(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/6.3', {
             headers: {
                 'Content-Type': 'application/json',
@@ -503,6 +546,8 @@ export async function getHibahMasuk(instance: any = null, periode: any, year: an
 }
 export async function storeHibahMasuk(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/6.3', {
             periode: periode,
             year: year,
@@ -525,6 +570,8 @@ export async function storeHibahMasuk(dataInput: any, periode: any, year: any) {
 
 export async function deleteHibahMasuk(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/6.3', {
             headers: {
                 'Content-Type': 'application/json',
@@ -548,6 +595,8 @@ export async function deleteHibahMasuk(id: any) {
 // Hibah Keluar
 export async function getHibahKeluar(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/6.4', {
             headers: {
                 'Content-Type': 'application/json',
@@ -570,6 +619,8 @@ export async function getHibahKeluar(instance: any = null, periode: any, year: a
 }
 export async function storeHibahKeluar(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/6.4', {
             periode: periode,
             year: year,
@@ -592,6 +643,8 @@ export async function storeHibahKeluar(dataInput: any, periode: any, year: any) 
 
 export async function deleteHibahKeluar(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/6.4', {
             headers: {
                 'Content-Type': 'application/json',
@@ -615,6 +668,8 @@ export async function deleteHibahKeluar(id: any) {
 // PenilaianAset
 export async function getPenilaianAset(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/7', {
             headers: {
                 'Content-Type': 'application/json',
@@ -637,6 +692,8 @@ export async function getPenilaianAset(instance: any = null, periode: any, year:
 }
 export async function storePenilaianAset(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/7', {
             periode: periode,
             year: year,
@@ -658,6 +715,8 @@ export async function storePenilaianAset(dataInput: any, periode: any, year: any
 }
 export async function deletePenilaianAset(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/7', {
             headers: {
                 'Content-Type': 'application/json',
@@ -681,6 +740,8 @@ export async function deletePenilaianAset(id: any) {
 // PenghapusanAset
 export async function getPenghapusanAset(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/8', {
             headers: {
                 'Content-Type': 'application/json',
@@ -703,6 +764,8 @@ export async function getPenghapusanAset(instance: any = null, periode: any, yea
 }
 export async function storePenghapusanAset(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/8', {
             periode: periode,
             year: year,
@@ -724,6 +787,8 @@ export async function storePenghapusanAset(dataInput: any, periode: any, year: a
 }
 export async function deletePenghapusanAset(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/8', {
             headers: {
                 'Content-Type': 'application/json',
@@ -747,6 +812,8 @@ export async function deletePenghapusanAset(id: any) {
 // PenjualanAset
 export async function getPenjualanAset(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/padb/9', {
             headers: {
                 'Content-Type': 'application/json',
@@ -769,6 +836,8 @@ export async function getPenjualanAset(instance: any = null, periode: any, year:
 }
 export async function storePenjualanAset(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/padb/9', {
             periode: periode,
             year: year,
@@ -790,6 +859,8 @@ export async function storePenjualanAset(dataInput: any, periode: any, year: any
 }
 export async function deletePenjualanAset(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/padb/9', {
             headers: {
                 'Content-Type': 'application/json',

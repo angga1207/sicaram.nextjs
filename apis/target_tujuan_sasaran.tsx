@@ -1,11 +1,13 @@
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 import { getCookie } from 'cookies-next';
+import { getSession } from "next-auth/react";
 const baseUri = BaseUri();
-const CurrentToken = getCookie('token');
 
 export async function getIndex(periode: number, instance: any = null) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/target-tujuan-sasaran-list';
         const res = await axios.get(uri, {
@@ -31,6 +33,8 @@ export async function getIndex(periode: number, instance: any = null) {
 
 export async function getDetail(type: string, data_id: any, periode: any, instance: any = null) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/target-tujuan-sasaran/' + data_id;
         const res = await axios.get(uri, {
@@ -57,6 +61,8 @@ export async function getDetail(type: string, data_id: any, periode: any, instan
 
 export async function update(dataInput: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/target-tujuan-sasaran/' + dataInput.id;
         const res = await axios.post(uri, dataInput, {
@@ -79,6 +85,8 @@ export async function update(dataInput: any) {
 // Perubahan
 export async function getIndexPerubahan(periode: number, year: number, instance: any = null) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/target-perubahan-tujuan-sasaran-list';
         const res = await axios.get(uri, {
@@ -105,6 +113,8 @@ export async function getIndexPerubahan(periode: number, year: number, instance:
 
 export async function getDetailPerubahan(type: string, data_id: any, year: any, periode: any, instance: any = null) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/target-perubahan-tujuan-sasaran/' + data_id;
         const res = await axios.get(uri, {
@@ -132,6 +142,8 @@ export async function getDetailPerubahan(type: string, data_id: any, year: any, 
 
 export async function updatePerubahan(dataInput: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         uri = baseUri + '/target-perubahan-tujuan-sasaran/' + dataInput.id;
         const res = await axios.post(uri, dataInput, {

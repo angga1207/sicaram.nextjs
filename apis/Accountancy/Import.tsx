@@ -1,13 +1,14 @@
 import axios from "axios";
 import { getCookie } from 'cookies-next';
 import { BaseUri } from "../serverConfig";
+import { getSession } from "next-auth/react";
 
-
-const CurrentToken = getCookie('token');
 const baseUri = BaseUri();
 
 export async function storeKodeRekening(periode: any, year: any, file: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const formData = new FormData();
         formData.append('file', file);
         formData.append('periode', periode);
@@ -30,6 +31,8 @@ export async function storeKodeRekening(periode: any, year: any, file: any) {
 
 export async function storeSaldoAwalNeraca(instance: any, periode: any, year: any, file: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const formData = new FormData();
         formData.append('file', file);
         formData.append('instance', instance ?? '');
@@ -53,6 +56,8 @@ export async function storeSaldoAwalNeraca(instance: any, periode: any, year: an
 
 export async function storeSaldoAwalLO(instance: any, periode: any, year: any, file: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const formData = new FormData();
         formData.append('file', file);
         formData.append('instance', instance ?? '');

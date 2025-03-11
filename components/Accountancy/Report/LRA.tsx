@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useEffect, useState } from 'react';
-import { downloadReportNeraca, getReportNeraca, saveSingleNeraca } from '@/apis/Accountancy/Report';
+import { getReportLRA } from '@/apis/Accountancy/Report';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
@@ -29,10 +29,12 @@ const LRA = (data: any) => {
     const [periode, setPeriode] = useState(paramData[0]);
     const [year, setYear] = useState(paramData[1]);
     const [instance, setInstance] = useState<any>(paramData[2]);
-    const [level, setLevel] = useState(paramData[3]);
+    // const [level, setLevel] = useState(paramData[3]);
+    const [level, setLevel] = useState(6);
     const [years, setYears] = useState(paramData[4]);
     const [instances, setInstances] = useState(paramData[5]);
     const [levels, setLevels] = useState(paramData[6]);
+    const [rawDatas, setRawDatas] = useState<any>([]);
     const [datas, setDatas] = useState<any>([]);
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [CurrentUser, setCurrentUser] = useState<any>([]);
@@ -61,11 +63,12 @@ const LRA = (data: any) => {
         if (isMounted && periode?.id && year && level && (instance || instance === 0)) {
             setDatas([]);
             setIsLoading(true);
-            getReportNeraca(instance, periode?.id, year, level).then((res) => {
+            getReportLRA(instance, periode?.id, year, level).then((res) => {
                 if (res.status === 'error') {
                     showAlert('error', 'Terjadi kesalahan');
                 }
                 else if (res.status === 'success') {
+                    setRawDatas(res.data);
                     if (level === 6) {
                         setDatas(res.data);
                     } else if (level === 5) {
@@ -88,7 +91,33 @@ const LRA = (data: any) => {
                 setIsLoading(false);
             });
         }
-    }, [isMounted, year, instance, level]);
+    }, [isMounted, year, instance]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id && year && level && (instance || instance === 0)) {
+            if (rawDatas.length > 0) {
+                if (level === 6) {
+                    setDatas(rawDatas);
+                } else if (level === 5) {
+                    const dt = rawDatas.filter((data: any) => data.code_6 === null);
+                    setDatas(dt);
+                } else if (level === 4) {
+                    const dt = rawDatas.filter((data: any) => data.code_5 === null);
+                    setDatas(dt);
+                } else if (level === 3) {
+                    const dt = rawDatas.filter((data: any) => data.code_4 === null);
+                    setDatas(dt);
+                } else if (level === 2) {
+                    const dt = rawDatas.filter((data: any) => data.code_3 === null);
+                    setDatas(dt);
+                } else if (level === 1) {
+                    const dt = rawDatas.filter((data: any) => data.code_2 === null);
+                    setDatas(dt);
+                }
+            }
+        }
+    }, [level]);
+
 
     const updatedData = (data: any, index: number) => {
         setDatas((prev: any) => {
@@ -265,10 +294,13 @@ const LRA = (data: any) => {
                                     Uraian
                                 </th>
                                 <th className='text-center w-[250px]'>
-                                    {year}
+                                    Anggaran
                                 </th>
                                 <th className='text-center w-[250px]'>
-                                    {year - 1}
+                                    Realisasi
+                                </th>
+                                <th className='text-center w-[250px]'>
+                                    Persentase
                                 </th>
                             </tr>
                         </thead>
@@ -297,37 +329,20 @@ const LRA = (data: any) => {
                                             </td>
                                             <td className='text-center'>
                                                 <InputRupiahSingleSave
-                                                    readOnly={data.fullcode.length === 6 ? !instance ? true : false : true}
-                                                    dataValue={data.saldo_akhir}
-                                                    onChange={(value: any) => {
-                                                        setDatas((prev: any) => {
-                                                            const updated = [...prev];
-                                                            updated[index]['saldo_akhir'] = isNaN(value) ? 0 : value;
-                                                            updatedData(updated, index);
-                                                            return updated;
-                                                        });
-                                                    }}
-                                                    onSave={() => {
-                                                        // showAlert('info', 'Fitur ini belum tersedia!');
-                                                        if (isUnsaved) {
-                                                            saveSingleNeraca(data).then((res) => {
-                                                                if (res.status === 'error') {
-                                                                    showAlert('error', 'Terjadi kesalahan');
-                                                                }
-                                                                else if (res.status === 'success') {
-                                                                    showAlert('success', 'Data berhasil disimpan');
-                                                                    setIsUnsaved(false);
-                                                                }
-                                                            });
-                                                        }
-                                                    }}
+                                                    readOnly={true}
+                                                    dataValue={data.anggaran}
                                                 />
                                             </td>
                                             <td className='text-center'>
                                                 <InputRupiahSingleSave
                                                     readOnly={true}
-                                                    dataValue={data.saldo_awal}
+                                                    dataValue={data.realisasi}
                                                 />
+                                            </td>
+                                            <td className='text-center font-semibold whitespace-nowrap'>
+                                                {/* {new Intl.NumberFormat('id-ID', { style: 'percent', minimumFractionDigits: 2 }).format
+                                                (data.persentase)} */}
+                                                {parseFloat(data?.persentase).toFixed(2)}%
                                             </td>
                                         </tr>
                                     ))}

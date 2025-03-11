@@ -2,11 +2,13 @@
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 import { getCookie } from 'cookies-next';
+import { getSession } from "next-auth/react";
 const baseUri = BaseUri();
-const CurrentToken = getCookie('token');
 
 export async function getSumberDana(search: string, page: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         if (search) {
             uri = baseUri + '/ref-tag-sumber-dana?search=' + search + '&page=' + page;
@@ -32,6 +34,8 @@ export async function getSumberDana(search: string, page: number) {
 
 export async function saveSumberDana(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-tag-sumber-dana', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -52,6 +56,8 @@ export async function saveSumberDana(data: any) {
 
 export async function deleteSumberDana(id: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/ref-tag-sumber-dana/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -72,6 +78,8 @@ export async function deleteSumberDana(id: number) {
 
 export async function getRefTujuanSasaran(search: string, page: number, instance: string, type: string, periode: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         if (search) {
             uri = baseUri + '/ref-tujuan-sasaran?search=' + search + '&page=' + page;
@@ -102,6 +110,8 @@ export async function getRefTujuanSasaran(search: string, page: number, instance
 
 export async function getDetailRefTujuanSasaran(id: number, type: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/ref-tujuan-sasaran/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -124,6 +134,8 @@ export async function getDetailRefTujuanSasaran(id: number, type: any) {
 
 export async function saveRefTujuanSasaran(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-tujuan-sasaran', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -144,6 +156,8 @@ export async function saveRefTujuanSasaran(data: any) {
 
 export async function deleteRefTujuanSasaran(id: number, type: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/ref-tujuan-sasaran/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -165,8 +179,10 @@ export async function deleteRefTujuanSasaran(id: number, type: any) {
     }
 }
 
-export async function getRefIndikatorTujuanSasaran(search: string, page: number, instance: string, type: string, periode:any) {
+export async function getRefIndikatorTujuanSasaran(search: string, page: number, instance: string, type: string, periode: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         let uri = '';
         if (search) {
             uri = baseUri + '/ref-indikator-tujuan-sasaran?search=' + search + '&page=' + page;
@@ -197,6 +213,8 @@ export async function getRefIndikatorTujuanSasaran(search: string, page: number,
 
 export async function getDetailRefIndikatorTujuanSasaran(id: number, type: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/ref-indikator-tujuan-sasaran/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -219,6 +237,8 @@ export async function getDetailRefIndikatorTujuanSasaran(id: number, type: any) 
 
 export async function saveRefIndikatorTujuanSasaran(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-indikator-tujuan-sasaran', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -239,6 +259,8 @@ export async function saveRefIndikatorTujuanSasaran(data: any) {
 
 export async function deleteRefIndikatorTujuanSasaran(id: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/ref-indikator-tujuan-sasaran/' + id, {
             headers: {
                 'Content-Type': 'application/json',

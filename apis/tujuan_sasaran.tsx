@@ -1,13 +1,14 @@
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 import { getCookie } from 'cookies-next';
+import { getSession } from "next-auth/react";
 const baseUri = BaseUri();
-const CurrentToken = getCookie('token');
 
 export async function getMasterTujuan(search: string, instance: any, periode: any) {
     // /master-tujuan
     try {
-
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const uri = baseUri + '/master-tujuan'
         const res = await axios.get(uri, {
             headers: {
@@ -33,6 +34,8 @@ export async function getMasterTujuan(search: string, instance: any, periode: an
 
 export async function getDetailMasterTujuan(id: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/master-tujuan/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -52,6 +55,8 @@ export async function getDetailMasterTujuan(id: number) {
 
 export async function saveMasterTujuan(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/master-tujuan', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -72,6 +77,8 @@ export async function saveMasterTujuan(data: any) {
 
 export async function deleteMasterTujuan(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/master-tujuan/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -92,6 +99,8 @@ export async function deleteMasterTujuan(id: any) {
 
 export async function getDetailMasterSasaran(id: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/master-sasaran/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -111,6 +120,8 @@ export async function getDetailMasterSasaran(id: number) {
 
 export async function saveMasterSasaran(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/master-sasaran', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -131,6 +142,8 @@ export async function saveMasterSasaran(data: any) {
 
 export async function deleteMasterSasaran(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/master-sasaran/' + id, {
             headers: {
                 'Content-Type': 'application/json',

@@ -1,17 +1,19 @@
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 import { getCookie } from 'cookies-next';
+import { getSession } from "next-auth/react";
 
 // const BaseUri = 'https://simoedanep.in/api';
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 // const BaseUri = 'http://127.0.0.1:8000/api';
 // const BaseUri = process.env.BASE_SERVER_URI;
 const baseUri = BaseUri();
-const CurrentToken = getCookie('token');
 
 // Instances Start
 export async function fetchInstances(search: any = '') {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/listInstance?search=' + search, {
             headers: {
                 'Content-Type': 'application/json',
@@ -30,6 +32,8 @@ export async function fetchInstances(search: any = '') {
 
 export async function fetchInstance(id: string = '') {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/listInstance/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -50,6 +54,8 @@ export async function fetchInstance(id: string = '') {
 export async function fetchKodeRekening(level: any = 1, parent_id: any = null) {
     // caram/getKodeRekening
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/getKodeRekening?level=' + level + '&parent_id=' + parent_id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -69,6 +75,8 @@ export async function fetchKodeRekening(level: any = 1, parent_id: any = null) {
 export async function fetchProgramsSubKegiatan(instance: string = '', year: number = 0) {
     // caram/realisasi/listProgramsSubKegiatan
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/listProgramsSubKegiatan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -92,6 +100,8 @@ export async function fetchProgramsSubKegiatan(instance: string = '', year: numb
 
 export async function fetchDataInformasiSubKegiatan(id: string, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/getDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
                 'Content-Type': 'application/json',
@@ -110,6 +120,8 @@ export async function fetchDataInformasiSubKegiatan(id: string, periode: any, ye
 
 export async function fetchDataRealisasi(id: string, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/getDataRealisasi/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
                 'Content-Type': 'application/json',
@@ -130,6 +142,8 @@ export async function fetchDataRealisasi(id: string, periode: any, year: number,
 // saveDataSubKegiatan
 export async function saveDataSubKegiatan(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/saveDataSubKegiatan', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -149,6 +163,8 @@ export async function saveDataSubKegiatan(data: any) {
 // getDetailDataSubKegiatan
 export async function detailDataSubKegiatan(id: string, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/detailDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
                 'Content-Type': 'application/json',
@@ -168,6 +184,8 @@ export async function detailDataSubKegiatan(id: string, periode: any, year: numb
 // updateDataSubKegiatan
 export async function updateDataSubKegiatan(id: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/updateDataSubKegiatan/' + id, data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -187,6 +205,8 @@ export async function updateDataSubKegiatan(id: any, data: any) {
 // Delete Data Sub Kegiatan
 export async function deleteDataRealisasiRincian(id: string, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         // caram/realisasi/deleteDataSubKegiatan/
         const res = await axios.delete(baseUri + '/caram/realisasi/deleteDataSubKegiatan/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
@@ -208,6 +228,8 @@ export async function deleteDataRealisasiRincian(id: string, periode: any, year:
 // getDataKontrak
 export async function fetchDataKontrak(id: string, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/kontrak/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
                 'Content-Type': 'application/json',
@@ -227,6 +249,8 @@ export async function fetchDataKontrak(id: string, periode: any, year: number, m
 // saveKontrak
 export async function saveKontrak(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/kontrak', data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -246,6 +270,8 @@ export async function saveKontrak(data: any) {
 // detailKontrak
 export async function detailKontrak(id: any, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/kontrak/edit/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
                 'Content-Type': 'application/json',
@@ -265,6 +291,8 @@ export async function detailKontrak(id: any, periode: any, year: number, month: 
 // updateKontrak
 export async function updateKontrak(id: any, data: any, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/kontrak/edit/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -284,6 +312,8 @@ export async function updateKontrak(id: any, data: any, periode: any, year: numb
 // deleteKontrak
 export async function deleteKontrak(id: any, periode: any, year: number, month: number) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/caram/kontrak/delete/' + id + '?periode=' + periode + '&year=' + year + '&month=' + month, {
             headers: {
                 'Content-Type': 'application/json',

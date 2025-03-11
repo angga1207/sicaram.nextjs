@@ -213,7 +213,7 @@ const Page = () => {
     }, [isMounted]);
 
     const [isShowNoteMenu, setIsShowNoteMenu] = useState<any>(false);
-    const [selectedTab, setSelectedTab] = useState<any>('neraca');
+    const [selectedTab, setSelectedTab] = useState<any>('lra');
 
     const tabChanged = (type: string) => {
         setSelectedTab(type);
@@ -254,7 +254,7 @@ const Page = () => {
                         <div className="my-4 h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
                         <PerfectScrollbar className="relative h-full grow ltr:-mr-3.5 ltr:pr-3.5 rtl:-ml-3.5 rtl:pl-3.5">
                             <div className="space-y-1">
-                                {/* <button
+                                <button
                                     type="button"
                                     className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'lra' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'
                                         }`}
@@ -266,7 +266,7 @@ const Page = () => {
                                             Laporan LRA
                                         </div>
                                     </div>
-                                </button> */}
+                                </button>
                                 <button
                                     type="button"
                                     className={`flex h-10 w-full items-center justify-between rounded-md p-2 font-medium hover:bg-white-dark/10 hover:text-primary dark:hover:bg-[#181F32] dark:hover:text-primary ${selectedTab === 'neraca' && 'bg-gray-100 text-primary dark:bg-[#181F32] dark:text-primary'

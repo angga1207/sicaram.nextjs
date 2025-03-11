@@ -74,9 +74,6 @@ const Page = () => {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
-
-            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
-            setCurrentToken(token);
         }
         if (isMounted) {
             const localPeriode = localStorage.getItem('periode');

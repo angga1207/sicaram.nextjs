@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getSession, signOut } from "next-auth/react";
 
 export function BaseUri() {
     // const uri = 'https://sicaram.oganilirkab.go.id/api';
@@ -11,23 +12,41 @@ export function BaseUri() {
 
 export async function serverCheck() {
     try {
-        const CurrentToken = localStorage.getItem('token');
-        const res = await axios.post(BaseUri() + '/bdsm', {}, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${CurrentToken}`,
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        if (CurrentToken === undefined) {
+            const res = await axios.post(BaseUri() + '/bdsm', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            const data = await res.data;
+            if (data.status == 'success') {
+                if (data.data.user === null) {
+                    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    // await signOut();
+                }
+                document.cookie = `user=${JSON.stringify(data?.data?.user)}; path=/`;
             }
-        })
-        const data = await res.data;
-
-        if (data.status == 'success') {
-            if (data.data.user === null) {
-                document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                window.location.href = '/login';
+            return data;
+        } else {
+            const res = await axios.post(BaseUri() + '/bdsm', {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${CurrentToken}`,
+                }
+            })
+            const data = await res.data;
+            if (data.status == 'success') {
+                if (data.data.user === null) {
+                    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    // await signOut();
+                }
+                document.cookie = `user=${JSON.stringify(data?.data?.user)}; path=/`;
             }
-            document.cookie = `user=${JSON.stringify(data?.data?.user)}; path=/`;
+            return data;
         }
-        return data;
+
     } catch (error) {
         return {
             status: 'error',
@@ -39,7 +58,8 @@ export async function serverCheck() {
 export async function GlobalEndPoint(_get: any, q: any = null) {
     try {
         // aioe
-        const CurrentToken = localStorage.getItem('token');
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(BaseUri() + '/aioe', {
             '_get': _get,
             'q': q,

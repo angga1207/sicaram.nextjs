@@ -337,7 +337,7 @@ const Neraca = (data: any) => {
                                             </td>
                                             <td className='text-center'>
                                                 <InputRupiahSingleSave
-                                                    readOnly={data.fullcode.length === 6 ? !instance ? true : false : true}
+                                                    readOnly={data?.fullcode?.length === 6 ? !instance ? true : false : true}
                                                     dataValue={data.saldo_akhir}
                                                     onChange={(value: any) => {
                                                         setDatas((prev: any) => {

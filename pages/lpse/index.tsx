@@ -18,6 +18,7 @@ import LoadingSicaram from '@/components/LoadingSicaram';
 import { useRouter } from 'next/router';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import Dropdown from '@/components/Dropdown';
+import { useSession } from 'next-auth/react';
 
 const Index = () => {
 
@@ -30,7 +31,14 @@ const Index = () => {
     }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
-    const [CurrentToken, setCurrentToken] = useState<any>([]);
+    const [CurrentToken, setCurrentToken] = useState<any>(null);
+    const session = useSession();
+    useEffect(() => {
+        if (isMounted && session.status === 'authenticated') {
+            const token = session?.data?.user?.name;
+            setCurrentToken(token);
+        }
+    }, [isMounted, session]);
 
     useEffect(() => {
         dispatch(setPageTitle('Dashboard LPSE'));

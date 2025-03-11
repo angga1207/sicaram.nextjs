@@ -88,9 +88,6 @@ const Index = () => {
     useEffect(() => {
         if (isMounted && periode?.id && year) {
             summaryKinerja(periode?.id, year, view).then((data) => {
-                if (data?.message?.response?.status === 401) {
-                    signOut();
-                }
                 if (data.status === 'success') {
                     setKinerjaSummary(data.data);
                 }
@@ -117,9 +114,6 @@ const Index = () => {
             });
 
             summaryKinerja(periode?.id, year, view).then((data) => {
-                if (data?.message?.response?.status === 401) {
-                    signOut();
-                }
                 if (data.status === 'success') {
                     setKinerjaSummary(data.data);
                 }

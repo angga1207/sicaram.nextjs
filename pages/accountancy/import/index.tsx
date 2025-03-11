@@ -25,6 +25,7 @@ import IconMenu from '@/components/Icon/IconMenu';
 import { storeKodeRekening, storeSaldoAwalLO, storeSaldoAwalNeraca } from '@/apis/Accountancy/Import';
 import { getData, resetData, storeData } from '@/apis/Accountancy/Accountancy';
 import ImportSaldoAwal from '@/components/Accountancy/AdminOnly/ImportSaldoAwal';
+import { useSession } from 'next-auth/react';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -77,15 +78,11 @@ const Page = () => {
     }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
-    const [CurrentToken, setCurrentToken] = useState<any>(null);
     useEffect(() => {
         if (document.cookie) {
             let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
             user = user ? JSON.parse(user) : null;
             setCurrentUser(user);
-
-            let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
-            setCurrentToken(token);
         }
         if (isMounted) {
             const localPeriode = localStorage.getItem('periode');
@@ -94,6 +91,15 @@ const Page = () => {
             }
         }
     }, [isMounted]);
+
+    const [CurrentToken, setCurrentToken] = useState<any>(null);
+    const session = useSession();
+    useEffect(() => {
+        if (isMounted && session.status === 'authenticated') {
+            const token = session?.data?.user?.name;
+            setCurrentToken(token);
+        }
+    }, [isMounted, session]);
 
     useEffect(() => {
         if (isMounted) {

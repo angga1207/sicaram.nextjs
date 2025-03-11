@@ -1,15 +1,16 @@
 import { getCookie } from 'cookies-next';
 import axios from "axios";
 import { BaseUri } from "../serverConfig";
+import { getSession } from 'next-auth/react';
 
-
-const CurrentToken = getCookie('token');
 // const BaseUri = 'https://simoedanep.in/api';
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 const baseUri = BaseUri();
 
 export async function getData(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/hutang-belanja', {
             headers: {
                 'Content-Type': 'application/json',
@@ -33,6 +34,8 @@ export async function getData(instance: any = null, periode: any, year: any) {
 
 export async function storeData(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/hutang-belanja', {
             periode: periode,
             year: year,
@@ -55,6 +58,8 @@ export async function storeData(dataInput: any, periode: any, year: any) {
 
 export async function deleteData(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/hutang-belanja', {
             headers: {
                 'Content-Type': 'application/json',
@@ -76,6 +81,8 @@ export async function deleteData(id: any) {
 
 export async function getPembayaranHutang(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/hutang-belanja/pembayaran-hutang', {
             headers: {
                 'Content-Type': 'application/json',
@@ -99,6 +106,8 @@ export async function getPembayaranHutang(instance: any = null, periode: any, ye
 
 export async function storePembayaranHutang(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/hutang-belanja/pembayaran-hutang', {
             periode: periode,
             year: year,
@@ -121,6 +130,8 @@ export async function storePembayaranHutang(dataInput: any, periode: any, year: 
 
 export async function deletePembayaranHutang(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/hutang-belanja/pembayaran-hutang', {
             headers: {
                 'Content-Type': 'application/json',
@@ -142,6 +153,8 @@ export async function deletePembayaranHutang(id: any) {
 
 export async function getHutangBaru(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/hutang-belanja/hutang-baru', {
             headers: {
                 'Content-Type': 'application/json',
@@ -165,6 +178,8 @@ export async function getHutangBaru(instance: any = null, periode: any, year: an
 
 export async function storeHutangBaru(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/hutang-belanja/hutang-baru', {
             periode: periode,
             year: year,
@@ -187,6 +202,8 @@ export async function storeHutangBaru(dataInput: any, periode: any, year: any) {
 
 export async function deleteHutangBaru(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/hutang-belanja/hutang-baru', {
             headers: {
                 'Content-Type': 'application/json',

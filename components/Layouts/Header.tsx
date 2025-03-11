@@ -26,12 +26,12 @@ import axios, { AxiosRequestConfig } from "axios";
 import { BaseUri } from '@/apis/serverConfig';
 import { fetchNotifLess, markNotifAsRead } from '@/apis/personal_profile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBriefcase, faCheckDouble, faLockOpen, faSignOut, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faCheckDouble, faLockOpen, faSignInAlt, faSignOut, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import IconBookmark from '../Icon/IconBookmark';
 import IconPlus from '../Icon/IconPlus';
 import IconMinus from '../Icon/IconMinus';
-import { signOut, useSession } from 'next-auth/react';
+import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import Select from 'react-select';
 
 
@@ -95,20 +95,11 @@ const Header = () => {
     const [CurrentUser, setCurrentUser] = useState<any>(null);
     const [CurrentToken, setCurrentToken] = useState<any>([]);
     const [Locked, setLocked] = useState<any>([]);
-    const mySession = useSession();
-
-    if (mySession.status == 'unauthenticated') {
-        window.location.href = '/login';
-    }
 
     useEffect(() => {
         if (window) {
             if (isMounted) {
-
                 if (document.cookie) {
-                    let token = document.cookie.split(';').find((row) => row.trim().startsWith('token='))?.split('=')[1];
-                    setCurrentToken(token);
-
                     let user = document.cookie.split(';').find((row) => row.trim().startsWith('user='))?.split('=')[1];
                     user = user ? JSON.parse(user) : null;
                     setCurrentUser(user);
@@ -241,31 +232,36 @@ const Header = () => {
     const logout = () => {
         const uri = BaseUri() + '/logout';
         try {
-            const res = axios.get(uri, {
-                headers: {
-                    'Authorization': 'Bearer ' + CurrentToken
-                }
-            }).then((response) => {
-                if (response.status == 200) {
-                    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    signOut();
-                    window.location.href = '/login';
-                }
-            }).catch((error) => {
-                if (error.response.status == 401) {
-                    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                    signOut();
-                    window.location.href = '/login';
-                }
-            });
+            const MyToken = session?.data?.user?.name;
+            if (MyToken) {
+                const res = axios.get(uri, {
+                    headers: {
+                        'Authorization': 'Bearer ' + MyToken
+                    }
+                }).then((response) => {
+                    if (response.status == 200) {
+                        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                        signOut({
+                            callbackUrl: '/login',
+                        });
+                    }
+                    // }).catch((error) => {
+                    //     if (error.response.status == 401) {
+                    //         document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    //         document.cookie = 'userPassword=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    //         document.cookie = 'ups=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    //         document.cookie = 'user=; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    //         document.cookie = 'locked=false; path/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    //         signOut({
+                    //             callbackUrl: '/login',
+                    //         });
+                    //     }
+                });
+            }
         } catch (error) {
             showAlert('error', 'Terjadi Kesalahan Server' + ' ' + error);
         }
@@ -328,21 +324,21 @@ const Header = () => {
                 }
             }
 
-            if (res?.message?.response?.status == 401) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Sesi Anda telah berakhir',
-                    text: 'Silahkan login kembali',
-                    padding: '10px 20px',
-                    showCancelButton: false,
-                    confirmButtonText: 'Login',
-                    cancelButtonText: 'Batal',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '/login';
-                    }
-                });
-            }
+            // if (res?.message?.response?.status == 401) {
+            //     Swal.fire({
+            //         icon: 'error',
+            //         title: 'Sesi Anda telah berakhir',
+            //         text: 'Silahkan login kembali',
+            //         padding: '10px 20px',
+            //         showCancelButton: false,
+            //         confirmButtonText: 'Login',
+            //         cancelButtonText: 'Batal',
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             window.location.href = '/login';
+            //         }
+            //     });
+            // }
         })
     }
 
@@ -451,7 +447,21 @@ const Header = () => {
         return () => clearInterval(interval);
     }, []);
 
-
+    const [isAuth, setIsAuth] = useState(false);
+    const session = useSession();
+    useEffect(() => {
+        if (session) {
+            const token = session.data?.user?.name;
+            if (session.status == 'authenticated' && token) {
+                setIsAuth(true);
+            } else if (session.status == 'unauthenticated') {
+                setIsAuth(false);
+                signOut({
+                    callbackUrl: '/login',
+                });
+            }
+        }
+    }, [isMounted, session]);
 
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''} !bg-transparent`}>
@@ -830,94 +840,148 @@ const Header = () => {
                             </Dropdown>
                         </div>
 
-                        <div className="dropdown flex shrink-0">
-                            <Dropdown
-                                offset={[0, 8]}
-                                placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                btnClassName="relative group block"
-                                button={
-                                    <img
-                                        className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-                                        src={CurrentUser?.photo ?? "/assets/images/logo-oi.png"}
-                                        onError={(e: any) => {
-                                            e.target.onerror = null;
-                                            e.target.src = '/assets/images/logo-oi.png';
-                                        }}
-                                        alt={CurrentUser?.fullname ?? 'User Photo'} />
-                                }
-                            >
-                                <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
-                                    <li>
-                                        <div className="flex items-center px-4 py-4">
-                                            <img
-                                                className="h-10 w-10 rounded-md object-cover"
-                                                src={CurrentUser?.photo ?? "/assets/images/logo-oi.png"}
-                                                onError={(e: any) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = '/assets/images/logo-oi.png';
-                                                }}
-                                                alt={CurrentUser?.fullname ?? 'User Photo'} />
-                                            <div className="ltr:pl-4 rtl:pr-4">
-                                                <h4 className="truncate text-base">
-                                                    {CurrentUser?.firstname}
-                                                </h4>
-                                                {CurrentUser?.role_name != 'Perangkat Daerah' ? (
-                                                    <>
-                                                        <button type="button" className="rounded bg-success-light px-1 text-xs text-success">
-                                                            {CurrentUser?.role_name ? CurrentUser?.role_name : ''}
-                                                        </button>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Tippy content={CurrentUser?.instance_name ? CurrentUser?.instance_name : ''}>
-                                                            <div className="rounded bg-success-light px-1 text-xs text-success line-clamp-2 cursor-pointer text-center">
-                                                                {CurrentUser?.instance_alias ? CurrentUser?.instance_alias : ''}
-                                                            </div>
-                                                        </Tippy>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <Link href="/users/profile" className="dark:hover:text-white">
-                                            <FontAwesomeIcon icon={faUser} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                            Profil
-                                        </Link>
-
-                                        {CurrentUser?.role_id === 9 && (
-                                            <Link href={`/instance`} className="dark:hover:text-white">
-                                                <FontAwesomeIcon icon={faBriefcase} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                                <span className='!capitalize'>
-                                                    Profil {CurrentUser?.instance_alias}
-                                                </span>
-                                            </Link>
-                                        )}
-
-                                    </li>
-                                    <li>
-                                        <div
-                                            onClick={() => {
-                                                kunciLayar();
+                        {isAuth === false ? (
+                            <div className="dropdown flex shrink-0">
+                                <Dropdown
+                                    offset={[0, 8]}
+                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
+                                    btnClassName="relative group block"
+                                    button={
+                                        <img
+                                            className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
+                                            src={"/assets/images/logo-oi.png"}
+                                            onError={(e: any) => {
+                                                e.target.onerror = null;
+                                                e.target.src = '/assets/images/logo-oi.png';
                                             }}
-                                            className="flex px-4 py-2 dark:hover:text-white cursor-pointer hover:bg-indigo-50 hover:text-indigo-700">
-                                            <FontAwesomeIcon icon={faLockOpen} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                            Kunci Layar
-                                        </div>
-                                    </li>
-                                    <li className="border-t border-white-light dark:border-white-light/10">
-                                        <Link href="#" className="!py-3 text-danger"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                logout();
-                                            }}>
-                                            <FontAwesomeIcon icon={faSignOutAlt} className="h-4.5 w-4.5 shrink-0 rotate-0 ltr:mr-2 rtl:ml-2" />
-                                            Log Out
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </Dropdown>
-                        </div>
+                                            alt={'User Photo'} />
+                                    }
+                                >
+                                    <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
+                                        <li>
+                                            <div className="flex items-center px-4 py-4">
+                                                <img
+                                                    className="h-10 w-10 rounded-md object-cover"
+                                                    src={"/assets/images/logo-oi.png"}
+                                                    onError={(e: any) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = '/assets/images/logo-oi.png';
+                                                    }}
+                                                    alt={'User Photo'} />
+                                                <div className="ltr:pl-4 rtl:pr-4">
+                                                    <h4 className="truncate text-base">
+                                                        Nama Pengguna
+                                                    </h4>
+                                                    <button type="button" className="rounded bg-success-light px-1 text-xs text-success">
+                                                        Role
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    logout();
+                                                }}
+                                                className="flex px-4 py-2 dark:hover:text-white cursor-pointer hover:bg-indigo-50 hover:text-indigo-700">
+                                                <FontAwesomeIcon icon={faSignInAlt} className="h-4.5 w-4.5 shrink-0 rotate-0 ltr:mr-2 rtl:ml-2" />
+                                                Masuk Kembali
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </Dropdown>
+                            </div>
+                        ) : (
+                            <div className="dropdown flex shrink-0">
+                                <Dropdown
+                                    offset={[0, 8]}
+                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
+                                    btnClassName="relative group block"
+                                    button={
+                                        <img
+                                            className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
+                                            src={CurrentUser?.photo ?? "/assets/images/logo-oi.png"}
+                                            onError={(e: any) => {
+                                                e.target.onerror = null;
+                                                e.target.src = '/assets/images/logo-oi.png';
+                                            }}
+                                            alt={CurrentUser?.fullname ?? 'User Photo'} />
+                                    }
+                                >
+                                    <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
+                                        <li>
+                                            <div className="flex items-center px-4 py-4">
+                                                <img
+                                                    className="h-10 w-10 rounded-md object-cover"
+                                                    src={CurrentUser?.photo ?? "/assets/images/logo-oi.png"}
+                                                    onError={(e: any) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = '/assets/images/logo-oi.png';
+                                                    }}
+                                                    alt={CurrentUser?.fullname ?? 'User Photo'} />
+                                                <div className="ltr:pl-4 rtl:pr-4">
+                                                    <h4 className="truncate text-base">
+                                                        {CurrentUser?.firstname}
+                                                    </h4>
+                                                    {CurrentUser?.role_name != 'Perangkat Daerah' ? (
+                                                        <>
+                                                            <button type="button" className="rounded bg-success-light px-1 text-xs text-success">
+                                                                {CurrentUser?.role_name ? CurrentUser?.role_name : ''}
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Tippy content={CurrentUser?.instance_name ? CurrentUser?.instance_name : ''}>
+                                                                <div className="rounded bg-success-light px-1 text-xs text-success line-clamp-2 cursor-pointer text-center">
+                                                                    {CurrentUser?.instance_alias ? CurrentUser?.instance_alias : ''}
+                                                                </div>
+                                                            </Tippy>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <Link href="/users/profile" className="dark:hover:text-white">
+                                                <FontAwesomeIcon icon={faUser} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                                Profil
+                                            </Link>
+
+                                            {CurrentUser?.role_id === 9 && (
+                                                <Link href={`/instance`} className="dark:hover:text-white">
+                                                    <FontAwesomeIcon icon={faBriefcase} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                                    <span className='!capitalize'>
+                                                        Profil {CurrentUser?.instance_alias}
+                                                    </span>
+                                                </Link>
+                                            )}
+
+                                        </li>
+                                        <li>
+                                            <div
+                                                onClick={() => {
+                                                    kunciLayar();
+                                                }}
+                                                className="flex px-4 py-2 dark:hover:text-white cursor-pointer hover:bg-indigo-50 hover:text-indigo-700">
+                                                <FontAwesomeIcon icon={faLockOpen} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+                                                Kunci Layar
+                                            </div>
+                                        </li>
+                                        <li className="border-t border-white-light dark:border-white-light/10">
+                                            <Link href="#" className="!py-3 text-danger"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    logout();
+                                                }}>
+                                                <FontAwesomeIcon icon={faSignOutAlt} className="h-4.5 w-4.5 shrink-0 rotate-0 ltr:mr-2 rtl:ml-2" />
+                                                Log Out
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </Dropdown>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

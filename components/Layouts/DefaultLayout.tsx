@@ -11,14 +11,20 @@ import Portals from '../../components/Portals';
 import { useRouter } from 'next/router';
 import OfflineModal from '../OfflineModal';
 import Calculator from './Calculator';
+import { useSession } from 'next-auth/react';
 
 const DefaultLayout = ({ children }: PropsWithChildren) => {
     const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
     const [showLoader, setShowLoader] = useState(true);
     const [showTopButton, setShowTopButton] = useState(false);
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const [animation, setAnimation] = useState(themeConfig.animation);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const goToTop = () => {
         document.body.scrollTop = 0;
@@ -61,10 +67,20 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
         }, 1100);
     }, [router.asPath]);
 
+    const [isAuth, setIsAuth] = useState(false);
+    const session = useSession();
+    useEffect(() => {
+        if (session) {
+            const token = session.data?.user?.name;
+            if (session.status == 'authenticated' && token) {
+                setIsAuth(true);
+            }
+        }
+    }, [isMounted, session]);
+
     return (
         <App>
             <OfflineModal />
-
             {/* BEGIN MAIN CONTAINER */}
             <div className="relative bg-[url(/assets/images/108364.jpg)] dark:bg-none bg-cover bg-center bg-no-repeat">
                 {/* screen loader  */}
@@ -114,9 +130,13 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
                         <Header />
                         {/* END TOP NAVBAR */}
 
-                        {/* BEGIN CONTENT AREA */}
-                        <div className={`${animation} animate__animated p-6 pb-10`}>{children}</div>
-                        {/* END CONTENT AREA */}
+                        {isAuth && (
+                            <>
+                                {/* BEGIN CONTENT AREA */}
+                                <div className={`${animation} animate__animated p-6 pb-10`}>{children}</div>
+                                {/* END CONTENT AREA */}
+                            </>
+                        )}
 
                         {/* BEGIN FOOTER */}
                         {/* <Footer /> */}
@@ -125,7 +145,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
                     </div>
                 </div>
             </div>
-        </App>
+        </App >
     );
 };
 

@@ -1,9 +1,8 @@
 import { getCookie } from 'cookies-next';
 import axios from "axios";
 import { BaseUri } from "../serverConfig";
+import { getSession } from 'next-auth/react';
 
-
-const CurrentToken = getCookie('token');
 // const BaseUri = 'https://simoedanep.in/api';
 // const BaseUri = 'https://sicaram.oganilirkab.go.id/api';
 const baseUri = BaseUri();
@@ -11,6 +10,8 @@ const baseUri = BaseUri();
 
 export async function getPegawai(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/pegawai', {
             headers: {
                 'Content-Type': 'application/json',
@@ -34,6 +35,8 @@ export async function getPegawai(instance: any = null, periode: any, year: any) 
 
 export async function storePegawai(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/pegawai', {
             periode: periode,
             year: year,
@@ -56,6 +59,8 @@ export async function storePegawai(dataInput: any, periode: any, year: any) {
 
 export async function deletePegawai(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/pegawai', {
             headers: {
                 'Content-Type': 'application/json',
@@ -77,6 +82,8 @@ export async function deletePegawai(id: any) {
 
 export async function getPersediaan(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/persediaan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -100,6 +107,8 @@ export async function getPersediaan(instance: any = null, periode: any, year: an
 
 export async function storePersediaan(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/persediaan', {
             periode: periode,
             year: year,
@@ -122,6 +131,8 @@ export async function storePersediaan(dataInput: any, periode: any, year: any) {
 
 export async function deletePersediaan(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/persediaan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -143,6 +154,8 @@ export async function deletePersediaan(id: any) {
 
 export async function getJasa(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/jasa', {
             headers: {
                 'Content-Type': 'application/json',
@@ -166,6 +179,8 @@ export async function getJasa(instance: any = null, periode: any, year: any) {
 
 export async function storeJasa(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/jasa', {
             periode: periode,
             year: year,
@@ -188,6 +203,8 @@ export async function storeJasa(dataInput: any, periode: any, year: any) {
 
 export async function deleteJasa(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/jasa', {
             headers: {
                 'Content-Type': 'application/json',
@@ -209,6 +226,8 @@ export async function deleteJasa(id: any) {
 
 export async function getPemeliharaan(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/pemeliharaan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -232,6 +251,8 @@ export async function getPemeliharaan(instance: any = null, periode: any, year: 
 
 export async function storePemeliharaan(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/pemeliharaan', {
             periode: periode,
             year: year,
@@ -254,6 +275,8 @@ export async function storePemeliharaan(dataInput: any, periode: any, year: any)
 
 export async function deletePemeliharaan(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/pemeliharaan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -275,6 +298,8 @@ export async function deletePemeliharaan(id: any) {
 
 export async function getPerjadin(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/perjadin', {
             headers: {
                 'Content-Type': 'application/json',
@@ -298,6 +323,8 @@ export async function getPerjadin(instance: any = null, periode: any, year: any)
 
 export async function storePerjadin(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/perjadin', {
             periode: periode,
             year: year,
@@ -320,6 +347,8 @@ export async function storePerjadin(dataInput: any, periode: any, year: any) {
 
 export async function deletePerjadin(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/perjadin', {
             headers: {
                 'Content-Type': 'application/json',
@@ -341,6 +370,8 @@ export async function deletePerjadin(id: any) {
 
 export async function getUangJasaDiserahkan(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/uang-jasa-diserahkan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -364,6 +395,8 @@ export async function getUangJasaDiserahkan(instance: any = null, periode: any, 
 
 export async function storeUangJasaDiserahkan(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/uang-jasa-diserahkan', {
             periode: periode,
             year: year,
@@ -386,6 +419,8 @@ export async function storeUangJasaDiserahkan(dataInput: any, periode: any, year
 
 export async function deleteUangJasaDiserahkan(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/uang-jasa-diserahkan', {
             headers: {
                 'Content-Type': 'application/json',
@@ -407,6 +442,8 @@ export async function deleteUangJasaDiserahkan(id: any) {
 
 export async function getHibah(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/hibah', {
             headers: {
                 'Content-Type': 'application/json',
@@ -430,6 +467,8 @@ export async function getHibah(instance: any = null, periode: any, year: any) {
 
 export async function storeHibah(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/hibah', {
             periode: periode,
             year: year,
@@ -452,6 +491,8 @@ export async function storeHibah(dataInput: any, periode: any, year: any) {
 
 export async function deleteHibah(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/hibah', {
             headers: {
                 'Content-Type': 'application/json',
@@ -473,6 +514,8 @@ export async function deleteHibah(id: any) {
 
 export async function getSubsidi(instance: any = null, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/accountancy/blo/subsidi', {
             headers: {
                 'Content-Type': 'application/json',
@@ -496,6 +539,8 @@ export async function getSubsidi(instance: any = null, periode: any, year: any) 
 
 export async function storeSubsidi(dataInput: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/accountancy/blo/subsidi', {
             periode: periode,
             year: year,
@@ -518,6 +563,8 @@ export async function storeSubsidi(dataInput: any, periode: any, year: any) {
 
 export async function deleteSubsidi(id: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/accountancy/blo/subsidi', {
             headers: {
                 'Content-Type': 'application/json',

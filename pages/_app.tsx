@@ -214,14 +214,13 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
 
                     <style>
                         {`
-                       .grecaptcha-badge {
-                        position: relative !important;
-                        left: 0px !important;
-                        top: 0px !important;
-
+                        .grecaptcha-badge {
+                            position: relative !important;
+                            left: 0px !important;
+                            top: 0px !important;
                             // visibility: hidden;
-                    }
-                    `}
+                            }
+                        `}
                     </style>
                 </Head>
 

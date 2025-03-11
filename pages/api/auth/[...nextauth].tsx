@@ -12,22 +12,16 @@ const authOptions: NextAuthOptions = {
             authorize(credentials, req) {
                 const {
                     id,
-                    username,
-                    fullname,
-                    token,
+                    name,
                 } = credentials as {
                     id: string
-                    username: string,
-                    fullname: string
-                    token: string
+                    name: string,
                 };
 
-                if (token || username) {
+                if (name) {
                     return {
                         id: id as string,
-                        username: username,
-                        fullname: fullname,
-                        token: token
+                        name: name as string,
                     }
                 }
                 // throw new Error("No credentials");

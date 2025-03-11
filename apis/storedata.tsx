@@ -1,7 +1,7 @@
-
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
 import { getCookie } from 'cookies-next';
+import { getSession } from "next-auth/react";
 
 // const CurrentToken = getCookie('token');
 // const CurrentToken = sessionStorage.getItem('token') ?? '';
@@ -15,10 +15,12 @@ const baseUri = BaseUri();
 // const BaseUri = process.env.BASE_SERVER_URI;
 
 var FormData = require('form-data');
-const CurrentToken = getCookie('token');
 
 // Users Start
 export async function storeUser(data: any) {
+
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/users', {
         method: 'POST',
         headers: {
@@ -33,6 +35,8 @@ export async function storeUser(data: any) {
 
 export async function updateUserWithPhoto(params: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const formData = new FormData();
         formData.append('fullname', params.fullname);
         formData.append('username', params.username);
@@ -56,6 +60,8 @@ export async function updateUserWithPhoto(params: any) {
 }
 
 export async function updateUser(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const newData = {
         'fullname': data.fullname,
         'firstname': data.firstname,
@@ -88,6 +94,8 @@ export async function updateUser(data: any) {
 }
 
 export async function deleteUser(id: string) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/users/' + id, {
         method: 'DELETE',
         headers: {
@@ -102,6 +110,8 @@ export async function deleteUser(id: string) {
 
 // Periode Start
 export async function storePeriode(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-periode', {
         method: 'POST',
         headers: {
@@ -115,6 +125,8 @@ export async function storePeriode(data: any) {
 }
 
 export async function updatePeriode(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-periode/' + data.id, {
         method: 'POST',
         headers: {
@@ -129,6 +141,8 @@ export async function updatePeriode(data: any) {
 
 // Satuan Start
 export async function storeSatuan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-satuan', {
         method: 'POST',
         headers: {
@@ -142,6 +156,8 @@ export async function storeSatuan(data: any) {
 }
 
 export async function updateSatuan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-satuan/' + data.id, {
         method: 'POST',
         headers: {
@@ -155,6 +171,8 @@ export async function updateSatuan(data: any) {
 }
 
 export async function deleteSatuan(id: string) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-satuan/' + id, {
         method: 'DELETE',
         headers: {
@@ -169,6 +187,8 @@ export async function deleteSatuan(id: string) {
 // Instances Start
 export async function storeInstance(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await fetch(baseUri + '/instances', {
             method: 'POST',
             headers: {
@@ -185,6 +205,8 @@ export async function storeInstance(data: any) {
 }
 
 export async function updateInstance(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/instances/' + data.id, {
         method: 'POST',
         headers: {
@@ -198,6 +220,8 @@ export async function updateInstance(data: any) {
 }
 
 export async function deleteInstance(id: number) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/instances/' + id, {
         method: 'DELETE',
         headers: {
@@ -213,6 +237,8 @@ export async function deleteInstance(id: number) {
 // Ref Rekening Start
 export async function storeRefRekening(periode: any, data: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-rekening?periode=' + periode + '&year=' + year, data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -228,6 +254,8 @@ export async function storeRefRekening(periode: any, data: any, year: any) {
 
 export async function updateRefRekening(periode: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-rekening/' + data.id + '?periode=' + periode, data, {
             headers: {
                 'Content-Type': 'application/json',
@@ -242,6 +270,8 @@ export async function updateRefRekening(periode: any, data: any) {
 }
 
 export async function deleteRefRekening(level: any, id: string) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-rekening/' + id + '?level=' + level, {
         method: 'DELETE',
         headers: {
@@ -254,6 +284,8 @@ export async function deleteRefRekening(level: any, id: string) {
 }
 
 export async function uploadExcel(file: any, periode: any, year: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await axios.post(baseUri + '/ref-rekening-upload', {
         'file': file,
         periode: periode,
@@ -270,6 +302,8 @@ export async function uploadExcel(file: any, periode: any, year: any) {
 
 // Role Start
 export async function storeRole(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/roles', {
         method: 'POST',
         headers: {
@@ -283,6 +317,8 @@ export async function storeRole(data: any) {
 }
 
 export async function updateRole(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/roles/' + data.id, {
         method: 'POST',
         headers: {
@@ -296,6 +332,8 @@ export async function updateRole(data: any) {
 }
 
 export async function deleteRole(id: string) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/roles/' + id, {
         method: 'DELETE',
         headers: {
@@ -310,6 +348,8 @@ export async function deleteRole(id: string) {
 
 // Master Urusan Start
 export async function storeUrusan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-urusan', {
         method: 'POST',
         headers: {
@@ -323,6 +363,8 @@ export async function storeUrusan(data: any) {
 }
 
 export async function updateUrusan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-urusan/' + data.id, {
         method: 'POST',
         headers: {
@@ -336,6 +378,8 @@ export async function updateUrusan(data: any) {
 }
 
 export async function deleteUrusan(id: number) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-urusan/' + id, {
         method: 'DELETE',
         headers: {
@@ -350,6 +394,8 @@ export async function deleteUrusan(id: number) {
 
 // Master Bidang Start
 export async function storeBidang(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-bidang', {
         method: 'POST',
         headers: {
@@ -363,6 +409,8 @@ export async function storeBidang(data: any) {
 }
 
 export async function updateBidang(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-bidang/' + data.id, {
         method: 'POST',
         headers: {
@@ -376,6 +424,8 @@ export async function updateBidang(data: any) {
 }
 
 export async function deleteBidang(id: number) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-bidang/' + id, {
         method: 'DELETE',
         headers: {
@@ -391,6 +441,8 @@ export async function deleteBidang(id: number) {
 // Master Program Start
 export async function storeProgram(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await fetch(baseUri + '/ref-program', {
             method: 'POST',
             headers: {
@@ -407,6 +459,8 @@ export async function storeProgram(data: any) {
 }
 
 export async function updateProgram(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-program/' + data.id, {
         method: 'POST',
         headers: {
@@ -420,6 +474,8 @@ export async function updateProgram(data: any) {
 }
 
 export async function deleteProgram(id: number) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-program/' + id, {
         method: 'DELETE',
         headers: {
@@ -434,6 +490,8 @@ export async function deleteProgram(id: number) {
 
 // Master Kegiatan Start
 export async function storeKegiatan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-kegiatan', {
         method: 'POST',
         headers: {
@@ -447,6 +505,8 @@ export async function storeKegiatan(data: any) {
 }
 
 export async function updateKegiatan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-kegiatan/' + data.id, {
         method: 'POST',
         headers: {
@@ -460,6 +520,8 @@ export async function updateKegiatan(data: any) {
 }
 
 export async function deleteKegiatan(id: number) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-kegiatan/' + id, {
         method: 'DELETE',
         headers: {
@@ -474,6 +536,8 @@ export async function deleteKegiatan(id: number) {
 
 // Master SubKegiatan Start
 export async function storeSubKegiatan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-sub-kegiatan', {
         method: 'POST',
         headers: {
@@ -487,6 +551,8 @@ export async function storeSubKegiatan(data: any) {
 }
 
 export async function updateSubKegiatan(data: any) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-sub-kegiatan/' + data.id, {
         method: 'POST',
         headers: {
@@ -500,6 +566,8 @@ export async function updateSubKegiatan(data: any) {
 }
 
 export async function deleteSubKegiatan(id: number) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-sub-kegiatan/' + id, {
         method: 'DELETE',
         headers: {
@@ -516,6 +584,8 @@ export async function deleteSubKegiatan(id: number) {
 // Indikator Kinerja Kegiatan Start
 export async function storeIndikatorKegiatan(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-indikator-kegiatan', {
             'name': data.name,
             'instance_id': data.instance_id,
@@ -537,6 +607,8 @@ export async function storeIndikatorKegiatan(data: any) {
 export async function updateIndikatorKegiatan(data: any) {
 
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-indikator-kegiatan/' + data.id, {
             'name': data.name,
             'instance_id': data.instance_id,
@@ -556,6 +628,8 @@ export async function updateIndikatorKegiatan(data: any) {
 }
 
 export async function deleteIndikatorKegiatan(id: string) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-indikator-kegiatan/' + id, {
         method: 'DELETE',
         headers: {
@@ -571,6 +645,8 @@ export async function deleteIndikatorKegiatan(id: string) {
 // Indikator Kinerja SubKegiatan Start
 export async function storeIndikatorSubKegiatan(data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-indikator-sub-kegiatan', {
             'name': data.name,
             'instance_id': data.instance_id,
@@ -592,6 +668,8 @@ export async function storeIndikatorSubKegiatan(data: any) {
 export async function updateIndikatorSubKegiatan(data: any) {
 
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-indikator-sub-kegiatan/' + data.id, {
             'name': data.name,
             'instance_id': data.instance_id,
@@ -611,6 +689,8 @@ export async function updateIndikatorSubKegiatan(data: any) {
 }
 
 export async function deleteIndikatorSubKegiatan(id: string) {
+    const session = await getSession();
+    const CurrentToken = session?.user?.name;
     const res = await fetch(baseUri + '/ref-indikator-sub-kegiatan/' + id, {
         method: 'DELETE',
         headers: {
@@ -625,6 +705,8 @@ export async function deleteIndikatorSubKegiatan(id: string) {
 
 export async function saveRpjmd(periode: any, instance: any, program: any, rpjmd: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/rpjmd', {
             'periode': periode,
             'instance': instance,
@@ -647,6 +729,8 @@ export async function saveRpjmd(periode: any, instance: any, program: any, rpjmd
 
 export async function saveRenstraKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/renstra/' + kegiatan, {
             'periode': periode,
             'instance': instance,
@@ -669,6 +753,8 @@ export async function saveRenstraKegiatan(periode: any, instance: any, program: 
 
 export async function saveRenstraSubKegiatan(periode: any, instance: any, program: any, sub_kegiatan: any, year: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/renstra/' + sub_kegiatan, {
             'periode': periode,
             'instance': instance,
@@ -691,6 +777,8 @@ export async function saveRenstraSubKegiatan(periode: any, instance: any, progra
 
 export async function postRenstraNotes(periode: any, instance: any, program: any, renstra: any, message: any, status: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/renstra/' + renstra + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
             'periode': periode,
             'instance': instance,
@@ -713,6 +801,8 @@ export async function postRenstraNotes(periode: any, instance: any, program: any
 
 export async function saveRenjaKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/renja/' + kegiatan, {
             'periode': periode,
             'instance': instance,
@@ -735,6 +825,8 @@ export async function saveRenjaKegiatan(periode: any, instance: any, program: an
 
 export async function saveRenjaSubKegiatan(periode: any, instance: any, program: any, sub_kegiatan: any, year: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/renja/' + sub_kegiatan, {
             'periode': periode,
             'instance': instance,
@@ -757,6 +849,8 @@ export async function saveRenjaSubKegiatan(periode: any, instance: any, program:
 
 export async function postRenjaNotes(periode: any, instance: any, program: any, renja: any, message: any, status: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/renja/' + renja + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
             'periode': periode,
             'instance': instance,
@@ -779,6 +873,8 @@ export async function postRenjaNotes(periode: any, instance: any, program: any, 
 
 export async function saveApbdKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/apbd/' + kegiatan, {
             'periode': periode,
             'instance': instance,
@@ -801,6 +897,8 @@ export async function saveApbdKegiatan(periode: any, instance: any, program: any
 
 export async function saveApbdSubKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any, data: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/apbd/' + kegiatan, {
             'periode': periode,
             'instance': instance,
@@ -823,6 +921,8 @@ export async function saveApbdSubKegiatan(periode: any, instance: any, program: 
 
 export async function postApbdNotes(periode: any, instance: any, program: any, apbd: any, message: any, status: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/apbd/' + apbd + '/notes?periode=' + periode + '&instance=' + instance + '&program=' + program, {
             'periode': periode,
             'instance': instance,
@@ -845,6 +945,8 @@ export async function postApbdNotes(periode: any, instance: any, program: any, a
 
 export async function uploadExcelApbd(dataInputExcel: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/upload-apbd', {
             'file': dataInputExcel?.file,
             'date': dataInputExcel?.date,
@@ -869,6 +971,8 @@ export async function uploadExcelApbd(dataInputExcel: any) {
 
 export async function uploadExcelCodeSubToCodeRekening(file: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-sub-to-rekening-upload', {
             'file': file,
         }, {
@@ -886,6 +990,8 @@ export async function uploadExcelCodeSubToCodeRekening(file: any) {
 
 export async function uploadExcelSumberDana(file: any, periode: any, year: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/ref-sumber-dana-upload', {
             'file': file,
             periode: periode,

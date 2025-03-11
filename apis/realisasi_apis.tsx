@@ -1,14 +1,16 @@
 import { getCookie } from 'cookies-next';
 import axios from "axios";
 import { BaseUri } from "./serverConfig";
+import { getSession } from 'next-auth/react';
 
 const baseUri = BaseUri();
 
 var FormData = require('form-data');
-const CurrentToken = getCookie('token');
 
 export async function getMasterData(id: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -32,6 +34,8 @@ export async function getMasterData(id: any, year: any, month: any) {
 
 export async function getKeteranganSubKegiatan(idRealisasiSubKegiatan: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi-keterangan/' + idRealisasiSubKegiatan + '/get', {
             headers: {
                 'Content-Type': 'application/json',
@@ -55,6 +59,8 @@ export async function getKeteranganSubKegiatan(idRealisasiSubKegiatan: any, year
 
 export async function SaveRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/' + id, {
             data: datas,
             periode: periode,
@@ -79,6 +85,8 @@ export async function SaveRealisasi(id: any, datas: any, periode: any, year: any
 
 export async function SaveRincianRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/detail', {
             data: datas,
             periode: periode,
@@ -103,6 +111,8 @@ export async function SaveRincianRealisasi(id: any, datas: any, periode: any, ye
 
 export async function SyncRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/sync', {
             data: datas,
             periode: periode,
@@ -127,6 +137,8 @@ export async function SyncRealisasi(id: any, datas: any, periode: any, year: any
 
 export async function SyncRincianRealisasi(id: any, datas: any, periode: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/detail/sync', {
             data: datas,
             periode: periode,
@@ -151,6 +163,8 @@ export async function SyncRincianRealisasi(id: any, datas: any, periode: any, ye
 
 export async function SaveKeterangan(idRealisasiSubKegiatan: any, datas: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi-keterangan/' + idRealisasiSubKegiatan + '/save', {
             'id': datas.id,
             'notes': datas.notes,
@@ -179,6 +193,8 @@ export async function SaveKeterangan(idRealisasiSubKegiatan: any, datas: any, ye
 export async function DeleteKeteranganImage(id: any) {
     // /caram/realisasi-keterangan-delete-file/{id)
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/caram/realisasi-keterangan-delete-file/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -197,6 +213,8 @@ export async function DeleteKeteranganImage(id: any) {
 
 export async function fetchLogs(id: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi/' + id + '/logs', {
             headers: {
                 'Content-Type': 'application/json',
@@ -219,6 +237,8 @@ export async function fetchLogs(id: any, year: any, month: any) {
 
 export async function sendRequestVerification(id: any, data: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/logs', {
             message: data?.message,
             status: 'sent',
@@ -242,6 +262,8 @@ export async function sendRequestVerification(id: any, data: any, year: any, mon
 
 export async function sendReplyVerification(id: any, data: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi/' + id + '/logs', {
             message: data?.message,
             status: data?.status,
@@ -265,6 +287,8 @@ export async function sendReplyVerification(id: any, data: any, year: any, month
 
 export async function getKontrakSPSE(search: any, year: any, kodeSatker: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         // /caram/realisasi-keterangan-fetch-spse-kontrak
         const res = await axios.get(baseUri + '/caram/realisasi-keterangan-fetch-spse-kontrak', {
             headers: {
@@ -290,6 +314,8 @@ export async function getKontrakSPSE(search: any, year: any, kodeSatker: any) {
 
 export async function getContract(subKegiatanId: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.get(baseUri + '/caram/realisasi-keterangan-get-kontrak', {
             headers: {
                 'Content-Type': 'application/json',
@@ -314,6 +340,8 @@ export async function getContract(subKegiatanId: any, year: any, month: any) {
 
 export async function addContract(id: any, data: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.post(baseUri + '/caram/realisasi-keterangan-add-kontrak', {
             id: id,
             data: data,
@@ -337,6 +365,8 @@ export async function addContract(id: any, data: any, year: any, month: any) {
 
 export async function deleteContract(id: any, no_kontrak: any, year: any, month: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const res = await axios.delete(baseUri + '/caram/realisasi-keterangan-delete-kontrak/' + id, {
             headers: {
                 'Content-Type': 'application/json',
@@ -362,6 +392,8 @@ export async function deleteContract(id: any, no_kontrak: any, year: any, month:
 
 export async function uploadRealisasiExcel(subKegiatanId: any, instance: any, periode: any, year: any, month: any, file: any) {
     try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
         const formData = new FormData();
         formData.append('file', file);
         formData.append('periode', periode);
