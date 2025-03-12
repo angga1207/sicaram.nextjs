@@ -89,7 +89,20 @@ const Header = () => {
     const [year, setYear] = useState<any>(null)
 
     useEffect(() => {
-        setIsMounted(true);
+        // setIsMounted(true);
+        if (isMounted == false) {
+            serverCheck().then((res) => {
+                if (res.status == 'success') {
+                    if (res.data.user === null) {
+                        setIsAuth(false);
+                        signOut({
+                            callbackUrl: '/login',
+                        })
+                    }
+                }
+                setIsMounted(true);
+            });
+        }
     }, []);
 
     const [CurrentUser, setCurrentUser] = useState<any>(null);

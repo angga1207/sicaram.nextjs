@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { getRekapAsetLainnya, saveRekapAsetLainnya } from '@/apis/Accountancy/RekonsiliasiAset';
 import InputRupiah from '@/components/InputRupiah';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -130,6 +131,7 @@ const RekapAsetLainnya = (data: any) => {
 
         min_pembayaran_utang: 0,
         min_reklasifikasi_beban_persediaan: 0,
+        min_reklasifikasi_beban_jasa: 0,
         min_reklasifikasi_beban_pemeliharaan: 0,
         min_reklasifikasi_beban_hibah: 0,
         min_reklasifikasi_beban_kib_a: 0,
@@ -190,6 +192,7 @@ const RekapAsetLainnya = (data: any) => {
         const minusKeys = [
             'min_pembayaran_utang',
             'min_reklasifikasi_beban_persediaan',
+            'min_reklasifikasi_beban_jasa',
             'min_reklasifikasi_beban_pemeliharaan',
             'min_reklasifikasi_beban_hibah',
             'min_reklasifikasi_beban_kib_a',
@@ -262,6 +265,7 @@ const RekapAsetLainnya = (data: any) => {
 
                 updated['min_pembayaran_utang'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_pembayaran_utang), 0);
                 updated['min_reklasifikasi_beban_persediaan'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_persediaan), 0);
+                updated['min_reklasifikasi_beban_jasa'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_jasa), 0);
                 updated['min_reklasifikasi_beban_pemeliharaan'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_pemeliharaan), 0);
                 updated['min_reklasifikasi_beban_hibah'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_hibah), 0);
                 updated['min_reklasifikasi_beban_kib_a'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_kib_a), 0);
@@ -306,7 +310,7 @@ const RekapAsetLainnya = (data: any) => {
                                 <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900  bg-yellow-300 min-w-[250px]'>
                                     Total Penambahan
                                 </th>
-                                <th colSpan={14} className='text-center border whitespace-nowrap border-slate-900 bg-green-300'>
+                                <th colSpan={15} className='text-center border whitespace-nowrap border-slate-900 bg-green-300'>
                                     Mutasi Kurang
                                 </th>
                                 <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900  bg-green-300 min-w-[250px]'>
@@ -374,6 +378,9 @@ const RekapAsetLainnya = (data: any) => {
                                 </th>
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Reklasifikasi Ke Beban Persediaan
+                                </th>
+                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                    Reklasifikasi Ke Beban Jasa
                                 </th>
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Reklasifikasi Ke Beban Pemeliharaan
@@ -698,6 +705,19 @@ const RekapAsetLainnya = (data: any) => {
                                                     </td>
                                                     <td className='border border-slate-900'>
                                                         <InputRupiah
+                                                            dataValue={row.min_reklasifikasi_beban_jasa}
+                                                            readOnly={true}
+                                                            onChange={(value: any) => {
+                                                                setDataInput((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['min_reklasifikasi_beban_jasa'] = isNaN(value) ? 0 : value;
+                                                                    _calculateData(index)
+                                                                    return updated;
+                                                                });
+                                                            }} />
+                                                    </td>
+                                                    <td className='border border-slate-900'>
+                                                        <InputRupiah
                                                             dataValue={row.min_reklasifikasi_beban_pemeliharaan}
                                                             readOnly={true}
                                                             onChange={(value: any) => {
@@ -969,6 +989,9 @@ const RekapAsetLainnya = (data: any) => {
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_persediaan)}
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                    Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_jasa)}
+                                </td>
+                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_pemeliharaan)}
                                 </td>
                                 <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
@@ -1015,59 +1038,74 @@ const RekapAsetLainnya = (data: any) => {
                     </table>
                 </div>
 
-                <div className="flex items-center justify-end gap-2">
-                    <div className="flex flex-col items-end">
-                        <div className="">
-                            Kenaikan / Penurunan
-                        </div>
-                        <div className="w-[200px] font-semibold">
-                            <div className='flex items-center justify-between cursor-pointer'>
-                                <div className="">
-                                    Rp.
+                <div className="flex items-end justify-between flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-end">
+                            <div className="">
+                                Kenaikan / Penurunan
+                            </div>
+                            <div className="w-[200px] font-semibold">
+                                <div className='flex items-center justify-between cursor-pointer'>
+                                    <div className="">
+                                        Rp.
+                                    </div>
+                                    <div className="">
+                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir - grandTotal?.saldo_awal)}
+                                    </div>
                                 </div>
-                                <div className="">
-                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal?.saldo_akhir - grandTotal?.saldo_awal)}
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <div className="">
+                                Persentase
+                            </div>
+                            <div className="w-[200px] font-semibold">
+                                <div className='flex items-center justify-end gap-1 cursor-pointer'>
+                                    <div className="">
+                                        {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(percentage)}
+                                    </div>
+                                    <div className="">
+                                        %
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col items-end">
-                        <div className="">
-                            Persentase
-                        </div>
-                        <div className="w-[200px] font-semibold">
-                            <div className='flex items-center justify-end gap-1 cursor-pointer'>
-                                <div className="">
-                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(percentage)}
-                                </div>
-                                <div className="">
-                                    %
-                                </div>
-                            </div>
-                        </div>
+                    <div className="flex items-center justify-end gap-2">
+                        {dataInput.length > 0 && (
+                            <DownloadButtons
+                                data={dataInput}
+                                endpoint='/accountancy/download/excel'
+                                params={{
+                                    type: 'rekon_aset_rekap_aset_lainnya',
+                                    category: 'kibs',
+                                }}
+                                afterClick={(e: any) => {
+                                    if (e === 'error') {
+                                        Swal.fire({
+                                            title: 'Download Gagal!',
+                                            text: 'Terjadi kesalahan saat mendownload file.',
+                                            icon: 'error',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Download Berhasil!',
+                                            text: 'File telah berhasil didownload.',
+                                            icon: 'success',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    }
+                                }}
+                            />
+                        )}
                     </div>
-                    {/* <button
-                        onClick={(e) => {
-                            // confirm swal
-                            Swal.fire({
-                                title: 'Simpan perubahan?',
-                                text: 'Perubahan yang disimpan tidak dapat dikembalikan!',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonText: 'Simpan',
-                                cancelButtonText: 'Batal',
-                                cancelButtonColor: '#3085d6',
-                                confirmButtonColor: '#00ab55',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    _saveData();
-                                }
-                            });
-                        }}
-                        className="btn btn-success">
-                        <FontAwesomeIcon icon={faSave} className="w-4 h-4 mr-2" />
-                        Simpan
-                    </button> */}
                 </div>
             </div>
         </div>

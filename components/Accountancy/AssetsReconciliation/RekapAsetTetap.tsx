@@ -131,6 +131,7 @@ const RekapAsetTetap = (data: any) => {
 
         min_pembayaran_utang: 0,
         min_reklasifikasi_beban_persediaan: 0,
+        min_reklasifikasi_beban_jasa: 0,
         min_reklasifikasi_beban_pemeliharaan: 0,
         min_reklasifikasi_beban_hibah: 0,
         min_reklasifikasi_beban_kib_a: 0,
@@ -193,6 +194,7 @@ const RekapAsetTetap = (data: any) => {
 
                 updated['min_pembayaran_utang'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_pembayaran_utang), 0);
                 updated['min_reklasifikasi_beban_persediaan'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_persediaan), 0);
+                updated['min_reklasifikasi_beban_jasa'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_jasa), 0);
                 updated['min_reklasifikasi_beban_pemeliharaan'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_pemeliharaan), 0);
                 updated['min_reklasifikasi_beban_hibah'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_hibah), 0);
                 updated['min_reklasifikasi_beban_kib_a'] = dataInput.reduce((acc: any, curr: any) => acc + parseFloat(curr.min_reklasifikasi_beban_kib_a), 0);
@@ -230,7 +232,7 @@ const RekapAsetTetap = (data: any) => {
                                 <th rowSpan={2} className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Total Penambahan
                                 </th>
-                                <th colSpan={14} className='text-center border whitespace-nowrap border-slate-900 bg-green-300'>
+                                <th colSpan={15} className='text-center border whitespace-nowrap border-slate-900 bg-green-300'>
                                     Mutasi Kurang
                                 </th>
                                 <th rowSpan={2} className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
@@ -298,6 +300,9 @@ const RekapAsetTetap = (data: any) => {
                                 </th>
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Reklasifikasi Ke Beban Persediaan
+                                </th>
+                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                    Reklasifikasi Ke Beban Jasa
                                 </th>
                                 <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
                                     Reklasifikasi Ke Beban Pemeliharaan
@@ -609,6 +614,19 @@ const RekapAsetTetap = (data: any) => {
                                                         setDataInput((prev: any) => {
                                                             const updated = [...prev];
                                                             updated[index]['min_reklasifikasi_beban_persediaan'] = value;
+                                                            return updated;
+                                                        });
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className='border border-slate-900'>
+                                                <InputRupiah
+                                                    dataValue={row.min_reklasifikasi_beban_jasa}
+                                                    readOnly={true}
+                                                    onChange={(value: any) => {
+                                                        setDataInput((prev: any) => {
+                                                            const updated = [...prev];
+                                                            updated[index]['min_reklasifikasi_beban_jasa'] = value;
                                                             return updated;
                                                         });
                                                     }}
@@ -1006,6 +1024,16 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                         <div>
                                             {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_persediaan)}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            Rp.
+                                        </div>
+                                        <div>
+                                            {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_jasa)}
                                         </div>
                                     </div>
                                 </td>
