@@ -13,6 +13,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { deleteHibah, getHibah, storeHibah } from '@/apis/Accountancy/BebanLaporanOperasional';
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -1002,6 +1003,40 @@ const Hibah = (data: any) => {
                     </button>
                 </div>
                 <div className="flex items-center justify-end gap-4">
+                    {(dataInput.length > 0) && (
+                        <DownloadButtons
+                            data={dataInput}
+                            endpoint='/accountancy/download/excel'
+                            params={{
+                                // type: instance ? 'hibah' : 'hibah_kab',
+                                type: 'hibah',
+                                category: 'beban_lo',
+                            }}
+                            afterClick={(e: any) => {
+                                if (e === 'error') {
+                                    Swal.fire({
+                                        title: 'Download Gagal!',
+                                        text: 'Terjadi kesalahan saat mendownload file.',
+                                        icon: 'error',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Tutup',
+                                        confirmButtonColor: '#00ab55',
+                                    });
+                                    return;
+                                } else {
+                                    Swal.fire({
+                                        title: 'Download Berhasil!',
+                                        text: 'File telah berhasil didownload.',
+                                        icon: 'success',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Tutup',
+                                        confirmButtonColor: '#00ab55',
+                                    });
+                                    return;
+                                }
+                            }}
+                        />
+                    )}
                     {(dataInput.length > 0 && instance) && (
                         <>
                             <button type="button"

@@ -33,8 +33,6 @@ const DownloadButtons = ({
                     Authorization: `Bearer ${CurrentToken}`,
                 },
             });
-
-
             const url = window.URL.createObjectURL(new Blob([response.data.data.path]));
             const link = document.createElement('a');
             link.href = url;

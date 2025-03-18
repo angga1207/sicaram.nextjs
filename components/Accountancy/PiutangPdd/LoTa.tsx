@@ -844,7 +844,7 @@ const LoTa = (data: any) => {
                 </div>
             </div>
 
-            {instance && (
+            {/* {instance && (
                 <div className="flex items-center justify-end gap-4 mt-4 px-5">
                     <div className="">
                         <button type="button"
@@ -876,7 +876,7 @@ const LoTa = (data: any) => {
                         </button>
                     )}
                 </div>
-            )}
+            )} */}
         </>
     );
 }

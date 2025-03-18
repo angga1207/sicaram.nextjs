@@ -12,6 +12,7 @@ import IconTrash from '@/components/Icon/IconTrash';
 import { deletePenilaianAset, getPenilaianAset, storePenilaianAset } from '@/apis/Accountancy/PenyesuaianAsetDanBeban';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import InputRupiah from '@/components/InputRupiah';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -853,6 +854,37 @@ const PenilaianAset = (data: any) => {
                 <div className="flex items-center justify-end gap-4">
                     {dataInput.length > 0 && (
                         <>
+                            <DownloadButtons
+                                data={dataInput}
+                                endpoint='/accountancy/download/excel'
+                                params={{
+                                    type: 'penilaian_aset',
+                                    category: 'padb',
+                                }}
+                                afterClick={(e: any) => {
+                                    if (e === 'error') {
+                                        Swal.fire({
+                                            title: 'Download Gagal!',
+                                            text: 'Terjadi kesalahan saat mendownload file.',
+                                            icon: 'error',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Download Berhasil!',
+                                            text: 'File telah berhasil didownload.',
+                                            icon: 'success',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    }
+                                }}
+                            />
                             <button type="button"
                                 disabled={isSaving == true}
                                 onClick={(e) => {

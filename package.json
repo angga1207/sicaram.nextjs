@@ -7,10 +7,10 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "start prod": "next start -p 3006",
+        "start prod": "next start -p 3003",
         "lint": "next lint",
-        "prod": "next build && next start -p 3006",
-        "customprod": "npm run start -- --port 3006"
+        "prod": "next build && next start -p 3003",
+        "customprod": "npm run start -- --port 3003"
     },
     "dependencies": {
         "@develoka/angka-terbilang-js": "^1.4.2",
