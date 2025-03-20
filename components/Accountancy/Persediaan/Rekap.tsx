@@ -153,31 +153,31 @@ const Rekap = (data: any) => {
             <div className="table-responsive h-[calc(100vh-420px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 left-0 z-[1] !bg-slate-900 !text-white'>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                        <tr className='!bg-slate-900 !text-white left-0 sticky top-0 z-[1]'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Uraian
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Saldo Awal {year} (Saldo Akhir {year - 1})
                             </th>
-                            <th colSpan={3} className='whitespace-nowrap border text-center'>
+                            <th colSpan={3} className='border text-center whitespace-nowrap'>
                                 Mutasi Penambahan Beban {year} (Belanja {year})
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Saldo Akhir {year}
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Beban
                             </th>
                         </tr>
-                        <tr className='sticky top-[45px] left-0 z-[1] !bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border text-center'>
+                        <tr className='!bg-slate-900 !text-white left-0 sticky top-[45px] z-[1]'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Realisasi LRA {year} (Rp)
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Hutang Belanja {year} (Rp)
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Perolehan dari Hibah {year} (Rp)
                             </th>
                         </tr>
@@ -186,7 +186,7 @@ const Rekap = (data: any) => {
                         {
                             dataInput.map((data: any, index: any) => (
                                 <tr>
-                                    <td className='border font-semibold !p-5'>
+                                    <td className='border !p-5 font-semibold'>
                                         {data.uraian}
                                     </td>
                                     <td className='border text-end !p-5'>
@@ -212,27 +212,27 @@ const Rekap = (data: any) => {
                         }
                     </tbody>
                     <tfoot>
-                        <tr className='!bg-slate-400 !text-white sticky left-0 -bottom-5'>
-                            <td className='border text-center font-semibold p-3'>
+                        <tr className='-bottom-5 !bg-slate-400 !text-white left-0 sticky'>
+                            <td className='border p-3 text-center font-semibold'>
                                 {/* Selisih (Jumlah A + B - Nilai Persediaan dalam Neraca) */}
                                 Jumlah A + B
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.saldo_awal)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.realisasi_lra)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.hutang_belanja)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.perolehan_hibah)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.saldo_akhir)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.beban)}
                             </td>
                         </tr>
@@ -240,7 +240,7 @@ const Rekap = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-end gap-4">
+            <div className="flex justify-end gap-4 items-center">
                 {dataInput.length > 0 && (
                     <>
                         <DownloadButtons
@@ -249,6 +249,9 @@ const Rekap = (data: any) => {
                             params={{
                                 type: 'rekap',
                                 category: 'persediaan',
+                                instance: instance,
+                                periode: periode?.id,
+                                year: year,
                             }}
                             afterClick={(e: any) => {
                                 if (e === 'error') {

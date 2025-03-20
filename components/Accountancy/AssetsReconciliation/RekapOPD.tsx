@@ -174,78 +174,78 @@ const RekapOPD = (data: any) => {
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white'>
-                                <th rowSpan={2} className='text-center border border-white min-w-[300px] max-w-[300px]'>
+                                <th rowSpan={2} className='border border-white text-center max-w-[300px] min-w-[300px]'>
                                     Perangkat Daerah
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Tanah
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Peralatan Mesin
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Gedung dan Bangunan
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Jalan Jaringan Irigasi
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Aset Tetap Lainnya
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     KDP
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Aset Lainnya
                                 </th>
                             </tr>
                             <tr className='!bg-slate-900 !text-white'>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
 
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year - 1}
                                 </th>
-                                <th className='text-center border border-white min-w-[150px]'>
+                                <th className='border border-white text-center min-w-[150px]'>
                                     {year}
                                 </th>
                             </tr>
@@ -260,8 +260,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -270,8 +270,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -281,8 +281,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -291,8 +291,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -302,8 +302,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -312,8 +312,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -323,8 +323,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -333,8 +333,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -344,8 +344,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -354,8 +354,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -365,8 +365,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -375,8 +375,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -386,8 +386,8 @@ const RekapOPD = (data: any) => {
                                             </div>
                                         </td>
 
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -396,8 +396,8 @@ const RekapOPD = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='text-right border border-slate-900 whitespace-nowrap'>
-                                            <div className="flex items-center justify-between">
+                                        <td className='border border-slate-900 text-right whitespace-nowrap'>
+                                            <div className="flex justify-between items-center">
                                                 <div>
                                                     Rp.
                                                 </div>
@@ -412,15 +412,15 @@ const RekapOPD = (data: any) => {
 
                         </tbody>
                         <tfoot>
-                            <tr className='!bg-slate-900 text-white'>
+                            <tr className='text-white !bg-slate-900'>
                                 <td className='border border-slate-900 p-4'>
                                     <div className="font-semibold">
                                         Total
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -429,8 +429,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -440,8 +440,8 @@ const RekapOPD = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -450,8 +450,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -461,8 +461,8 @@ const RekapOPD = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -471,8 +471,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -482,8 +482,8 @@ const RekapOPD = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -492,8 +492,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -503,8 +503,8 @@ const RekapOPD = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -513,8 +513,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -524,8 +524,8 @@ const RekapOPD = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -534,8 +534,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -545,8 +545,8 @@ const RekapOPD = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -555,8 +555,8 @@ const RekapOPD = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='text-right border border-slate-900 p-4 whitespace-nowrap font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='border border-slate-900 p-4 text-right font-semibold whitespace-nowrap'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>

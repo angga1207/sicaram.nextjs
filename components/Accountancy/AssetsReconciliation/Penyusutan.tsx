@@ -188,24 +188,24 @@ const Penyusutan = (data: any) => {
                     <table className="table-striped">
                         <thead>
                             <tr className='!bg-slate-900 !text-white'>
-                                <th rowSpan={2} className='text-center border border-white min-w-[300px]'>
+                                <th rowSpan={2} className='border border-white text-center min-w-[300px]'>
                                     Nama Aset
                                 </th>
-                                <th rowSpan={2} className='text-center border border-white w-[250px]'>
+                                <th rowSpan={2} className='border border-white text-center w-[250px]'>
                                     Akumulasi Penyusutan 31 Des {year - 1}
                                 </th>
-                                <th colSpan={2} className='text-center border border-white'>
+                                <th colSpan={2} className='border border-white text-center'>
                                     Mutasi
                                 </th>
-                                <th rowSpan={2} className='text-center border border-white w-[250px]'>
+                                <th rowSpan={2} className='border border-white text-center w-[250px]'>
                                     Akumulasi Penyusutan 31 Des {year}
                                 </th>
                             </tr>
                             <tr className='!bg-slate-900 !text-white'>
-                                <th className='text-center border border-white w-[250px]'>
+                                <th className='border border-white text-center w-[250px]'>
                                     Tambah
                                 </th>
-                                <th className='text-center border border-white w-[250px]'>
+                                <th className='border border-white text-center w-[250px]'>
                                     Kurang
                                 </th>
                             </tr>
@@ -275,27 +275,27 @@ const Penyusutan = (data: any) => {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td className='border border-slate-900 p-3 bg-slate-400 text-white'>
+                                <td className='bg-slate-400 border border-slate-900 p-3 text-white'>
                                     <div className="font-semibold">
                                         Jumlah
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-3 bg-slate-400 text-white'>
+                                <td className='bg-slate-400 border border-slate-900 p-3 text-white'>
                                     <div className="text-end font-semibold">
                                         Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.akumulasi_penyusutan_last_year)}
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-3 bg-slate-400 text-white'>
+                                <td className='bg-slate-400 border border-slate-900 p-3 text-white'>
                                     <div className="text-end font-semibold">
                                         Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.mutasi_tambah)}
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-3 bg-slate-400 text-white'>
+                                <td className='bg-slate-400 border border-slate-900 p-3 text-white'>
                                     <div className="text-end font-semibold">
                                         Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.mutasi_kurang)}
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-3 bg-slate-400 text-white'>
+                                <td className='bg-slate-400 border border-slate-900 p-3 text-white'>
                                     <div className="text-end font-semibold">
                                         Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.akumulasi_penyusutan)}
                                     </div>
@@ -306,13 +306,13 @@ const Penyusutan = (data: any) => {
                 </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex justify-end gap-2 items-center">
                 <div className="flex flex-col items-end">
                     <div className="">
                         Kenaikan / Penurunan
                     </div>
                     <div className="w-[200px] font-semibold">
-                        <div className='flex items-center justify-between cursor-pointer'>
+                        <div className='flex justify-between cursor-pointer items-center'>
                             <div className="">
                                 Rp.
                             </div>
@@ -327,7 +327,7 @@ const Penyusutan = (data: any) => {
                         Persentase
                     </div>
                     <div className="w-[200px] font-semibold">
-                        <div className='flex items-center justify-end gap-1 cursor-pointer'>
+                        <div className='flex justify-end cursor-pointer gap-1 items-center'>
                             <div className="">
                                 {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(percentage)}
                             </div>
@@ -357,7 +357,7 @@ const Penyusutan = (data: any) => {
                             });
                         }}
                         className="btn btn-success">
-                        <FontAwesomeIcon icon={faSave} className="w-4 h-4 mr-2" />
+                        <FontAwesomeIcon icon={faSave} className="h-4 w-4 mr-2" />
                         Simpan
                     </button>
                 )}

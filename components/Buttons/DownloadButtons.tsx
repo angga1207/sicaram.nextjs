@@ -51,7 +51,7 @@ const DownloadButtons = ({
     return (
         <div className="dropdown">
             <Dropdown
-                placement='top-start'
+                placement='top-end'
                 btnClassName="btn btn-outline-info dropdown-toggle inline-flex"
                 button={
                     <>

@@ -41,15 +41,23 @@ const Dropdown = (props: any, forwardedRef: any) => {
     }));
 
     return (
-        <>
-            <button ref={referenceRef} type="button" className={props.btnClassName} onClick={() => setVisibility(!visibility)}>
+        <div
+            onMouseOver={() => setVisibility(true)}
+            onMouseOut={() => setVisibility(false)}
+        >
+            <button
+                ref={referenceRef}
+                type="button"
+                className={props.btnClassName}
+            // onClick={() => setVisibility(!visibility)}
+            >
                 {props.button}
             </button>
 
             <div ref={popperRef} style={styles.popper} {...attributes.popper} className="z-50" onClick={() => setVisibility(!visibility)}>
                 {visibility && props.children}
             </div>
-        </>
+        </div>
     );
 };
 

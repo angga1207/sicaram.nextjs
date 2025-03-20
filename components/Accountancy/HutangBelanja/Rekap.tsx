@@ -238,7 +238,7 @@ const Rekap = (param: any) => {
         <>
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 {dataInput.length === 0 && (
-                    <div className="flex flex-col gap-y-2 items-center justify-center h-full w-full">
+                    <div className="flex flex-col h-full justify-center w-full gap-y-2 items-center">
                         <div>
                             <LoadingSicaram />
                         </div>
@@ -251,138 +251,138 @@ const Rekap = (param: any) => {
                     <table className="table-striped">
                         <thead className='sticky top-0 z-[2]'>
                             <tr className='!bg-dark !text-white'>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap min-w-[300px] max-w-[300px]'>
+                                <th rowSpan={3} className='border border-slate-100 text-center max-w-[300px] min-w-[300px] whitespace-nowrap'>
                                     Perangkat Daerah
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Kode Rekening
                                 </th>
-                                <th rowSpan={3} className='sticky left-0 top-0 z-[2] bg-dark text-white text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='bg-dark border border-slate-100 text-center text-white left-0 sticky top-0 whitespace-nowrap z-[2]'>
                                     Nama Kegiatan - Uraian Paket Pekerjaan
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Pelaksana Pekerjaan
                                 </th>
-                                <th rowSpan={2} colSpan={2} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={2} colSpan={2} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Kontrak
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Nilai Belanja / Nilai Kontrak
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Kewajiban Tidak Terbayar {year - 1}
                                 </th>
-                                <th colSpan={9} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th colSpan={9} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Pembayaran s.d 31 Des {year}
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Jumlah Pembayaran Utang s.d 31 Des {year}
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Kewajiban Tidak Terbayar {year}
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Utang Baru {year}
                                 </th>
-                                <th colSpan={14} rowSpan={2} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th colSpan={14} rowSpan={2} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Utang (Rp)
                                 </th>
-                                <th rowSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th rowSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Total Utang
                                 </th>
                             </tr>
                             <tr className="!bg-dark !text-white">
-                                <th colSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th colSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Pembayaran Ke - 1
                                 </th>
-                                <th colSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th colSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Pembayaran Ke - 2
                                 </th>
-                                <th colSpan={3} className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th colSpan={3} className='border border-slate-100 text-center whitespace-nowrap'>
                                     Pembayaran Ke - 3
                                 </th>
                             </tr>
                             <tr className="!bg-dark !text-white">
 
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Nomor
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Tahun
                                 </th>
 
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     No SP2D
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Tanggal
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Jumlah
                                 </th>
 
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     No SP2D
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Tanggal
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Jumlah
                                 </th>
 
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     No SP2D
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Tanggal
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap'>
+                                <th className='border border-slate-100 text-center whitespace-nowrap'>
                                     Jumlah
                                 </th>
 
 
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Pegawai
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Persediaan
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Perjadin
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Jasa
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Pemeliharaan
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Uang/Jasa Diserahkan
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-green-500'>
+                                <th className='bg-green-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Hibah
                                 </th>
 
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Aset Tetap Tanah
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Aset Tetap Peralatan dan Mesin
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Aset Tetap Gedung dan Bangunan
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Aset Tetap Jalan Jaringan Irigasi
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Aset Tetap Lainnya
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Konstruksi Dalam Pekerjaan
                                 </th>
-                                <th className='text-center border border-slate-100 whitespace-nowrap bg-yellow-500'>
+                                <th className='bg-yellow-500 border border-slate-100 text-center whitespace-nowrap'>
                                     Aset Lain-lain
                                 </th>
                             </tr>
@@ -395,7 +395,7 @@ const Rekap = (param: any) => {
                                             <tr className=''>
                                                 <td className='border'>
                                                     {/* Perangkat Daerah */}
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex gap-2 items-center">
                                                         <Select placeholder="Pilih Perangkat Daerah"
                                                             className='min-w-[300px]'
                                                             onChange={(e: any) => {
@@ -463,7 +463,7 @@ const Rekap = (param: any) => {
                                                             })
                                                         } />
                                                 </td>
-                                                <td className='sticky left-0 z-[1] bg-slate-50 border'>
+                                                <td className='bg-slate-50 border left-0 sticky z-[1]'>
                                                     <Tippy content={data.type === 'pembayaran' ? 'Pembayaran Utang' : 'Utang Baru'} theme={data.type === 'pembayaran' ? 'success' : 'warning'}>
                                                         <input type="text"
                                                             placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
@@ -477,7 +477,7 @@ const Rekap = (param: any) => {
                                                                     return updated;
                                                                 });
                                                             }}
-                                                            className='form-input font-normal min-w-[250px] cursor-pointer' />
+                                                            className='form-input cursor-pointer font-normal min-w-[250px]' />
                                                     </Tippy>
                                                 </td>
                                                 <td className='border'>
@@ -800,18 +800,18 @@ const Rekap = (param: any) => {
                         </tbody>
                         <tfoot className=''>
                             <tr>
-                                <td className='border p-4 bg-slate-200 sticky left-0'>
+                                <td className='bg-slate-200 border p-4 left-0 sticky'>
                                     <div className="flex justify-center font-semibold">
                                         Jumlah
                                     </div>
                                 </td>
-                                <td colSpan={2} className='border p-4 bg-slate-200'>
+                                <td colSpan={2} className='bg-slate-200 border p-4'>
                                     <div className="flex justify-center font-semibold">
                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.total_data)} Data
                                     </div>
                                 </td>
-                                <td colSpan={3} className='border p-4 bg-slate-200'></td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td colSpan={3} className='bg-slate-200 border p-4'></td>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div className="">
@@ -819,7 +819,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div className="">
@@ -827,8 +827,8 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td colSpan={2} className='border p-4 bg-slate-200'></td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td colSpan={2} className='bg-slate-200 border p-4'></td>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -836,8 +836,8 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td colSpan={2} className='border p-4 bg-slate-200'></td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td colSpan={2} className='bg-slate-200 border p-4'></td>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -845,8 +845,8 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td colSpan={2} className='border p-4 bg-slate-200'></td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td colSpan={2} className='bg-slate-200 border p-4'></td>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -854,7 +854,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -862,7 +862,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -870,7 +870,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -879,7 +879,7 @@ const Rekap = (param: any) => {
                                     </div>
                                 </td>
 
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div className="">
@@ -887,7 +887,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -895,7 +895,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -903,7 +903,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -911,7 +911,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -919,7 +919,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -927,7 +927,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -936,7 +936,7 @@ const Rekap = (param: any) => {
                                     </div>
                                 </td>
 
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -944,7 +944,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -952,7 +952,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -960,7 +960,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -968,7 +968,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -976,7 +976,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -984,7 +984,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -992,7 +992,7 @@ const Rekap = (param: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border p-4 bg-slate-200'>
+                                <td className='bg-slate-200 border p-4'>
                                     <div className="flex justify-between font-semibold">
                                         Rp.
                                         <div>
@@ -1006,8 +1006,8 @@ const Rekap = (param: any) => {
                 )}
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -1015,14 +1015,14 @@ const Rekap = (param: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -1042,7 +1042,7 @@ const Rekap = (param: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -1057,11 +1057,11 @@ const Rekap = (param: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     <div>
                         {dataInput.length > 0 && (
                             <DownloadButtons
@@ -1070,6 +1070,9 @@ const Rekap = (param: any) => {
                                 params={{
                                     type: 'rekap_utang_belanja',
                                     category: 'hutang_belanja',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
                                 afterClick={(e: any) => {
                                     if (e === 'error') {

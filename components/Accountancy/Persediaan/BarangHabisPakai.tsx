@@ -211,40 +211,40 @@ const BarangHabisPakai = (data: any) => {
             <div className="table-responsive h-[calc(100vh-420px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 left-0 z-[1] !bg-slate-900 !text-white'>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                        <tr className='!bg-slate-900 !text-white left-0 sticky top-0 z-[1]'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Nama Perangkat Daerah
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Nama Persediaan
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Saldo Awal {year} (Saldo Akhir {year - 1})
                             </th>
-                            <th colSpan={4} className='whitespace-nowrap border text-center'>
+                            <th colSpan={4} className='border text-center whitespace-nowrap'>
                                 Mutasi Penambahan Beban {year} (Belanja {year})
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center'>
+                            <th rowSpan={2} className='border text-center whitespace-nowrap'>
                                 Saldo Akhir {year}
                             </th>
-                            <th rowSpan={2} className='whitespace-nowrap border text-center !max-w-[250px]'>
+                            <th rowSpan={2} className='border text-center !max-w-[250px] whitespace-nowrap'>
                                 Beban Persediaan
                                 <div className='text-xs !whitespace-normal'>
                                     (Saldo Awal + Realisasi LRA + Hutang Belanja + Perolehan Hibah - Saldo Akhir)
                                 </div>
                             </th>
                         </tr>
-                        <tr className='sticky top-[45px] left-0 z-[1] !bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border text-center'>
+                        <tr className='!bg-slate-900 !text-white left-0 sticky top-[45px] z-[1]'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Kode Rekening
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Realisasi LRA {year} (Rp)
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Hutang Belanja {year} (Rp)
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Perolehan dari Hibah {year} (Rp)
                             </th>
                         </tr>
@@ -256,7 +256,7 @@ const BarangHabisPakai = (data: any) => {
                                     <tr>
                                         <td className='border'>
                                             {/* Perangkat Daerah */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Perangkat Daerah"
                                                     className='min-w-[300px]'
                                                     onChange={(e: any) => {
@@ -294,7 +294,7 @@ const BarangHabisPakai = (data: any) => {
                                             </div>
                                         </td>
                                         <td className='border'>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <input type="text"
                                                     placeholder='Nama Persediaan'
                                                     autoComplete='off'
@@ -349,8 +349,8 @@ const BarangHabisPakai = (data: any) => {
                                                                         }
                                                                     });
                                                             }}
-                                                            className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                            <IconTrash className='w-4 h-4' />
+                                                            className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                            <IconTrash className='h-4 w-4' />
                                                         </button>
                                                     </Tippy>
                                                 </div>
@@ -490,30 +490,30 @@ const BarangHabisPakai = (data: any) => {
                         ))}
                     </tbody>
                     <tfoot>
-                        <tr className='!bg-slate-400 sticky left-0 -bottom-5'>
-                            <td className='border text-center font-semibold p-3'>
+                        <tr className='-bottom-5 !bg-slate-400 left-0 sticky'>
+                            <td className='border p-3 text-center font-semibold'>
                                 Jumlah
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.total_data)} Data
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.saldo_awal)}
                             </td>
                             <td className='border'></td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.realisasi_lra)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.hutang_belanja)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.perolehan_hibah)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.saldo_akhir)}
                             </td>
-                            <td className='border text-end font-semibold p-3'>
+                            <td className='border p-3 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.beban_persediaan)}
                             </td>
                         </tr>
@@ -521,8 +521,8 @@ const BarangHabisPakai = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -530,14 +530,14 @@ const BarangHabisPakai = (data: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -557,7 +557,7 @@ const BarangHabisPakai = (data: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -572,11 +572,11 @@ const BarangHabisPakai = (data: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     {dataInput.length > 0 && (
                         <>
                             <DownloadButtons
@@ -585,6 +585,9 @@ const BarangHabisPakai = (data: any) => {
                                 params={{
                                     type: 'barang_habis_pakai',
                                     category: 'persediaan',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
                                 afterClick={(e: any) => {
                                     if (e === 'error') {
@@ -617,8 +620,8 @@ const BarangHabisPakai = (data: any) => {
                                         addDataInput()
                                     }
                                 }}
-                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                 Tambah Data
                             </button>
 
@@ -627,15 +630,15 @@ const BarangHabisPakai = (data: any) => {
                                     onClick={(e) => {
                                         save()
                                     }}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
                                     Simpan
                                 </button>
                             ) : (
                                 <button type="button"
                                     disabled={true}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
                                     Menyimpan..
                                 </button>
                             )}

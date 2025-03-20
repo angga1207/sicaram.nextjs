@@ -283,103 +283,103 @@ const MutasiAset = (data: any) => {
         <>
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
-                    <thead className='sticky top-0 left-0 z-[1]'>
+                    <thead className='left-0 sticky top-0 z-[1]'>
                         <tr className='!bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 No
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Info
                             </th>
-                            <th className='whitespace-nowrap border text-center w-[300px]' rowSpan={2}>
+                            <th className='border text-center w-[300px] whitespace-nowrap' rowSpan={2}>
                                 Perangkat Daerah Lama
                             </th>
-                            <th className='whitespace-nowrap border text-center w-[300px]' rowSpan={2}>
+                            <th className='border text-center w-[300px] whitespace-nowrap' rowSpan={2}>
                                 Perangkat Daerah Baru
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Kelompok Aset
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Nama dan Rincian Barang
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Tahun Perolehan
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Nilai Perolehan
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Akumulasi Penyusutan
                             </th>
-                            <th className='whitespace-nowrap border text-center' colSpan={2}>
+                            <th className='border text-center whitespace-nowrap' colSpan={2}>
                                 Berita Acara Serah Terima
                             </th>
 
-                            <th className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1' rowSpan={2}>
+                            <th className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap' rowSpan={2}>
                             </th>
 
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800' colSpan={7}>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap' colSpan={7}>
                                 Kelompok Aset (+++)
                             </th>
 
-                            {/* <th className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1' rowSpan={2}>
+                            {/* <th className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap' rowSpan={2}>
                             </th>
 
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800' colSpan={7}>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap' colSpan={7}>
                                 Kelompok Aset (---)
                             </th> */}
                         </tr>
                         <tr className='!bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 No Bast
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Tanggal Bast
                             </th>
 
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Konstruksi Dalam Pengerjaan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Lainnya
                             </th>
 
 
-                            {/* <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            {/* <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Konstruksi Dalam Pengerjaan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-green-300 text-slate-800'>
+                            <th className='bg-green-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Lainnya
                             </th> */}
                         </tr>
@@ -389,16 +389,16 @@ const MutasiAset = (data: any) => {
                             <>
                                 {(index >= (page - 1) * perPage && index < (page * perPage)) && (
                                     <tr key={index}>
-                                        <td className='whitespace-nowrap border text-center'>
+                                        <td className='border text-center whitespace-nowrap'>
                                             <div className="font-semibold">
                                                 {index + 1}
                                             </div>
                                         </td>
                                         <td>
-                                            <div className="flex justify-center items-center gap-2">
+                                            <div className="flex justify-center gap-2 items-center">
                                                 <Tippy content={`Dibuat Oleh : ${data.created_by} | Diperbarui Oleh : ${data.updated_by}`} theme='info' placement='top-start'>
                                                     <button className='text-info select-none'>
-                                                        <FontAwesomeIcon icon={faUser} className='w-3.5 h-3.5' />
+                                                        <FontAwesomeIcon icon={faUser} className='h-3.5 w-3.5' />
                                                     </button>
                                                 </Tippy>
 
@@ -431,7 +431,7 @@ const MutasiAset = (data: any) => {
                                                             });
                                                         }}
                                                     >
-                                                        <IconTrash className='w-5 h-5' />
+                                                        <IconTrash className='h-5 w-5' />
                                                     </button>
                                                 </Tippy>
                                             </div>
@@ -555,7 +555,7 @@ const MutasiAset = (data: any) => {
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -593,15 +593,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.nilai_perolehan)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -639,8 +639,8 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.akumulasi_penyusutan)}
                                                 </div>
                                             </div>
@@ -681,11 +681,11 @@ const MutasiAset = (data: any) => {
                                                 }} />
                                         </td>
 
-                                        <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
+                                        <td className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap'></td>
 
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -723,15 +723,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_tanah)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -769,15 +769,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_peralatan_mesin)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -815,15 +815,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_gedung_bangunan)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -861,15 +861,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_jalan_jaringan_irigasi)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -907,15 +907,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_tetap_lainnya)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -953,15 +953,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_kdp)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -999,18 +999,18 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.plus_aset_lainnya)}
                                                 </div>
                                             </div>
                                         </td>
 
-                                        {/* <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
+                                        {/* <td className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap'></td>
 
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1048,15 +1048,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_tanah)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1094,15 +1094,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_peralatan_mesin)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1140,15 +1140,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_gedung_bangunan)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1186,15 +1186,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_jalan_jaringan_irigasi)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1232,15 +1232,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_tetap_lainnya)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1278,15 +1278,15 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_kdp)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -1324,8 +1324,8 @@ const MutasiAset = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.min_aset_lainnya)}
                                                 </div>
                                             </div>
@@ -1336,14 +1336,14 @@ const MutasiAset = (data: any) => {
                             </>
                         ))}
                     </tbody>
-                    <tfoot className='sticky -bottom-5 left-0 z-[1]'>
+                    <tfoot className='-bottom-5 left-0 sticky z-[1]'>
                         <tr className='!bg-slate-300 !text-slate-800'>
                             <td></td>
                             <td></td>
-                            <td colSpan={1} className='!bg-slate-300 !text-slate-800 border p-3 text-center font-semibold sticky -bottom-5 left-0'>
+                            <td colSpan={1} className='border p-3 text-center -bottom-5 !bg-slate-300 !text-slate-800 font-semibold left-0 sticky'>
                                 Jumlah
                             </td>
-                            <td className='!bg-slate-300 !text-slate-800 border p-3 text-center font-semibold'>
+                            <td className='border p-3 text-center !bg-slate-300 !text-slate-800 font-semibold'>
                                 {new Intl.NumberFormat('id-ID', {}).format(totalData.total_data)} Mutasi
                             </td>
                             <td colSpan={3}></td>
@@ -1405,8 +1405,8 @@ const MutasiAset = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -1414,14 +1414,14 @@ const MutasiAset = (data: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -1441,7 +1441,7 @@ const MutasiAset = (data: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -1456,11 +1456,11 @@ const MutasiAset = (data: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     {dataInput.length > 0 && (
                         <>
                             <DownloadButtons
@@ -1469,6 +1469,9 @@ const MutasiAset = (data: any) => {
                                 params={{
                                     type: 'mutasi_aset',
                                     category: 'padb',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
                                 afterClick={(e: any) => {
                                     if (e === 'error') {
@@ -1501,8 +1504,8 @@ const MutasiAset = (data: any) => {
                                         addDataInput()
                                     }
                                 }}
-                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                 Tambah Data
                             </button>
 
@@ -1511,15 +1514,15 @@ const MutasiAset = (data: any) => {
                                     onClick={(e) => {
                                         save()
                                     }}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
                                     Simpan
                                 </button>
                             ) : (
                                 <button type="button"
                                     disabled={true}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
                                     Menyimpan..
                                 </button>
                             )}

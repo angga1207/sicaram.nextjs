@@ -294,128 +294,128 @@ const RekapAsetLainnya = (data: any) => {
     return (
         <div>
             <div className="">
-                <div className="table-responsive mb-5 pb-5 max-h-[calc(100vh-400px)]">
+                <div className="table-responsive max-h-[calc(100vh-400px)] mb-5 pb-5">
                     <table className="table-striped">
-                        <thead className='sticky top-0 left-0 z-[2]'>
+                        <thead className='left-0 sticky top-0 z-[2]'>
                             <tr>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900 xl:min-w-[300px] xl:max-w-[300px] sticky top-0 left-0 bg-slate-50'>
+                                <th rowSpan={2} className='bg-slate-50 border border-slate-900 text-center left-0 sticky top-0 whitespace-nowrap xl:max-w-[300px] xl:min-w-[300px]'>
                                     Perangkat Daerah
                                 </th>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900 xl:min-w-[300px] xl:max-w-[300px] sticky top-0 left-[300px] bg-slate-50'>
+                                <th rowSpan={2} className='bg-slate-50 border border-slate-900 text-center left-[300px] sticky top-0 whitespace-nowrap xl:max-w-[300px] xl:min-w-[300px]'>
                                     Saldo Awal
                                 </th>
-                                <th colSpan={16} className='text-center border whitespace-nowrap border-slate-900 bg-yellow-300'>
+                                <th colSpan={16} className='bg-yellow-300 border border-slate-900 text-center whitespace-nowrap'>
                                     Mutasi Tambah
                                 </th>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900  bg-yellow-300 min-w-[250px]'>
+                                <th rowSpan={2} className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Total Penambahan
                                 </th>
-                                <th colSpan={15} className='text-center border whitespace-nowrap border-slate-900 bg-green-300'>
+                                <th colSpan={15} className='bg-green-300 border border-slate-900 text-center whitespace-nowrap'>
                                     Mutasi Kurang
                                 </th>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900  bg-green-300 min-w-[250px]'>
+                                <th rowSpan={2} className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Total Pengurangan
                                 </th>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900 min-w-[300px]'>
+                                <th rowSpan={2} className='border border-slate-900 text-center min-w-[300px] whitespace-nowrap'>
                                     Saldo Akhir
                                 </th>
                             </tr>
                             <tr>
                                 {/* Tambah Start */}
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Realisasi Belanja
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Utang Kegiatan {year}
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Atribusi
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Barang Habis Pakai
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Pemeliharaan
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Jasa
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB A
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB B
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB C
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB D
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB E
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KDP
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Aset Lain-lain
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Hibah Masuk
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Penilaian
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Mutasi Antar OPD
                                 </th>
                                 {/* Tambah End */}
 
                                 {/* Kurang Start */}
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Pembayaran Utang
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Persediaan
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Jasa
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Pemeliharaan
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Hibah/Bansos
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB A
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB B
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB C
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB D
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB E
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KDP
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke Aset Lain-lain
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Penghapusan/ Penjualan
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Mutasi Antar OPD
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     TPTGR
                                 </th>
                                 {/* Kurang End */}
@@ -431,12 +431,12 @@ const RekapAsetLainnya = (data: any) => {
                                         dataInput.map((row: any, index: any) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td className='border border-slate-900 sticky top-0 left-0 z-[1] bg-slate-50'>
+                                                    <td className='bg-slate-50 border border-slate-900 left-0 sticky top-0 z-[1]'>
                                                         <div className="font-semibold">
                                                             {row.instance_name}
                                                         </div>
                                                     </td>
-                                                    <td className='border border-slate-900 sticky top-0 left-[300px] z-[1] bg-slate-50'>
+                                                    <td className='bg-slate-50 border border-slate-900 left-[300px] sticky top-0 z-[1]'>
                                                         <InputRupiah
                                                             dataValue={row.saldo_awal}
                                                             readOnly={true}
@@ -836,16 +836,16 @@ const RekapAsetLainnya = (data: any) => {
                                                     <td className='border border-slate-900'>
                                                         {/* Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(row.min_penghapusan)} */}
                                                         {/* <div className="flex group">
-                                                        <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                        <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                             Rp.
                                                         </div>
-                                                        <div className="form-input ltr:rounded-l-none rtl:rounded-r-none font-normal text-end bg-slate-200">
+                                                        <div className="form-input bg-slate-200 text-end font-normal ltr:rounded-l-none rtl:rounded-r-none">
                                                             {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(row.min_penghapusan)}
                                                         </div>
-                                                        <div className="self-center ml-1">
+                                                        <div className="ml-1 self-center">
                                                             <Tippy content="Link Penghapusan Aset & Penjualan Aset" theme="bct" className="p-2">
-                                                                <Link href="/accountancy/penyesuaian-aset-beban?app=7" className="btn btn-primary px-2 rounded-full h-9 w-9">
-                                                                    <FontAwesomeIcon icon={faLink} className="w-4 h-4 cursor-pointer" />
+                                                                <Link href="/accountancy/penyesuaian-aset-beban?app=7" className="btn btn-primary h-9 rounded-full w-9 px-2">
+                                                                    <FontAwesomeIcon icon={faLink} className="h-4 w-4 cursor-pointer" />
                                                                 </Link>
                                                             </Tippy>
                                                         </div>
@@ -923,114 +923,114 @@ const RekapAsetLainnya = (data: any) => {
                             )}
                         </tbody>
                         <tfoot>
-                            <tr className='sticky -bottom-5 left-0 z-[2]'>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white font-semibold sticky -bottom-5 left-0'>
+                            <tr className='-bottom-5 left-0 sticky z-[2]'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-white -bottom-5 font-semibold left-0 sticky'>
                                     Jumlah
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold sticky -bottom-5 left-[300px]'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white -bottom-5 font-semibold left-[300px] sticky'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.saldo_awal)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_realisasi_belanja)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_hutang_kegiatan)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_atribusi)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_barang_habis_pakai)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_pemeliharaan)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_jasa)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_a)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_b)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_c)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_d)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kib_e)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_kdp)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_reklasifikasi_aset_lain_lain)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_hibah_masuk)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_penilaian)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_mutasi_antar_opd)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.plus_total)}
                                 </td>
 
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_pembayaran_utang)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_persediaan)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_jasa)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_pemeliharaan)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_hibah)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_a)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_b)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_c)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_d)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kib_e)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_kdp)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_reklasifikasi_beban_aset_lain_lain)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_penghapusan)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_mutasi_antar_opd)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_tptgr)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.min_total)}
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
                                     Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(grandTotal.saldo_akhir)}
                                 </td>
                             </tr>
@@ -1038,14 +1038,14 @@ const RekapAsetLainnya = (data: any) => {
                     </table>
                 </div>
 
-                <div className="flex items-end justify-between flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col justify-between gap-2 items-end lg:flex-row lg:items-center lg:justify-between">
+                    <div className="flex gap-2 items-center">
                         <div className="flex flex-col items-end">
                             <div className="">
                                 Kenaikan / Penurunan
                             </div>
                             <div className="w-[200px] font-semibold">
-                                <div className='flex items-center justify-between cursor-pointer'>
+                                <div className='flex justify-between cursor-pointer items-center'>
                                     <div className="">
                                         Rp.
                                     </div>
@@ -1060,7 +1060,7 @@ const RekapAsetLainnya = (data: any) => {
                                 Persentase
                             </div>
                             <div className="w-[200px] font-semibold">
-                                <div className='flex items-center justify-end gap-1 cursor-pointer'>
+                                <div className='flex justify-end cursor-pointer gap-1 items-center'>
                                     <div className="">
                                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(percentage)}
                                     </div>
@@ -1071,7 +1071,7 @@ const RekapAsetLainnya = (data: any) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex justify-end gap-2 items-center">
                         {dataInput.length > 0 && (
                             <DownloadButtons
                                 data={dataInput}
@@ -1079,6 +1079,9 @@ const RekapAsetLainnya = (data: any) => {
                                 params={{
                                     type: 'rekon_aset_rekap_aset_lainnya',
                                     category: 'kibs',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
                                 afterClick={(e: any) => {
                                     if (e === 'error') {

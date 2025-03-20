@@ -216,128 +216,128 @@ const RekapAsetTetap = (data: any) => {
     return (
         <div>
             <div className="">
-                <div className="table-responsive mb-5 pb-5 max-h-[calc(100vh-200px)]">
+                <div className="table-responsive max-h-[calc(100vh-200px)] mb-5 pb-5">
                     <table className="table-striped">
-                        <thead className='sticky top-0 left-0 z-[2]'>
+                        <thead className='left-0 sticky top-0 z-[2]'>
                             <tr>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900 xl:min-w-[300px] xl:max-w-[300px] sticky top-0 left-0 bg-slate-50'>
+                                <th rowSpan={2} className='bg-slate-50 border border-slate-900 text-center left-0 sticky top-0 whitespace-nowrap xl:max-w-[300px] xl:min-w-[300px]'>
                                     Perangkat Daerah
                                 </th>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900 xl:min-w-[300px] xl:max-w-[300px] sticky top-0 left-[300px] bg-slate-50'>
+                                <th rowSpan={2} className='bg-slate-50 border border-slate-900 text-center left-[300px] sticky top-0 whitespace-nowrap xl:max-w-[300px] xl:min-w-[300px]'>
                                     Saldo Awal
                                 </th>
-                                <th colSpan={16} className='text-center border whitespace-nowrap border-slate-900 bg-yellow-300'>
+                                <th colSpan={16} className='bg-yellow-300 border border-slate-900 text-center whitespace-nowrap'>
                                     Mutasi Tambah
                                 </th>
-                                <th rowSpan={2} className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th rowSpan={2} className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Total Penambahan
                                 </th>
-                                <th colSpan={15} className='text-center border whitespace-nowrap border-slate-900 bg-green-300'>
+                                <th colSpan={15} className='bg-green-300 border border-slate-900 text-center whitespace-nowrap'>
                                     Mutasi Kurang
                                 </th>
-                                <th rowSpan={2} className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th rowSpan={2} className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Total Pengurangan
                                 </th>
-                                <th rowSpan={2} className='text-center border whitespace-nowrap border-slate-900 min-w-[300px]'>
+                                <th rowSpan={2} className='border border-slate-900 text-center min-w-[300px] whitespace-nowrap'>
                                     Saldo Akhir
                                 </th>
                             </tr>
                             <tr>
                                 {/* Tambah Start */}
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Realisasi Belanja
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Utang Kegiatan {year}
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Atribusi
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Barang Habis Pakai
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Pemeliharaan
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Jasa
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB A
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB B
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB C
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB D
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KIB E
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari KDP
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi dari Aset Lain-lain
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Hibah Masuk
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Penilaian
                                 </th>
-                                <th className='text-center bg-yellow-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-yellow-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Mutasi Antar OPD
                                 </th>
                                 {/* Tambah End */}
 
                                 {/* Kurang Start */}
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Pembayaran Utang
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Persediaan
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Jasa
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Pemeliharaan
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi Ke Beban Hibah/Bansos
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB A
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB B
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB C
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB D
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KIB E
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke KDP
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Reklasifikasi ke Aset Lain-lain
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Penghapusan/ Penjualan
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     Mutasi Antar OPD
                                 </th>
-                                <th className='text-center bg-green-300 border whitespace-nowrap border-slate-900 min-w-[250px]'>
+                                <th className='bg-green-300 border border-slate-900 text-center min-w-[250px] whitespace-nowrap'>
                                     TPTGR
                                 </th>
                                 {/* Kurang End */}
@@ -348,12 +348,12 @@ const RekapAsetTetap = (data: any) => {
                                 dataInput.map((row: any, index: any) => {
                                     return (
                                         <tr key={index}>
-                                            <td className='border border-slate-900 sticky top-0 left-0 z-[1] bg-slate-50'>
+                                            <td className='bg-slate-50 border border-slate-900 left-0 sticky top-0 z-[1]'>
                                                 <div className="font-semibold">
                                                     {row.instance_name}
                                                 </div>
                                             </td>
-                                            <td className='border border-slate-900 sticky top-0 left-[300px] z-[1] bg-slate-50'>
+                                            <td className='bg-slate-50 border border-slate-900 left-[300px] sticky top-0 z-[1]'>
                                                 <InputRupiah
                                                     dataValue={row.saldo_awal}
                                                     readOnly={true}
@@ -821,12 +821,12 @@ const RekapAsetTetap = (data: any) => {
                             }
                         </tbody>
                         <tfoot>
-                            <tr className='sticky -bottom-5 left-0 z-[2]'>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white font-semibold sticky -bottom-5 left-0'>
+                            <tr className='-bottom-5 left-0 sticky z-[2]'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-white -bottom-5 font-semibold left-0 sticky'>
                                     Jumlah
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold sticky -bottom-5 left-[300px]'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white -bottom-5 font-semibold left-[300px] sticky'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -835,8 +835,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -845,8 +845,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -855,8 +855,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -865,8 +865,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -875,8 +875,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -885,8 +885,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -895,8 +895,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -905,8 +905,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -915,9 +915,9 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
 
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -926,8 +926,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -936,8 +936,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -946,8 +946,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -956,8 +956,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -966,8 +966,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -976,8 +976,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -986,8 +986,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -996,8 +996,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1007,8 +1007,8 @@ const RekapAsetTetap = (data: any) => {
                                     </div>
                                 </td>
 
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1017,8 +1017,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1027,8 +1027,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1037,8 +1037,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1047,8 +1047,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1057,8 +1057,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1067,8 +1067,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1077,8 +1077,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1087,8 +1087,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1097,8 +1097,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1107,8 +1107,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1117,8 +1117,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1127,8 +1127,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1137,8 +1137,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1147,8 +1147,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1157,8 +1157,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>
@@ -1167,8 +1167,8 @@ const RekapAsetTetap = (data: any) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td className='border border-slate-900 p-4 bg-slate-400 text-white text-end font-semibold'>
-                                    <div className="flex items-center justify-between">
+                                <td className='bg-slate-400 border border-slate-900 p-4 text-end text-white font-semibold'>
+                                    <div className="flex justify-between items-center">
                                         <div>
                                             Rp.
                                         </div>

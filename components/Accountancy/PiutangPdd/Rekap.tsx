@@ -12,6 +12,7 @@ import IconTrash from '@/components/Icon/IconTrash';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { getRekap } from '@/apis/Accountancy/PiutangPdd';
 import InputRupiah from '@/components/InputRupiah';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -152,7 +153,7 @@ const Rekap = (data: any) => {
 
     return (
         <>
-            <div className="text-xl text-center font-semibold text-gray-600 mb-5">
+            <div className="text-center text-gray-600 text-xl font-semibold mb-5">
                 Rekap Piutang Pendapatan Audited Per 31 Desember {year}
             </div>
 
@@ -160,25 +161,25 @@ const Rekap = (data: any) => {
                 <table>
                     <thead>
                         <tr>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white">
+                            <th className="bg-slate-900 border text-center text-white whitespace-nowrap">
                                 No
                             </th>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Jenis Piutang
                             </th>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Saldo Awal Tahun {year}
                             </th>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Saldo Akhir Tahun {year}
                             </th>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Piutang Bruto
                             </th>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Penyisihan Piutang
                             </th>
-                            <th className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Beban Penyisihan
                             </th>
                         </tr>
@@ -186,33 +187,33 @@ const Rekap = (data: any) => {
                     <tbody>
                         {dataInput.map((data: any, index: number) => (
                             <tr key={index}>
-                                <td className="text-center whitespace-nowrap border">
+                                <td className="border text-center whitespace-nowrap">
                                     {index + 1}
                                 </td>
-                                <td className="text-start uppercase font-semibold whitespace-nowrap border">
+                                <td className="border text-start font-semibold uppercase whitespace-nowrap">
                                     {data.uraian}
                                 </td>
-                                <td className="text-center whitespace-nowrap border">
+                                <td className="border text-center whitespace-nowrap">
                                     <InputRupiah
                                         readOnly={true}
                                         dataValue={data.saldo_awal} />
                                 </td>
-                                <td className="text-center whitespace-nowrap border">
+                                <td className="border text-center whitespace-nowrap">
                                     <InputRupiah
                                         readOnly={true}
                                         dataValue={data.saldo_akhir} />
                                 </td>
-                                <td className="text-center whitespace-nowrap border">
+                                <td className="border text-center whitespace-nowrap">
                                     <InputRupiah
                                         readOnly={true}
                                         dataValue={data.piutang_bruto} />
                                 </td>
-                                <td className="text-center whitespace-nowrap border">
+                                <td className="border text-center whitespace-nowrap">
                                     <InputRupiah
                                         readOnly={true}
                                         dataValue={data.penyisihan_piutang} />
                                 </td>
-                                <td className="text-center whitespace-nowrap border">
+                                <td className="border text-center whitespace-nowrap">
                                     <InputRupiah
                                         readOnly={true}
                                         dataValue={data.beban_penyisihan} />
@@ -222,30 +223,30 @@ const Rekap = (data: any) => {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan={2} className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                            <td colSpan={2} className="bg-slate-200 border text-center font-semibold whitespace-nowrap">
                                 Total
                             </td>
-                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                            <td className="bg-slate-200 border text-center font-semibold whitespace-nowrap">
                                 <InputRupiah
                                     readOnly={true}
                                     dataValue={totalData.saldo_awal} />
                             </td>
-                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                            <td className="bg-slate-200 border text-center font-semibold whitespace-nowrap">
                                 <InputRupiah
                                     readOnly={true}
                                     dataValue={totalData.saldo_akhir} />
                             </td>
-                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                            <td className="bg-slate-200 border text-center font-semibold whitespace-nowrap">
                                 <InputRupiah
                                     readOnly={true}
                                     dataValue={totalData.piutang_bruto} />
                             </td>
-                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                            <td className="bg-slate-200 border text-center font-semibold whitespace-nowrap">
                                 <InputRupiah
                                     readOnly={true}
                                     dataValue={totalData.penyisihan_piutang} />
                             </td>
-                            <td className="text-center whitespace-nowrap border bg-slate-200 font-semibold">
+                            <td className="bg-slate-200 border text-center font-semibold whitespace-nowrap">
                                 <InputRupiah
                                     readOnly={true}
                                     dataValue={totalData.beban_penyisihan} />
@@ -253,6 +254,46 @@ const Rekap = (data: any) => {
                         </tr>
                     </tfoot>
                 </table>
+            </div>
+
+
+            <div className="flex justify-end gap-4 items-center">
+                {(dataInput.length > 0) && (
+                    <DownloadButtons
+                        data={dataInput}
+                        endpoint='/accountancy/download/excel'
+                        params={{
+                            type: 'rekap_pendapatan_lo',
+                            category: 'pendapatan_lo',
+                            instance: instance,
+                            periode: periode?.id,
+                            year: year,
+                        }}
+                        afterClick={(e: any) => {
+                            if (e === 'error') {
+                                Swal.fire({
+                                    title: 'Download Gagal!',
+                                    text: 'Terjadi kesalahan saat mendownload file.',
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Tutup',
+                                    confirmButtonColor: '#00ab55',
+                                });
+                                return;
+                            } else {
+                                Swal.fire({
+                                    title: 'Download Berhasil!',
+                                    text: 'File telah berhasil didownload.',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Tutup',
+                                    confirmButtonColor: '#00ab55',
+                                });
+                                return;
+                            }
+                        }}
+                    />
+                )}
             </div>
         </>
     );

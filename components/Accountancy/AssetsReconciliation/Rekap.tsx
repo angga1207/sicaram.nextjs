@@ -285,8 +285,8 @@ const Rekap = (data: any) => {
         <div>
             <div className="">
                 {isLoading === true && (
-                    <div className="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center">
-                        {/* <FontAwesomeIcon icon={faSpinner} spin size="3x" className="h-80 w-80 animate-spin text-white" /> */}
+                    <div className="flex bg-black bg-opacity-50 h-screen justify-center w-screen fixed items-center left-0 top-0 z-50">
+                        {/* <FontAwesomeIcon icon={faSpinner} spin size="3x" className="h-80 text-white w-80 animate-spin" /> */}
                         <LoadingSicaram />
                     </div>
                 )}
@@ -326,7 +326,7 @@ const Rekap = (data: any) => {
                                                 </td>
                                                 <td className='border-x'>
                                                     <Tippy content={(item.saldo_awal ? terbilang(item.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                        <div className='flex justify-between cursor-pointer items-center'>
                                                             <div>
                                                                 Rp.
                                                             </div>
@@ -338,7 +338,7 @@ const Rekap = (data: any) => {
                                                 </td>
                                                 <td className='border-x'>
                                                     <Tippy content={(item.mutasi_tambah ? terbilang(item.mutasi_tambah) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                        <div className='flex justify-between cursor-pointer items-center'>
                                                             <div>
                                                                 Rp.
                                                             </div>
@@ -350,7 +350,7 @@ const Rekap = (data: any) => {
                                                 </td>
                                                 <td className='border-x'>
                                                     <Tippy content={(item.mutasi_kurang ? terbilang(item.mutasi_kurang) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                        <div className='flex justify-between cursor-pointer items-center'>
                                                             <div>
                                                                 Rp.
                                                             </div>
@@ -362,7 +362,7 @@ const Rekap = (data: any) => {
                                                 </td>
                                                 <td className='border-x'>
                                                     <Tippy content={(item.saldo_akhir ? terbilang(item.saldo_akhir) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                                        <div className='flex items-center justify-between cursor-pointer'>
+                                                        <div className='flex justify-between cursor-pointer items-center'>
                                                             <div>
                                                                 Rp.
                                                             </div>
@@ -382,11 +382,11 @@ const Rekap = (data: any) => {
                                     <td>
 
                                     </td>
-                                    <td className='font-semibold !text-end p-3'>
+                                    <td className='p-3 !text-end font-semibold'>
                                         JUMLAH
                                     </td>
                                     <td className='p-3 font-semibold'>
-                                        <div className='flex items-center justify-between cursor-pointer'>
+                                        <div className='flex justify-between cursor-pointer items-center'>
                                             <div>
                                                 Rp.
                                             </div>
@@ -399,7 +399,7 @@ const Rekap = (data: any) => {
                                         </div>
                                     </td>
                                     <td className='p-3 font-semibold'>
-                                        <div className='flex items-center justify-between cursor-pointer'>
+                                        <div className='flex justify-between cursor-pointer items-center'>
                                             <div>
                                                 Rp.
                                             </div>
@@ -411,7 +411,7 @@ const Rekap = (data: any) => {
                                         </div>
                                     </td>
                                     <td className='p-3 font-semibold'>
-                                        <div className='flex items-center justify-between cursor-pointer'>
+                                        <div className='flex justify-between cursor-pointer items-center'>
                                             <div>
                                                 Rp.
                                             </div>
@@ -424,7 +424,7 @@ const Rekap = (data: any) => {
                                         </div>
                                     </td>
                                     <td className='p-3 font-semibold'>
-                                        <div className='flex items-center justify-between cursor-pointer'>
+                                        <div className='flex justify-between cursor-pointer items-center'>
                                             <div>
                                                 Rp.
                                             </div>
@@ -442,14 +442,14 @@ const Rekap = (data: any) => {
                 )}
 
                 <div className="space-y-3">
-                    <div className="flex items-center justify-end">
+                    <div className="flex justify-end items-center">
                         <div className="w-[200px]">
                             Kenaikan / Penurunan
                         </div>
-                        <div className="w-[300px] font-semibold text-lg">
+                        <div className="text-lg w-[300px] font-semibold">
 
                             <Tippy content={(grandTotal.saldo_awal ? terbilang(grandTotal.saldo_awal) : 'Nol') + ' Rupiah'} placement='top-end'>
-                                <div className='flex items-center justify-between cursor-pointer'>
+                                <div className='flex justify-between cursor-pointer items-center'>
                                     <div className="">
                                         Rp.
                                     </div>
@@ -460,12 +460,12 @@ const Rekap = (data: any) => {
                             </Tippy>
                         </div>
                     </div>
-                    <div className="flex items-center justify-end">
+                    <div className="flex justify-end items-center">
                         <div className="w-[200px]">
                             Persentase
                         </div>
-                        <div className="w-[300px] font-semibold text-lg">
-                            <div className='flex items-center justify-between cursor-pointer'>
+                        <div className="text-lg w-[300px] font-semibold">
+                            <div className='flex justify-between cursor-pointer items-center'>
                                 <div className="">
                                     %
                                 </div>

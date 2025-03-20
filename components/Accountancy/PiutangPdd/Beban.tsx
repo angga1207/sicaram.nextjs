@@ -13,6 +13,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { deleteBeban, getBeban, storeBeban } from '@/apis/Accountancy/PiutangPdd';
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -467,25 +468,25 @@ const Beban = (data: any) => {
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 bg-slate-900 text-white z-[1]'>
+                        <tr className='bg-slate-900 text-white sticky top-0 z-[1]'>
                             {([9].includes(CurrentUser?.role_id) == false) && (
-                                <th rowSpan={2} className='text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]'>
+                                <th rowSpan={2} className='bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap'>
                                     Nama Perangkat Daerah
                                 </th>
                             )}
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Jenis Piutang
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Jumlah Penyisihan Tahun {year}
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Jumlah Penyisihan Tahun {year - 1}
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Koreksi Penyisihan (Surplus keg Non Operasional)
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Beban Penyisihan
                             </th>
                         </tr>
@@ -495,8 +496,8 @@ const Beban = (data: any) => {
                             <>
                                 {/* PENDAPATAN PAJAK DAERAH */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 PENDAPATAN PAJAK DAERAH
                                             </div>
@@ -505,28 +506,28 @@ const Beban = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(1)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.jumlah_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.jumlah_penyisihan_last_year}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.koreksi_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.beban_penyisihan}
                                             readOnly={true} />
@@ -576,7 +577,7 @@ const Beban = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -643,8 +644,8 @@ const Beban = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -709,8 +710,8 @@ const Beban = (data: any) => {
 
                                 {/* HASIL RETRIBUSI DAERAH */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 HASIL RETRIBUSI DAERAH
                                             </div>
@@ -719,28 +720,28 @@ const Beban = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(2)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.jumlah_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.jumlah_penyisihan_last_year}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.koreksi_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.beban_penyisihan}
                                             readOnly={true} />
@@ -790,7 +791,7 @@ const Beban = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -857,8 +858,8 @@ const Beban = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -923,8 +924,8 @@ const Beban = (data: any) => {
 
                                 {/*  HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH
                                             </div>
@@ -933,28 +934,28 @@ const Beban = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(3)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.jumlah_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.jumlah_penyisihan_last_year}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.koreksi_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.beban_penyisihan}
                                             readOnly={true} />
@@ -1004,7 +1005,7 @@ const Beban = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -1071,8 +1072,8 @@ const Beban = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1137,8 +1138,8 @@ const Beban = (data: any) => {
 
                                 {/*  LAIN-LAIN PAD YANG SAH  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 LAIN-LAIN PAD YANG SAH
                                             </div>
@@ -1147,28 +1148,28 @@ const Beban = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(4)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.jumlah_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.jumlah_penyisihan_last_year}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.koreksi_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.beban_penyisihan}
                                             readOnly={true} />
@@ -1218,7 +1219,7 @@ const Beban = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -1285,8 +1286,8 @@ const Beban = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1351,8 +1352,8 @@ const Beban = (data: any) => {
 
                                 {/*  TRANSFER PEMERINTAH PUSAT  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 TRANSFER PEMERINTAH PUSAT
                                             </div>
@@ -1361,28 +1362,28 @@ const Beban = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(5)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.jumlah_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.jumlah_penyisihan_last_year}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.koreksi_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.beban_penyisihan}
                                             readOnly={true} />
@@ -1433,7 +1434,7 @@ const Beban = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     menuPlacement={'top'}
                                                     className='min-w-[400px]'
@@ -1501,8 +1502,8 @@ const Beban = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1567,8 +1568,8 @@ const Beban = (data: any) => {
 
                                 {/*  TRANSFER ANTAR DAERAH  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 TRANSFER ANTAR DAERAH
                                             </div>
@@ -1577,28 +1578,28 @@ const Beban = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(6)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.jumlah_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.jumlah_penyisihan_last_year}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.koreksi_penyisihan}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.beban_penyisihan}
                                             readOnly={true} />
@@ -1649,7 +1650,7 @@ const Beban = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -1717,8 +1718,8 @@ const Beban = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1784,7 +1785,7 @@ const Beban = (data: any) => {
                         ) : (
                             <tr>
                                 <td colSpan={12} className='border text-center'>
-                                    <div className="font-semibold text-md uppercase">
+                                    <div className="text-md font-semibold uppercase">
                                         Sedang Memuat Data
                                         <span className='dots-loading'>
                                             ...
@@ -1799,13 +1800,13 @@ const Beban = (data: any) => {
                         <tfoot>
                             <tr>
                                 <td className='border p-4'></td>
-                                <td className="border p-4 bg-slate-50 dark:bg-slate-900">
+                                <td className="bg-slate-50 border p-4 dark:bg-slate-900">
                                     <div className="text-end font-semibold">
                                         Jumlah
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1815,7 +1816,7 @@ const Beban = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1825,7 +1826,7 @@ const Beban = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1835,7 +1836,7 @@ const Beban = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1850,29 +1851,70 @@ const Beban = (data: any) => {
                 </table>
             </div>
 
-            {instance && (
-                <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                    <div className=""></div>
-
-                    {isSaving == false ? (
-                        <button type="button"
-                            onClick={(e) => {
-                                save()
+            <div className="flex justify-end gap-4 items-center mt-4 px-5">
+                <div className="flex items-center">
+                    {(totalData) && (
+                        <DownloadButtons
+                            data={
+                                dataInput1.concat(dataInput2, dataInput3, dataInput4, dataInput5, dataInput6)
+                            }
+                            endpoint='/accountancy/download/excel'
+                            params={{
+                                type: 'beban',
+                                category: 'pendapatan_lo',
+                                instance: instance,
+                                periode: periode?.id,
+                                year: year,
                             }}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                            Simpan
-                        </button>
-                    ) : (
-                        <button type="button"
-                            disabled={true}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                            Menyimpan..
-                        </button>
+                            afterClick={(e: any) => {
+                                if (e === 'error') {
+                                    Swal.fire({
+                                        title: 'Download Gagal!',
+                                        text: 'Terjadi kesalahan saat mendownload file.',
+                                        icon: 'error',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Tutup',
+                                        confirmButtonColor: '#00ab55',
+                                    });
+                                    return;
+                                } else {
+                                    Swal.fire({
+                                        title: 'Download Berhasil!',
+                                        text: 'File telah berhasil didownload.',
+                                        icon: 'success',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Tutup',
+                                        confirmButtonColor: '#00ab55',
+                                    });
+                                    return;
+                                }
+                            }}
+                        />
                     )}
                 </div>
-            )}
+
+                {instance && (
+                    <>
+                        {isSaving == false ? (
+                            <button type="button"
+                                onClick={(e) => {
+                                    save()
+                                }}
+                                className='btn btn-success text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
+                                Simpan
+                            </button>
+                        ) : (
+                            <button type="button"
+                                disabled={true}
+                                className='btn btn-success text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
+                                Menyimpan..
+                            </button>
+                        )}
+                    </>
+                )}
+            </div>
         </>
     );
 }

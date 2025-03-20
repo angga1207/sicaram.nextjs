@@ -272,82 +272,82 @@ const Subsidi = (data: any) => {
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 bg-slate-900 text-white z-[1]'>
+                        <tr className='bg-slate-900 text-white sticky top-0 z-[1]'>
                             {([9].includes(CurrentUser?.role_id) == false) && (
-                                <th rowSpan={2} className='text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]'>
+                                <th rowSpan={2} className='bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap'>
                                     Nama Perangkat Daerah
                                 </th>
                             )}
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Nomor Rekening
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px] sticky top-0 left-0 z-[1]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white left-0 min-w-[200px] sticky top-0 whitespace-nowrap z-[1]">
                                 Nama Rekening
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Realisasi Belanja
                             </th>
-                            <th rowSpan={1} colSpan={8} className="text-center whitespace-nowrap border bg-yellow-300 text-slate-900 border-slate-900">
+                            <th rowSpan={1} colSpan={8} className="bg-yellow-300 border border-slate-900 text-center text-slate-900 whitespace-nowrap">
                                 Mutasi Tambah
                             </th>
-                            <th rowSpan={1} colSpan={9} className="text-center whitespace-nowrap border bg-green-300 text-slate-900 border-slate-900">
+                            <th rowSpan={1} colSpan={9} className="bg-green-300 border border-slate-900 text-center text-slate-900 whitespace-nowrap">
                                 Mutasi Kurang
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Beban LO
                             </th>
                         </tr>
                         <tr className='sticky top-[46px] z-[0]'>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Saldo Awal {year}
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Belanja Dibayar Dimuka Akhir
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Hutang {year}
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Hibah Masuk
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Reklas Tambah dari Rekening Lain/BOS
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Reklas Tambah dari Modal
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Jukor
                             </th>
-                            <th className="text-center border bg-yellow-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-yellow-300 border border-slate-900 text-center min-w-[200px]">
                                 Jumlah
                             </th>
 
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Saldo Akhir {year - 1}
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Beban Tahun Lalu Dibayar {year - 1}
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Belanja Dibayar Dimuka Awal
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Pembayaran Hutang
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Reklas Kurang ke Rekening Lain
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Reklas Kurang ke Aset
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Atribusi / Kapitalisasi Belanja Modal
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Jukor
                             </th>
-                            <th className="text-center border bg-green-300 border-slate-900 min-w-[200px]">
+                            <th className="bg-green-300 border border-slate-900 text-center min-w-[200px]">
                                 Jumlah
                             </th>
                         </tr>
@@ -398,7 +398,7 @@ const Subsidi = (data: any) => {
                                             </td>
                                         )}
                                         <td className='border'>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -465,8 +465,8 @@ const Subsidi = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -474,8 +474,8 @@ const Subsidi = (data: any) => {
 
                                             </div>
                                         </td>
-                                        <td className="border sticky left-0 z-[0] bg-slate-50 dark:bg-slate-900">
-                                            <div className="min-w-[300px] font-semibold whitespace-normal">
+                                        <td className="bg-slate-50 border dark:bg-slate-900 left-0 sticky z-[0]">
+                                            <div className="font-semibold min-w-[300px] whitespace-normal">
                                                 {data.kode_rekening_id ? (
                                                     <>
                                                         <div>
@@ -495,7 +495,7 @@ const Subsidi = (data: any) => {
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <div className="text-red-500 text-center">Pilih Kode Rekening</div>
+                                                        <div className="text-center text-red-500">Pilih Kode Rekening</div>
                                                     </>
                                                 )}
                                             </div>
@@ -515,7 +515,7 @@ const Subsidi = (data: any) => {
                                                 }} />
                                         </td>
 
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.saldo_awal}
                                                 onChange={(value: any) => {
@@ -527,7 +527,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.belanja_dibayar_dimuka_akhir}
                                                 onChange={(value: any) => {
@@ -539,7 +539,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.hutang}
                                                 onChange={(value: any) => {
@@ -551,7 +551,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.hibah}
                                                 onChange={(value: any) => {
@@ -563,7 +563,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.reklas_tambah_dari_rekening}
                                                 onChange={(value: any) => {
@@ -575,7 +575,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.reklas_tambah_dari_modal}
                                                 onChange={(value: any) => {
@@ -587,7 +587,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.plus_jukor}
                                                 onChange={(value: any) => {
@@ -599,7 +599,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-yellow-300 border-slate-900">
+                                        <td className="bg-yellow-300 border border-slate-900">
                                             <InputRupiah
                                                 readOnly={true}
                                                 dataValue={data.plus_total}
@@ -613,7 +613,7 @@ const Subsidi = (data: any) => {
                                                 }} />
                                         </td>
 
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.saldo_akhir}
                                                 onChange={(value: any) => {
@@ -625,7 +625,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.beban_tahun_lalu}
                                                 onChange={(value: any) => {
@@ -637,7 +637,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.belanja_dibayar_dimuka_awal}
                                                 onChange={(value: any) => {
@@ -649,7 +649,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.pembayaran_hutang}
                                                 // readOnly={true}
@@ -662,7 +662,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.reklas_kurang_ke_rekening}
                                                 onChange={(value: any) => {
@@ -674,7 +674,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.reklas_kurang_ke_aset}
                                                 onChange={(value: any) => {
@@ -686,7 +686,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.atribusi}
                                                 onChange={(value: any) => {
@@ -698,7 +698,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 dataValue={data.min_jukor}
                                                 onChange={(value: any) => {
@@ -710,7 +710,7 @@ const Subsidi = (data: any) => {
                                                     });
                                                 }} />
                                         </td>
-                                        <td className="border bg-green-300 border-slate-900">
+                                        <td className="bg-green-300 border border-slate-900">
                                             <InputRupiah
                                                 readOnly={true}
                                                 dataValue={data.min_total}
@@ -726,10 +726,10 @@ const Subsidi = (data: any) => {
 
                                         <td className="border">
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-semibold text-end bg-slate-200">
+                                                <div className="form-input bg-slate-200 text-end w-[250px] font-semibold ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(data.beban_lo)}
                                                 </div>
                                             </div>
@@ -744,13 +744,13 @@ const Subsidi = (data: any) => {
                         <tr>
                             <td className='border p-4'></td>
                             <td className='border p-4'></td>
-                            <td className="border p-4 sticky left-0 z-[0] bg-slate-50 dark:bg-slate-900">
+                            <td className="bg-slate-50 border p-4 dark:bg-slate-900 left-0 sticky z-[0]">
                                 <div className="text-end font-semibold">
                                     Jumlah
                                 </div>
                             </td>
                             <td className="border p-4">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -759,8 +759,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -769,8 +769,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -779,8 +779,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -789,8 +789,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -799,8 +799,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -809,8 +809,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -819,8 +819,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -829,8 +829,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-yellow-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-yellow-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -840,8 +840,8 @@ const Subsidi = (data: any) => {
                                 </div>
                             </td>
 
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -850,8 +850,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -860,8 +860,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -870,8 +870,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -880,8 +880,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -890,8 +890,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -900,8 +900,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -910,8 +910,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -920,8 +920,8 @@ const Subsidi = (data: any) => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="border p-4 bg-green-300 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="bg-green-300 border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -931,8 +931,8 @@ const Subsidi = (data: any) => {
                                 </div>
                             </td>
 
-                            <td className="border p-4 border-slate-900">
-                                <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                            <td className="border border-slate-900 p-4">
+                                <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                     <div className="">
                                         Rp.
                                     </div>
@@ -946,8 +946,8 @@ const Subsidi = (data: any) => {
                 </table >
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -955,14 +955,14 @@ const Subsidi = (data: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -982,7 +982,7 @@ const Subsidi = (data: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -997,11 +997,11 @@ const Subsidi = (data: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     {(dataInput.length > 0) && (
                         <DownloadButtons
                             data={dataInput}
@@ -1010,6 +1010,9 @@ const Subsidi = (data: any) => {
                                 // type: instance ? 'subsidi' : 'subsidi_kab',
                                 type: 'subsidi',
                                 category: 'beban_lo',
+                                instance: instance,
+                                periode: periode?.id,
+                                year: year,
                             }}
                             afterClick={(e: any) => {
                                 if (e === 'error') {
@@ -1045,8 +1048,8 @@ const Subsidi = (data: any) => {
                                         addDataInput()
                                     }
                                 }}
-                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                 Tambah Data
                             </button>
 
@@ -1055,15 +1058,15 @@ const Subsidi = (data: any) => {
                                     onClick={(e) => {
                                         save()
                                     }}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
                                     Simpan
                                 </button>
                             ) : (
                                 <button type="button"
                                     disabled={true}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
                                     Menyimpan..
                                 </button>
                             )}

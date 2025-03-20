@@ -13,6 +13,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { deletePdd, getPdd, storePdd } from '@/apis/Accountancy/PiutangPdd';
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -472,30 +473,30 @@ const PDD = (data: any) => {
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 bg-slate-900 text-white z-[1]'>
+                        <tr className='bg-slate-900 text-white sticky top-0 z-[1]'>
                             {([9].includes(CurrentUser?.role_id) == false) && (
-                                <th rowSpan={2} className='text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]'>
+                                <th rowSpan={2} className='bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap'>
                                     Nama Perangkat Daerah
                                 </th>
                             )}
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Uraian
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Pendapatan Diterima Dimuka Awal
                             </th>
-                            <th rowSpan={1} colSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white">
+                            <th rowSpan={1} colSpan={2} className="bg-slate-900 border text-center text-white whitespace-nowrap">
                                 Mutasi
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Pendapatan Diterima Dimuka Akhir
                             </th>
                         </tr>
                         <tr className='sticky top-[46px] z-[0]'>
-                            <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px]">
                                 Bertambah
                             </th>
-                            <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                            <th className="bg-slate-900 border text-center text-white min-w-[200px]">
                                 Berkurang
                             </th>
                         </tr>
@@ -505,8 +506,8 @@ const PDD = (data: any) => {
                             <>
                                 {/* PENDAPATAN PAJAK DAERAH */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 PENDAPATAN PAJAK DAERAH
                                             </div>
@@ -515,28 +516,28 @@ const PDD = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(1)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.pendapatan_diterima_dimuka_awal}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.mutasi_berkurang}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.mutasi_bertambah}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData1.pendapatan_diterima_dimuka_akhir}
                                             readOnly={true} />
@@ -586,7 +587,7 @@ const PDD = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -653,8 +654,8 @@ const PDD = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -718,8 +719,8 @@ const PDD = (data: any) => {
 
                                 {/* HASIL RETRIBUSI DAERAH */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 HASIL RETRIBUSI DAERAH
                                             </div>
@@ -728,28 +729,28 @@ const PDD = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(2)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.pendapatan_diterima_dimuka_awal}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.mutasi_berkurang}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.mutasi_bertambah}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData2.pendapatan_diterima_dimuka_akhir}
                                             readOnly={true} />
@@ -799,7 +800,7 @@ const PDD = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -866,8 +867,8 @@ const PDD = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -931,8 +932,8 @@ const PDD = (data: any) => {
 
                                 {/*  HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 HASIL PENGELOLAAN KEKAYAAN YANG DIPISAHKAN DAERAH
                                             </div>
@@ -941,28 +942,28 @@ const PDD = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(3)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.pendapatan_diterima_dimuka_awal}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.mutasi_berkurang}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.mutasi_bertambah}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData3.pendapatan_diterima_dimuka_akhir}
                                             readOnly={true} />
@@ -1012,7 +1013,7 @@ const PDD = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -1079,8 +1080,8 @@ const PDD = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1144,8 +1145,8 @@ const PDD = (data: any) => {
 
                                 {/*  LAIN-LAIN PAD YANG SAH  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 LAIN-LAIN PAD YANG SAH
                                             </div>
@@ -1154,28 +1155,28 @@ const PDD = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(4)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData4.pendapatan_diterima_dimuka_awal}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData4.mutasi_berkurang}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData4.mutasi_bertambah}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData4.pendapatan_diterima_dimuka_akhir}
                                             readOnly={true} />
@@ -1225,7 +1226,7 @@ const PDD = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -1292,8 +1293,8 @@ const PDD = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1357,8 +1358,8 @@ const PDD = (data: any) => {
 
                                 {/*  TRANSFER PEMERINTAH PUSAT  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 TRANSFER PEMERINTAH PUSAT
                                             </div>
@@ -1367,28 +1368,28 @@ const PDD = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(5)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.pendapatan_diterima_dimuka_awal}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.mutasi_berkurang}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.mutasi_bertambah}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData5.pendapatan_diterima_dimuka_akhir}
                                             readOnly={true} />
@@ -1439,7 +1440,7 @@ const PDD = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     menuPlacement={'top'}
                                                     className='min-w-[400px]'
@@ -1507,8 +1508,8 @@ const PDD = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1572,8 +1573,8 @@ const PDD = (data: any) => {
 
                                 {/*  TRANSFER ANTAR DAERAH  */}
                                 <tr>
-                                    <td colSpan={2} className='border font-semibold text-md bg-slate-200/50'>
-                                        <div className="flex items-center justify-between">
+                                    <td colSpan={2} className='bg-slate-200/50 border text-md font-semibold'>
+                                        <div className="flex justify-between items-center">
                                             <div className="">
                                                 TRANSFER ANTAR DAERAH
                                             </div>
@@ -1582,28 +1583,28 @@ const PDD = (data: any) => {
                                                 onClick={(e) => {
                                                     addDataInput(6)
                                                 }}
-                                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                                 Tambah Data
                                             </button>
                                         </div>
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.pendapatan_diterima_dimuka_awal}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.mutasi_berkurang}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.mutasi_bertambah}
                                             readOnly={true} />
                                     </td>
-                                    <td className='border font-semibold bg-slate-200/50'>
+                                    <td className='bg-slate-200/50 border font-semibold'>
                                         <InputRupiah
                                             dataValue={totalData6.pendapatan_diterima_dimuka_akhir}
                                             readOnly={true} />
@@ -1654,7 +1655,7 @@ const PDD = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='min-w-[400px]'
                                                     classNamePrefix={'selectAngga'}
@@ -1722,8 +1723,8 @@ const PDD = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -1788,7 +1789,7 @@ const PDD = (data: any) => {
                         ) : (
                             <tr>
                                 <td colSpan={12} className='border text-center'>
-                                    <div className="font-semibold text-md uppercase">
+                                    <div className="text-md font-semibold uppercase">
                                         Sedang Memuat Data
                                         <span className='dots-loading'>
                                             ...
@@ -1803,13 +1804,13 @@ const PDD = (data: any) => {
                         <tfoot>
                             <tr>
                                 <td className='border p-4'></td>
-                                <td className="border p-4 bg-slate-50 dark:bg-slate-900">
+                                <td className="bg-slate-50 border p-4 dark:bg-slate-900">
                                     <div className="text-end font-semibold">
                                         Jumlah
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1819,7 +1820,7 @@ const PDD = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1829,7 +1830,7 @@ const PDD = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1839,7 +1840,7 @@ const PDD = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -1854,29 +1855,70 @@ const PDD = (data: any) => {
                 </table>
             </div>
 
-            {instance && (
-                <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                    <div className=""></div>
-
-                    {isSaving == false ? (
-                        <button type="button"
-                            onClick={(e) => {
-                                save()
+            <div className="flex justify-end gap-4 items-center mt-4 px-5">
+                <div className="flex items-center">
+                    {(totalData) && (
+                        <DownloadButtons
+                            data={
+                                dataInput1.concat(dataInput2, dataInput3, dataInput4, dataInput5, dataInput6)
+                            }
+                            endpoint='/accountancy/download/excel'
+                            params={{
+                                type: 'pdd',
+                                category: 'pendapatan_lo',
+                                instance: instance,
+                                periode: periode?.id,
+                                year: year,
                             }}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                            Simpan
-                        </button>
-                    ) : (
-                        <button type="button"
-                            disabled={true}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                            Menyimpan..
-                        </button>
+                            afterClick={(e: any) => {
+                                if (e === 'error') {
+                                    Swal.fire({
+                                        title: 'Download Gagal!',
+                                        text: 'Terjadi kesalahan saat mendownload file.',
+                                        icon: 'error',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Tutup',
+                                        confirmButtonColor: '#00ab55',
+                                    });
+                                    return;
+                                } else {
+                                    Swal.fire({
+                                        title: 'Download Berhasil!',
+                                        text: 'File telah berhasil didownload.',
+                                        icon: 'success',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Tutup',
+                                        confirmButtonColor: '#00ab55',
+                                    });
+                                    return;
+                                }
+                            }}
+                        />
                     )}
                 </div>
-            )}
+
+                {instance && (
+                    <>
+                        {isSaving == false ? (
+                            <button type="button"
+                                onClick={(e) => {
+                                    save()
+                                }}
+                                className='btn btn-success text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
+                                Simpan
+                            </button>
+                        ) : (
+                            <button type="button"
+                                disabled={true}
+                                className='btn btn-success text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
+                                Menyimpan..
+                            </button>
+                        )}
+                    </>
+                )}
+            </div>
         </>
     );
 }

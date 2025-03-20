@@ -244,75 +244,75 @@ const HibahMasuk = (data: any) => {
         <>
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
-                    <thead className='sticky top-0 left-0 z-[1]'>
+                    <thead className='left-0 sticky top-0 z-[1]'>
                         <tr className='!bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 No
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Info
                             </th>
                             {([9].includes(CurrentUser?.role_id) == false) && (
-                                <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                                <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                     Perangkat Daerah
                                 </th>
                             )}
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Penerima Hibah
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Pemberi Hibah
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Kode Rekening
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Nama Barang
                             </th>
-                            <th className='whitespace-nowrap border text-center' rowSpan={2}>
+                            <th className='border text-center whitespace-nowrap' rowSpan={2}>
                                 Nilai
                             </th>
-                            <th className='whitespace-nowrap border text-center' colSpan={2}>
+                            <th className='border text-center whitespace-nowrap' colSpan={2}>
                                 Berita Acara
                             </th>
 
-                            <th className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1' rowSpan={2}>
+                            <th className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap' rowSpan={2}>
                             </th>
 
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800' colSpan={8}>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap' colSpan={8}>
                                 Kelompok Barang / Aset Hibah Masuk (+++)
                             </th>
                         </tr>
                         <tr className='!bg-slate-900 !text-white'>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 No BA
                             </th>
-                            <th className='whitespace-nowrap border text-center'>
+                            <th className='border text-center whitespace-nowrap'>
                                 Tanggal BA
                             </th>
 
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Persediaan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Tanah
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Peralatan dan Mesin
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Gedung dan Bangunan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Jalan Jaringan Irigasi
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Tetap Lainnya
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Konstruksi Dalam Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border border-slate-800 text-center bg-yellow-300 text-slate-800'>
+                            <th className='bg-yellow-300 border border-slate-800 text-center text-slate-800 whitespace-nowrap'>
                                 Aset Lainnya
                             </th>
                         </tr>
@@ -326,12 +326,12 @@ const HibahMasuk = (data: any) => {
                                             {(index + 1)}
                                         </td>
                                         <td>
-                                            <div className="flex justify-center items-center gap-2">
+                                            <div className="flex justify-center gap-2 items-center">
                                                 <Tippy content={`Dibuat Oleh : ${item.created_by ?? ''} | Diperbarui Oleh : ${item.updated_by ?? ''}`}
                                                     theme='info'
                                                     placement='top-start'>
                                                     <button className='text-info select-none'>
-                                                        <FontAwesomeIcon icon={faUser} className='w-3.5 h-3.5' />
+                                                        <FontAwesomeIcon icon={faUser} className='h-3.5 w-3.5' />
                                                     </button>
                                                 </Tippy>
 
@@ -365,7 +365,7 @@ const HibahMasuk = (data: any) => {
                                                             });
                                                         }}
                                                     >
-                                                        <IconTrash className='w-5 h-5' />
+                                                        <IconTrash className='h-5 w-5' />
                                                     </button>
                                                 </Tippy>
                                             </div>
@@ -484,7 +484,7 @@ const HibahMasuk = (data: any) => {
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -522,8 +522,8 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.nilai)}
                                                 </div>
                                             </div>
@@ -565,11 +565,11 @@ const HibahMasuk = (data: any) => {
                                                 }} />
                                         </td>
 
-                                        <td className='whitespace-nowrap border text-center !bg-white w-[1px] !p-1'></td>
+                                        <td className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap'></td>
 
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -607,15 +607,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.persediaan)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -653,15 +653,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.aset_tetap_tanah)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -699,15 +699,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.aset_tetap_peralatan_mesin)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -745,15 +745,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.aset_tetap_gedung_bangunan)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -791,15 +791,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.aset_tetap_jalan_jaringan_irigasi)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -837,15 +837,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.aset_tetap_lainnya)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -883,15 +883,15 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.konstruksi_dalam_pekerjaan)}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className='border'>
                                             <div className="flex group">
-                                                <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
+                                                <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
                                                     Rp.
                                                 </div>
                                                 <input
@@ -929,8 +929,8 @@ const HibahMasuk = (data: any) => {
                                                         })
                                                         setIsUnsaved(true);
                                                     }}
-                                                    className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end hidden group-focus-within:block group-hover:block" />
-                                                <div className="form-input w-[250px] ltr:rounded-l-none rtl:rounded-r-none font-normal text-end block group-focus-within:hidden group-hover:hidden">
+                                                    className="form-input text-end w-[250px] font-normal group-focus-within:block group-hover:block hidden ltr:rounded-l-none rtl:rounded-r-none" />
+                                                <div className="form-input text-end w-[250px] block font-normal group-focus-within:hidden group-hover:hidden ltr:rounded-l-none rtl:rounded-r-none">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(item.aset_lainnya)}
                                                 </div>
                                             </div>
@@ -942,36 +942,36 @@ const HibahMasuk = (data: any) => {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan={([9].includes(CurrentUser?.role_id) == false) ? 6 : 5} className='border text-end font-bold p-4'>Total</td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td colSpan={([9].includes(CurrentUser?.role_id) == false) ? 6 : 5} className='border p-4 text-end font-bold'>Total</td>
+                            <td className='border p-4 text-end font-semibold'>
                                 {totalData.total_data.toLocaleString('id-ID')} Data
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.nilai.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
                             <td colSpan={3} className='border'></td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.persediaan.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.aset_tetap_tanah.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.aset_tetap_peralatan_mesin.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.aset_tetap_gedung_bangunan.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.aset_tetap_jalan_jaringan_irigasi.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.aset_tetap_lainnya.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.konstruksi_dalam_pekerjaan.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className='border text-end font-semibold p-4'>
+                            <td className='border p-4 text-end font-semibold'>
                                 Rp. {totalData.aset_lainnya.toLocaleString('id-ID', { minimumFractionDigits: 2 })}
                             </td>
                         </tr>
@@ -979,8 +979,8 @@ const HibahMasuk = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -988,14 +988,14 @@ const HibahMasuk = (data: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -1015,7 +1015,7 @@ const HibahMasuk = (data: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -1030,11 +1030,11 @@ const HibahMasuk = (data: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     {dataInput.length > 0 && (
                         <>
                             <DownloadButtons
@@ -1043,6 +1043,9 @@ const HibahMasuk = (data: any) => {
                                 params={{
                                     type: 'hibah_masuk',
                                     category: 'padb',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
                                 afterClick={(e: any) => {
                                     if (e === 'error') {
@@ -1075,8 +1078,8 @@ const HibahMasuk = (data: any) => {
                                         addDataInput()
                                     }
                                 }}
-                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                 Tambah Data
                             </button>
 
@@ -1085,15 +1088,15 @@ const HibahMasuk = (data: any) => {
                                     onClick={(e) => {
                                         save()
                                     }}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
                                     Simpan
                                 </button>
                             ) : (
                                 <button type="button"
                                     disabled={true}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
                                     Menyimpan..
                                 </button>
                             )}

@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.29";
+    const APP_VERSION = "2.5b.30";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -100,31 +100,31 @@ const Sidebar = () => {
             <nav
                 className={`sidebar fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] transition-all duration-300 ${semidark ? 'text-white-dark' : ''}`}
             >
-                <div className="h-full bg-white dark:bg-black">
-                    <div className="flex items-center justify-between px-4 py-3 group">
-                        <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <img className="ml-[5px] w-10 h-10 object-contain flex-none animate-bounce delay-100" src="/assets/images/logo-caram.png" alt="logo" />
-                            <span className="align-middle text-xl font-bold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">{t('SICARAM')}</span>
+                <div className="bg-white h-full dark:bg-black">
+                    <div className="flex justify-between group items-center px-4 py-3">
+                        <Link href="/" className="flex items-center main-logo shrink-0">
+                            <img className="flex-none h-10 w-10 animate-bounce delay-100 ml-[5px] object-contain" src="/assets/images/logo-caram.png" alt="logo" />
+                            <span className="align-middle text-xl dark:text-white-light font-bold lg:inline ltr:ml-1.5 rtl:mr-1.5">{t('SICARAM')}</span>
                         </Link>
 
                         <button
                             type="button"
-                            className="collapse-icon flex h-8 w-8 items-center rounded-full transition duration-300 hover:bg-gray-500/10 rtl:rotate-180 dark:text-white-light dark:hover:bg-dark-light/10"
+                            className="collapse-icon flex h-8 rounded-full w-8 dark:hover:bg-dark-light/10 dark:text-white-light duration-300 hover:bg-gray-500/10 items-center rtl:rotate-180 transition"
                             onClick={() => dispatch(toggleSidebar())}
                         >
                             <IconCaretsDown className="m-auto rotate-90" />
                         </button>
                     </div>
-                    <PerfectScrollbar className="relative h-[calc(100vh-100px)]">
+                    <PerfectScrollbar className="h-[calc(100vh-100px)] relative">
                         {isAuth ? (
-                            <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
+                            <ul className="p-4 font-semibold py-0 relative space-y-0.5">
 
                                 {CurrentUser?.role_id === 9 && (
-                                    <li className="menu nav-item">
+                                    <li className="nav-item menu">
                                         <Link href="/dashboard/pd" className="group">
                                             <div className="flex items-center">
-                                                <FontAwesomeIcon icon={faHomeUser} className='shrink-0 group-hover:!text-primary' />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                <FontAwesomeIcon icon={faHomeUser} className='group-hover:!text-primary shrink-0' />
+                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                     Dashboard
                                                 </span>
                                             </div>
@@ -133,11 +133,11 @@ const Sidebar = () => {
                                 )}
 
                                 {CurrentUser?.role_id !== 9 && (
-                                    <li className="menu nav-item">
+                                    <li className="nav-item menu">
                                         <button type="button" className={`${currentMenu === 'dashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('dashboard')}>
                                             <div className="flex items-center">
-                                                <FontAwesomeIcon icon={faHomeUser} className='shrink-0 group-hover:!text-primary' />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                <FontAwesomeIcon icon={faHomeUser} className='group-hover:!text-primary shrink-0' />
+                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                     Dashboard
                                                 </span>
                                             </div>
@@ -147,7 +147,7 @@ const Sidebar = () => {
                                         </button>
 
                                         <AnimateHeight duration={300} height={currentMenu === 'dashboard' ? 'auto' : 0}>
-                                            <ul className="sub-menu text-gray-500">
+                                            <ul className="text-gray-500 sub-menu">
                                                 <li>
                                                     <Link href="/dashboard">
                                                         Dashboard
@@ -173,19 +173,19 @@ const Sidebar = () => {
 
                                 {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].includes(CurrentUser?.role_id)) && (
                                     <>
-                                        {/* <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        {/* <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
+                                        <IconMinus className="flex-none h-5 w-4 hidden" />
                                         <span>
                                             Master Data
                                         </span>
                                     </h2> */}
 
                                         {([1, 9].includes(CurrentUser?.role_id)) && (
-                                            <li className="menu nav-item">
+                                            <li className="nav-item menu">
                                                 <Link href="/Menu/MasterData" className="group">
                                                     <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        <FontAwesomeIcon icon={faSitemap} className='group-hover:!text-primary shrink-0' />
+                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                             Master Data
                                                         </span>
                                                     </div>
@@ -195,11 +195,11 @@ const Sidebar = () => {
 
 
                                         {([1, 2, 3, 4, 5, 10].includes(CurrentUser?.role_id)) && (
-                                            <li className="menu nav-item">
+                                            <li className="nav-item menu">
                                                 <button type="button" className={`${currentMenu === 'lpse' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('lpse')}>
                                                     <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faNetworkWired} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        <FontAwesomeIcon icon={faNetworkWired} className='group-hover:!text-primary shrink-0' />
+                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                             LPSE
                                                         </span>
                                                     </div>
@@ -209,7 +209,7 @@ const Sidebar = () => {
                                                 </button>
 
                                                 <AnimateHeight duration={300} height={currentMenu === 'lpse' ? 'auto' : 0}>
-                                                    <ul className="sub-menu text-gray-500">
+                                                    <ul className="text-gray-500 sub-menu">
                                                         <li>
                                                             <Link href="/lpse">
                                                                 Dashboard
@@ -235,11 +235,11 @@ const Sidebar = () => {
                                         )}
 
 
-                                        {/* <li className="menu nav-item">
+                                        {/* <li className="nav-item menu">
                                         <button type="button" className={`${currentMenu === 'master-urusan-kegiatan' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('master-urusan-kegiatan')}>
                                             <div className="flex items-center">
-                                                <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
-                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                <FontAwesomeIcon icon={faSitemap} className='group-hover:!text-primary shrink-0' />
+                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                     Master Urusan
                                                 </span>
                                             </div>
@@ -249,7 +249,7 @@ const Sidebar = () => {
                                         </button>
 
                                         <AnimateHeight duration={300} height={currentMenu === 'master-urusan-kegiatan' ? 'auto' : 0}>
-                                            <ul className="sub-menu text-gray-500">
+                                            <ul className="text-gray-500 sub-menu">
                                                 <li>
                                                     <Link href="/master/urusan">
                                                         Urusan
@@ -280,11 +280,11 @@ const Sidebar = () => {
                                     </li> */}
 
                                         {/* {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <button type="button" className={`${currentMenu === 'master-indikator-kinerja' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('master-indikator-kinerja')}>
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faIndent} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faIndent} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Indikator Kinerja
                                                     </span>
                                                 </div>
@@ -294,7 +294,7 @@ const Sidebar = () => {
                                             </button>
 
                                             <AnimateHeight duration={300} height={currentMenu === 'master-indikator-kinerja' ? 'auto' : 0}>
-                                                <ul className="sub-menu text-gray-500">
+                                                <ul className="text-gray-500 sub-menu">
                                                     <li>
                                                         <Link href="/master/indikator-kinerja/kegiatan">
                                                             Indikator Kegiatan
@@ -311,11 +311,11 @@ const Sidebar = () => {
                                     )} */}
 
                                         {/* {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <button type="button" className={`${currentMenu === 'kode-rekening' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('kode-rekening')}>
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faFileInvoiceDollar} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faFileInvoiceDollar} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Kode Rekening
                                                     </span>
                                                 </div>
@@ -325,7 +325,7 @@ const Sidebar = () => {
                                             </button>
 
                                             <AnimateHeight duration={300} height={currentMenu === 'kode-rekening' ? 'auto' : 0}>
-                                                <ul className="sub-menu text-gray-500">
+                                                <ul className="text-gray-500 sub-menu">
                                                     {([1, 2, 4, 7].includes(CurrentUser?.role_id)) && (
                                                         <li>
                                                             <Link href="/rekening">
@@ -346,11 +346,11 @@ const Sidebar = () => {
                                     )} */}
 
                                         {/* {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <button type="button" className={`${currentMenu === 'ref-data' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('ref-data')}>
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faRegistered} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faRegistered} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Referensi
                                                     </span>
                                                 </div>
@@ -360,7 +360,7 @@ const Sidebar = () => {
                                             </button>
 
                                             <AnimateHeight duration={300} height={currentMenu === 'ref-data' ? 'auto' : 0}>
-                                                <ul className="sub-menu text-gray-500">
+                                                <ul className="text-gray-500 sub-menu">
                                                     {([1, 2].includes(CurrentUser?.role_id)) && (
                                                         <li>
                                                             <Link href="/reference/periode">
@@ -403,11 +403,11 @@ const Sidebar = () => {
 
                                         {/* {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
                                         <>
-                                            <li className="menu nav-item">
+                                            <li className="nav-item menu">
                                                 <button type="button" className={`${currentMenu === 'head-tujuan-sasaran' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('head-tujuan-sasaran')}>
                                                     <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faSitemap} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        <FontAwesomeIcon icon={faSitemap} className='group-hover:!text-primary shrink-0' />
+                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                             Tujuan & Sasaran
                                                         </span>
                                                     </div>
@@ -417,7 +417,7 @@ const Sidebar = () => {
                                                 </button>
 
                                                 <AnimateHeight duration={300} height={currentMenu === 'head-tujuan-sasaran' ? 'auto' : 0}>
-                                                    <ul className="sub-menu text-gray-500">
+                                                    <ul className="text-gray-500 sub-menu">
                                                         {([1, 2, 3, 6].includes(CurrentUser?.role_id)) && (
                                                             <>
                                                                 <li>
@@ -471,11 +471,11 @@ const Sidebar = () => {
                                                 </AnimateHeight>
                                             </li>
 
-                                            <li className="menu nav-item">
+                                            <li className="nav-item menu">
                                                 <button type="button" className={`${currentMenu === 'head-pohon-kinerja' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('head-pohon-kinerja')}>
                                                     <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faTree} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        <FontAwesomeIcon icon={faTree} className='group-hover:!text-primary shrink-0' />
+                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                             Pohon Kinerja
                                                         </span>
                                                     </div>
@@ -485,7 +485,7 @@ const Sidebar = () => {
                                                 </button>
 
                                                 <AnimateHeight duration={300} height={currentMenu === 'head-pohon-kinerja' ? 'auto' : 0}>
-                                                    <ul className="sub-menu text-gray-500">
+                                                    <ul className="text-gray-500 sub-menu">
 
                                                         <>
                                                             <li>
@@ -501,11 +501,11 @@ const Sidebar = () => {
                                     )} */}
 
                                         {/* {([1, 2, 4, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <Link href="/tagging-sumber-dana" className="group">
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faTags} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark text-xs">
+                                                    <FontAwesomeIcon icon={faTags} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black text-xs dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Tagging Sumber Dana
                                                     </span>
                                                 </div>
@@ -514,11 +514,11 @@ const Sidebar = () => {
                                     )} */}
 
                                         {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <Link href="/rpjmd" className="group">
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faRust} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faRust} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         RPJMD
                                                     </span>
                                                 </div>
@@ -527,11 +527,11 @@ const Sidebar = () => {
                                     )} */}
 
                                         {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <Link href="/renstra" className="group">
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faFileInvoice} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faFileInvoice} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Renstra Induk
                                                     </span>
                                                 </div>
@@ -540,11 +540,11 @@ const Sidebar = () => {
                                     )} */}
 
                                         {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <Link href="/renja" className="group">
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faFileContract} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faFileContract} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Renstra Perubahan
                                                     </span>
                                                 </div>
@@ -554,28 +554,28 @@ const Sidebar = () => {
 
                                         {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
                                             <>
-                                                <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                                    <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
+                                                    <IconMinus className="flex-none h-5 w-4 hidden" />
                                                     <span>
                                                         REALISASI
                                                     </span>
                                                 </h2>
-                                                <li className="menu nav-item">
+                                                <li className="nav-item menu">
                                                     <Link href="/kinerja" className="group">
                                                         <div className="flex items-center">
-                                                            <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
-                                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                            <FontAwesomeIcon icon={faEnvelopeOpenText} className='group-hover:!text-primary shrink-0' />
+                                                            <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                                 Realisasi Program
                                                             </span>
                                                         </div>
                                                     </Link>
                                                 </li>
                                                 {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                                    <li className="menu nav-item">
+                                                    <li className="nav-item menu">
                                                         <Link href="/realisasi/tujuan-sasaran" className="group">
                                                             <div className="flex items-center">
-                                                                <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
-                                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                                <FontAwesomeIcon icon={faEnvelopeOpenText} className='group-hover:!text-primary shrink-0' />
+                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                                     Realisasi Tujuan Sasaran
                                                                 </span>
                                                             </div>
@@ -583,10 +583,10 @@ const Sidebar = () => {
                                                     </li>
                                                 )}
                                                 {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                                    <li className="menu nav-item">
+                                                    <li className="nav-item menu">
                                                         <Link href="/realisasi/tujuan-sasaran-perangkat-daerah" className="group">
                                                             <div className="flex items-center">
-                                                                <FontAwesomeIcon icon={faEnvelopeOpenText} className='shrink-0 group-hover:!text-primary' />
+                                                                <FontAwesomeIcon icon={faEnvelopeOpenText} className='group-hover:!text-primary shrink-0' />
                                                                 <span className={`text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark ${([1, 2, 3, 6].includes(CurrentUser?.role_id)) ? "text-xs whitespace-normal" : ""}`}>
                                                                     Realisasi Tujuan Sasaran
                                                                     {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) ? " Perangkat Daerah" : ""}
@@ -600,19 +600,19 @@ const Sidebar = () => {
 
                                         {([1, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                             <>
-                                                <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                                    <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
+                                                    <IconMinus className="flex-none h-5 w-4 hidden" />
                                                     <span>
                                                         BPKAD
                                                     </span>
                                                 </h2>
 
                                                 {([1, 2, 4].includes(CurrentUser?.role_id)) && (
-                                                    <li className="menu nav-item">
+                                                    <li className="nav-item menu">
                                                         <Link href="/bpkad/import" className="group">
                                                             <div className="flex items-center">
-                                                                <FontAwesomeIcon icon={faCloudUploadAlt} className='shrink-0 group-hover:!text-primary' />
-                                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                                <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
+                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                                     Import SIPD
                                                                 </span>
                                                             </div>
@@ -620,11 +620,11 @@ const Sidebar = () => {
                                                     </li>
                                                 )}
                                                 {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
-                                                    <li className="menu nav-item">
+                                                    <li className="nav-item menu">
                                                         <Link href="/accountancy" className="group">
                                                             <div className="flex items-center">
-                                                                <FontAwesomeIcon icon={faMoneyBills} className='shrink-0 group-hover:!text-primary' />
-                                                                <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                                <FontAwesomeIcon icon={faMoneyBills} className='group-hover:!text-primary shrink-0' />
+                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                                     Akuntansi
                                                                 </span>
                                                             </div>
@@ -634,28 +634,28 @@ const Sidebar = () => {
                                             </>
                                         )}
 
-                                        <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                            <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
+                                            <IconMinus className="flex-none h-5 w-4 hidden" />
                                             <span>
                                                 Laporan
                                             </span>
                                         </h2>
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <Link href="/report" className="group">
                                                 <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faClipboardCheck} className='shrink-0 group-hover:!text-primary' />
-                                                    <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                    <FontAwesomeIcon icon={faClipboardCheck} className='group-hover:!text-primary shrink-0' />
+                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                         Program Kegiatan
                                                     </span>
                                                 </div>
                                             </Link>
                                         </li>
                                         {([1, 4, 9, 12].includes(CurrentUser?.role_id)) && (
-                                            <li className="menu nav-item">
+                                            <li className="nav-item menu">
                                                 <Link href="/accountancy/report" className="group">
                                                     <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faClipboardCheck} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        <FontAwesomeIcon icon={faClipboardCheck} className='group-hover:!text-primary shrink-0' />
+                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                             Akuntansi
                                                         </span>
                                                     </div>
@@ -665,18 +665,18 @@ const Sidebar = () => {
 
                                         {([1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id)) && (
                                             <>
-                                                <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                                    <IconMinus className="hidden h-5 w-4 flex-none" />
+                                                <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
+                                                    <IconMinus className="flex-none h-5 w-4 hidden" />
                                                     <span>
                                                         Manajemen
                                                     </span>
                                                 </h2>
 
-                                                <li className="menu nav-item">
+                                                <li className="nav-item menu">
                                                     <button type="button" className={`${currentMenu === 'user-management' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('user-management')}>
                                                         <div className="flex items-center">
-                                                            <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
-                                                            <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                            <IconMenuUsers className="group-hover:!text-primary shrink-0" />
+                                                            <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                                 Manajemen Pengguna
                                                             </span>
                                                         </div>
@@ -686,7 +686,7 @@ const Sidebar = () => {
                                                     </button>
 
                                                     <AnimateHeight duration={300} height={currentMenu === 'user-management' ? 'auto' : 0}>
-                                                        <ul className="sub-menu text-gray-500">
+                                                        <ul className="text-gray-500 sub-menu">
                                                             {([1, 2, 3, 4, 5, 9].includes(CurrentUser?.role_id)) && (
                                                                 <li>
                                                                     <Link href="/users">
@@ -708,11 +708,11 @@ const Sidebar = () => {
                                         )}
 
                                         {([1, 2, 3, 4, 5].includes(CurrentUser?.role_id)) && (
-                                            <li className="menu nav-item">
+                                            <li className="nav-item menu">
                                                 <Link href="/instances" className="group">
                                                     <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faBriefcase} className='shrink-0 group-hover:!text-primary' />
-                                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
+                                                        <FontAwesomeIcon icon={faBriefcase} className='group-hover:!text-primary shrink-0' />
+                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
                                                             Perangkat Daerah
                                                         </span>
                                                     </div>
@@ -725,13 +725,13 @@ const Sidebar = () => {
                             </ul>
                         ) : (
                             <>
-                                <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
+                                <ul className="p-4 font-semibold py-0 relative space-y-0.5">
                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((item, index) => (
-                                        <li className="menu nav-item">
+                                        <li className="nav-item menu">
                                             <Link href="#" className="group">
-                                                <div className="flex items-center w-full gap-x-2">
-                                                    <div className="grow animate-pulse h-7 w-9 rounded-full bg-slate-200"></div>
-                                                    <div className="grow-0 animate-pulse h-7 rounded w-full bg-slate-200"></div>
+                                                <div className="flex w-full gap-x-2 items-center">
+                                                    <div className="bg-slate-200 h-7 rounded-full w-9 animate-pulse grow"></div>
+                                                    <div className="bg-slate-200 h-7 rounded w-full animate-pulse grow-0"></div>
                                                 </div>
                                             </Link>
                                         </li>
@@ -742,9 +742,9 @@ const Sidebar = () => {
                         )}
                     </PerfectScrollbar>
 
-                    <div className="px-2 pt-2">
+                    <div className="pt-2 px-2">
                         <Tippy content="Versi Aplikasi">
-                            <div className="text-center text-xs truncate font-semibold cursor-pointer hover:text-primary transition-all duration-300">
+                            <div className="text-center text-xs cursor-pointer duration-300 font-semibold hover:text-primary transition-all truncate">
                                 V. {APP_VERSION}
                             </div>
                         </Tippy>

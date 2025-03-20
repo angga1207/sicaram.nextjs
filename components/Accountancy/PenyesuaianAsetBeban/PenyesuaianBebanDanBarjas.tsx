@@ -275,76 +275,76 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 left-0 z-[1]'>
+                        <tr className='left-0 sticky top-0 z-[1]'>
                             {([9].includes(CurrentUser?.role_id) == false) && (
-                                <th className='whitespace-nowrap border'>
+                                <th className='border whitespace-nowrap'>
                                     Nama Perangkat Daerah
                                 </th>
                             )}
-                            <th className='whitespace-nowrap border'>
+                            <th className='border whitespace-nowrap'>
                                 Kode Rekening
                             </th>
-                            <th className='whitespace-nowrap border sticky top-0 left-0 bg-slate-100 dark:bg-slate-800'>
+                            <th className='bg-slate-100 border dark:bg-slate-800 left-0 sticky top-0 whitespace-nowrap'>
                                 Nama Barang / Pekerjaan
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='border whitespace-nowrap'>
                                 Nomor Kontrak
                             </th>
-                            <th className='whitespace-nowrap border'>
+                            <th className='border whitespace-nowrap'>
                                 Nomor SP2D
                             </th>
 
-                            <th className='!bg-white border !px-2'></th>
+                            <th className='border !bg-white !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Pegawai
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Persediaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Jasa
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Pemeliharaan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Perjalanan Dinas
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Hibah
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Beban Uang / Jasa Diberikan
                             </th>
-                            <th className='whitespace-nowrap border bg-yellow-200'>
+                            <th className='bg-yellow-200 border whitespace-nowrap'>
                                 Jumlah Penyesuaian
                             </th>
 
-                            <th className='!bg-white border !px-2'></th>
+                            <th className='border !bg-white !px-2'></th>
 
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Pegawai
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Persediaan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Jasa
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Pemeliharaan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Perjalanan Dinas
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Hibah
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Beban Uang / Jasa Diberikan
                             </th>
-                            <th className='whitespace-nowrap border bg-green-200'>
+                            <th className='bg-green-200 border whitespace-nowrap'>
                                 Jumlah Penyesuaian
                             </th>
 
@@ -359,7 +359,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                         {([9].includes(CurrentUser?.role_id) == false) && (
                                             <td className='border'>
                                                 {/* Perangkat Daerah */}
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex gap-2 items-center">
                                                     <Select placeholder="Pilih Perangkat Daerah"
                                                         className='min-w-[300px]'
                                                         onChange={(e: any) => {
@@ -399,7 +399,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                         )}
                                         <td className='border'>
                                             {/* Kode Rekening */}
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     className='w-[400px]'
                                                     isDisabled={isSaving == true}
@@ -464,8 +464,8 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                                             }
                                                                         });
                                                                 }}
-                                                                className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                <IconTrash className='w-4 h-4' />
+                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                <IconTrash className='h-4 w-4' />
                                                             </button>
                                                         </Tippy>
                                                     </div>
@@ -473,7 +473,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
 
                                             </div>
                                         </td>
-                                        <td className='border sticky left-0 bg-slate-50 dark:bg-slate-900'>
+                                        <td className='bg-slate-50 border dark:bg-slate-900 left-0 sticky'>
                                             {/* Nama Barang / Pekerjaan */}
                                             <div className="">
                                                 <div className="flex">
@@ -544,7 +544,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                             {/* Separator */}
                                         </td>
 
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Pegawai */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -560,7 +560,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Persediaan */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -576,7 +576,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Jasa */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -592,7 +592,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Pemeliharaan */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -608,7 +608,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Perjalanan Dinas */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -624,7 +624,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Hibah */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -640,7 +640,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Beban Lain-lain */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -656,7 +656,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-yellow-200'>
+                                        <td className='bg-yellow-200 border'>
                                             {/* Jumlah Penyesuaian */}
                                             <InputRupiah
                                                 // isDisabled={isSaving == true}
@@ -678,7 +678,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                             {/* Separator */}
                                         </td>
 
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Pegawai */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -694,7 +694,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Persediaan */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -710,7 +710,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Jasa */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -726,7 +726,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Pemeliharaan */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -742,7 +742,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Perjalanan Dinas */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -758,7 +758,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Hibah */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -774,7 +774,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Beban Lain-lain */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -790,7 +790,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border bg-green-200'>
+                                        <td className='bg-green-200 border'>
                                             {/* Jumlah Penyesuaian */}
                                             <InputRupiah
                                                 // isDisabled={isSaving == true}
@@ -815,60 +815,60 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
 
                         <tr className='!bg-slate-400'>
                             <td colSpan={([9].includes(CurrentUser?.role_id) == false) ? 4 : 3} className='!bg-slate-300'></td>
-                            <td className='sticky left-0 text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold left-0 sticky'>
                                 Jumlah :
                             </td>
                             <td colSpan={1} className='!bg-slate-300'></td>
 
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_pegawai)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_persediaan)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_jasa)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_pemeliharaan)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_perjalanan_dinas)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_hibah)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_lain_lain)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_jumlah_penyesuaian)}
                             </td>
 
                             <td></td>
 
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_pegawai)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_persediaan)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_jasa)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_pemeliharaan)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_perjalanan_dinas)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_hibah)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_lain_lain)}
                             </td>
-                            <td className='text-end font-semibold !bg-slate-300'>
+                            <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_jumlah_penyesuaian)}
                             </td>
 
@@ -877,8 +877,8 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -886,14 +886,14 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -913,7 +913,7 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -928,11 +928,11 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     {dataInput.length > 0 && (
                         <>
                             <DownloadButtons
@@ -941,6 +941,9 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                 params={{
                                     type: 'beban_barjas',
                                     category: 'padb',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
                                 afterClick={(e: any) => {
                                     if (e === 'error') {
@@ -973,8 +976,8 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                         addDataInput()
                                     }
                                 }}
-                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                 Tambah Data
                             </button>
 
@@ -983,15 +986,15 @@ const PenyesuaianBebanDanBarjas = (data: any) => {
                                     onClick={(e) => {
                                         save()
                                     }}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
                                     Simpan
                                 </button>
                             ) : (
                                 <button type="button"
                                     disabled={true}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
                                     Menyimpan..
                                 </button>
                             )}

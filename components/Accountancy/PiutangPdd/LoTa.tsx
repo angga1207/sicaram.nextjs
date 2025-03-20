@@ -14,6 +14,7 @@ import { deleteLoTa, getLoTa, storeLoTa } from '@/apis/Accountancy/PiutangPdd';
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
 import { isEmpty, min } from 'lodash';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -261,49 +262,49 @@ const LoTa = (data: any) => {
             <div className="table-responsive h-[calc(100vh-400px)] pb-5">
                 <table className="table-striped">
                     <thead>
-                        <tr className='sticky top-0 bg-slate-900 text-white z-[1]'>
+                        <tr className='bg-slate-900 text-white sticky top-0 z-[1]'>
                             {([9].includes(CurrentUser?.role_id) == false) && (
-                                <th rowSpan={2} className='text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]'>
+                                <th rowSpan={2} className='bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap'>
                                     Nama Perangkat Daerah
                                 </th>
                             )}
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Uraian
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Anggaran Perubahan
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Laporan Realisasi Anggaran (LRA)
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 % (LRA)
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Piutang Awal
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Piutang Akhir
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 PDD Awal TA {year} (Kredit)
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 PDD Akhir TA {year} (Debet)
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Laporan Operasional
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 % LO
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Penambahan / Pengurangan LO
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Reklas & Koreksi LO
                             </th>
-                            <th rowSpan={2} className="text-center whitespace-nowrap border bg-slate-900 text-white min-w-[200px]">
+                            <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
                                 Perbedaan LO & LRA
                             </th>
                         </tr>
@@ -357,7 +358,7 @@ const LoTa = (data: any) => {
                                                 )}
                                                 <td className='border'>
                                                     {/* Kode Rekening */}
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex gap-2 items-center">
                                                         <Select placeholder="Pilih Kode Rekening"
                                                             className='min-w-[400px]'
                                                             classNamePrefix={'selectAngga'}
@@ -447,8 +448,8 @@ const LoTa = (data: any) => {
                                                                                     }
                                                                                 });
                                                                         }}
-                                                                        className="btn btn-danger w-8 h-8 p-0 rounded-full">
-                                                                        <IconTrash className='w-4 h-4' />
+                                                                        className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                        <IconTrash className='h-4 w-4' />
                                                                     </button>
                                                                 </Tippy>
                                                             </div>
@@ -607,7 +608,7 @@ const LoTa = (data: any) => {
                         ) : (
                             <tr>
                                 <td colSpan={12} className='border text-center'>
-                                    <div className="font-semibold text-md uppercase">
+                                    <div className="text-md font-semibold uppercase">
                                         Sedang Memuat Data
                                         <span className='dots-loading'>
                                             ...
@@ -621,13 +622,13 @@ const LoTa = (data: any) => {
                         <tfoot>
                             <tr>
                                 <td className='border p-4'></td>
-                                <td className="border p-4 bg-slate-50 dark:bg-slate-900">
+                                <td className="bg-slate-50 border p-4 dark:bg-slate-900">
                                     <div className="text-end font-semibold">
                                         Jumlah
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -637,7 +638,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -647,7 +648,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-center gap-1 font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-center text-end font-semibold gap-1 whitespace-nowrap">
                                         <div className="">
                                             {parseFloat(totalData.lra_percent)?.toFixed(2)}
                                         </div>
@@ -657,7 +658,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -667,7 +668,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -677,7 +678,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -687,7 +688,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -697,7 +698,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -707,7 +708,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-center gap-1 font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-center text-end font-semibold gap-1 whitespace-nowrap">
                                         <div className="">
                                             {parseFloat(totalData.laporan_operasional_percent)?.toFixed(2)}
                                         </div>
@@ -717,7 +718,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -727,7 +728,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -737,7 +738,7 @@ const LoTa = (data: any) => {
                                     </div>
                                 </td>
                                 <td className="border p-4">
-                                    <div className="flex justify-between font-semibold text-end whitespace-nowrap">
+                                    <div className="flex justify-between text-end font-semibold whitespace-nowrap">
                                         <div className="">
                                             Rp.
                                         </div>
@@ -752,8 +753,8 @@ const LoTa = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-between gap-4 mt-4 px-5">
-                <div className="flex items-center gap-2">
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -761,14 +762,14 @@ const LoTa = (data: any) => {
                             }
                         }}
                         disabled={page == 1}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronLeft} className='h-3 w-3 mr-1' />
                     </button>
 
                     <div className="flex align-center justify-center gap-1">
                         <input
                             type="number"
-                            className="form-input min-w-1 text-center py-0 px-1"
+                            className="form-input text-center min-w-1 px-1 py-0"
                             value={page}
                             onChange={(e: any) => {
                                 const value = e.target.value;
@@ -788,7 +789,7 @@ const LoTa = (data: any) => {
                         <div>
                             <input
                                 type="text"
-                                className="form-input min-w-1 text-center py-0 px-1"
+                                className="form-input text-center min-w-1 px-1 py-0"
                                 value={'/ ' + maxPage}
                                 readOnly={true}
                                 min={1}
@@ -803,13 +804,47 @@ const LoTa = (data: any) => {
                             }
                         }}
                         disabled={page == maxPage}
-                        className='btn btn-primary whitespace-nowrap text-xs'>
-                        <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
+                        className='btn btn-primary text-xs whitespace-nowrap'>
+                        <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
                 </div>
-                <div className="flex items-center justify-end gap-4">
+                <div className="flex justify-end gap-4 items-center">
                     {dataInput1.length > 0 && (
                         <>
+                            <DownloadButtons
+                                data={dataInput1}
+                                endpoint='/accountancy/download/excel'
+                                params={{
+                                    type: 'lota',
+                                    category: 'pendapatan_lo',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
+                                }}
+                                afterClick={(e: any) => {
+                                    if (e === 'error') {
+                                        Swal.fire({
+                                            title: 'Download Gagal!',
+                                            text: 'Terjadi kesalahan saat mendownload file.',
+                                            icon: 'error',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Download Berhasil!',
+                                            text: 'File telah berhasil didownload.',
+                                            icon: 'success',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    }
+                                }}
+                            />
                             <button type="button"
                                 disabled={isSaving == true}
                                 onClick={(e) => {
@@ -817,8 +852,8 @@ const LoTa = (data: any) => {
                                         addDataInput(1)
                                     }
                                 }}
-                                className='btn btn-primary whitespace-nowrap text-xs'>
-                                <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
+                                className='btn btn-primary text-xs whitespace-nowrap'>
+                                <FontAwesomeIcon icon={faPlus} className='h-3 w-3 mr-1' />
                                 Tambah Data
                             </button>
 
@@ -827,15 +862,15 @@ const LoTa = (data: any) => {
                                     onClick={(e) => {
                                         save()
                                     }}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
                                     Simpan
                                 </button>
                             ) : (
                                 <button type="button"
                                     disabled={true}
-                                    className='btn btn-success whitespace-nowrap text-xs'>
-                                    <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
                                     Menyimpan..
                                 </button>
                             )}
@@ -843,40 +878,6 @@ const LoTa = (data: any) => {
                     )}
                 </div>
             </div>
-
-            {/* {instance && (
-                <div className="flex items-center justify-end gap-4 mt-4 px-5">
-                    <div className="">
-                        <button type="button"
-                            disabled={isSaving == true}
-                            onClick={(e) => {
-                                addDataInput(1)
-                            }}
-                            className='btn btn-primary whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faPlus} className='w-3 h-3 mr-1' />
-                            Tambah Data
-                        </button>
-                    </div>
-
-                    {isSaving == false ? (
-                        <button type="button"
-                            onClick={(e) => {
-                                save()
-                            }}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSave} className='w-3 h-3 mr-1' />
-                            Simpan
-                        </button>
-                    ) : (
-                        <button type="button"
-                            disabled={true}
-                            className='btn btn-success whitespace-nowrap text-xs'>
-                            <FontAwesomeIcon icon={faSpinner} className='w-3 h-3 mr-1 animate-spin' />
-                            Menyimpan..
-                        </button>
-                    )}
-                </div>
-            )} */}
         </>
     );
 }
