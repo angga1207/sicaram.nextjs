@@ -107,3 +107,32 @@ export async function getReportRekening(instance: any, year: any, periode: any) 
         }
     }
 }
+
+export async function getReportByRekening(instance: any, periode: any, year: any, month: any, kodeRekeningId: any) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+
+        const res = await axios.get(baseUri + '/report/by-rekening', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance: instance,
+                year: year,
+                periode: periode,
+                month: month,
+                kd_rek: kodeRekeningId
+            }
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+

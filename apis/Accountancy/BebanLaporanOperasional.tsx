@@ -33,6 +33,30 @@ export async function getPegawai(instance: any = null, periode: any, year: any) 
     }
 }
 
+export async function calculateData(periode: any, year: any, type: any) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.post(baseUri + '/accountancy/blo/calculate', {
+            periode: periode,
+            year: year,
+            type: type,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
 export async function storePegawai(dataInput: any, periode: any, year: any) {
     try {
         const session = await getSession();

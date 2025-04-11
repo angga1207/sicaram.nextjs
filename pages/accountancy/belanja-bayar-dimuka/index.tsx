@@ -172,6 +172,8 @@ const Page = () => {
     }, [isMounted]);
 
     const [dataInput, setDataInput] = useState<any>([]);
+    const [dataInputOrigin, setDataInputOrigin] = useState<any>([]);
+    const [search, setSearch] = useState<any>('');
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -181,6 +183,7 @@ const Page = () => {
                 if (res.status === 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
+                        setDataInputOrigin(res.data);
                         const maxPage = Math.ceil(res.data.length / perPage);
                         setMaxPage(maxPage);
                     } else {
@@ -317,6 +320,35 @@ const Page = () => {
             }
         });
     }
+
+    const handleSearch = (e: any) => {
+        if (e.length > 0) {
+            setSearch(e);
+            const filteredData = dataInputOrigin.filter((item: any) => {
+                return (
+                    item.instance?.name?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.instance?.code?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.kode_rekening?.name?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.kode_rekening?.fullcode?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.kontrak_date_start?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.kontrak_date_end?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.nomor_perjanjian?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.rekanan?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.uraian?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.keterangan?.toLowerCase().includes(e.toLowerCase())
+                );
+            });
+            setDataInput(filteredData);
+            setMaxPage(Math.ceil(filteredData.length / perPage));
+            setPage(1);
+        } else {
+            setSearch(e);
+            setDataInput(dataInputOrigin);
+            setMaxPage(Math.ceil(dataInputOrigin.length / perPage));
+            setPage(1);
+        }
+    }
+
     return (
         <>
             <div className="">
@@ -833,6 +865,17 @@ const Page = () => {
                                 className='btn btn-primary whitespace-nowrap text-xs'>
                                 <FontAwesomeIcon icon={faChevronRight} className='w-3 h-3 mr-1' />
                             </button>
+
+                            <div className="">
+                                <input
+                                    type="text"
+                                    className="form-input text-xs min-w-1 py-1.5 px-2"
+                                    placeholder="Pencarian"
+                                    value={search}
+                                    onChange={(e: any) => {
+                                        handleSearch(e.target.value);
+                                    }} />
+                            </div>
                         </div>
                         <div className="flex items-center justify-end gap-4">
                             {dataInput.length > 0 && (

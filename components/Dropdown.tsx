@@ -42,14 +42,14 @@ const Dropdown = (props: any, forwardedRef: any) => {
 
     return (
         <div
-            onMouseOver={() => setVisibility(true)}
-            onMouseOut={() => setVisibility(false)}
+        // onMouseOver={() => setVisibility(true)}
+        // onMouseOut={() => setVisibility(false)}
         >
             <button
                 ref={referenceRef}
                 type="button"
                 className={props.btnClassName}
-            // onClick={() => setVisibility(!visibility)}
+                onClick={() => setVisibility(!visibility)}
             >
                 {props.button}
             </button>

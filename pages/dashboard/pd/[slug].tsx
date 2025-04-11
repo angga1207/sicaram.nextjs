@@ -192,7 +192,8 @@ const DashboardOPD = () => {
             plotOptions: {
                 radialBar: {
                     startAngle: -135,
-                    endAngle: 225,
+                    // endAngle: 225,
+                    endAngle: 135,
                     hollow: {
                         margin: 0,
                         size: '50%',
@@ -275,7 +276,8 @@ const DashboardOPD = () => {
             plotOptions: {
                 radialBar: {
                     startAngle: -135,
-                    endAngle: 225,
+                    // endAngle: 225,
+                    endAngle: 135,
                     hollow: {
                         margin: 0,
                         size: '50%',

@@ -134,7 +134,8 @@ const Index = () => {
             plotOptions: {
                 radialBar: {
                     startAngle: -135,
-                    endAngle: 225,
+                    // endAngle: 225,
+                    endAngle: 135,
                     hollow: {
                         margin: 0,
                         size: '50%',
@@ -220,7 +221,8 @@ const Index = () => {
             plotOptions: {
                 radialBar: {
                     startAngle: -135,
-                    endAngle: 225,
+                    // endAngle: 225,
+                    endAngle: 135,
                     hollow: {
                         margin: 0,
                         size: '50%',
@@ -309,11 +311,11 @@ const Index = () => {
             </div>
 
             <div className="grid md:grid-cols-8 justify-center items-center gap-x-5">
-                <div className='hidden md:block xl:col-span-4 md:col-span-4 self-start'>
+                <div className='hidden md:block xl:col-span-3 md:col-span-3 self-start'>
                     <MainMenu />
                 </div>
 
-                <div className='cols-span-4 xl:col-span-4 md:col-span-4 grid grid-cols-1 xl:grid-cols-2 gap-2'>
+                <div className='cols-span-5 xl:col-span-5 md:col-span-5 grid grid-cols-1 xl:grid-cols-2 gap-2'>
                     <div className="flex items-center justify-center">
                         <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
 
@@ -330,7 +332,7 @@ const Index = () => {
                                         </Player>
                                     </div> */}
 
-                                    <div className="absolute z-[1] top-[10%] xl:top-[10%] 2xl:top-[15%] 4xl:top-[18%] inset-x-0 group-hover:top-[5%] group-hover:xl:top-[5%] group-hover:2xl:top-[10%] group-hover:4xl:top-[13%] transition-all delay-100 duration-300">
+                                    <div className="absolute z-[1] top-[20%] xl:top-[20%] 2xl:top-[25%] 4xl:top-[28%] inset-x-0 group-hover:top-[15%] group-hover:xl:top-[15%] group-hover:2xl:top-[20%] group-hover:4xl:top-[23%] transition-all delay-100 duration-300">
                                         <Player
                                             autoplay
                                             loop
@@ -387,7 +389,7 @@ const Index = () => {
                                         </Player>
                                     </div> */}
 
-                                    <div className="absolute z-[1] top-[10%] xl:top-[10%] 2xl:top-[15%] 4xl:top-[18%] inset-x-0 group-hover:top-[5%] group-hover:xl:top-[5%] group-hover:2xl:top-[10%] group-hover:4xl:top-[13%] transition-all delay-100 duration-300">
+                                    <div className="absolute z-[1] top-[20%] xl:top-[20%] 2xl:top-[25%] 4xl:top-[28%] inset-x-0 group-hover:top-[15%] group-hover:xl:top-[15%] group-hover:2xl:top-[20%] group-hover:4xl:top-[23%] transition-all delay-100 duration-300">
                                         <Player
                                             autoplay
                                             loop

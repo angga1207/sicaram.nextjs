@@ -24,7 +24,7 @@ const MainMenu = () => {
                 {
                     id: 1,
                     name: 'Master Urusan',
-                    icon: <IconMenuWidgets className='w-14 h-14 text-success' />,
+                    icon: <IconMenuWidgets className='w-10 h-10 text-success' />,
                     url: '#',
                     active: true,
                     roles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 12],
@@ -59,7 +59,7 @@ const MainMenu = () => {
                 {
                     id: 2,
                     name: 'Indikator Kinerja',
-                    icon: <IconMenuTodo className='w-14 h-14 text-success' />,
+                    icon: <IconMenuTodo className='w-10 h-10 text-success' />,
                     url: '#',
                     active: true,
                     roles: [1, 2, 3, 4, 5, 9],
@@ -79,7 +79,7 @@ const MainMenu = () => {
                 {
                     id: 3,
                     name: 'Kode Rekening',
-                    icon: <IconMenuInvoice className='w-14 h-14 text-success' />,
+                    icon: <IconMenuInvoice className='w-10 h-10 text-success' />,
                     url: '#',
                     active: true,
                     roles: [1, 2, 3, 4, 6, 7],
@@ -100,7 +100,7 @@ const MainMenu = () => {
                     id: 4,
                     name: 'Referensi',
                     roles: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                    icon: <IconMenuWidgets className='w-14 h-14 text-success' />,
+                    icon: <IconMenuWidgets className='w-10 h-10 text-success' />,
                     url: '#',
                     active: true,
                     childs: [
@@ -135,7 +135,7 @@ const MainMenu = () => {
                     id: 5,
                     name: 'Tujuan & Sasaran',
                     roles: [1, 2, 3, 6, 9],
-                    icon: <FontAwesomeIcon icon={faArrowUpRightDots} className='w-14 h-14 text-success' />,
+                    icon: <FontAwesomeIcon icon={faArrowUpRightDots} className='w-10 h-10 text-success' />,
                     url: '#',
                     active: true,
                     childs: [
@@ -175,7 +175,7 @@ const MainMenu = () => {
                     id: 6,
                     name: 'Pohon Kinerja',
                     roles: [1, 2, 3, 6, 9],
-                    icon: <FontAwesomeIcon icon={faTree} className='w-14 h-14 text-success' />,
+                    icon: <FontAwesomeIcon icon={faTree} className='w-10 h-10 text-success' />,
                     url: '/pohon-kinerja',
                     active: true,
                     childs: [],
@@ -184,7 +184,7 @@ const MainMenu = () => {
                     id: 7,
                     name: 'Tagging Sumber Dana',
                     roles: [1, 2, 4, 7, 9],
-                    icon: <FontAwesomeIcon icon={faTags} className='w-12 h-12 text-success' />,
+                    icon: <FontAwesomeIcon icon={faTags} className='w-8 h-8 text-success' />,
                     url: '/tagging-sumber-dana',
                     active: true,
                     childs: [],
@@ -193,7 +193,7 @@ const MainMenu = () => {
                     id: 8,
                     name: 'RPJMD',
                     roles: [1, 2, 4, 7, 9],
-                    icon: <FontAwesomeIcon icon={faMoneyCheckAlt} className='w-14 h-14 text-success' />,
+                    icon: <FontAwesomeIcon icon={faMoneyCheckAlt} className='w-10 h-10 text-success' />,
                     url: '/rpjmd',
                     active: true,
                     childs: [],
@@ -202,7 +202,7 @@ const MainMenu = () => {
                     id: 9,
                     name: 'Renstra Induk',
                     roles: [1, 2, 4, 7, 9],
-                    icon: <FontAwesomeIcon icon={faCoins} className='w-14 h-14 text-success' />,
+                    icon: <FontAwesomeIcon icon={faCoins} className='w-8 h-8 text-success' />,
                     url: '/renstra',
                     active: true,
                     childs: [],
@@ -211,7 +211,7 @@ const MainMenu = () => {
                     id: 10,
                     name: 'Renstra Perubahan',
                     roles: [1, 2, 4, 7, 9],
-                    icon: <FontAwesomeIcon icon={faCoins} className='w-12 h-12 text-success' />,
+                    icon: <FontAwesomeIcon icon={faCoins} className='w-8 h-8 text-success' />,
                     url: '/renja',
                     active: true,
                     childs: [],
@@ -220,7 +220,7 @@ const MainMenu = () => {
                     id: 11,
                     name: 'Akuntansi',
                     roles: [1, 2, 4, 9, 12],
-                    icon: <FontAwesomeIcon icon={faMoneyBills} className='w-14 h-14 text-success' />,
+                    icon: <FontAwesomeIcon icon={faMoneyBills} className='w-9 h-9 text-success' />,
                     url: '/accountancy',
                     active: true,
                     childs: [],
@@ -229,7 +229,7 @@ const MainMenu = () => {
                     id: 12,
                     name: 'Realisasi',
                     roles: [1, 2, 3, 4, 6, 7, 9],
-                    icon: <FontAwesomeIcon icon={faClipboardCheck} className='w-12 h-12 text-success' />,
+                    icon: <FontAwesomeIcon icon={faClipboardCheck} className='w-8 h-8 text-success' />,
                     url: '#',
                     active: true,
                     childs: [
@@ -258,11 +258,11 @@ const MainMenu = () => {
         <>
 
             {!selectedMenu && (
-                <div className="grid grid-cols-2 md:grid-cols-4 justify-start items-start gap-4 h-[500px] overflow-y-auto overflow-x-hidden pr-4 pb-4 pl-1 pt-1">
+                <div className="grid grid-cols-2 md:grid-cols-4 justify-start items-start gap-2 h-[500px] overflow-y-auto overflow-x-hidden pr-4 pb-4 pl-1 pt-1">
                     {mainMenu?.map((item: any, index: number) => (
                         <>
                             {item.url == '#' && (
-                                <div className={`panel md:h-[170px] shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer hover:bg-green-100 w-full flex items-center justify-center`}
+                                <div className={`transition-all duration-300 cursor-pointer hover:text-success w-full flex items-center justify-center`}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         setSelectedMenu(item);
@@ -270,17 +270,17 @@ const MainMenu = () => {
                                 >
                                     <div className="flex items-center justify-center flex-col">
                                         {item.icon}
-                                        <div className='mt-2 font-semibold text-md text-center text-success'>
+                                        <div className='mt-2 font-semibold text-md text-center'>
                                             {item.name}
                                         </div>
                                     </div>
                                 </div>
                             )}
                             {item.url != '#' && (
-                                <Link href={item.url} className={`panel md:h-[170px] shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer hover:bg-green-100 w-full flex items-center justify-center`}>
+                                <Link href={item.url} className={`transition-all duration-300 cursor-pointer hover:text-success w-full flex items-center justify-center`}>
                                     <div className="flex items-center justify-center flex-col">
                                         {item.icon}
-                                        <div className='mt-2 font-semibold text-lg text-center text-success'>
+                                        <div className='mt-2 font-semibold text-lg text-center'>
                                             {item.name}
                                         </div>
                                     </div>

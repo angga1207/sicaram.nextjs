@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.30";
+    const APP_VERSION = "2.5b.31";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -637,7 +637,7 @@ const Sidebar = () => {
                                         <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
                                             <IconMinus className="flex-none h-5 w-4 hidden" />
                                             <span>
-                                                Laporan
+                                                Report System
                                             </span>
                                         </h2>
                                         <li className="nav-item menu">
@@ -645,7 +645,7 @@ const Sidebar = () => {
                                                 <div className="flex items-center">
                                                     <FontAwesomeIcon icon={faClipboardCheck} className='group-hover:!text-primary shrink-0' />
                                                     <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Program Kegiatan
+                                                        Laporan
                                                     </span>
                                                 </div>
                                             </Link>

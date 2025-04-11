@@ -103,6 +103,8 @@ const MutasiAset = (data: any) => {
     }, [isMounted, paramData]);
 
     const [dataInput, setDataInput] = useState<any>([]);
+    const [dataInputOrigin, setDataInputOrigin] = useState<any>([]);
+    const [search, setSearch] = useState<any>('');
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -134,6 +136,7 @@ const MutasiAset = (data: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         setDataInput(res.data);
+                        setDataInputOrigin(res.data);
                         const maxPage = Math.ceil(res.data.length / perPage);
                         setMaxPage(maxPage);
                     } else {
@@ -277,6 +280,30 @@ const MutasiAset = (data: any) => {
                 showAlert('error', 'Data gagal dihapus');
             }
         });
+    }
+
+    const handleSearch = (e: any) => {
+        if (e.length > 0) {
+            setSearch(e);
+            const filteredData = dataInputOrigin.filter((item: any) => {
+                return (
+                    item.from_instance_name?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.bast_date?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.bast_number?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.kelompok_aset?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.nama_barang?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.to_instance_name?.toLowerCase().includes(e.toLowerCase())
+                );
+            });
+            setDataInput(filteredData);
+            setMaxPage(Math.ceil(filteredData.length / perPage));
+            setPage(1);
+        } else {
+            setSearch(e);
+            setDataInput(dataInputOrigin);
+            setMaxPage(Math.ceil(dataInputOrigin.length / perPage));
+            setPage(1);
+        }
     }
 
     return (
@@ -1459,6 +1486,17 @@ const MutasiAset = (data: any) => {
                         className='btn btn-primary text-xs whitespace-nowrap'>
                         <FontAwesomeIcon icon={faChevronRight} className='h-3 w-3 mr-1' />
                     </button>
+
+                    <div className="">
+                        <input
+                            type="text"
+                            className="form-input text-xs min-w-1 py-1.5 px-2"
+                            placeholder="Pencarian"
+                            value={search}
+                            onChange={(e: any) => {
+                                handleSearch(e.target.value);
+                            }} />
+                    </div>
                 </div>
                 <div className="flex justify-end gap-4 items-center">
                     {dataInput.length > 0 && (
