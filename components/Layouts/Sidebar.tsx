@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.31";
+    const APP_VERSION = "2.5b.32";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -613,7 +613,19 @@ const Sidebar = () => {
                                                             <div className="flex items-center">
                                                                 <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
                                                                 <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                                    Import SIPD
+                                                                    Upload Rekap 5
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </li>
+                                                )}
+                                                {([1, 2, 4].includes(CurrentUser?.role_id)) && (
+                                                    <li className="nav-item menu">
+                                                        <Link href="/bpkad/realisasi" className="group">
+                                                            <div className="flex items-center">
+                                                                <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
+                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
+                                                                    Upload Realisasi
                                                                 </span>
                                                             </div>
                                                         </Link>
@@ -727,7 +739,9 @@ const Sidebar = () => {
                             <>
                                 <ul className="p-4 font-semibold py-0 relative space-y-0.5">
                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((item, index) => (
-                                        <li className="nav-item menu">
+                                        <li
+                                            key={`item-sidebar-${index}`}
+                                            className="nav-item menu">
                                             <Link href="#" className="group">
                                                 <div className="flex w-full gap-x-2 items-center">
                                                     <div className="bg-slate-200 h-7 rounded-full w-9 animate-pulse grow"></div>

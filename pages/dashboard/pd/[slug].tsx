@@ -1,7 +1,7 @@
 import { IRootState } from '@/store';
 import { useRouter } from 'next/router';
 import { setPageTitle, toggleShowMoney } from '@/store/themeConfigSlice';
-import { faAngleDoubleDown, faBriefcase, faCartArrowDown, faChartLine, faClock, faExclamationTriangle, faExternalLinkAlt, faFileSignature, faGlobeAsia, faNoteSticky, faPenClip, faPercent, faProjectDiagram, faSackDollar, faShare, faSign, faStar, faSuitcase, faTachometerAltAverage, faThumbsUp, faToolbox, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleDown, faBoxesPacking, faBriefcase, faCartArrowDown, faChartLine, faClock, faExclamationTriangle, faExternalLinkAlt, faFileSignature, faGlobeAsia, faNoteSticky, faPenClip, faPercent, faProjectDiagram, faSackDollar, faShare, faSign, faStar, faSuitcase, faTachometerAltAverage, faThumbsUp, faToolbox, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -2088,28 +2088,47 @@ const DashboardOPD = () => {
             </div>
 
             <div className="mt-5 p-0">
-                <div className="w-full flex items-center flex-wrap">
+                <div className="w-full flex items-center flex-wrap bg-white rounded-t">
                     <button
                         onClick={() => {
                             setTab2('capaian')
                         }}
-                        className={`${tab2 === 'capaian' ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tl grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full max-w-full`}
+                        className={`${tab2 === 'capaian' ? 'text-white !outline-none before:!w-full bg-blue-500 w-auto' : 'w-20'} rounded-tl text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full max-w-full transition-all duration-300`}
                     >
                         <FontAwesomeIcon icon={faChartLine} className='w-5 h-5' />
-                        <span className='font-semibold whitespace-nowrap text-lg uppercase'>
-                            Capaian Kinerja & Keuangan
-                        </span>
+                        {tab2 === 'capaian' && (
+                            <span className='font-semibold whitespace-nowrap text-lg uppercase'>
+                                Capaian Kinerja & Keuangan
+                            </span>
+                        )}
                     </button>
+
+                    {/* <button
+                        onClick={() => {
+                            setTab2('paket')
+                        }}
+                        className={`${tab2 === 'paket' ? 'text-white !outline-none before:!w-full bg-blue-500 w-auto' : 'w-20'} text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full transition-all duration-300`}
+                    >
+                        <FontAwesomeIcon icon={faBoxesPacking} className='w-5 h-5' />
+                        {tab2 === 'paket' && (
+                            <span className='font-semibold whitespace-nowrap text-lg uppercase'>
+                                Paket Pekerjaan
+                            </span>
+                        )}
+                    </button> */}
+
                     <button
                         onClick={() => {
                             setTab2('tujuan-sasaran')
                         }}
-                        className={`${tab2 === 'tujuan-sasaran' ? 'text-white !outline-none before:!w-full bg-blue-500' : ''} rounded-tr grow text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full`}
+                        className={`${tab2 === 'tujuan-sasaran' ? 'text-white !outline-none before:!w-full bg-blue-500 w-auto' : 'w-20'} rounded-tr text-blue-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-blue-500 before:transition-all before:duration-700 hover:before:w-full transition-all duration-300`}
                     >
                         <FontAwesomeIcon icon={faProjectDiagram} className='w-5 h-5' />
-                        <span className='font-semibold whitespace-nowrap text-lg uppercase'>
-                            Tujuan & Sasaran
-                        </span>
+                        {tab2 === 'tujuan-sasaran' && (
+                            <span className='font-semibold whitespace-nowrap text-lg uppercase'>
+                                Tujuan & Sasaran
+                            </span>
+                        )}
                     </button>
                 </div>
 
@@ -2448,7 +2467,7 @@ const DashboardOPD = () => {
                                                                     {(selectedProgram?.summary?.realisasi_kinerja ||
                                                                         selectedProgram?.summary?.realisasi_kinerja === 0) ? (
                                                                         <>
-                                                                            {selectedProgram?.summary?.realisasi_kinerja.toFixed(2)} %
+                                                                            {selectedProgram?.summary?.realisasi_kinerja?.toFixed(2)} %
                                                                         </>
                                                                     ) : (
                                                                         <div className="dots-loading text-xs">...</div>

@@ -269,7 +269,7 @@ const Index = () => {
     }
 
     const pickInstance = (id: any) => {
-        setInstance(id);
+        // setInstance(id);
         setViewValidating(false);
         router.query.instance = id;
         router.push(router)
@@ -314,7 +314,7 @@ const Index = () => {
             });
             return;
         }
-        setProgram(id);
+        // setProgram(id);
         setYear(new Date().getFullYear());
         setFetchLoading(true);
         setFetchLoading(false);
@@ -1910,20 +1910,20 @@ const Index = () => {
 
                                                 {dataInput?.type == 'sub-kegiatan' && (
                                                     <div className="w-full flex items-center justify-between rounded border divide-x cursor-pointer">
-                                                        <div
+                                                        {/* <div
                                                             onClick={(e) => {
                                                                 setTabModal('kinerja');
                                                             }}
                                                             className={tabModal == 'kinerja' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
                                                             Target Kinerja
-                                                        </div>
-                                                        <div
+                                                        </div> */}
+                                                        {/* <div
                                                             onClick={(e) => {
                                                                 setTabModal('anggaran');
                                                             }}
                                                             className={tabModal == 'anggaran' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
                                                             Anggaran
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 )}
 
@@ -1933,85 +1933,83 @@ const Index = () => {
                                                             Target Kinerja Tahun {year}
                                                         </div>
                                                         <div className="space-y-2 divide-y mt-4">
-                                                            {dataInput?.indicators?.map((data: any, index: number) => {
-                                                                return (
-                                                                    <>
-                                                                        <div className="flex flex-nowrap overflow-y-auto items-center justify-between py-1 gap-y-4">
-                                                                            <div className="grow w-[500px] flex items-center">
-                                                                                <FontAwesomeIcon icon={faArrowRight} className="w-2.5 h-2.5 inline-block mr-2 text-slate-400" />
-                                                                                <span>
-                                                                                    {data?.name}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div className="w-[400px] text-center">
-                                                                                <div className="flex group">
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        value={dataInput?.indicators?.[index]?.value ?? ''}
-                                                                                        onChange={(e) => {
-                                                                                            const value = e.target.value ?? 0;
-                                                                                            setDataInput((prev: any) => {
-                                                                                                const newIndicators = prev?.indicators?.map((item: any, i: any) => {
-                                                                                                    if (i == index) {
-                                                                                                        return {
-                                                                                                            ...item,
-                                                                                                            value: value
-                                                                                                        }
-                                                                                                    }
-                                                                                                    return item;
-                                                                                                }
-                                                                                                );
+                                                            {dataInput?.indicators?.map((data: any, index: number) => (
+                                                                <div
+                                                                    key={`data-${index}`}
+                                                                    className="flex flex-nowrap overflow-y-auto items-center justify-between py-1 gap-y-4">
+                                                                    <div className="grow w-[500px] flex items-center">
+                                                                        <FontAwesomeIcon icon={faArrowRight} className="w-2.5 h-2.5 inline-block mr-2 text-slate-400" />
+                                                                        <span>
+                                                                            {data?.name}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="w-[400px] text-center">
+                                                                        <div className="flex group">
+                                                                            <input
+                                                                                type="text"
+                                                                                value={dataInput?.indicators?.[index]?.value ?? ''}
+                                                                                onChange={(e) => {
+                                                                                    const value = e.target.value ?? 0;
+                                                                                    setDataInput((prev: any) => {
+                                                                                        const newIndicators = prev?.indicators?.map((item: any, i: any) => {
+                                                                                            if (i == index) {
                                                                                                 return {
-                                                                                                    ...prev,
-                                                                                                    indicators: newIndicators
+                                                                                                    ...item,
+                                                                                                    value: value
                                                                                                 }
-                                                                                            });
-                                                                                            setUnsave(true);
-                                                                                        }}
-                                                                                        placeholder="Target Kinerja..."
-                                                                                        className="form-input ltr:rounded-r-none
+                                                                                            }
+                                                                                            return item;
+                                                                                        }
+                                                                                        );
+                                                                                        return {
+                                                                                            ...prev,
+                                                                                            indicators: newIndicators
+                                                                                        }
+                                                                                    });
+                                                                                    setUnsave(true);
+                                                                                }}
+                                                                                placeholder="Target Kinerja..."
+                                                                                className="form-input ltr:rounded-r-none
                                                                                                 rtl:rounded-l-none group-focus-within:border-indigo-400 cursor-pointer" />
 
-                                                                                    <select
-                                                                                        value={dataInput?.indicators?.[index]?.satuan_id ?? ''}
-                                                                                        onChange={(e) => {
-                                                                                            const satuan_id = e.target.value;
-                                                                                            setDataInput((prev: any) => {
-                                                                                                const newIndicators = prev?.indicators?.map((item: any, i: any) => {
-                                                                                                    if (i == index) {
-                                                                                                        return {
-                                                                                                            ...item,
-                                                                                                            satuan_id: satuan_id
-                                                                                                        }
-                                                                                                    }
-                                                                                                    return item;
-                                                                                                }
-                                                                                                );
+                                                                            <select
+                                                                                value={dataInput?.indicators?.[index]?.satuan_id ?? ''}
+                                                                                onChange={(e) => {
+                                                                                    const satuan_id = e.target.value;
+                                                                                    setDataInput((prev: any) => {
+                                                                                        const newIndicators = prev?.indicators?.map((item: any, i: any) => {
+                                                                                            if (i == index) {
                                                                                                 return {
-                                                                                                    ...prev,
-                                                                                                    indicators: newIndicators
+                                                                                                    ...item,
+                                                                                                    satuan_id: satuan_id
                                                                                                 }
-                                                                                            });
-                                                                                            setUnsave(true);
-                                                                                        }}
-                                                                                        className="form-select ltr:rounded-l-none rtl:rounded-r-none ltr:border-l-0 rtl:border-r-0  group-focus-within:border-indigo-400 cursor-pointer">
-                                                                                        <option value="" hidden>Pilih Satuan</option>
-                                                                                        {satuans?.map((data: any, index: number) => {
-                                                                                            return (
-                                                                                                <>
-                                                                                                    <option value={data?.id}>
-                                                                                                        {data?.name}
-                                                                                                    </option>
-                                                                                                </>
-                                                                                            )
-                                                                                        })}
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
+                                                                                            }
+                                                                                            return item;
+                                                                                        }
+                                                                                        );
+                                                                                        return {
+                                                                                            ...prev,
+                                                                                            indicators: newIndicators
+                                                                                        }
+                                                                                    });
+                                                                                    setUnsave(true);
+                                                                                }}
+                                                                                className="form-select ltr:rounded-l-none rtl:rounded-r-none ltr:border-l-0 rtl:border-r-0  group-focus-within:border-indigo-400 cursor-pointer">
+                                                                                <option value="" hidden>Pilih Satuan</option>
+                                                                                {satuans?.map((data: any, index: number) => {
+                                                                                    return (
+                                                                                        <>
+                                                                                            <option value={data?.id}>
+                                                                                                {data?.name}
+                                                                                            </option>
+                                                                                        </>
+                                                                                    )
+                                                                                })}
+                                                                            </select>
                                                                         </div>
-                                                                    </>
-                                                                )
-                                                            })}
+                                                                    </div>
+                                                                </div>
+                                                            ))}
 
                                                             <div className="pt-4">
                                                                 <div className="text-xs text-slate-500">

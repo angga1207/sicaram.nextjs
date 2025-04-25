@@ -709,7 +709,8 @@ const Header = () => {
                                 }}
                                 isSearchable={false}
                                 isClearable={false}
-                                isDisabled={(years?.length === 0)}
+                                // isDisabled={(years?.length === 0) || [3, 4, 5,6,7,8,9,10,11,12].includes(CurrentUser?.role_id)}
+                                isDisabled={(years?.length === 0) || CurrentUser?.role_id > 2}
                             />
                         </div>
 

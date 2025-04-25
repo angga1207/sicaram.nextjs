@@ -307,6 +307,7 @@ const RincianBelanja = (
 
                                             {data?.type === 'target-kinerja' && (
                                                 <InputRupiahRealisasi
+                                                    isDisabled={true}
                                                     dataValue={data.realisasi_anggaran_bulan_ini}
                                                     onChange={(value: any) => {
                                                         if (subKegiatan?.status === 'verified') {

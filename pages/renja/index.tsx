@@ -198,29 +198,6 @@ const Index = () => {
         }
     }, [instance, CurrentUser?.role_id]);
 
-    // useEffect(() => {
-    //     const messaging = getMessaging(firebaseApp);
-    //     const unsubscribe = onMessage(messaging, (payload: any) => {
-    //         console.log(payload)
-    //         if (payload.data.title == 'Verifikasi Renstra Perubahan') {
-    //             fetchRenjaValidatorNotes(periode?.id, instance, program, renja?.id).then((data) => {
-    //                 if (data.status == 'success') {
-    //                     setDataValidating(data.data);
-    //                 }
-    //             });
-
-    //             fetchRenja(periode?.id, instance, program).then((data) => {
-    //                 if (data.status == 'success') {
-    //                     setRenjas(data.data.datas);
-    //                     setRenstra(data.data.renstra);
-    //                     setRenja(data.data.renja);
-    //                     setRange(data.data.range);
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }, []);
-
     const goSearchProgram = (search: any) => {
         setSearchProgram(search);
         setFilteredPrograms(programs.map((item: any) => {
@@ -281,7 +258,7 @@ const Index = () => {
     }
 
     const pickInstance = (id: any) => {
-        setInstance(id);
+        // setInstance(id);
         setViewValidating(false);
         router.query.instance = id;
         router.push(router)
@@ -320,7 +297,7 @@ const Index = () => {
             });
             return;
         }
-        setProgram(id);
+        // setProgram(id);
         setYear(new Date().getFullYear());
         setFetchLoading(true);
         setFetchLoading(false);
@@ -330,15 +307,17 @@ const Index = () => {
     }
 
     useEffect(() => {
-        if (periode?.id && instance && program) {
-            fetchRenja(periode?.id, instance, program).then((data) => {
-                if (data.status == 'success') {
-                    setRenjas(data.data.datas);
-                    setRenja(data.data.renja)
-                    setRenstra(data.data.renstra);
-                    setRange(data.data.range);
-                }
-            });
+        if (isMounted) {
+            if (periode?.id && instance && program) {
+                fetchRenja(periode?.id, instance, program).then((data) => {
+                    if (data.status == 'success') {
+                        setRenjas(data.data.datas);
+                        setRenja(data.data.renja)
+                        setRenstra(data.data.renstra);
+                        setRange(data.data.range);
+                    }
+                });
+            }
         }
     }, [program])
 
@@ -531,14 +510,6 @@ const Index = () => {
                             status: status,
                         };
                     });
-                    // fetchRenja(periode?.id, instance, program).then((data) => {
-                    //     if (data.status == 'success') {
-                    //         setRenjas(data.data.datas);
-                    //         setRenstra(data.data.renstra);
-                    //         setRenja(data.data.renja);
-                    //         setRange(data.data.range);
-                    //     }
-                    // });
                 }
                 setMessage('');
                 setStatus('');
@@ -652,13 +623,12 @@ const Index = () => {
                                                     <>
                                                         {programs?.map((data: any) => {
                                                             return (
-                                                                <button onClick={(e) =>
-                                                                    fetchLoading == false && (
-                                                                        <>
-                                                                            {pickProgram(data?.id)
-                                                                            }
-                                                                        </>
-                                                                    )}
+                                                                <button onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    if (!fetchLoading) {
+                                                                        pickProgram(data.id);
+                                                                    }
+                                                                }}
                                                                     className={program == data?.id ? 'relative -mb-[1px] block w-full border-white-light p-3.5 py-4 before:absolute before:bottom-0 before:top-0 before:m-auto before:inline-block before:h-0 before:w-[1px] before:bg-primary before:transition-all before:duration-700  hover:before:h-[80%] hover:bg-primary-light group ltr:border-r ltr:before:-right-[1px] rtl:border-l rtl:before:-left-[1px] dark:border-[#191e3a] text-start bg-primary-light text-primary' : 'relative -mb-[1px] block w-full border-white-light p-3.5 py-4 before:absolute before:bottom-0 before:top-0 before:m-auto before:inline-block before:h-0 before:w-[1px] before:bg-primary before:transition-all before:duration-700  hover:before:h-[80%] hover:bg-primary-light group ltr:border-r ltr:before:-right-[1px] rtl:border-l rtl:before:-left-[1px] dark:border-[#191e3a] text-start'}
                                                                 >
                                                                     <div className={program == data?.id ? 'font-bold dark:text-slate-200 text-primary' : 'font-bold text-slate-700 dark:text-slate-200 group-hover:text-primary'} >
@@ -1886,7 +1856,7 @@ const Index = () => {
 
                                                 {dataInput?.type == 'sub-kegiatan' && (
                                                     <div className="w-full flex items-center justify-between rounded border divide-x cursor-pointer">
-                                                        <div
+                                                        {/* <div
                                                             onClick={(e) => {
                                                                 setTabModal('kinerja');
                                                             }}
@@ -1899,7 +1869,7 @@ const Index = () => {
                                                             }}
                                                             className={tabModal == 'anggaran' ? 'text-center w-full py-2 px-4 font-semibold bg-blue-500 dark:bg-blue-800 hover:bg-blue-600 dark:hover:bg-blue-700 text-white' : 'text-center w-full py-2 px-4 hover:bg-blue-300 dark:hover:blue-700 hover:text-white'}>
                                                             Anggaran
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 )}
 

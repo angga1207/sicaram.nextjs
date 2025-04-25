@@ -130,8 +130,6 @@ const Index = () => {
         { value: 12, label: 'Desember' },
     ]);
 
-    console.log(months)
-
     const [month, setMonth] = useState<any>(null);
     const [instance, setInstance] = useState<any>(null);
     const [instances, setInstances] = useState<any>([]);
@@ -203,40 +201,64 @@ const Index = () => {
 
     useEffect(() => {
         if (isMounted) {
-            if (instance && year) {
-                fetchProgramsSubKegiatan(instance, year).then((data) => {
-                    if (data.status === 'success') {
-                        setDatas(data.data);
-                    }
+            if (instance && year && month) {
+                if (datas?.length == 0) {
+                    fetchProgramsSubKegiatan(instance, year).then((data) => {
+                        if (data.status === 'success') {
+                            setDatas(data.data);
+                        }
 
-                    if (data.status === 'error') {
-                        showAlert('error', data.message);
-                    }
+                        if (data.status === 'error') {
+                            showAlert('error', data.message);
+                        }
 
-                    if (data?.message?.response?.status == 401) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Sesi Anda telah berakhir',
-                            text: 'Silahkan login kembali',
-                            padding: '10px 20px',
-                            showCancelButton: false,
-                            confirmButtonText: 'Login',
-                            cancelButtonText: 'Batal',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = '/login';
-                            }
-                        });
-                    }
-                });
-                if (router.query) {
-                    router.query.year = year;
-                    router.query.instance = instance;
-                    router.push(router);
+                        if (data?.message?.response?.status == 401) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Sesi Anda telah berakhir',
+                                text: 'Silahkan login kembali',
+                                padding: '10px 20px',
+                                showCancelButton: false,
+                                confirmButtonText: 'Login',
+                                cancelButtonText: 'Batal',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/login';
+                                }
+                            });
+                        }
+                    });
                 }
             }
         }
-    }, [instance, year, isMounted]);
+    }, [instance, year, month, isMounted]);
+
+    useEffect(() => {
+        router.query.instance = instance;
+        setYear(null)
+        router.query.year = '';
+        setMonth(null)
+        router.query.month = '';
+
+        setDatas([]);
+
+        router.push(router);
+    }, [instance]);
+
+    useEffect(() => {
+        router.query.year = year;
+        setMonth(null)
+        router.query.month = '';
+
+        setDatas([]);
+
+        router.push(router);
+    }, [year]);
+
+    useEffect(() => {
+        router.query.month = month;
+        router.push(router);
+    }, [month]);
 
     const [showPrograms, setShowPrograms] = useState<string[]>([]);
     const [showKegiatans, setShowKegiatans] = useState<string[]>([]);
@@ -541,26 +563,48 @@ const Index = () => {
             )}
 
             {instance && (
-                <div className='p-10'>
-                    <div className="text-center text-md font-semibold mb-5">
-                        Pilih Tahun
+                <div className='mb-10'>
+                    <div className='mb-3'>
+                        <div className="text-center text-md font-semibold mb-2">
+                            Pilih Tahun
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-4">
+                            {years?.map((yr: any, index: number) => (
+                                <button
+                                    key={`yr-${yr}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setYear(yr);
+                                    }}
+                                    className={year == yr ? 'btn btn-primary mr-2' : 'btn btn-outline-primary mr-2'}>
+                                    {yr}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                        {years?.map((yr: any, index: number) => (
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setYear(yr);
-                                }}
-                                className={year == yr ? 'btn btn-primary mr-2' : 'btn btn-outline-primary mr-2'}>
-                                {yr}
-                            </button>
-                        ))}
+
+                    <div className=''>
+                        <div className="text-center text-md font-semibold mb-2">
+                            Pilih Bulan
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-4">
+                            {months?.map((mth: any, index: number) => (
+                                <button
+                                    key={`mth-${index}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setMonth(mth.value);
+                                    }}
+                                    className={month == mth.value ? 'btn btn-primary mr-2' : 'btn btn-outline-primary mr-2'}>
+                                    {mth.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
 
-            {instance && year && (
+            {(instance && year && month) && (
                 <>
                     <div className="font-semibold text-lg mb-4">
                         Pilih Program
@@ -759,8 +803,7 @@ const Index = () => {
                                                                                             </div>
 
                                                                                             <div className="flex flex-col md:flex-row items-center justify-start gap-2 md:divide-x divide-indigo-500 pb-3 lg:pb-0">
-                                                                                                <div className="px-0 flex-none">
-
+                                                                                                {/* <div className="px-0 flex-none">
                                                                                                     <Select
                                                                                                         className="min-w-[200px]"
                                                                                                         id="month"
@@ -777,18 +820,18 @@ const Index = () => {
                                                                                                         classNamePrefix={'selectAngga'}
                                                                                                         isDisabled={(months?.length === 0) || false}
                                                                                                     />
-                                                                                                </div>
+                                                                                                </div> */}
 
                                                                                                 {(periode?.id && year && month) && (
                                                                                                     <div className="px-2 flex items-center gap-x-1">
                                                                                                         {(subkegiatan.renstra_status === 'verified' && subkegiatan.renja_status === 'verified' && subkegiatan.apbd_status === 'verified') ? (
-                                                                                                            <Tippy content={CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}>
+                                                                                                            <Tippy content={CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Pagu Anggaran'}>
                                                                                                                 <Link
                                                                                                                     target='_blank'
                                                                                                                     href={`/kinerja/target/${subkegiatan.id}?periode=${periode?.id}&year=${year}&month=${month}`}
                                                                                                                     className='btn btn-secondary font-normal'>
                                                                                                                     <span className='truncate w-[80px] md:w-[100px] lg:w-auto'>
-                                                                                                                        {CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Input Rincian Belanja'}
+                                                                                                                        {CurrentUser?.role_id === 6 ? 'Lihat Target' : 'Pagu Anggaran'}
                                                                                                                     </span>
                                                                                                                     <IconArrowForward className='w-4 h-4 ml-2 flex-none' />
                                                                                                                 </Link>
@@ -861,7 +904,7 @@ const Index = () => {
             )}
 
 
-            <Transition appear show={modalImport} as={Fragment}>
+            {/* <Transition appear show={modalImport} as={Fragment}>
                 <Dialog as="div" open={modalImport} onClose={() => setModalImport(false)}>
                     <Transition.Child
                         as={Fragment}
@@ -970,7 +1013,7 @@ const Index = () => {
                         </div>
                     </div>
                 </Dialog>
-            </Transition >
+            </Transition > */}
         </>
     );
 };

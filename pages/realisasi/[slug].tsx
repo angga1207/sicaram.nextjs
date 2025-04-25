@@ -642,90 +642,6 @@ const Index = () => {
         })
     }
 
-
-    // DEBUG TOOLS ANGGA
-    // useEffect(() => {
-    //     // if (subKegiatan?.status == 'verified' || subKegiatan?.status_target == 'verified') {
-    //     setSubKegiatan((prev: any) => {
-    //         const updated = { ...prev };
-    //         updated.status = 'draft';
-    //         updated.status_target = 'verified';
-    //         return updated;
-    //     });
-    //     // }
-    // }, [subKegiatan?.status]);
-    // DEBUG TOOLS ANGGA
-
-    // if (subKegiatan && subKegiatan.status != 'verified') {
-    //     return (
-    //         <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
-    //             <div className="flex items-center justify-center gap-2">
-    //                 <FontAwesomeIcon icon={faExclamationTriangle} className='w-8 h-8 text-cyan-500' />
-    //                 <div className="text-[40px] font-semibold text-cyan-500">
-    //                     Mohon Maaf,
-    //                 </div>
-    //             </div>
-    //             <div className="text-xl font-semibold text-cyan-500">
-    //                 Anda Tidak Dapat Mengakses Halaman Ini
-    //             </div>
-    //             <div className="text-lg font-semibold text-orange-500 mt-2">
-    //                 Dikarenakan Target Belum Terverifikasi
-    //             </div>
-    //             {/* back button */}
-    //             <div className="mt-4">
-    //                 <button
-    //                     onClick={() => {
-    //                         closeWindow();
-    //                     }}
-    //                     className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center"
-    //                 >
-    //                     <FontAwesomeIcon icon={faAngleDoubleLeft} className='w-4 h-4 mr-2' />
-    //                     Kembali
-    //                 </button>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
-    // if (CurrentUser.role_id !== 1) {
-    //     return (
-    //         <div className="relative flex h-full items-center justify-center overflow-hidden">
-    //             <div className="px-6 py-16 text-center font-semibold before:container before:absolute before:left-1/2 before:aspect-square before:-translate-x-1/2 before:rounded-full before:bg-[linear-gradient(180deg,#4361EE_0%,rgba(67,97,238,0)_50.73%)] before:opacity-10 md:py-20">
-    //                 <div className="relative">
-    //                     {/* <img
-    //                         src={isDark ? '/assets/images/error/maintenence-dark.svg' : '/assets/images/error/maintenence-light.svg'}
-    //                         alt="maintenence"
-    //                         className="mx-auto -mt-10 w-full max-w-xs object-cover md:-mt-20 md:max-w-lg"
-    //                     /> */}
-    //                     <Player
-    //                         autoplay
-    //                         loop
-    //                         src="/lottie/maintenance.json"
-    //                         // className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
-    //                         className="mx-auto -mt-10 h-[480px] w-full max-w-xs object-cover md:-mt-20 md:max-w-lg"
-    //                     >
-    //                     </Player>
-    //                     <div className="-mt-8 font-semibold dark:text-white">
-    //                         <h2 className="mb-5 text-3xl font-bold text-primary md:text-5xl">
-    //                             Sedang Dalam Pengembangan
-    //                         </h2>
-    //                         <h4 className="mb-7 text-xl sm:text-2xl">
-    //                             Mohon Maaf, Anda Tidak Dapat Mengakses Halaman Ini
-    //                         </h4>
-    //                         <p className="text-base">
-    //                             Kami sedang dalam proses pengembangan untuk memberikan pengalaman pengguna yang lebih baik.
-    //                         </p>
-    //                     </div>
-    //                     <Link href={`/kinerja?year=${year}&instance=${dataRealisasiSubKegiatan?.instance_id}&month=${month}`} className="btn btn-primary mx-auto !mt-7 w-max border-0 uppercase shadow-none">
-    //                         <FontAwesomeIcon icon={faAngleDoubleLeft} className='w-4 h-4 mr-2' />
-    //                         Kembali
-    //                     </Link>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // } else {
-    // }
     return (
         <>
             <div className="panel p-0 mb-10">
@@ -757,37 +673,6 @@ const Index = () => {
                 </div>
 
                 <div className="w-full flex items-center overflow-x-auto">
-
-                    <button
-                        onClick={(e) => {
-                            if (isLoading === false) {
-                                if (unsaveKeteranganStatus) {
-                                    e.preventDefault();
-                                    Swal.fire({
-                                        title: 'Peringatan',
-                                        text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonText: 'Ya, Lanjutkan',
-                                        cancelButtonText: 'Batal',
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            setUnsaveKeteranganStatus(false);
-                                            setTab(5);
-                                        }
-                                    });
-                                } else {
-                                    setTab(5)
-                                }
-                            }
-                        }}
-                        className={`${tab === 5 ? 'text-white !outline-none before:!w-full bg-green-500' : 'bg-green-200 text-green-800'} rounded-tl grow !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-green-500 before:transition-all before:duration-700 hover:before:w-full`}
-                    >
-                        <FontAwesomeIcon icon={faCloudUploadAlt} className='w-4 h-4' />
-                        <span className='font-semibold whitespace-nowrap uppercase'>
-                            Unggah Realisasi (SIPD)
-                        </span>
-                    </button>
 
                     <button
                         onClick={(e) => {
@@ -1874,28 +1759,6 @@ const Index = () => {
                     </div>
                 )}
 
-                {tab === 5 && (
-                    <div className="">
-                        {isMounted && (
-                            <ImportSIPD
-                                params={isMounted &&
-                                {
-                                    periode: periode,
-                                    year: year,
-                                    month: month,
-                                    subKegiatan: subKegiatan,
-                                }
-                                }
-                                updateData={(e: any) => {
-                                    // reload data
-                                    refreshDataFromDatabase();
-                                }}
-                                isUnsave={setUnsaveStatus}
-                            />
-                        )}
-                    </div>
-                )}
-
             </div>
 
             {isMounted && (
@@ -2033,30 +1896,32 @@ const Index = () => {
                                             <ul className="!min-w-[200px]">
                                                 {month > 1 && (
                                                     <li>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                setMonth(parseInt(month) - 1);
-                                                            }}
+                                                        <a
+                                                            // onClick={(e) => {
+                                                            //     setMonth(parseInt(month) - 1);
+                                                            // }}
+                                                            href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${Number(month) - 1}`}
                                                             className='flex items-center'>
                                                             <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4 flex-none -scale-x-100' />
                                                             <span>
                                                                 Bulan {new Date(year, month - 2).toLocaleString('id-ID', { month: 'long' })}
                                                             </span>
-                                                        </button>
+                                                        </a>
                                                     </li>
                                                 )}
                                                 {month < 12 && (
                                                     <li>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                setMonth(parseInt(month) + 1);
-                                                            }}
+                                                        <a
+                                                            // onClick={(e) => {
+                                                            //     setMonth(parseInt(month) + 1);
+                                                            // }}
+                                                            href={`/realisasi/${subKegiatanId}?periode=${periode}&year=${year}&month=${Number(month) + 1}`}
                                                             className='flex items-center'>
                                                             <FontAwesomeIcon icon={faArrowRightToBracket} className='mr-2 w-4 h-4' />
                                                             <span>
                                                                 Bulan {new Date(year, month).toLocaleString('id-ID', { month: 'long' })}
                                                             </span>
-                                                        </button>
+                                                        </a>
                                                     </li>
                                                 )}
                                                 <li>
@@ -2071,7 +1936,7 @@ const Index = () => {
                                         </Dropdown>
                                     </div>
 
-                                    {(dataBackEndError === false && [1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser.role_id) && (tab === 1 || tab === 2)) && (
+                                    {/* {(dataBackEndError === false && [1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser.role_id) && (tab === 1 || tab === 2)) && (
                                         <button
                                             type='button'
                                             className='btn btn-sm dark:border-indigo-900 dark:shadow-black-dark-light bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-500 dark:hover:bg-indigo-800 text-white'
@@ -2085,7 +1950,7 @@ const Index = () => {
                                             <FontAwesomeIcon icon={faSyncAlt} className='mr-2 w-4 h-4' />
                                             {syncLoading ? 'Sedang Melakukan Singkron Data' : 'Singkron Data'}
                                         </button>
-                                    )}
+                                    )} */}
                                     {(dataBackEndError === false && (tab === 1 || tab === 2)) ? (
                                         <button
                                             type='button'
@@ -2283,7 +2148,7 @@ const Index = () => {
                                                     </button>
                                                 </div>
                                             )}
-                                            {[1, 2, 3, 4, 5, 6, 7, 8].includes(CurrentUser?.role_id) && (
+                                            {[1, 2, 8].includes(CurrentUser?.role_id) && (
                                                 <div>
                                                     <button
                                                         onClick={() => replyVerification()}

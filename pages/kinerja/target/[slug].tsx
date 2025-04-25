@@ -526,19 +526,20 @@ const Index = () => {
                                                                         {data.uraian}
                                                                     </div>
 
-                                                                    {data?.rekening == 6 && (
+                                                                    {/* {data?.rekening == 6 && (
                                                                         <div className="flex items-center gap-2">
                                                                             <Tippy content="Tambah Rincian Belanja" >
                                                                                 <button type='button'
                                                                                     className='btn bg-primary text-white w-4.5 h-4.5 p-1 rounded-full'
                                                                                     onClick={(e) => {
-                                                                                        addTargetKinerja(index);
+                                                                                        showAlert('info', 'Menu didisabled!')
+                                                                                        // addTargetKinerja(index);
                                                                                     }}>
                                                                                     <FontAwesomeIcon icon={faPlus} className='w-3 h-3' />
                                                                                 </button>
                                                                             </Tippy>
                                                                         </div>
-                                                                    )}
+                                                                    )} */}
                                                                 </div>
                                                             )}
 
@@ -657,7 +658,7 @@ const Index = () => {
                                                                             </div>
                                                                         )}
                                                                         <div className="flex items-center gap-x-1">
-                                                                            {(data.is_detail == true) && (
+                                                                            {/* {(data.is_detail == true) && (
                                                                                 <Tippy content={`Tambah Rincian Belanja`}>
                                                                                     <button
                                                                                         type='button'
@@ -668,7 +669,7 @@ const Index = () => {
                                                                                         <FontAwesomeIcon icon={faPlus} className='' />
                                                                                     </button>
                                                                                 </Tippy>
-                                                                            )}
+                                                                            )} */}
 
                                                                             {/* {(data?.is_new && data.is_detail == false) && ( */}
                                                                             {data?.is_new || data?.jenis == 'Manual' && (
@@ -756,6 +757,7 @@ const Index = () => {
                                                                     // disabled={month == 1 ? false : true}
                                                                     onChange={
                                                                         (e) => {
+                                                                            return;
                                                                             if (subKegiatan?.status == 'verified') {
                                                                                 showAlert('error', 'Data tidak dapat diubah karena Status Target Sudah "Terverifikasi"');
                                                                                 return;
@@ -1398,69 +1400,6 @@ const Index = () => {
                         <div className="flex flex-wrap sm:flex-nowrap justify-center sm:justify-end items-center gap-2">
 
                             <div className="flex justify-end flex-wrap items-center gap-1 mr-3 w-[300px]">
-                                {/* {subKegiatan?.tag_sumber_dana?.length > 0 && (
-                                    <>
-                                        {showTags === false ? (
-                                            <>
-                                                {subKegiatan?.tag_sumber_dana?.length == 1 && (
-                                                    <>
-                                                        <Tippy content={`Sumber Dana ${subKegiatan?.tag_sumber_dana[0]?.tag_name}`}>
-                                                            <div onClick={() => setShowTags(true)} className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md w-[75px] truncate cursor-pointer">
-                                                                {subKegiatan?.tag_sumber_dana[0]?.tag_name}
-                                                            </div>
-                                                        </Tippy>
-                                                    </>
-                                                )}
-                                                {subKegiatan?.tag_sumber_dana?.length == 2 && (
-                                                    <>
-                                                        <Tippy content={`Sumber Dana ${subKegiatan?.tag_sumber_dana[0]?.tag_name}`}>
-                                                            <div onClick={() => setShowTags(true)} className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md w-[75px] truncate cursor-pointer">
-                                                                {subKegiatan?.tag_sumber_dana[0]?.tag_name}
-                                                            </div>
-                                                        </Tippy>
-                                                        <Tippy content={`Sumber Dana ${subKegiatan?.tag_sumber_dana[1]?.tag_name}`}>
-                                                            <div onClick={() => setShowTags(true)} className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md w-[75px] truncate cursor-pointer">
-                                                                {subKegiatan?.tag_sumber_dana[1]?.tag_name}
-                                                            </div>
-                                                        </Tippy>
-                                                    </>
-                                                )}
-                                                {subKegiatan?.tag_sumber_dana?.length > 2 && (
-                                                    <>
-                                                        <Tippy content={`Sumber Dana ${subKegiatan?.tag_sumber_dana[0]?.tag_name}`}>
-                                                            <div onClick={() => setShowTags(true)} className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md w-[75px] truncate cursor-pointer">
-                                                                {subKegiatan?.tag_sumber_dana[0]?.tag_name}
-                                                            </div>
-                                                        </Tippy>
-                                                        <Tippy content={`Sumber Dana ${subKegiatan?.tag_sumber_dana[1]?.tag_name}`}>
-                                                            <div onClick={() => setShowTags(true)} className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md w-[75px] truncate cursor-pointer">
-                                                                {subKegiatan?.tag_sumber_dana[1]?.tag_name}
-                                                            </div>
-                                                        </Tippy>
-                                                        <Tippy content={`Dan ${subKegiatan?.tag_sumber_dana?.length - 2} Lainnya`}>
-                                                            <div
-                                                                onClick={() => setShowTags(true)}
-                                                                className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md w-[75px] truncate cursor-pointer">
-                                                                {subKegiatan?.tag_sumber_dana?.length - 2} Lainnya
-                                                            </div>
-                                                        </Tippy>
-                                                    </>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <>
-                                                {subKegiatan?.tag_sumber_dana?.map((tag: any, index: any) => (
-                                                    <Tippy content={`Sumber Dana ${tag?.tag_name}`}>
-                                                        <div onClick={() => setShowTags(false)} className="text-xs bg-indigo-500 dark:bg-indigo-700 text-white px-2 py-1 rounded-md cursor-pointer whitespace-nowrap">
-                                                            {tag?.tag_name}
-                                                        </div>
-                                                    </Tippy>
-                                                ))}
-                                            </>
-                                        )}
-                                    </>
-                                )} */}
-
                                 <Tippy content={`Tagging Sumber Dana`}>
                                     <div onClick={() => setModalSumberDana(true)}
                                         className="btn btn-primary btn-sm cursor-pointer">
@@ -1469,7 +1408,7 @@ const Index = () => {
                                 </Tippy>
                             </div>
 
-                            <Tippy content={`Tekan Untuk Melihat Log`}>
+                            {/* <Tippy content={`Tekan Untuk Melihat Log`}>
                                 <button
                                     type='button'
                                     disabled={dataBackEndError === true ? true : false}
@@ -1519,7 +1458,7 @@ const Index = () => {
                                         <FontAwesomeIcon icon={faAngleDoubleUp} className='border-l pl-1 w-5 h-5 text-white dark:text-white-dark' />
                                     </div>
                                 </button>
-                            </Tippy>
+                            </Tippy> */}
 
                             <div className="border-r-2 border-slate-400 h-[35px] w-2 hidden sm:block"></div>
 
@@ -1610,7 +1549,7 @@ const Index = () => {
                                 </Dropdown>
                             </div>
 
-                            {dataBackEndError === false ? (
+                            {/* {dataBackEndError === false ? (
                                 <button
                                     type='button'
                                     className='btn btn-sm dark:border-green-900 dark:shadow-black-dark-light bg-green-600 dark:bg-green-700 hover:bg-green-500 dark:hover:bg-green-800 text-white'
@@ -1628,7 +1567,7 @@ const Index = () => {
                                     <FontAwesomeIcon icon={faSave} className='mr-2 w-4 h-4' />
                                     Simpan
                                 </button>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>

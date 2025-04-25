@@ -402,12 +402,21 @@ const Index = () => {
                                     <th className='min-w-[500px]'>
                                         Nama Lengkap
                                     </th>
+                                    {userType == 'perangkat_daerah' && (
+                                        <th>
+                                            Perangkat Daerah
+                                        </th>
+                                    )}
                                     {userType == 'verifikator' ? (
-                                        <th className='!text-center'>Verifikator Untuk</th>
+                                        <>
+                                            <th className='w-[200px]'>
+                                                Jenis Akun
+                                            </th>
+                                            <th className='!text-center'>Verifikator Untuk</th>
+                                        </>
                                     ) : (
                                         <th className='w-[200px] !text-center'>Jenis Pengguna</th>
                                     )}
-                                    <th className='w-[200px]'>Username</th>
                                     <th className="!text-center w-[100px]">
                                         <div className="flex items-center justify-center">
                                             <FontAwesomeIcon icon={faCog} className="h-4 w-4 text-slate-400" />
@@ -424,11 +433,30 @@ const Index = () => {
                                                     <div>
                                                         <img src={data?.photo} alt="Photo Profile" className='w-12 h-12 rounded-full p-0.5 bg-slate-100 object-contain' />
                                                     </div>
-                                                    <div className='font-bold text-base line-clamp-2'>
-                                                        {data?.fullname}
+                                                    <div className="">
+                                                        <div className='font-bold text-base line-clamp-2'>
+                                                            {data?.fullname}
+                                                        </div>
+                                                        <div className='text-xs text-slate-400 line-clamp-2'>
+                                                            @{data?.username}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
+                                            {userType == 'perangkat_daerah' && (
+                                                <td>
+                                                    <div className="hover:text-primary cursor-pointer">
+                                                        {data?.instance_name}
+                                                    </div>
+                                                </td>
+                                            )}
+                                            {userType == 'verifikator' && (
+                                                <td>
+                                                    <div className="hover:text-primary cursor-pointer">
+                                                        {data?.role_name}
+                                                    </div>
+                                                </td>
+                                            )}
                                             {userType == 'verifikator' ? (
                                                 <td>
                                                     <div className="flex items-center flex-wrap gap-1">
@@ -469,11 +497,6 @@ const Index = () => {
                                                     </div>
                                                 </td>
                                             )}
-                                            <td>
-                                                <div className="hover:text-primary cursor-pointer">
-                                                    @{data?.username}
-                                                </div>
-                                            </td>
                                             <td className="text-center">
                                                 <div className="flex items-center gap-2">
                                                     <Tippy content="Edit">
@@ -751,7 +774,7 @@ const Index = () => {
                                                     </>
                                                 )}
 
-                                                {(dataInput.role == 6) && (
+                                                {(dataInput.role == 6 || dataInput.role == 7 || dataInput.role == 8) && (
                                                     <>
                                                         <div>
                                                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">

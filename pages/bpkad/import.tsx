@@ -23,7 +23,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import LoadingSicaram from '@/components/LoadingSicaram';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderClosed } from '@fortawesome/free-regular-svg-icons';
-import { faCloudUploadAlt, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faCloudUploadAlt, faLongArrowRight, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { BaseUri } from '@/apis/serverConfig';
 import { useSession } from 'next-auth/react';
 
@@ -61,7 +61,7 @@ const showAlertBox = async (icon: any, title: any, text: any) => {
 const Page = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Import SIPD - BPKAD'));
+        dispatch(setPageTitle('Upload Rekap 5 - BPKAD'));
     });
 
     const [isMounted, setIsMounted] = useState(false);
@@ -174,6 +174,7 @@ const Page = () => {
     const [years, setYears] = useState<any>([]);
 
     const [month, setMonth] = useState<any>(new Date().getMonth())
+    const [monthTo, setMonthTo] = useState<any>(12);
     const [fileApbd, setFileApbd] = useState<any>(null)
     const [messageApbd, setMessageApbd] = useState<any>('')
     const [fileTargetBelanja, setFileTargetBelanja] = useState<any>(null)
@@ -213,11 +214,17 @@ const Page = () => {
             showAlert('error', 'Sedang dalam proses upload, mohon tunggu');
             return
         }
+
+        if (monthTo < month) {
+            showAlert('error', 'Bulan yang dipilih tidak sesuai. Minimal sama!');
+            return
+        }
         setIsUploading(true)
         try {
             const formData = new FormData()
             formData.append('file', fileApbd)
             formData.append('month', month)
+            formData.append('monthTo', monthTo)
             formData.append('year', year)
             formData.append('periode', periode?.id)
             formData.append('message', messageApbd)
@@ -427,20 +434,6 @@ const Page = () => {
                                     {({ selected }) => (
                                         <button
                                             onClick={(e) => {
-                                                setMenu(3)
-                                            }}
-                                            className={`${selected ? 'text-primary !outline-none before:!w-full' : ''} grow
-                                                    relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
-                                        >
-                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                            REKAP 5 ke Master Sub Kegiatan
-                                        </button>
-                                    )}
-                                </Tab>
-                                <Tab as={Fragment}>
-                                    {({ selected }) => (
-                                        <button
-                                            onClick={(e) => {
                                                 setMenu(1)
                                             }}
                                             className={`${selected ? 'text-primary !outline-none before:!w-full' : ''} grow
@@ -451,86 +444,22 @@ const Page = () => {
                                         </button>
                                     )}
                                 </Tab>
-                                {/* <Tab as={Fragment}>
+                                <Tab as={Fragment}>
                                     {({ selected }) => (
                                         <button
                                             onClick={(e) => {
-                                                setMenu(2)
+                                                setMenu(3)
                                             }}
                                             className={`${selected ? 'text-primary !outline-none before:!w-full' : ''} grow
-                                                relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
+                                                    relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
                                         >
                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                            Import Target Belanja
+                                            REKAP 5 ke Master Sub Kegiatan (Referensi)
                                         </button>
                                     )}
-                                </Tab> */}
+                                </Tab>
                             </Tab.List>
                             <Tab.Panels>
-
-                                <Tab.Panel>
-                                    <div className="active pt-5">
-
-                                        <div className="mt-4">
-                                            <input
-                                                type="file"
-                                                className="hidden"
-                                                onChange={(e: any) => {
-                                                    setFileRekap5(e.target.files[0])
-                                                }}
-                                                accept='.xls,.xlsx'
-                                                id="fileRekap5" />
-                                            <label htmlFor="fileRekap5" className="btn btn-primary cursor-pointer">
-                                                Pilih Rekap 5
-                                            </label>
-
-                                            {fileRekap5 && (
-                                                <div className="mt-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="">
-                                                            <div className="line-clamp-1 text-md">
-                                                                {fileRekap5.name}
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    setFileRekap5(null)
-                                                                }}
-                                                                className="btn btn-danger px-0.5 py-0.5 rounded-full btn-xs">
-                                                                <IconX className='w-4 h-4' />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-
-
-                                        {fileRekap5 && (
-                                            <>
-                                                <div className="">
-                                                    {isUploading == false && (
-                                                        <button
-                                                            onClick={(e) => {
-                                                                uploadRekap5()
-                                                            }}
-                                                            className="btn btn-success">
-                                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                                            Upload Rekap 5 ke Program Kegiatan
-                                                        </button>
-                                                    )}
-                                                    {isUploading == true && (
-                                                        <button className="btn btn-success">
-                                                            <FontAwesomeIcon icon={faSpinner} className='w-5 h-5 mr-2 animate-spin' />
-                                                            Sedang Upload
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                </Tab.Panel>
 
                                 <Tab.Panel>
                                     <div className="pt-5">
@@ -545,16 +474,29 @@ const Page = () => {
                                                     }}
                                                     options={months} />
                                             </div>
+                                            <div className="">
+                                                <FontAwesomeIcon icon={faLongArrowRight} className='text-slate-500 w-4 h-4' />
+                                            </div>
                                             <div className="grow">
                                                 <Select
+                                                    placeholder="Sampai Bulan"
                                                     required={true}
-                                                    value={years.filter((item: any) => item.value === year)[0]}
+                                                    value={months.filter((item: any) => item.value === monthTo)[0]}
                                                     onChange={(e: any) => {
-                                                        setYear(e.value)
+                                                        setMonthTo(e.value)
                                                     }}
-                                                    placeholder="Pilih Tahun"
-                                                    options={years} />
+                                                    options={months} />
                                             </div>
+                                        </div>
+                                        <div className="w-full mt-2">
+                                            <Select
+                                                required={true}
+                                                value={years.filter((item: any) => item.value === year)[0]}
+                                                onChange={(e: any) => {
+                                                    setYear(e.value)
+                                                }}
+                                                placeholder="Pilih Tahun"
+                                                options={years} />
                                         </div>
 
                                         <div className="mt-4">
@@ -629,56 +571,34 @@ const Page = () => {
                                     </div>
                                 </Tab.Panel>
 
-                                {/* <Tab.Panel>
-                                    <div className='pt-5'>
-                                        <div className="flex items-center gap-4">
-                                            <div className="grow">
-                                                <Select
-                                                    placeholder="Pilih Bulan"
-                                                    required={true}
-                                                    value={months.filter((item: any) => item.value === month)[0]}
-                                                    onChange={(e: any) => {
-                                                        setMonth(e.value)
-                                                    }}
-                                                    options={months} />
-                                            </div>
-                                            <div className="grow">
-                                                <Select
-                                                    required={true}
-                                                    value={years.filter((item: any) => item.value === year)[0]}
-                                                    onChange={(e: any) => {
-                                                        setYear(e.value)
-                                                    }}
-                                                    placeholder="Pilih Tahun"
-                                                    options={years} />
-                                            </div>
-                                        </div>
+                                <Tab.Panel>
+                                    <div className="active pt-5">
 
                                         <div className="mt-4">
                                             <input
                                                 type="file"
                                                 className="hidden"
                                                 onChange={(e: any) => {
-                                                    setFileTargetBelanja(e.target.files[0])
+                                                    setFileRekap5(e.target.files[0])
                                                 }}
                                                 accept='.xls,.xlsx'
-                                                id="fileTarget" />
-                                            <label htmlFor="fileTarget" className="btn btn-primary cursor-pointer">
-                                                Pilih File
+                                                id="fileRekap5" />
+                                            <label htmlFor="fileRekap5" className="btn btn-primary cursor-pointer">
+                                                Pilih Rekap 5
                                             </label>
 
-                                            {fileTargetBelanja && (
+                                            {fileRekap5 && (
                                                 <div className="mt-4">
                                                     <div className="flex items-center gap-4">
                                                         <div className="">
                                                             <div className="line-clamp-1 text-md">
-                                                                {fileTargetBelanja.name}
+                                                                {fileRekap5.name}
                                                             </div>
                                                         </div>
                                                         <div>
                                                             <button
                                                                 onClick={(e) => {
-                                                                    setFileTargetBelanja(null)
+                                                                    setFileRekap5(null)
                                                                 }}
                                                                 className="btn btn-danger px-0.5 py-0.5 rounded-full btn-xs">
                                                                 <IconX className='w-4 h-4' />
@@ -689,17 +609,18 @@ const Page = () => {
                                             )}
                                         </div>
 
-                                        {months && years && fileTargetBelanja && (
-                                            <div className="">
-                                                <div className="flex items-center justify-end gap-4 mt-5">
+
+                                        {fileRekap5 && (
+                                            <>
+                                                <div className="">
                                                     {isUploading == false && (
                                                         <button
                                                             onClick={(e) => {
-                                                                uploadTargetBelanja()
+                                                                uploadRekap5()
                                                             }}
                                                             className="btn btn-success">
                                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                                            Upload Target Belanja
+                                                            Upload Rekap 5 ke Program Kegiatan
                                                         </button>
                                                     )}
                                                     {isUploading == true && (
@@ -709,10 +630,10 @@ const Page = () => {
                                                         </button>
                                                     )}
                                                 </div>
-                                            </div>
+                                            </>
                                         )}
                                     </div>
-                                </Tab.Panel> */}
+                                </Tab.Panel>
 
                             </Tab.Panels>
                         </Tab.Group>
