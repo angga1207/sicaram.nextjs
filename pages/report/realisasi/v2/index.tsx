@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import { useDispatch } from "react-redux";
 import { setPageTitle } from "@/store/themeConfigSlice";
+import { BaseUri } from "@/apis/serverConfig";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import DisplayMoney from "@/components/DisplayMoney";
+import Link from "next/link";
 
 export default function Page() {
 
@@ -68,7 +73,55 @@ export default function Page() {
         }
     }, [router.query]);
 
-    console.log(month, monthID)
+
+    const [CurrentToken, setCurrentToken] = useState<any>(null);
+    const session = useSession();
+    useEffect(() => {
+        if (isMounted && session.status === 'authenticated') {
+            const token = session?.data?.user?.name;
+            setCurrentToken(token);
+        }
+    }, [isMounted, session]);
+
+    const fetchReport = async () => {
+        if (CurrentToken) {
+            const response = await axios.get(`${BaseUri()}/report/1/v2`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${CurrentToken}`
+                },
+                params: {
+                    periode: periode?.id,
+                    instance: instanceId,
+                    year: year,
+                    month: monthID,
+                }
+            });
+            const data = await response.data;
+            return data;
+        }
+    }
+
+    const [isFetching, setIsFetching] = useState(true)
+    const [datas, setDatas] = useState<any>([]);
+    useEffect(() => {
+        if (isMounted && year && month && instanceId && CurrentToken) {
+            setIsFetching(true)
+            fetchReport().then((data) => {
+                if (data.status == 'success') {
+                    setDatas(data.data.data)
+                    setInstance(data.data.instance);
+                } else if (data.status == 'error') {
+                    // showAlert('error', data.message);
+                } else {
+                    // showAlert('error', 'Terjadi kesalahan');
+                }
+                setIsFetching(false)
+            });
+        }
+    }, [instanceId, month, year, isMounted, CurrentToken]);
+
+    // console.log(month, monthID)
 
     return (
         <div>
@@ -82,21 +135,20 @@ export default function Page() {
                             DIRINCI MENURUT PROGRAM/KEGIATAN
                         </div>
                         <div>
-                            TAHUN ANGGARAN 2024
+                            TAHUN ANGGARAN {year}
                         </div>
                     </div>
 
                     <div className="flex items-center gap-x-2">
-                        <div className="shrink w-[50px]">
-                            OPD
+                        <div className="shrink w-[150px]">
+                            PERANGKAT DAERAH
                         </div>
                         <div>
-                            : BAGIAN PEREKONOMIAN DAN SDA SETDA OGAN ILIR
-                            {/* {instanceId} */}
+                            : {instance?.name ?? '-'}
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2">
-                        <div className="shrink w-[50px]">
+                        <div className="shrink w-[150px]">
                             BULAN
                         </div>
                         <div className="uppercase">
@@ -104,8 +156,8 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <div className="table-responsive max-h-[calc(100vh-300px)] overflow-x-auto">
-                    <table className="table-striped">
+                <div className="table-responsive max-h-[calc(100vh-300px)] overflow-x-auto pb-5">
+                    <table className="table-stripeds">
                         <thead className="sticky top-0 left-0">
                             <tr>
                                 <th className="text-center border bg-slate-900 text-white"
@@ -127,7 +179,7 @@ export default function Page() {
                                 <th className="text-center border bg-slate-900 text-white"
                                     colSpan={7}
                                 >
-                                    Anggaran Tahun 2024
+                                    Anggaran Tahun {year}
                                 </th>
                                 <th className="text-center border bg-slate-900 text-white"
                                     colSpan={10}
@@ -169,7 +221,7 @@ export default function Page() {
                                 >
                                     Pagu (Rp)
                                 </th>
-                                <th className="text-center border bg-slate-900 text-white min-w-[200px]"
+                                <th className="text-center border bg-slate-900 text-white min-w-[100px]"
                                     rowSpan={2}
                                 >
                                     Bobot (%)
@@ -196,7 +248,7 @@ export default function Page() {
                                 >
                                     Realisasi Kinerja
                                 </th>
-                                <th className="text-center border bg-slate-900 text-white"
+                                <th className="text-center border bg-slate-900 text-white min-w-[300px]"
                                     rowSpan={2}
                                 >
                                     Data Pendukung (Photo)
@@ -212,7 +264,7 @@ export default function Page() {
                                 <th className="text-center border bg-slate-900 text-white min-w-[200px]">
                                     (Rp)
                                 </th>
-                                <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                                <th className="text-center border bg-slate-900 text-white min-w-[100px]">
                                     (%)
                                 </th>
 
@@ -220,7 +272,7 @@ export default function Page() {
                                     colSpan={2}>
                                     Target Kinerja s.d Akhir Tahun
                                 </th>
-                                <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                                <th className="text-center border bg-slate-900 text-white min-w-[100px]">
                                     %
                                 </th>
                                 <th className="text-center border bg-slate-900 text-white min-w-[200px]">
@@ -234,96 +286,281 @@ export default function Page() {
                                 >
                                     Realisasi Kinerja s.d Bulan Ini
                                 </th>
-                                <th className="text-center border bg-slate-900 text-white min-w-[200px]">
+                                <th className="text-center border bg-slate-900 text-white min-w-[100px]">
                                     (%)
                                 </th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map((item: any, index: number) => (
-                                <tr key={index}>
-                                    <td className="border border-slate-600">
-                                        1
-                                    </td>
-                                    {/* kode rekening start */}
-                                    <td className="border border-slate-600">
-                                        1
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        1.2
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        1.2.3
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        1.2.3.4
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        1.2.3.4.5
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        1.2.3.4.5.6
-                                    </td>
-                                    {/* kode rekening end */}
+                            {isFetching ? (
+                                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map((item: any, index: number) => (
+                                    <tr key={index}>
+                                        <td className="border border-slate-600">
 
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
-                                    <td className="border border-slate-600">
-                                        test
-                                    </td>
+                                        </td>
+                                        {/* kode rekening start */}
+                                        <td className="border border-slate-600">
 
-                                </tr>
-                            ))}
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        {/* kode rekening end */}
+
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+
+                                    </tr>
+                                ))
+                            ) : (
+                                datas?.map((item: any, index: number) => (
+                                    <tr
+                                        key={index}
+                                        className={`${item.data_type == 'data' ? '' : 'bg-slate-300 !text-whites'}`}
+                                    >
+                                        <td className="border border-slate-600 text-center">
+                                            {item.data_type == 'data' ? '' : item.no}
+                                        </td>
+
+                                        {/* kode rekening start */}
+                                        <td className="border border-slate-600">
+                                            {item.rek_code_1}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {item.rek_code_2}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {item.rek_code_3}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {item.rek_code_4}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {item.rek_code_5}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {item.rek_code_6}
+                                        </td>
+                                        {/* kode rekening end */}
+
+                                        <td className="border border-slate-600">
+                                            <div className="font-semibold">
+                                                {item.name}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                                <DisplayMoney
+                                                    data={item.pagu}
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                                <div className="text-center">
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.bobot)} %
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="border border-slate-600">
+
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {/* Realisasi Lalu */}
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                                <DisplayMoney
+                                                    data={item.realisasi_lalu}
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {/* Realisasi Ini */}
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                                <DisplayMoney
+                                                    data={item.realisasi_ini}
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {/* Realisasi s.d Bulan Ini */}
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                                <DisplayMoney
+                                                    data={item.realisasi}
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            {/* Realisasi s.d Bulan Ini Percent */}
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                                <div className="text-center">
+                                                    {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.realisasi_percent)} %
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.indikator_kinerja && (
+                                                    item.indikator_kinerja.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            {item}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.target_kinerja && (
+                                                    item.target_kinerja.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            {item ?? '0'}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.target_kinerja_satuan && (
+                                                    item.target_kinerja_satuan.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            {item ?? '-'}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="text-center">
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.target_kinerja_percent)} %
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.realisasi_kinerja_lalu && (
+                                                    item.realisasi_kinerja_lalu.map((item: any, index: number) => (
+                                                        <div>
+                                                            {item ?? '0'}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            [onprogress]
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.realisasi_kinerja && (
+                                                    item.realisasi_kinerja.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            {item ?? '0'}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.target_kinerja_satuan && (
+                                                    item.target_kinerja_satuan.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            {item ?? '-'}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="text-center">
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.realisasi_kinerja_percent)} %
+                                            </div>
+                                        </td>
+                                        <td className="border border-slate-600">
+                                            <div className="space-y-2 divide-y">
+                                                {item.data_pendukung && (
+                                                    item.data_pendukung.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            <Link
+                                                                href={item.path}
+                                                                target="_blank"
+                                                                className="text-blue-500 hover:text-blue-700 hover:underline">
+                                                                {item.filename ?? '-'}
+                                                            </Link>
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>

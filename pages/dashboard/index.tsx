@@ -296,6 +296,8 @@ const Index = () => {
         },
     };
 
+    const [showMenu, setShowMenu] = useState(false);
+
     return (
         <>
             <div className='mb-5'>
@@ -310,19 +312,36 @@ const Index = () => {
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-8 justify-center items-center gap-x-5">
-                <div className='hidden md:block xl:col-span-3 md:col-span-3 self-start'>
-                    <MainMenu />
+            <div className="relative">
+                <div className={`hidden md:blocks absolute top-0 z-50 ${showMenu ? 'left-[35%]' : 'left-0'}`}>
+                    <button
+                        type='button'
+                        className='btn btn-dark px-2'
+                        onClick={(e) => {
+                            setShowMenu(!showMenu)
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faAngleDoubleRight}
+                            className={`w-4 h-4 ${showMenu ? 'rotate-180' : ''}`} />
+                    </button>
                 </div>
+                <div className="grid md:grid-cols-8 justify-center items-center gap-x-5">
 
-                <div className='cols-span-5 xl:col-span-5 md:col-span-5 grid grid-cols-1 xl:grid-cols-2 gap-2'>
-                    <div className="flex items-center justify-center">
-                        <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
+                    {showMenu && (
+                        <div className='hidden md:block xl:col-span-3 md:col-span-3 self-start'>
+                            <MainMenu />
+                        </div>
+                    )}
 
-                            {percentageAnggaranSummary != null ? (
-                                <>
+                    <div className={`${showMenu ? 'cols-span-5 xl:col-span-5 md:col-span-5' : 'cols-span-8 xl:col-span-8 md:col-span-8'} grid grid-cols-1 xl:grid-cols-2 gap-2`}>
+                        <div className="flex items-center justify-center">
+                            <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
 
-                                    {/* <div className="absolute top-0 inset-x-0">
+                                {percentageAnggaranSummary != null ? (
+                                    <>
+
+                                        {/* <div className="absolute top-0 inset-x-0">
                                         <Player
                                             autoplay
                                             loop
@@ -332,54 +351,54 @@ const Index = () => {
                                         </Player>
                                     </div> */}
 
-                                    <div className="absolute z-[1] top-[20%] xl:top-[20%] 2xl:top-[25%] 4xl:top-[28%] inset-x-0 group-hover:top-[15%] group-hover:xl:top-[15%] group-hover:2xl:top-[20%] group-hover:4xl:top-[23%] transition-all delay-100 duration-300">
-                                        <Player
-                                            autoplay
-                                            loop
-                                            src="/lottie/animation-4.json"
-                                            className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
-                                        >
-                                        </Player>
-                                    </div>
-
-                                    <Link href={`/dashboard/capaian-keuangan`} className=''>
-                                        {isMounted ? (
-                                            <ReactApexChart
-                                                series={chartCapaianKeuangan.series}
-                                                options={chartCapaianKeuangan.options}
-                                                type="radialBar" height={500} width={'100%'} />
-                                        ) : (
-                                            <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                                <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
-                                            </div>
-                                        )}
-
-                                        <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-300'>
-                                            Capaian Belanja
+                                        <div className="absolute z-[1] top-[20%] xl:top-[20%] 2xl:top-[25%] 4xl:top-[28%] inset-x-0 group-hover:top-[15%] group-hover:xl:top-[15%] group-hover:2xl:top-[20%] group-hover:4xl:top-[23%] transition-all delay-100 duration-300">
+                                            <Player
+                                                autoplay
+                                                loop
+                                                src="/lottie/animation-4.json"
+                                                className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
+                                            >
+                                            </Player>
                                         </div>
-                                        <div className="flex items-center justify-center">
-                                            <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
-                                                <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
-                                                Klik untuk Melihat Rincian Capaian Belanja
+
+                                        <Link href={`/dashboard/capaian-keuangan`} className=''>
+                                            {isMounted ? (
+                                                <ReactApexChart
+                                                    series={chartCapaianKeuangan.series}
+                                                    options={chartCapaianKeuangan.options}
+                                                    type="radialBar" height={500} width={'100%'} />
+                                            ) : (
+                                                <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
+                                                    <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
+                                                </div>
+                                            )}
+
+                                            <div className='cursor-pointer text-xl font-bold text-center group-hover:text-success group-hover:-skew-x-12 transition-all duration-300'>
+                                                Capaian Belanja
                                             </div>
-                                        </div>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <LoadingSicaram />
-                                </>
-                            )}
+                                            <div className="flex items-center justify-center">
+                                                <div className="text-xs text-center badge bg-success opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
+                                                    <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
+                                                    Klik untuk Melihat Rincian Capaian Belanja
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <LoadingSicaram />
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex items-center justify-center">
-                        <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
+                        <div className="flex items-center justify-center">
+                            <div className="h-[500px] w-full relative group p-4 rounded-xl transition-all delay-100 duration-300">
 
-                            {KinerjaSummary?.realisasi != null ? (
-                                <>
+                                {KinerjaSummary?.realisasi != null ? (
+                                    <>
 
-                                    {/* <div className="absolute -top-7 inset-x-0">
+                                        {/* <div className="absolute -top-7 inset-x-0">
                                         <Player
                                             autoplay
                                             loop
@@ -389,40 +408,41 @@ const Index = () => {
                                         </Player>
                                     </div> */}
 
-                                    <div className="absolute z-[1] top-[20%] xl:top-[20%] 2xl:top-[25%] 4xl:top-[28%] inset-x-0 group-hover:top-[15%] group-hover:xl:top-[15%] group-hover:2xl:top-[20%] group-hover:4xl:top-[23%] transition-all delay-100 duration-300">
-                                        <Player
-                                            autoplay
-                                            loop
-                                            src="/lottie/animation-3.json"
-                                            className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
-                                        >
-                                        </Player>
-                                    </div>
+                                        <div className="absolute z-[1] top-[20%] xl:top-[20%] 2xl:top-[25%] 4xl:top-[28%] inset-x-0 group-hover:top-[15%] group-hover:xl:top-[15%] group-hover:2xl:top-[20%] group-hover:4xl:top-[23%] transition-all delay-100 duration-300">
+                                            <Player
+                                                autoplay
+                                                loop
+                                                src="/lottie/animation-3.json"
+                                                className='w-32 h-32 group-hover:w-40 group-hover:h-40 transition-all delay-100 duration-300'
+                                            >
+                                            </Player>
+                                        </div>
 
-                                    <Link href={`/dashboard/capaian-kinerja`} className=''>
-                                        {isMounted ? (
-                                            <ReactApexChart series={chartCapaianKinerja.series} options={chartCapaianKinerja.options} type="radialBar" height={500} width={'100%'} />
-                                        ) : (
-                                            <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                                <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
+                                        <Link href={`/dashboard/capaian-kinerja`} className=''>
+                                            {isMounted ? (
+                                                <ReactApexChart series={chartCapaianKinerja.series} options={chartCapaianKinerja.options} type="radialBar" height={500} width={'100%'} />
+                                            ) : (
+                                                <div className="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
+                                                    <span className="inline-flex h-5 w-5 animate-spin rounded-full  border-2 border-black !border-l-transparent dark:border-white"></span>
+                                                </div>
+                                            )}
+                                            <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-300'>
+                                                Capaian Kinerja
                                             </div>
-                                        )}
-                                        <div className='cursor-pointer text-xl font-bold text-center group-hover:text-primary group-hover:-skew-x-12 transition-all duration-300'>
-                                            Capaian Kinerja
-                                        </div>
-                                        <div className="flex items-center justify-center">
-                                            <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
-                                                <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
-                                                Klik untuk Melihat Rincian Capaian Kinerja
+                                            <div className="flex items-center justify-center">
+                                                <div className="text-xs text-center badge bg-primary opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300 flex items-center justify-center">
+                                                    <FontAwesomeIcon icon={faAngleDoubleRight} className='mr-1 w-3 h-3' />
+                                                    Klik untuk Melihat Rincian Capaian Kinerja
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <LoadingSicaram />
-                                </>
-                            )}
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <LoadingSicaram />
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

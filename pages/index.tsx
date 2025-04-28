@@ -24,7 +24,7 @@ const Index = () => {
         if (CurrentUser?.role_id === 9) {
             router.push('/dashboard/pd');
         } else {
-            router.push('/dashboard');
+            router.push('/dashboard/capaian-keuangan');
         }
     }, []);
 

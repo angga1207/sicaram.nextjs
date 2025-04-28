@@ -935,8 +935,8 @@ const Header = () => {
                                                     }}
                                                     alt={CurrentUser?.fullname ?? 'User Photo'} />
                                                 <div className="ltr:pl-4 rtl:pr-4">
-                                                    <h4 className="truncate text-base">
-                                                        {CurrentUser?.firstname}
+                                                    <h4 className="line-clamp-2 text-base">
+                                                        {CurrentUser?.fullname}
                                                     </h4>
                                                     {CurrentUser?.role_name != 'Perangkat Daerah' ? (
                                                         <>

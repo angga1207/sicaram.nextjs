@@ -341,7 +341,7 @@ const Index = () => {
                                                     })
                                                 } />
                                         </div>
-                                        {/* <div className="mb-5">
+                                        <div className="mb-5">
                                             <label className="form-label mb-0">
                                                 Bulan
                                             </label>
@@ -368,8 +368,8 @@ const Index = () => {
                                                         }
                                                     })
                                                 } />
-                                        </div> */}
-                                        <div className="mb-5">
+                                        </div>
+                                        {/* <div className="mb-5">
                                             <label className="form-label mb-0">
                                                 Triwulan
                                             </label>
@@ -396,7 +396,7 @@ const Index = () => {
                                                         }
                                                     })
                                                 } />
-                                        </div>
+                                        </div> */}
                                         <div className="mb-5">
                                             <button type="button" className="btn btn-primary w-full" onClick={(e) => {
                                                 e.preventDefault();
@@ -408,16 +408,16 @@ const Index = () => {
                                                     showAlertCenter('info', 'Pilih Tahun terlebih dahulu');
                                                     return;
                                                 }
-                                                if (!triwulan && triwulan != 0) {
-                                                    showAlertCenter('info', 'Pilih Triwulan terlebih dahulu');
-                                                    return;
-                                                }
-                                                // if (!month && month != 0) {
-                                                //     showAlertCenter('info', 'Pilih Bulan terlebih dahulu');
+                                                // if (!triwulan && triwulan != 0) {
+                                                //     showAlertCenter('info', 'Pilih Triwulan terlebih dahulu');
                                                 //     return;
                                                 // }
-                                                router.push(`/report/realisasi?instance=${instance}&year=${year}&triwulan=${triwulan}`);
-                                                // router.push(`/report/realisasi/v2/?instance=${instance}&year=${year}&month=${month}`);
+                                                if (!month && month != 0) {
+                                                    showAlertCenter('info', 'Pilih Bulan terlebih dahulu');
+                                                    return;
+                                                }
+                                                // router.push(`/report/realisasi?instance=${instance}&year=${year}&triwulan=${triwulan}`);
+                                                router.push(`/report/realisasi/v2/?instance=${instance}&year=${year}&month=${month}`);
                                             }}>
                                                 <IconSearch className="w-4 h-4" />
                                                 <span className="ltr:ml-2 rtl:mr-2">
