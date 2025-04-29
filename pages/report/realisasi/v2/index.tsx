@@ -7,6 +7,23 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import DisplayMoney from "@/components/DisplayMoney";
 import Link from "next/link";
+import Select from 'react-select';
+import Swal from "sweetalert2";
+
+const showAlert = async (icon: any, text: any) => {
+    const toast = Swal.mixin({
+        toast: false,
+        position: 'center',
+        showConfirmButton: true,
+        confirmButtonText: 'Tutup',
+        showCancelButton: false,
+    });
+    toast.fire({
+        icon: icon,
+        title: text,
+        padding: '10px 20px',
+    });
+};
 
 export default function Page() {
 
@@ -73,7 +90,6 @@ export default function Page() {
         }
     }, [router.query]);
 
-
     const [CurrentToken, setCurrentToken] = useState<any>(null);
     const session = useSession();
     useEffect(() => {
@@ -82,6 +98,43 @@ export default function Page() {
             setCurrentToken(token);
         }
     }, [isMounted, session]);
+
+    const fetchRefs = async () => {
+        const response = await axios.get(`${BaseUri()}/report/getRefs`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`
+            },
+            params: {
+                periode_id: periode?.id,
+            }
+        });
+        const data = await response.data;
+        return data;
+    }
+
+    const [years, setYears] = useState<any>(null);
+    const [instances, setInstances] = useState<any>([]);
+
+    useEffect(() => {
+        if (isMounted && periode?.id) {
+            fetchRefs().then((data) => {
+                if (data.status == 'success') {
+                    setInstances(data.data.instances);
+                    setYears(data.data.periodeRange.years);
+                } else if (data.status == 'error') {
+                    showAlert('error', data.message);
+                } else {
+                    showAlert('error', 'Terjadi kesalahan');
+                }
+            });
+        }
+
+        // if (years?.includes(new Date().getFullYear())) {
+        //     setYear(new Date().getFullYear());
+        // }
+
+    }, [isMounted, periode?.id]);
 
     const fetchReport = async () => {
         if (CurrentToken) {
@@ -139,20 +192,106 @@ export default function Page() {
                         </div>
                     </div>
 
+                </div>
+                <div className="flex items-center gap-x-2 mb-2">
+                    <div className="shrink-0 whitespace-nowrap w-[150px]">
+                        PERANGKAT DAERAH
+                    </div>
+                    <div>
+                        :
+                    </div>
+                    <div className="">
+                        <Select placeholder="Pilih Perangkat Daerah"
+                            className='w-full'
+                            onChange={(e: any) => {
+                                if ([9].includes(CurrentUser?.role_id)) {
+                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                    return;
+                                } else {
+                                    setInstance(e?.value);
+                                }
+                            }}
+                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                            value={
+                                instances?.map((data: any, index: number) => {
+                                    if (data.id == instance?.id) {
+                                        return {
+                                            value: data.id,
+                                            label: data.name,
+                                        }
+                                    }
+                                })
+                            }
+                            options={
+                                instances?.map((data: any, index: number) => {
+                                    return {
+                                        value: data.id,
+                                        label: data.name,
+                                    }
+                                })
+                            }
+                        />
+                    </div>
+                </div>
+                <div className="flex items-center gap-x-2 mb-2">
                     <div className="flex items-center gap-x-2">
-                        <div className="shrink w-[150px]">
-                            PERANGKAT DAERAH
+                        <div className="shrink-0 w-[150px]">
+                            BULAN & TAHUN
                         </div>
-                        <div>
-                            : {instance?.name ?? '-'}
+                        <div className="uppercase">
+                            :
+                        </div>
+                        <div className="">
+                            <Select placeholder="Pilih Bulan"
+                                className='w-full'
+                                onChange={(e: any) => {
+                                    setMonth(e?.value);
+                                }}
+                                value={
+                                    months?.map((data: any, index: number) => {
+                                        if (data.id == month?.id) {
+                                            return {
+                                                value: data.id,
+                                                label: data.name,
+                                            }
+                                        }
+                                    })
+                                }
+                                options={
+                                    months?.map((data: any, index: number) => {
+                                        return {
+                                            value: data.id,
+                                            label: data.name,
+                                        }
+                                    })
+                                } />
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2">
-                        <div className="shrink w-[150px]">
-                            BULAN
-                        </div>
-                        <div className="uppercase">
-                            : {month?.name ?? '-'}
+                        <div className="">
+                            <Select placeholder="Pilih Tahun"
+                                className='w-full'
+                                onChange={(e: any) => {
+                                    setYear(e?.value);
+                                }}
+                                value={
+                                    years?.map((data: any, index: number) => {
+                                        if (data == year) {
+                                            return {
+                                                value: data,
+                                                label: data,
+                                            }
+                                        }
+                                    })
+                                }
+                                options={
+                                    years?.map((data: any, index: number) => {
+                                        return {
+                                            value: data,
+                                            label: data,
+                                        }
+                                    })
+                                } />
                         </div>
                     </div>
                 </div>

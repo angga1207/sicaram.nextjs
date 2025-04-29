@@ -416,3 +416,29 @@ export async function uploadRealisasiExcel(subKegiatanId: any, instance: any, pe
         }
     }
 }
+
+export async function uploadBerkasRealisasi(idRealisasiSubKegiatan: any, year: any, month: any, datas: any, rekeningId: any) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.post(baseUri + '/caram/realisasi-berkas/' + idRealisasiSubKegiatan + '/upload', {
+            'newFiles': datas,
+            'year': year,
+            'month': month,
+            'rekening_id': rekeningId
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        })
+        // console.log(res);
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}

@@ -229,7 +229,7 @@ const Index = () => {
                                         >
                                             <FontAwesomeIcon icon={faBriefcase} className="w-4 h-4 mr-2" />
                                             <div className="">
-                                                Program
+                                                Konsolidasi Program
                                             </div>
                                         </button>
                                     )}
@@ -276,7 +276,7 @@ const Index = () => {
                                 <Tab.Panel>
                                     <div className="active pt-5">
                                         <div className="mb-5 text-center text-xl font-semibold">
-                                            Laporan Program - Sub Kegiatan
+                                            Laporan Konsolidasi Program
                                         </div>
                                         {![9].includes(CurrentUser?.role_id) && (
                                             <div className="mb-5">

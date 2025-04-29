@@ -254,8 +254,11 @@ const Page = () => {
     useEffect(() => {
         setDatas([]);
         setPrograms([]);
+        setProgramId(null);
         setKegiatans([]);
+        setKegiatanId(null);
         setSubKegiatans([]);
+        setSubKegiatanId(null);
     }, [instance, year])
 
     useEffect(() => {
@@ -267,6 +270,7 @@ const Page = () => {
             });
             setKegiatans(kegs[0]?.kegiatans ?? [])
             setSubKegiatans([])
+            setSubKegiatanId(null)
         }
     }, [programId])
 
