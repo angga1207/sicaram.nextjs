@@ -6,8 +6,25 @@ import { isEmpty } from "lodash";
 import Swal from "sweetalert2";
 
 const InputRupiah = (
-    { dataValue, onChange, isDisabled = false, readOnly = false, isRealisasi = false, onBlur, }:
-        { dataValue?: any, onChange?: any, isDisabled?: boolean, readOnly?: boolean, isRealisasi?: boolean, onBlur?: any }
+    {
+        dataValue,
+        onChange,
+        isDisabled = false,
+        readOnly = false,
+        isRealisasi = false,
+        onBlur,
+        placeholder = '',
+        isFullWidth = false,
+    }: {
+        dataValue?: any,
+        onChange?: any,
+        isDisabled?: boolean,
+        readOnly?: boolean,
+        isRealisasi?: boolean,
+        onBlur?: any,
+        placeholder?: string,
+        isFullWidth?: boolean,
+    }
 ) => {
 
     const handleChange = (e: any) => {
@@ -28,7 +45,7 @@ const InputRupiah = (
     return (
         <>
             {readOnly ? (
-                <div className="flex group">
+                <div className="flex group w-full">
                     <div className="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b]">
                         Rp.
                     </div>
@@ -54,7 +71,7 @@ const InputRupiah = (
                     </Tippy>
                 </div>
             ) : (
-                <div className="flex group">
+                <div className="flex group w-full">
                     {isRealisasi === false && (
                         <div className={`bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-white-light dark:border-[#17263c] dark:bg-[#1b2e4b] select-none`}>
                             Rp.
@@ -102,8 +119,9 @@ const InputRupiah = (
                             }
                         }}
                         disabled={isDisabled}
-                        className={`form-input font-semibold text-end hidden group-focus-within:block group-hover:block disabled:bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] rounded-none'}`} />
-                    <div className={`form-input font-semibold text-end block group-focus-within:hidden group-hover:hidden ${isDisabled ? 'bg-slate-200' : ''} ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] rounded-none'}`}>
+                        placeholder={placeholder}
+                        className={`form-input font-semibold text-end hidden group-focus-within:block group-hover:block disabled:bg-slate-200 ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] rounded-none'} ${isFullWidth ? 'w-full' : ''}`} />
+                    <div className={`form-input font-semibold text-end block group-focus-within:hidden group-hover:hidden ${isDisabled ? 'bg-slate-200' : ''} ${dataValue < 0 ? '!text-red-500' : ''} ${isRealisasi ? 'w-full min-h-8 text-xs px-1.5 py-1' : 'w-[250px] rounded-none'} ${isFullWidth ? 'w-full' : ''}`}>
                         {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(dataValue)}
                     </div>
                     {/* Copy Data */}

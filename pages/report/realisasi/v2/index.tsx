@@ -211,7 +211,7 @@ export default function Page() {
                                     setInstance(e?.value);
                                 }
                             }}
-                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
+                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isFetching ?? false)}
                             value={
                                 instances?.map((data: any, index: number) => {
                                     if (data.id == instance?.id) {
@@ -244,6 +244,7 @@ export default function Page() {
                         <div className="">
                             <Select placeholder="Pilih Bulan"
                                 className='w-full'
+                                isDisabled={(isFetching ?? false)}
                                 onChange={(e: any) => {
                                     setMonth(e?.value);
                                 }}
@@ -271,6 +272,7 @@ export default function Page() {
                         <div className="">
                             <Select placeholder="Pilih Tahun"
                                 className='w-full'
+                                isDisabled={(isFetching ?? false)}
                                 onChange={(e: any) => {
                                     setYear(e?.value);
                                 }}

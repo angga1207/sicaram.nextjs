@@ -495,7 +495,7 @@ const Header = () => {
                             <IconMenu className="h-5 w-5" />
                         </button>
 
-                        <div className="block sm:hidden">
+                        {/* <div className="block sm:hidden">
                             {periode?.name ? (
                                 <>
                                     <div className="text-sm font-semibold">
@@ -514,7 +514,7 @@ const Header = () => {
                                     </div>
                                 </>
                             )}
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="hidden ltr:mr-2 rtl:ml-2 sm:block">

@@ -285,7 +285,7 @@ export async function sendReplyVerification(id: any, data: any, year: any, month
     }
 }
 
-export async function getKontrakSPSE(search: any, year: any, kodeSatker: any) {
+export async function getKontrakSPSE(search: any, year: any, kodeSatker: any, type: any) {
     try {
         const session = await getSession();
         const CurrentToken = session?.user?.name;
@@ -299,6 +299,7 @@ export async function getKontrakSPSE(search: any, year: any, kodeSatker: any) {
                 kode_satker: kodeSatker,
                 search: search,
                 year: year,
+                type: type,
             }
         });
         const data = await res.data;
@@ -338,7 +339,7 @@ export async function getContract(subKegiatanId: any, year: any, month: any) {
 }
 
 
-export async function addContract(id: any, data: any, year: any, month: any) {
+export async function addContract(id: any, data: any, year: any, month: any, type: any, kode_rekening_id: any) {
     try {
         const session = await getSession();
         const CurrentToken = session?.user?.name;
@@ -346,7 +347,36 @@ export async function addContract(id: any, data: any, year: any, month: any) {
             id: id,
             data: data,
             year: year,
-            month: month
+            month: month,
+            type: type,
+            kode_rekening_id: kode_rekening_id
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            }
+        });
+        const returns = await res.data;
+        return returns;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function addManualContract(id: any, data: any, year: any, month: any, type: any, kode_rekening_id: any) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.post(baseUri + '/caram/realisasi-keterangan-add-manual-kontrak', {
+            id: id,
+            data: data,
+            year: year,
+            month: month,
+            type: type,
+            kode_rekening_id: kode_rekening_id
         }, {
             headers: {
                 'Content-Type': 'application/json',
