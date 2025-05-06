@@ -12,7 +12,7 @@ import { faTimesCircle } from "@fortawesome/free-regular-svg-icons";
 import Tippy from "@tippyjs/react";
 import 'tippy.js/dist/tippy.css';
 import Link from "next/link";
-import { faCloudUploadAlt, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faCloudUploadAlt, faLink, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -306,27 +306,27 @@ const Page = () => {
         //     showAlert('error', 'Bulan yang dipilih tidak sesuai. Minimal sama!');
         //     return
         // }
-        if (subKegiatan) {
-            Swal.fire({
-                // title: 'Unggah Berkas Realisasi',
-                title: 'Apakah anda yakin untuk mengunggah berkas realisasi <br/> Sub Kegiatan : ' + subKegiatan.fullcode + ' - ' + subKegiatan.name + ', <br/> Bulan ' + months.find((item: any) => item.value == month)?.label + ' Tahun ' + year,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Unggah',
-                cancelButtonText: 'Batal',
-                cancelButtonColor: '#3085d6',
-                confirmButtonColor: '#00ab55',
-                reverseButtons: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    goUpload();
-                }
-            });
-            return;
-        } else {
-            showAlertCenter('error', 'Pilih Sub Kegiatan!');
-            return
-        }
+        // if (subKegiatan) {
+        Swal.fire({
+            // title: 'Unggah Berkas Realisasi',
+            title: 'Apakah anda yakin untuk mengunggah berkas realisasi',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Unggah',
+            cancelButtonText: 'Batal',
+            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#00ab55',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                goUpload();
+            }
+        });
+        return;
+        // } else {
+        //     showAlertCenter('error', 'Pilih Sub Kegiatan!');
+        //     return
+        // }
     }
 
     const goUpload = async () => {
@@ -459,184 +459,60 @@ const Page = () => {
                         </div>
                     </div>
 
-                    {datas?.length > 0 ? (
-                        <div className="">
-                            {(instance && year && month) && (
-                                <div className="mb-5">
-                                    <label className="form-label mb-0">
-                                        Program
-                                    </label>
-                                    <Select placeholder="Pilih Program"
-                                        className='w-full'
-                                        onChange={(e: any) => {
-                                            if ([9].includes(CurrentUser?.role_id)) {
-                                                showAlert('error', 'Anda tidak memiliki akses ke Program ini');
-                                            } else {
-                                                setProgramId(e?.value);
-                                            }
-                                        }}
-                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
-                                        value={
-                                            programs?.map((data: any, index: number) => {
-                                                if (data.id == programId) {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.fullcode + ' - ' + data.name,
-                                                    }
-                                                }
-                                            })
-                                        }
-                                        options={
-                                            programs?.map((data: any, index: number) => {
-                                                return {
-                                                    value: data.id,
-                                                    label: data.fullcode + ' - ' + data.name,
-                                                }
-                                            })
-                                        } />
-                                </div>
-                            )}
+                    <div className=""></div>
 
-                            {(instance && year && month && programId) && (
-                                <div className="mb-5">
-                                    <label className="form-label mb-0">
-                                        Kegiatan
-                                    </label>
-                                    <Select placeholder="Pilih Kegiatan"
-                                        className='w-full'
+                    {(instance && year && month) && (
+                        <div className="flex flex-wrap items-center gap-x-2">
+                            <div className="grow">
+                                <div className="btn btn-primary w-full relative cursor-pointer">
+                                    <input
+                                        id="inputFile"
+                                        type="file"
+                                        accept=".xlsx"
+                                        title="Pilih Berkas Realisasi"
                                         onChange={(e: any) => {
-                                            if ([9].includes(CurrentUser?.role_id)) {
-                                                showAlert('error', 'Anda tidak memiliki akses ke Kegiatan ini');
-                                            } else {
-                                                setKegiatanId(e?.value);
-                                            }
+                                            setFile(e.target.files[0])
+                                            // console.log(e.target.files[0])
                                         }}
-                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
-                                        value={
-                                            kegiatans?.map((data: any, index: number) => {
-                                                if (data.id == kegiatanId) {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.fullcode + ' - ' + data.name,
-                                                    }
-                                                }
-                                            })
-                                        }
-                                        options={
-                                            kegiatans?.map((data: any, index: number) => {
-                                                return {
-                                                    value: data.id,
-                                                    label: data.fullcode + ' - ' + data.name,
-                                                }
-                                            })
-                                        } />
-                                </div>
-                            )}
-
-                            {(instance && year && month && programId && kegiatanId) && (
-                                <div className="mb-5">
-                                    <label className="form-label mb-0">
-                                        Sub Kegiatan
+                                        className="opacity-0 absolute top-0 left-0 w-full h-full" />
+                                    <label htmlFor="inputFile" className="cursor-pointer select-none mb-0">
+                                        {file ? file?.name : 'Pilih Berkas Realisasi'}
                                     </label>
-                                    <Select placeholder="Pilih Sub Kegiatan"
-                                        className='w-full'
-                                        onChange={(e: any) => {
-                                            if ([9].includes(CurrentUser?.role_id)) {
-                                                showAlert('error', 'Anda tidak memiliki akses ke Sub Kegiatan ini');
-                                            } else {
-                                                setSubKegiatanId(e?.value);
-                                            }
-                                        }}
-                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : false}
-                                        value={
-                                            subKegiatans?.map((data: any, index: number) => {
-                                                if (data.id == subKegiatanId) {
-                                                    return {
-                                                        value: data.id,
-                                                        label: data.fullcode + ' - ' + data.name,
+                                    {file && (
+                                        <Tippy content="Hapus Berkas" theme="danger">
+                                            <button
+                                                onClick={() => {
+                                                    if (isUploading) {
+                                                        return;
                                                     }
-                                                }
-                                            })
-                                        }
-                                        options={
-                                            subKegiatans?.map((data: any, index: number) => {
-                                                return {
-                                                    value: data.id,
-                                                    label: data.fullcode + ' - ' + data.name,
-                                                }
-                                            })
-                                        } />
+                                                    setFile(null)
+                                                }}
+                                                className="btn btn-sm rounded-full w-6 h-6 p-1 btn-danger ml-5">
+                                                <FontAwesomeIcon icon={faTimesCircle} className="w-4 h-4" />
+                                            </button>
+                                        </Tippy>
+                                    )}
                                 </div>
-                            )}
+                            </div>
+                            <div className="grow">
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        if (isUploading) {
+                                            return;
+                                        }
+                                        handleUpload();
+                                    }}
+                                    className="btn btn-success w-full">
+                                    {isUploading == false ? (
+                                        <FontAwesomeIcon icon={faCloudUploadAlt} className="w-4 h-4 mr-1" />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faSpinner} className="w-4 h-4 mr-1 animate-spin" />
+                                    )}
+                                    {isUploading ? 'Sedang Mengunggah' : 'Unggah'}
+                                </button>
+                            </div>
                         </div>
-                    ) : (
-                        <></>
-                    )}
-
-                    {(instance && year && month && programId && kegiatanId && subKegiatanId) && (
-                        <>
-                            <div className="">
-                                <div className="mb-5">
-                                    <div className="btn btn-primary w-full relative cursor-pointer">
-                                        <input
-                                            id="inputFile"
-                                            type="file"
-                                            accept=".xlsx"
-                                            title="Pilih Berkas Realisasi"
-                                            onChange={(e: any) => {
-                                                setFile(e.target.files[0])
-                                                // console.log(e.target.files[0])
-                                            }}
-                                            className="opacity-0 absolute top-0 left-0 w-full h-full" />
-                                        <label htmlFor="inputFile" className="cursor-pointer select-none mb-0">
-                                            {file ? file?.name : 'Pilih Berkas Realisasi'}
-                                        </label>
-                                        {file && (
-                                            <Tippy content="Hapus Berkas" theme="danger">
-                                                <button
-                                                    onClick={() => {
-                                                        if (isUploading) {
-                                                            return;
-                                                        }
-                                                        setFile(null)
-                                                    }}
-                                                    className="btn btn-sm rounded-full w-6 h-6 p-1 btn-danger ml-5">
-                                                    <FontAwesomeIcon icon={faTimesCircle} className="w-4 h-4" />
-                                                </button>
-                                            </Tippy>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="mb-5">
-                                    <button
-                                        type="button"
-                                        onClick={(e) => {
-                                            if (isUploading) {
-                                                return;
-                                            }
-                                            handleUpload();
-                                        }}
-                                        className="btn btn-success w-full">
-                                        {isUploading == false ? (
-                                            <FontAwesomeIcon icon={faCloudUploadAlt} className="w-4 h-4 mr-1" />
-                                        ) : (
-                                            <FontAwesomeIcon icon={faSpinner} className="w-4 h-4 mr-1 animate-spin" />
-                                        )}
-                                        {isUploading ? 'Sedang Mengunggah' : 'Unggah'}
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="">
-                                <div className="mb-5">
-                                    <Link
-                                        href={`/realisasi/${subKegiatanId}?periode=${periode?.id}&year=${year}&month=${month}`}
-                                        target="_blank"
-                                        className="btn btn-secondary w-full">
-                                        Buka Halaman Realisasi
-                                    </Link>
-                                </div>
-                            </div>
-                        </>
                     )}
 
 
