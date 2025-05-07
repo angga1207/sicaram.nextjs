@@ -183,6 +183,40 @@ const Page = () => {
     const [isUploading, setIsUploading] = useState<any>(false)
 
     const [logs, setLogs] = useState<any>([])
+    const [typeOptions, setTypeOptions] = useState<any>([
+        {
+            id: 1,
+            label: 'Pagu Induk',
+            value: 'pagu_induk',
+        },
+        {
+            id: 2,
+            label: 'Pagu Perubahan',
+            value: 'pagu_perubahan',
+        },
+        {
+            id: 3,
+            label: 'Pagu Pergeseran 1',
+            value: 'pagu_pergeseran_1',
+        },
+        {
+            id: 4,
+            label: 'Pagu Pergeseran 2',
+            value: 'pagu_pergeseran_2',
+        },
+        {
+            id: 5,
+            label: 'Pagu Pergeseran 3',
+            value: 'pagu_pergeseran_3',
+        },
+        {
+            id: 5,
+            label: 'Pagu Pergeseran 4',
+            value: 'pagu_pergeseran_4',
+        },
+    ])
+    const [type, setType] = useState<any>('pagu_induk')
+    const [selectedDate, setSelectedDate] = useState<any>(null);
 
     useEffect(() => {
         if (isMounted) {
@@ -228,6 +262,8 @@ const Page = () => {
             formData.append('year', year)
             formData.append('periode', periode?.id)
             formData.append('message', messageApbd)
+            formData.append('type', type)
+            formData.append('date', selectedDate)
 
             const res = await axios.post(BaseUri() + '/caram/upload-apbd', formData, {
                 headers: {
@@ -464,7 +500,7 @@ const Page = () => {
                                 <Tab.Panel>
                                     <div className="pt-5">
                                         <div className="flex items-center gap-4">
-                                            <div className="grow">
+                                            <div className="grow w-full sm:w-[45%]">
                                                 <Select
                                                     placeholder="Pilih Bulan"
                                                     required={true}
@@ -477,7 +513,7 @@ const Page = () => {
                                             <div className="">
                                                 <FontAwesomeIcon icon={faLongArrowRight} className='text-slate-500 w-4 h-4' />
                                             </div>
-                                            <div className="grow">
+                                            <div className="grow w-full sm:w-[45%]">
                                                 <Select
                                                     placeholder="Sampai Bulan"
                                                     required={true}
@@ -488,16 +524,47 @@ const Page = () => {
                                                     options={months} />
                                             </div>
                                         </div>
-                                        <div className="w-full mt-2">
-                                            <Select
-                                                required={true}
-                                                value={years.filter((item: any) => item.value === year)[0]}
-                                                onChange={(e: any) => {
-                                                    setYear(e.value)
-                                                }}
-                                                placeholder="Pilih Tahun"
-                                                options={years} />
+                                        <div className="flex flex-wrap items-center gap-4 mt-4">
+                                            <div className="grow w-full sm:w-[45%]">
+                                                <Select
+                                                    required={true}
+                                                    value={typeOptions.filter((item: any) => item.value === type)[0]}
+                                                    onChange={(e: any) => {
+                                                        setType(e.value)
+                                                    }}
+                                                    placeholder="Pilih Jenis Pagu"
+                                                    options={typeOptions} />
+                                            </div>
+                                            <div className="shrink w-4 h-4 hidden sm:block">
+                                            </div>
+                                            <div className="grow w-full sm:w-[45%]">
+                                                <Select
+                                                    required={true}
+                                                    value={years.filter((item: any) => item.value === year)[0]}
+                                                    onChange={(e: any) => {
+                                                        setYear(e.value)
+                                                    }}
+                                                    placeholder="Pilih Tahun"
+                                                    options={years} />
+                                            </div>
                                         </div>
+
+                                        {type !== 'pagu_induk' && (
+                                            <div className="flex flex-wrap items-center gap-4 mt-4">
+                                                <div className="grow w-full sm:w-[45%]">
+                                                    <input type="date"
+                                                        className="w-full border border-gray-300 dark:border-[#191e3a] rounded-md p-2"
+                                                        value={selectedDate}
+                                                        min={`${year}-${month < 10 ? '0' + month : month}-01`}
+                                                        max={`${year}-${monthTo < 10 ? '0' + monthTo : monthTo}-${new Date(year, monthTo, 0).getDate()}`}
+                                                        placeholder="Tanggal"
+                                                        onChange={(e) => {
+                                                            setSelectedDate(e.target.value)
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
 
                                         <div className="mt-4">
                                             <input
@@ -552,6 +619,10 @@ const Page = () => {
                                                     {isUploading == false && (
                                                         <button
                                                             onClick={(e) => {
+                                                                if (type !== 'pagu_induk' && !selectedDate) {
+                                                                    showAlertBox('error', 'Tanggal harus diisi jika bukan Pagu Induk', 'Silahkan isi tanggal terlebih dahulu');
+                                                                    return;
+                                                                }
                                                                 uploadApbd()
                                                             }}
                                                             className="btn btn-success">
