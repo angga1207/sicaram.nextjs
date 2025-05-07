@@ -26,6 +26,7 @@ import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchd
 import Link from 'next/link';
 import LoadingSicaram from '@/components/LoadingSicaram';
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import IconCalendar from '@/components/Icon/IconCalendar';
 
 const Index = () => {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
@@ -45,10 +46,12 @@ const Index = () => {
     const [periode, setPeriode] = useState<any>({});
     const [year, setYear] = useState<any>(null)
     const [view, setView] = useState<number>(1);
+    const [isFetching, setIsFetching] = useState(false);
 
     const [AnggaranSeries, setAnggaranSeries] = useState<any>([]);
     const [AnggaranSummary, setAnggaranSummary] = useState<any>([]);
     const [RankInstances, setRankInstances] = useState<any>([]);
+    const [lastUpdate, setLastUpdate] = useState<any>(null);
 
     const [CurrentUser, setCurrentUser] = useState<any>([]);
     useEffect(() => {
@@ -88,6 +91,7 @@ const Index = () => {
     useEffect(() => {
         setAnggaranSeries([]);
         if (isMounted && periode?.id && year) {
+            setIsFetching(true);
             chartRealisasi(periode?.id, year, view).then((data) => {
                 if (data.status === 'success') {
                     setAnggaranSeries(data.data);
@@ -99,7 +103,9 @@ const Index = () => {
                         'realisasi': realisasi,
                         'percent': percent,
                     });
+                    setLastUpdate(data.data?.lastUpdate);
                 }
+                setIsFetching(false);
             });
         }
     }, [view, periode?.id, year, isMounted]);
@@ -396,27 +402,13 @@ const Index = () => {
                         <div>
                             <div className="space-y-6">
 
-                                <div className="flex">
+                                <div className="flex items-center">
                                     <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-primary-light text-primary dark:bg-primary dark:text-primary-light">
                                         <IconBolt />
                                     </span>
                                     <div className="flex-1 px-3">
                                         <div>
                                             Anggaran Belanja
-                                        </div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">
-                                            {AnggaranSummary?.target?.updated_at ? (
-                                                <>
-                                                    {new Date(AnggaranSummary?.target?.updated_at).toLocaleString('id-ID', {
-                                                        month: 'short',
-                                                        year: 'numeric',
-                                                    })}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    -
-                                                </>
-                                            )}
                                         </div>
                                     </div>
                                     <span
@@ -442,7 +434,7 @@ const Index = () => {
                                     </span>
                                 </div>
 
-                                <div className="flex">
+                                <div className="flex items-center">
                                     <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-success-light text-success dark:bg-success dark:text-success-light">
                                         <IconCashBanknotes />
                                     </span>
@@ -450,24 +442,10 @@ const Index = () => {
                                         <div>
                                             Realisasi Belanja
                                         </div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">
-                                            {AnggaranSummary?.realisasi?.updated_at ? (
-                                                <>
-                                                    {new Date(AnggaranSummary?.realisasi?.updated_at).toLocaleString('id-ID', {
-                                                        month: 'short',
-                                                        year: 'numeric',
-                                                    })}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    -
-                                                </>
-                                            )}
-                                        </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-success ltr:ml-auto rtl:mr-auto cursor-pointer"
                                         onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
-                                        {AnggaranSummary?.realisasi ? (
+                                        {isFetching == false ? (
                                             <>
                                                 {themeConfig.showMoney === true ? (
                                                     <>
@@ -481,6 +459,34 @@ const Index = () => {
                                                     </div>
                                                 )}
                                             </>
+                                        ) : (
+                                            <>
+                                                <div className="dots-loading text-sm">...</div>
+                                            </>
+                                        )}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center">
+                                    <span className="grid h-9 w-9 shrink-0 place-content-center rounded-md bg-secondary-light text-secondary dark:bg-secondary dark:text-secondary-light">
+                                        <IconCalendar />
+                                    </span>
+                                    <div className="flex-1 px-3">
+                                        <div>
+                                            Diupdate Terakhir
+                                        </div>
+                                    </div>
+                                    <span className="whitespace-pre px-1 text-base text-secondary ltr:ml-auto rtl:mr-auto select-none">
+                                        {lastUpdate ? (
+                                            <div className="text-sm text-white-dark dark:text-gray-500">
+                                                {new Date(lastUpdate).toLocaleString('id-ID', {
+                                                    day: '2-digit',
+                                                    month: 'short',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                }) + ' WIB'}
+                                            </div>
                                         ) : (
                                             <>
                                                 <div className="dots-loading text-sm">...</div>
@@ -546,7 +552,7 @@ const Index = () => {
                                     onClick={(e) => {
                                         router.push(`/dashboard/pd/${item.instance_alias}`);
                                     }}
-                                    className='bg-white dark:bg-[#192A3A] w-full items-center p-4 hover:bg-blue-200 hover:animate-blinkingBg dark:hover:bg-blue-900 rounded shadow cursor-pointer group'
+                                    className='bg-white dark:bg-[#192A3A] w-full items-center p-4 hover:bg-slate-100 dark:hover:bg-slate-700 rounded shadow cursor-pointer group'
                                 >
                                     <div className="px-4 flex items-center justify-between">
                                         <div className="w-full">
@@ -558,11 +564,11 @@ const Index = () => {
                                             </div>
                                             <div className='mt-2 pt-2 border-t'>
                                                 <div className="font-semibold text-center mb-5">
-                                                    Capaian Keuangan
+                                                    Capaian Belanja
                                                 </div>
                                                 <div className='w-full text-center flex flex-col md:flex-row gap-y-10'>
                                                     <div className="flex flex-col md:flex-row gap-4 items-center">
-                                                        <Tippy content="Capaian Keuangan" theme='success'>
+                                                        <Tippy content="Capaian Belanja" theme='success'>
                                                             <div className="relative w-40 h-40 cursor-pointer">
                                                                 <svg className="w-full h-full" viewBox="0 0 100 100">
                                                                     <circle
@@ -593,32 +599,40 @@ const Index = () => {
                                                             </div>
                                                         </Tippy>
                                                         <div className="flex flex-col gap-4 justify-start items-start ml-4">
-                                                            <Tippy content="Nilai Anggaran" theme='dark'>
-                                                                <div className="text-lg font-semibold flex flex-col md:flex-row justify-center items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
-                                                                    <span className="text-slate-800 dark:text-white">Anggaran: </span>
-                                                                    {themeConfig.showMoney ? (
-                                                                        <>
-                                                                            Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
-                                                                        </>
-                                                                    )}
+                                                            <Tippy content="Nilai Anggaran" theme='secondary'>
+                                                                <div className="text-lg font-semibold flex flex-col md:flex-row justify-center md:justify-start items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
+                                                                    <div className="text-secondary w-auto md:w-[125px] text-start">
+                                                                        Anggaran
+                                                                    </div>
+                                                                    <div className="text-secondary">
+                                                                        {themeConfig.showMoney ? (
+                                                                            <>
+                                                                                : Rp. {new Intl.NumberFormat('id-ID').format(item.target_anggaran)}
+                                                                            </>
+                                                                        ) : (
+                                                                            <div className='flex items-center gap-x-2'>
+                                                                                : Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
                                                             </Tippy>
-                                                            <Tippy content="Nilai Realisasi" theme='dark'>
-                                                                <div className="text-lg font-semibold flex flex-col md:flex-row justify-center items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
-                                                                    <span className="text-slate-800 dark:text-white">Realisasi: </span>
-                                                                    {themeConfig.showMoney ? (
-                                                                        <>
-                                                                            Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
-                                                                        </>
-                                                                    )}
+                                                            <Tippy content="Nilai Realisasi" theme='success'>
+                                                                <div className="text-lg font-semibold flex flex-col md:flex-row justify-center md:justify-start items-center w-full gap-y-1 gap-x-2 text-gray-500 group-hover:text-dark">
+                                                                    <div className="text-success dark:text-white w-auto md:w-[125px] text-start">
+                                                                        Realisasi
+                                                                    </div>
+                                                                    <div className="text-success">
+                                                                        {themeConfig.showMoney ? (
+                                                                            <>
+                                                                                : Rp. {new Intl.NumberFormat('id-ID').format(item.realisasi_anggaran)}
+                                                                            </>
+                                                                        ) : (
+                                                                            <div className='flex items-center gap-x-2'>
+                                                                                : Rp. <FontAwesomeIcon icon={faEyeSlash} className="w-5 h-5" />
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
                                                             </Tippy>
                                                             <div className="flex items-center justify-center flex-wrap gap-4">
@@ -674,29 +688,6 @@ const Index = () => {
                     </div>
                 </div>
 
-            </div>
-
-            <div className="fixed bottom-[110px] z-50 ltr:right-[10px] rtl:left-[10px]">
-                <button
-                    onClick={(e) => {
-                        router.back();
-                    }}
-                    type="button"
-                    className="btn btn-outline-warning animate-pulse rounded-full bg-[#fafafa] p-2 dark:bg-[#060818] dark:hover:bg-warning -rotate-90">
-                    <svg width="24" height="24" className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            opacity="0.5"
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M12 20.75C12.4142 20.75 12.75 20.4142 12.75 20L12.75 10.75L11.25 10.75L11.25 20C11.25 20.4142 11.5858 20.75 12 20.75Z"
-                            fill="currentColor"
-                        ></path>
-                        <path
-                            d="M6.00002 10.75C5.69667 10.75 5.4232 10.5673 5.30711 10.287C5.19103 10.0068 5.25519 9.68417 5.46969 9.46967L11.4697 3.46967C11.6103 3.32902 11.8011 3.25 12 3.25C12.1989 3.25 12.3897 3.32902 12.5304 3.46967L18.5304 9.46967C18.7449 9.68417 18.809 10.0068 18.6929 10.287C18.5768 10.5673 18.3034 10.75 18 10.75L6.00002 10.75Z"
-                            fill="currentColor"
-                        ></path>
-                    </svg>
-                </button>
             </div>
         </>
     );

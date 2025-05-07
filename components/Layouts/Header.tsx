@@ -972,7 +972,7 @@ const Header = () => {
                                             )}
 
                                         </li>
-                                        <li>
+                                        {/* <li>
                                             <div
                                                 onClick={() => {
                                                     kunciLayar();
@@ -981,7 +981,7 @@ const Header = () => {
                                                 <FontAwesomeIcon icon={faLockOpen} className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
                                                 Kunci Layar
                                             </div>
-                                        </li>
+                                        </li> */}
                                         <li className="border-t border-white-light dark:border-white-light/10">
                                             <Link href="#" className="!py-3 text-danger"
                                                 onClick={(e) => {
