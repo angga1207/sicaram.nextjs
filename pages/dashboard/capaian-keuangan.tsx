@@ -132,7 +132,7 @@ const Index = () => {
                 name: 'Realisasi Belanja',
                 // data: [165000, 225000, 268000, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 data: AnggaranSeries?.realisasi?.map((item: any) => item.realisasi),
-            },
+            }
         ],
         options: {
             chart: {
@@ -207,7 +207,7 @@ const Index = () => {
                 // show: false,
                 tickAmount: 7,
                 labels: {
-                    formatter: (value: number) => {
+                    formatter: (value: any) => {
                         if (themeConfig.showMoney) {
                             if (value >= 1000000000000) {
                                 return 'Rp. ' + new Intl.NumberFormat('id-ID').format(value / 1000000000000) + ' T';
@@ -473,7 +473,7 @@ const Index = () => {
                                     </span>
                                     <div className="flex-1 px-3">
                                         <div>
-                                            Diupdate Terakhir
+                                            Terakhir Diperbarui
                                         </div>
                                     </div>
                                     <span className="whitespace-pre px-1 text-base text-secondary ltr:ml-auto rtl:mr-auto select-none">

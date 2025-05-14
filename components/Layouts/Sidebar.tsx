@@ -13,13 +13,13 @@ import IconMinus from '../../components/Icon/IconMinus';
 import IconMenuUsers from '../../components/Icon/Menu/IconMenuUsers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faMoneyBills, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
-import { faRegistered } from '@fortawesome/free-regular-svg-icons';
+import { faMoneyBillAlt, faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.38";
+    const APP_VERSION = "2.5b.39";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -609,6 +609,19 @@ const Sidebar = () => {
 
                                                 {([1, 2, 4].includes(CurrentUser?.role_id)) && (
                                                     <li className="nav-item menu">
+                                                        <Link href="/bpkad" className="group">
+                                                            <div className="flex items-center">
+                                                                <FontAwesomeIcon icon={faMoneyBillAlt} className='group-hover:!text-primary shrink-0' />
+                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
+                                                                    BPKAD Section
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </li>
+                                                )}
+
+                                                {/* {([1, 2, 4].includes(CurrentUser?.role_id)) && (
+                                                    <li className="nav-item menu">
                                                         <Link href="/bpkad/import" className="group">
                                                             <div className="flex items-center">
                                                                 <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
@@ -618,8 +631,9 @@ const Sidebar = () => {
                                                             </div>
                                                         </Link>
                                                     </li>
-                                                )}
-                                                {([1, 2, 4].includes(CurrentUser?.role_id)) && (
+                                                )} */}
+
+                                                {/* {([1, 2, 4].includes(CurrentUser?.role_id)) && (
                                                     <li className="nav-item menu">
                                                         <Link href="/bpkad/realisasi" className="group">
                                                             <div className="flex items-center">
@@ -630,7 +644,8 @@ const Sidebar = () => {
                                                             </div>
                                                         </Link>
                                                     </li>
-                                                )}
+                                                )} */}
+
                                                 {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                                     <li className="nav-item menu">
                                                         <Link href="/accountancy" className="group">

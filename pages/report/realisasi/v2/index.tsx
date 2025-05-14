@@ -159,20 +159,25 @@ export default function Page() {
     const [datas, setDatas] = useState<any>([]);
     useEffect(() => {
         if (isMounted && year && month && instanceId && CurrentToken) {
-            setIsFetching(true)
-            fetchReport().then((data) => {
-                if (data.status == 'success') {
-                    setDatas(data.data.data)
-                    setInstance(data.data.instance);
-                } else if (data.status == 'error') {
-                    // showAlert('error', data.message);
-                } else {
-                    // showAlert('error', 'Terjadi kesalahan');
-                }
-                setIsFetching(false)
-            });
+            FetchingReport();
         }
     }, [instanceId, month, year, isMounted, CurrentToken]);
+
+    const FetchingReport = () => {
+        setIsFetching(true)
+        fetchReport().then((data) => {
+            if (data.status == 'success') {
+                setDatas(data.data.data)
+                setInstance(data.data.instance);
+            } else if (data.status == 'error') {
+                // showAlert('error', data.message);
+            } else {
+                // showAlert('error', 'Terjadi kesalahan');
+            }
+            setIsFetching(false)
+        });
+    }
+
 
     // console.log(month, monthID)
 
@@ -208,7 +213,9 @@ export default function Page() {
                                     showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
                                     return;
                                 } else {
-                                    setInstance(e?.value);
+                                    // setInstance(e?.value);
+                                    router.query.instance = e?.value;
+                                    router.push(router);
                                 }
                             }}
                             isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isFetching ?? false)}
@@ -243,10 +250,12 @@ export default function Page() {
                         </div>
                         <div className="">
                             <Select placeholder="Pilih Bulan"
-                                className='w-full'
+                                className='w-full min-w-[180px]'
                                 isDisabled={(isFetching ?? false)}
                                 onChange={(e: any) => {
-                                    setMonth(e?.value);
+                                    // setMonth(e?.value);
+                                    router.query.month = e?.value;
+                                    router.push(router);
                                 }}
                                 value={
                                     months?.map((data: any, index: number) => {
@@ -271,10 +280,12 @@ export default function Page() {
                     <div className="flex items-center gap-x-2">
                         <div className="">
                             <Select placeholder="Pilih Tahun"
-                                className='w-full'
+                                className='w-full min-w-[180px]'
                                 isDisabled={(isFetching ?? false)}
                                 onChange={(e: any) => {
-                                    setYear(e?.value);
+                                    // setYear(e?.value);
+                                    router.query.year = e?.value;
+                                    router.push(router);
                                 }}
                                 value={
                                     years?.map((data: any, index: number) => {
@@ -310,12 +321,12 @@ export default function Page() {
                                     colSpan={6}
                                     rowSpan={4}
                                 >
-                                    Kode Rekening
+                                    Kode Program / Kode Sub Kegiatan / Kode Rekening
                                 </th>
                                 <th className="text-center border bg-slate-900 text-white min-w-[400px]"
                                     rowSpan={4}
                                 >
-                                    Program/Kegiatan/Sub Kegiatan
+                                    Program / Sub Kegiatan / Uraian
                                 </th>
                                 <th className="text-center border bg-slate-900 text-white"
                                     colSpan={7}
@@ -555,14 +566,14 @@ export default function Page() {
                                             </div>
                                         </td>
                                         <td className="border border-slate-600">
-                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan' || item.data_type == 'program') && (
                                                 <DisplayMoney
                                                     data={item.pagu}
                                                 />
                                             )}
                                         </td>
                                         <td className="border border-slate-600">
-                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan' || item.data_type == 'program') && (
                                                 <div className="text-center">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.bobot)} %
                                                 </div>
@@ -573,7 +584,7 @@ export default function Page() {
                                         </td>
                                         <td className="border border-slate-600">
                                             {/* Realisasi Lalu */}
-                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan' || item.data_type == 'program') && (
                                                 <DisplayMoney
                                                     data={item.realisasi_lalu}
                                                 />
@@ -581,7 +592,7 @@ export default function Page() {
                                         </td>
                                         <td className="border border-slate-600">
                                             {/* Realisasi Ini */}
-                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan' || item.data_type == 'program') && (
                                                 <DisplayMoney
                                                     data={item.realisasi_ini}
                                                 />
@@ -589,7 +600,7 @@ export default function Page() {
                                         </td>
                                         <td className="border border-slate-600">
                                             {/* Realisasi s.d Bulan Ini */}
-                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan' || item.data_type == 'program') && (
                                                 <DisplayMoney
                                                     data={item.realisasi}
                                                 />
@@ -597,7 +608,7 @@ export default function Page() {
                                         </td>
                                         <td className="border border-slate-600">
                                             {/* Realisasi s.d Bulan Ini Percent */}
-                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan') && (
+                                            {(item.data_type == 'data' || item.data_type == 'total' || item.data_type == 'sub_kegiatan' || item.data_type == 'program') && (
                                                 <div className="text-center">
                                                     {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.realisasi_percent)} %
                                                 </div>
@@ -614,7 +625,7 @@ export default function Page() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="border border-slate-600">
+                                        <td className="border border-slate-600 min-w-[100px]">
                                             <div className="space-y-2 divide-y">
                                                 {item.target_kinerja && (
                                                     item.target_kinerja.map((item: any, index: number) => (
@@ -625,7 +636,7 @@ export default function Page() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="border border-slate-600">
+                                        <td className="border border-slate-600 min-w-[100px]">
                                             <div className="space-y-2 divide-y">
                                                 {item.target_kinerja_satuan && (
                                                     item.target_kinerja_satuan.map((item: any, index: number) => (
@@ -653,9 +664,17 @@ export default function Page() {
                                             </div>
                                         </td>
                                         <td className="border border-slate-600">
-                                            [onprogress]
+                                            <div className="space-y-2 divide-y">
+                                                {item.realisasi_kinerja_ini && (
+                                                    item.realisasi_kinerja_ini.map((item: any, index: number) => (
+                                                        <div className="pt-1">
+                                                            {item ?? '0'}
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
                                         </td>
-                                        <td className="border border-slate-600">
+                                        <td className="border border-slate-600 min-w-[100px]">
                                             <div className="space-y-2 divide-y">
                                                 {item.realisasi_kinerja && (
                                                     item.realisasi_kinerja.map((item: any, index: number) => (
@@ -666,7 +685,7 @@ export default function Page() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="border border-slate-600">
+                                        <td className="border border-slate-600 min-w-[100px]">
                                             <div className="space-y-2 divide-y">
                                                 {item.target_kinerja_satuan && (
                                                     item.target_kinerja_satuan.map((item: any, index: number) => (
@@ -679,7 +698,7 @@ export default function Page() {
                                         </td>
                                         <td className="border border-slate-600">
                                             <div className="text-center">
-                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.realisasi_kinerja_percent)} %
+                                                {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(item?.realisasi_kinerja_percent ?? 0)} %
                                             </div>
                                         </td>
                                         <td className="border border-slate-600">

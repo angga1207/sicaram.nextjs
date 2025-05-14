@@ -6,7 +6,7 @@ const DisplayMoney = (
     }
 ) => {
     return (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-x-2">
             <div className="">
                 Rp.
             </div>

@@ -152,10 +152,17 @@ const Index = () => {
         });
     };
 
-
     useEffect(() => {
-        setInstance(CurrentUser?.instance_id ?? null);
-    }, [CurrentUser]);
+        if (CurrentUser?.instance_id) {
+            setInstance(CurrentUser?.instance_id);
+            router.query.instance = CurrentUser?.instance_id;
+            router.push(router)
+        } else {
+            setInstance(null);
+            router.query.instance = '';
+            router.push(router)
+        }
+    }, [isMounted, CurrentUser?.instance_id]);
 
     useEffect(() => {
         fetchPeriodes().then((data) => {

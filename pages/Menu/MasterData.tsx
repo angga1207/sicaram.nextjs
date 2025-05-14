@@ -240,218 +240,222 @@ const MasterData = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center mb-4 px-4">
-                <div className="font-semibold text-xl uppercase">
-                    MENU MASTER DATA
-                </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-x-6 gap-y-8 flex-wrap">
-
-
-                <Tippy content="Master Urusan" placement='bottom'>
-                    <div
-                        onClick={() => {
-                            setSelected(0);
-                            setModal(true);
-                        }}
-                        className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                        <Player
-                            autoplay
-                            loop
-                            src="/lottie/menu-1.json"
-                            className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                        >
-                        </Player>
-                        <div className="mt-2 text-center text-lg uppercase font-semibold">
-                            Master Urusan
+            <div className="relative flex w-full max-w-full flex-col justify-between overflow-hidden rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 lg:min-h-[calc(100vh-200px)] lg:flex-row lg:gap-10 xl:gap-0">
+                {/* Left */}
+                <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(72,149,239,1)_0%,rgba(76,201,240,1)_100%)] p-5 xl:inline-flex xl:max-w-[550px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
+                    <div className="absolute inset-y-0 w-8 from-primary/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
+                    <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
+                        <div className="ms-10 block w-auto text-[50px] font-bold uppercase text-white text-center">
+                            Menu
+                        </div>
+                        <div className="mt-24 hidden w-full max-w-[300px] lg:block">
+                            {/* <img src="/assets/images/auth/login.svg" alt="Cover Image" className="w-full" /> */}
+                            <Player
+                                autoplay
+                                loop
+                                src="/lottie/menu-0.json"
+                                className='w-[300px] h-[300px] group-hover:scale-125 transition-all duration-500'
+                            >
+                            </Player>
                         </div>
                     </div>
-                </Tippy>
+                </div>
 
-                {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                    <Tippy content="Indikator Kinerja" placement='bottom'>
-                        <div
-                            onClick={() => {
-                                setSelected(1);
-                                setModal(true);
-                            }}
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/menu-2.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Indikator Kinerja
-                            </div>
-                        </div>
-                    </Tippy>
-                )}
+                {/* Right */}
+                <div className="relative flex w-full flex-col items-center justify-center gap-6 px-4 pb-16 pt-6 sm:px-6 sm:pl-24">
+                    <div className="w-full lg:mt-16">
+                        {/* <div className="text-xl font-bold uppercase text-primary text-center mb-12">
+                            pilih menu dibawah ini untuk melanjutkan
+                        </div> */}
+                        <div className="w-full flex flex-wrap gap-4 justify-center">
 
-                {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
-                    <Tippy content="Kode Rekening" placement='bottom'>
-                        <div
-                            onClick={() => {
-                                setSelected(2);
-                                setModal(true);
-                            }}
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/menu-3.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Kode Rekening
-                            </div>
-                        </div>
-                    </Tippy>
-                )}
-
-                {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
-                    <Tippy content="Referensi" placement='bottom'>
-                        <div
-                            onClick={() => {
-                                setSelected(3);
-                                setModal(true);
-                            }}
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/menu-4.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Referensi
-                            </div>
-                        </div>
-                    </Tippy>
-                )}
-
-                {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                    <Tippy content="Tujuan & Sasaran" placement='bottom'>
-                        <div
-                            onClick={() => {
-                                setSelected(4);
-                                setModal(true);
-                            }}
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/menu-5.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Tujuan & Sasaran
-                            </div>
-                        </div>
-                    </Tippy>
-                )}
-
-                {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                    <Tippy content="Pohon Kinerja" placement='bottom'>
-                        <Link
-                            href="/pohon-kinerja"
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/menu-9.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Pohon Kinerja
-                            </div>
-                        </Link>
-                    </Tippy>
-                )}
-
-                {([1, 2, 4, 7, 9].includes(CurrentUser?.role_id)) && (
-                    <Tippy content="Tagging Sumber Dana" placement='bottom'>
-                        <Link
-                            href="/tagging-sumber-dana"
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/menu-6.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Tagging Sumber Dana
-                            </div>
-                        </Link>
-                    </Tippy>
-                )}
-
-                {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                    <>
-                        <Tippy content="RPJMD" placement='bottom'>
-                            <Link
-                                href="/rpjmd"
-                                className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
+                            <div
+                                onClick={() => {
+                                    setSelected(0);
+                                    setModal(true);
+                                }}
+                                className="panel group w-[150px] xs:w-[220px] cursor-pointer">
                                 <Player
                                     autoplay
                                     loop
-                                    src="/lottie/menu-7.json"
-                                    className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                                    src="/lottie/menu-1.json"
+                                    className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
                                 >
                                 </Player>
-                                <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                    RPJMD
+                                <div className="font-semibold text-center text-sm mt-2">
+                                    Master Urusan
                                 </div>
-                            </Link>
-                        </Tippy>
+                            </div>
 
-                        <Tippy content="Renstra Induk" placement='bottom'>
-                            <Link
-                                href="/renstra"
-                                className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                                <Player
-                                    autoplay
-                                    loop
-                                    src="/lottie/menu-8.json"
-                                    className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                                >
-                                </Player>
-                                <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                    Renstra Induk
+                            {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                <div
+                                    onClick={() => {
+                                        setSelected(1);
+                                        setModal(true);
+                                    }}
+                                    className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="/lottie/menu-2.json"
+                                        className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                    >
+                                    </Player>
+                                    <div className="font-semibold text-center text-sm mt-2">
+                                        Indikator Kinerja
+                                    </div>
                                 </div>
-                            </Link>
-                        </Tippy>
+                            )}
 
-                        <Tippy content="Renstra Perubahan" placement='bottom'>
-                            <Link
-                                href="/renja"
-                                className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
-                                <Player
-                                    autoplay
-                                    loop
-                                    src="/lottie/menu-8.json"
-                                    className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                                >
-                                </Player>
-                                <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                    Renstra Perubahan
+                            {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
+                                <div
+                                    onClick={() => {
+                                        setSelected(2);
+                                        setModal(true);
+                                    }}
+                                    className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="/lottie/menu-3.json"
+                                        className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                    >
+                                    </Player>
+                                    <div className="font-semibold text-center text-sm mt-2">
+                                        Kode Rekening
+                                    </div>
                                 </div>
-                            </Link>
-                        </Tippy>
-                    </>
-                )}
+                            )}
 
-            </div>
+                            {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
+                                <div
+                                    onClick={() => {
+                                        setSelected(3);
+                                        setModal(true);
+                                    }}
+                                    className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="/lottie/menu-4.json"
+                                        className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                    >
+                                    </Player>
+                                    <div className="font-semibold text-center text-sm mt-2">
+                                        Referensi
+                                    </div>
+                                </div>
+                            )}
 
+                            {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                <div
+                                    onClick={() => {
+                                        setSelected(4);
+                                        setModal(true);
+                                    }}
+                                    className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="/lottie/menu-5.json"
+                                        className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                    >
+                                    </Player>
+                                    <div className="font-semibold text-center text-sm mt-2">
+                                        Tujuan & Sasaran
+                                    </div>
+                                </div>
+                            )}
+
+                            {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                <Link
+                                    href="/pohon-kinerja"
+                                    className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="/lottie/menu-9.json"
+                                        className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                    >
+                                    </Player>
+                                    <div className="font-semibold text-center text-sm mt-2">
+                                        Pohon Kinerja
+                                    </div>
+                                </Link>
+                            )}
+
+                            {([1, 2, 4, 7, 9].includes(CurrentUser?.role_id)) && (
+                                <Link
+                                    href="/tagging-sumber-dana"
+                                    className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                    <Player
+                                        autoplay
+                                        loop
+                                        src="/lottie/menu-6.json"
+                                        className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                    >
+                                    </Player>
+                                    <div className="font-semibold text-center text-sm mt-2">
+                                        Tagging Sumber Dana
+                                    </div>
+                                </Link>
+                            )}
+
+                            {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
+                                <>
+                                    <Link
+                                        href="/rpjmd"
+                                        className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            src="/lottie/menu-7.json"
+                                            className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                        >
+                                        </Player>
+                                        <div className="font-semibold text-center text-sm mt-2">
+                                            RPJMD
+                                        </div>
+                                    </Link>
+
+                                    <Link
+                                        href="/renstra"
+                                        className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            src="/lottie/menu-8.json"
+                                            className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                        >
+                                        </Player>
+                                        <div className="font-semibold text-center text-sm mt-2">
+                                            Renstra Induk
+                                        </div>
+                                    </Link>
+
+                                    <Link
+                                        href="/renja"
+                                        className="panel group w-[150px] xs:w-[220px] cursor-pointer">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            src="/lottie/menu-8.json"
+                                            className='w-[100px] h-[100px] group-hover:scale-125 transition-all duration-500'
+                                        >
+                                        </Player>
+                                        <div className="font-semibold text-center text-sm mt-2">
+                                            Renstra Perubahan
+                                        </div>
+                                    </Link>
+                                </>
+                            )}
+
+                        </div>
+                    </div>
+                </div>
+            </div >
+
+            {/* Modal */}
             <Transition appear show={modal} as={Fragment}>
                 <Dialog as="div" open={modal} onClose={() => {
                     setModal(false);
