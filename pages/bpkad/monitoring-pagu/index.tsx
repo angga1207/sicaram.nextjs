@@ -272,7 +272,7 @@ const Page = () => {
             )}
 
             {!isFetching && (
-                <div className="table-responsive">
+                <div className="table-responsive pb-3">
                     <table className="table-hover">
                         <thead className="sticky top-0 bg-slate-800 text-white">
                             <tr>
