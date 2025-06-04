@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.39";
+    const APP_VERSION = "2.5b.40";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -552,7 +552,7 @@ const Sidebar = () => {
                                         </li>
                                     )} */}
 
-                                        {([1, 2, 3, 4, 5, 6, 7, 9].includes(CurrentUser?.role_id)) && (
+                                        {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
                                             <>
                                                 <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
                                                     <IconMinus className="flex-none h-5 w-4 hidden" />

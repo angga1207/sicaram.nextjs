@@ -329,3 +329,106 @@ export async function deleteKontrak(id: any, periode: any, year: number, month: 
         }
     }
 }
+
+
+export async function fetchList1(id: any, year: number, month: number) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.get(`${baseUri}/caram/realisasi/list1`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance_id: id,
+                year: year,
+                month: month
+            }
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchList2(id: any, year: number, month: number) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.get(`${baseUri}/caram/realisasi/list2`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance_id: id,
+                year: year,
+                month: month
+            }
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchList3(id: any, programId: any, year: number, month: number) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.get(`${baseUri}/caram/realisasi/list3`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance_id: id,
+                program_id: programId,
+                year: year,
+                month: month
+            }
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
+
+export async function fetchList4(id: any, kegiatanId: any, year: number, month: number) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.get(`${baseUri}/caram/realisasi/list4`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                instance_id: id,
+                kegiatan_id: kegiatanId,
+                year: year,
+                month: month
+            }
+        });
+        const datas = await res.data;
+        return datas;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}
