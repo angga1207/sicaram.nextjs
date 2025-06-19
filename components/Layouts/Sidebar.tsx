@@ -12,14 +12,14 @@ import IconCaretDown from '../../components/Icon/IconCaretDown';
 import IconMinus from '../../components/Icon/IconMinus';
 import IconMenuUsers from '../../components/Icon/Menu/IconMenuUsers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBriefcase, faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faMoneyBills, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faCartShopping, faCircleDollarToSlot, faClipboardCheck, faCloudUploadAlt, faDashboard, faDollarSign, faEnvelopeOpenText, faFileContract, faFileInvoice, faFileInvoiceDollar, faHome, faHomeAlt, faHomeUser, faIndent, faMoneyBills, faNetworkWired, faSitemap, faSync, faSyncAlt, faTag, faTags, faTree, faTreeCity } from '@fortawesome/free-solid-svg-icons';
 import { faMoneyBillAlt, faRegistered } from '@fortawesome/free-regular-svg-icons';
 import { faRust } from '@fortawesome/free-brands-svg-icons';
 import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.5b.40";
+    const APP_VERSION = "2.6a.1";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -234,324 +234,6 @@ const Sidebar = () => {
                                             </li>
                                         )}
 
-
-                                        {/* <li className="nav-item menu">
-                                        <button type="button" className={`${currentMenu === 'master-urusan-kegiatan' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('master-urusan-kegiatan')}>
-                                            <div className="flex items-center">
-                                                <FontAwesomeIcon icon={faSitemap} className='group-hover:!text-primary shrink-0' />
-                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                    Master Urusan
-                                                </span>
-                                            </div>
-                                            <div className={currentMenu !== 'master-urusan-kegiatan' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                <IconCaretDown />
-                                            </div>
-                                        </button>
-
-                                        <AnimateHeight duration={300} height={currentMenu === 'master-urusan-kegiatan' ? 'auto' : 0}>
-                                            <ul className="text-gray-500 sub-menu">
-                                                <li>
-                                                    <Link href="/master/urusan">
-                                                        Urusan
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/master/bidang">
-                                                        Bidang Urusan
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/master/program">
-                                                        Program
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/master/kegiatan">
-                                                        Kegiatan
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/master/subkegiatan">
-                                                        Sub Kegiatan
-                                                    </Link>
-                                                </li>
-                                            </ul>
-                                        </AnimateHeight>
-                                    </li> */}
-
-                                        {/* {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <button type="button" className={`${currentMenu === 'master-indikator-kinerja' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('master-indikator-kinerja')}>
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faIndent} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Indikator Kinerja
-                                                    </span>
-                                                </div>
-                                                <div className={currentMenu !== 'master-indikator-kinerja' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                    <IconCaretDown />
-                                                </div>
-                                            </button>
-
-                                            <AnimateHeight duration={300} height={currentMenu === 'master-indikator-kinerja' ? 'auto' : 0}>
-                                                <ul className="text-gray-500 sub-menu">
-                                                    <li>
-                                                        <Link href="/master/indikator-kinerja/kegiatan">
-                                                            Indikator Kegiatan
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link href="/master/indikator-kinerja/sub-kegiatan" className='text-xs'>
-                                                            Indikator Sub Kegiatan
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </AnimateHeight>
-                                        </li>
-                                    )} */}
-
-                                        {/* {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <button type="button" className={`${currentMenu === 'kode-rekening' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('kode-rekening')}>
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faFileInvoiceDollar} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Kode Rekening
-                                                    </span>
-                                                </div>
-                                                <div className={currentMenu !== 'kode-rekening' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                    <IconCaretDown />
-                                                </div>
-                                            </button>
-
-                                            <AnimateHeight duration={300} height={currentMenu === 'kode-rekening' ? 'auto' : 0}>
-                                                <ul className="text-gray-500 sub-menu">
-                                                    {([1, 2, 4, 7].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/rekening">
-                                                                Daftar Rekening
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                    {([1, 2, 3, 4, 6, 7].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/sumber-dana">
-                                                                Sumber Dana
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                </ul>
-                                            </AnimateHeight>
-                                        </li>
-                                    )} */}
-
-                                        {/* {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <button type="button" className={`${currentMenu === 'ref-data' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('ref-data')}>
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faRegistered} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Referensi
-                                                    </span>
-                                                </div>
-                                                <div className={currentMenu !== 'ref-data' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                    <IconCaretDown />
-                                                </div>
-                                            </button>
-
-                                            <AnimateHeight duration={300} height={currentMenu === 'ref-data' ? 'auto' : 0}>
-                                                <ul className="text-gray-500 sub-menu">
-                                                    {([1, 2].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/reference/periode">
-                                                                Periode
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                    {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/reference/satuan" className=''>
-                                                                Satuan
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                    {([1, 2, 3, 4].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/reference/tag-sumber-dana" className='text-xs'>
-                                                                Tag Sumber Dana
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                    {([1, 2, 3, 6].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/reference/tujuan-sasaran" className='text-xs'>
-                                                                Tujuan & Sasaran
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                    {([1, 2, 3, 6].includes(CurrentUser?.role_id)) && (
-                                                        <li>
-                                                            <Link href="/reference/indikator-tujuan-sasaran" className='text-xs'>
-                                                                Indikator Tujuan & Sasaran
-                                                            </Link>
-                                                        </li>
-                                                    )}
-                                                </ul>
-                                            </AnimateHeight>
-                                        </li>
-                                    )} */}
-
-                                        {/* {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                        <>
-                                            <li className="nav-item menu">
-                                                <button type="button" className={`${currentMenu === 'head-tujuan-sasaran' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('head-tujuan-sasaran')}>
-                                                    <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faSitemap} className='group-hover:!text-primary shrink-0' />
-                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                            Tujuan & Sasaran
-                                                        </span>
-                                                    </div>
-                                                    <div className={currentMenu !== 'head-tujuan-sasaran' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                        <IconCaretDown />
-                                                    </div>
-                                                </button>
-
-                                                <AnimateHeight duration={300} height={currentMenu === 'head-tujuan-sasaran' ? 'auto' : 0}>
-                                                    <ul className="text-gray-500 sub-menu">
-                                                        {([1, 2, 3, 6].includes(CurrentUser?.role_id)) && (
-                                                            <>
-                                                                <li>
-                                                                    <div className="text-sm font-semibold py-2">
-                                                                        Kabupaten
-                                                                    </div>
-                                                                </li>
-                                                                <li>
-                                                                    <Link href="/master/tujuan-sasaran" className=''>
-                                                                        Master
-                                                                    </Link>
-                                                                </li>
-                                                                <li>
-                                                                    <Link href="/target/tujuan-sasaran" className=''>
-                                                                        Target
-                                                                    </Link>
-                                                                </li>
-                                                                <li>
-                                                                    <Link href="/target/perubahan/tujuan-sasaran" className=''>
-                                                                        Target Perubahan
-                                                                    </Link>
-                                                                </li>
-
-                                                                <li>
-                                                                    <div className="text-sm font-semibold py-2">
-                                                                        Perangkat Daerah
-                                                                    </div>
-                                                                </li>
-                                                            </>
-                                                        )}
-                                                        {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
-                                                            <>
-                                                                <li>
-                                                                    <Link href="/master/tujuan-sasaran/perangkat-daerah" className=''>
-                                                                        {CurrentUser?.role_id === 9 ? 'Master Tujuan & Sasaran' : 'Master'}
-                                                                    </Link>
-                                                                </li>
-                                                                <li>
-                                                                    <Link href="/target/tujuan-sasaran/perangkat-daerah" className=''>
-                                                                        Target
-                                                                    </Link>
-                                                                </li>
-                                                                <li>
-                                                                    <Link href="/target/perubahan/tujuan-sasaran-perangkat-daerah" className=''>
-                                                                        Target Perubahan
-                                                                    </Link>
-                                                                </li>
-                                                            </>
-                                                        )}
-                                                    </ul>
-                                                </AnimateHeight>
-                                            </li>
-
-                                            <li className="nav-item menu">
-                                                <button type="button" className={`${currentMenu === 'head-pohon-kinerja' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('head-pohon-kinerja')}>
-                                                    <div className="flex items-center">
-                                                        <FontAwesomeIcon icon={faTree} className='group-hover:!text-primary shrink-0' />
-                                                        <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                            Pohon Kinerja
-                                                        </span>
-                                                    </div>
-                                                    <div className={currentMenu !== 'head-pohon-kinerja' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                        <IconCaretDown />
-                                                    </div>
-                                                </button>
-
-                                                <AnimateHeight duration={300} height={currentMenu === 'head-pohon-kinerja' ? 'auto' : 0}>
-                                                    <ul className="text-gray-500 sub-menu">
-
-                                                        <>
-                                                            <li>
-                                                                <Link href="/pohon-kinerja" className=''>
-                                                                    Pohon Kinerja
-                                                                </Link>
-                                                            </li>
-                                                        </>
-                                                    </ul>
-                                                </AnimateHeight>
-                                            </li>
-                                        </>
-                                    )} */}
-
-                                        {/* {([1, 2, 4, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <Link href="/tagging-sumber-dana" className="group">
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faTags} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black text-xs dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Tagging Sumber Dana
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    )} */}
-
-                                        {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <Link href="/rpjmd" className="group">
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faRust} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        RPJMD
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    )} */}
-
-                                        {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <Link href="/renstra" className="group">
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faFileInvoice} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Renstra Induk
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    )} */}
-
-                                        {/* {([1, 2, 3, 4, 6, 7, 9].includes(CurrentUser?.role_id)) && (
-                                        <li className="nav-item menu">
-                                            <Link href="/renja" className="group">
-                                                <div className="flex items-center">
-                                                    <FontAwesomeIcon icon={faFileContract} className='group-hover:!text-primary shrink-0' />
-                                                    <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                        Renstra Perubahan
-                                                    </span>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    )} */}
-
                                         {([1, 2, 3, 4, 5, 6, 7, 8, 9].includes(CurrentUser?.role_id)) && (
                                             <>
                                                 <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
@@ -598,7 +280,31 @@ const Sidebar = () => {
                                             </>
                                         )}
 
-                                        {([1, 4, 9, 12].includes(CurrentUser?.role_id)) && (
+                                        {([1, 2, 3].includes(CurrentUser?.role_id)) && (
+                                            <>
+                                                <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
+                                                    <IconMinus className="flex-none h-5 w-4 hidden" />
+                                                    <span>
+                                                        BAPPEDA
+                                                    </span>
+                                                </h2>
+
+                                                {([1, 2, 3].includes(CurrentUser?.role_id)) && (
+                                                    <li className="nav-item menu">
+                                                        <Link href="/bappeda" className="group">
+                                                            <div className="flex items-center">
+                                                                <FontAwesomeIcon icon={faTreeCity} className='group-hover:!text-primary shrink-0' />
+                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
+                                                                    BAPPEDA Section
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </li>
+                                                )}
+                                            </>
+                                        )}
+
+                                        {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                             <>
                                                 <h2 className="flex bg-white-light/30 -mx-4 dark:bg-dark dark:bg-opacity-[0.08] font-extrabold items-center mb-1 px-7 py-3 uppercase">
                                                     <IconMinus className="flex-none h-5 w-4 hidden" />
@@ -619,32 +325,6 @@ const Sidebar = () => {
                                                         </Link>
                                                     </li>
                                                 )}
-
-                                                {/* {([1, 2, 4].includes(CurrentUser?.role_id)) && (
-                                                    <li className="nav-item menu">
-                                                        <Link href="/bpkad/import" className="group">
-                                                            <div className="flex items-center">
-                                                                <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
-                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                                    Upload Rekap 5
-                                                                </span>
-                                                            </div>
-                                                        </Link>
-                                                    </li>
-                                                )} */}
-
-                                                {/* {([1, 2, 4].includes(CurrentUser?.role_id)) && (
-                                                    <li className="nav-item menu">
-                                                        <Link href="/bpkad/realisasi" className="group">
-                                                            <div className="flex items-center">
-                                                                <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
-                                                                <span className="text-black dark:group-hover:text-white-dark dark:text-[#506690] ltr:pl-3 rtl:pr-3">
-                                                                    Upload Realisasi
-                                                                </span>
-                                                            </div>
-                                                        </Link>
-                                                    </li>
-                                                )} */}
 
                                                 {([1, 2, 4, 9, 12].includes(CurrentUser?.role_id)) && (
                                                     <li className="nav-item menu">

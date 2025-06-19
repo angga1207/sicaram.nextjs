@@ -243,7 +243,7 @@ const Page = () => {
         }
     }, [CurrentToken, isMounted])
 
-    const uploadApbd = async () => {
+    const uploadPaguRenja = async () => {
         if (isUploading) {
             showAlert('error', 'Sedang dalam proses upload, mohon tunggu');
             return
@@ -257,15 +257,15 @@ const Page = () => {
         try {
             const formData = new FormData()
             formData.append('file', fileApbd)
-            formData.append('month', month)
-            formData.append('monthTo', monthTo)
-            formData.append('year', year)
-            formData.append('periode', periode?.id)
-            formData.append('message', messageApbd)
-            formData.append('type', type)
-            formData.append('date', selectedDate)
+            // formData.append('month', month)
+            // formData.append('monthTo', monthTo)
+            // formData.append('year', year)
+            // formData.append('periode', periode?.id)
+            // formData.append('message', messageApbd)
+            // formData.append('type', type)
+            // formData.append('date', selectedDate)
 
-            const res = await axios.post(BaseUri() + '/caram/upload-apbd', formData, {
+            const res = await axios.post(BaseUri() + '/caram/rnja/upload-rekap-5', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${CurrentToken}`,
@@ -286,73 +286,6 @@ const Page = () => {
         }
     }
 
-    const uploadRekap5 = async () => {
-        if (isUploading) {
-            showAlert('error', 'Sedang dalam proses upload, mohon tunggu');
-            return
-        }
-        setIsUploading(true)
-        try {
-            const formData = new FormData()
-            formData.append('file', fileRekap5)
-            formData.append('month', month)
-            formData.append('year', year)
-            formData.append('periode', periode?.id)
-
-            const res = await axios.post(BaseUri() + '/caram/upload-rekap5-program', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${CurrentToken}`,
-                }
-            })
-
-            if (res.data.status === 'success') {
-                showAlert('success', 'Data berhasil diupload')
-                setFileRekap5(null)
-            } else {
-                showAlert('error', 'Data gagal diupload')
-            }
-            setIsUploading(false)
-            getLogs()
-        } catch (e) {
-            setIsUploading(false)
-            console.log(e)
-        }
-    }
-
-    const uploadTargetBelanja = async () => {
-        if (isUploading) {
-            showAlert('error', 'Sedang dalam proses upload, mohon tunggu');
-            return
-        }
-        setIsUploading(true)
-        try {
-            const formData = new FormData()
-            formData.append('file', fileTargetBelanja)
-            formData.append('month', month)
-            formData.append('year', year)
-            formData.append('message', messageTargetBelanja)
-
-            const res = await axios.post(BaseUri() + '/ref-sub-to-rekening-upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${CurrentToken}`,
-                }
-            })
-
-            if (res.data.status === 'success') {
-                showAlert('success', 'Data berhasil diupload')
-            } else {
-                showAlert('error', 'Data gagal diupload')
-            }
-            setIsUploading(false)
-            getLogs()
-        } catch (e) {
-            setIsUploading(false)
-            console.log(e)
-        }
-    }
-
     const getLogs = async () => {
         try {
             await axios.get(BaseUri() + '/sipd/listLogs', {
@@ -361,7 +294,7 @@ const Page = () => {
                     Authorization: `Bearer ${CurrentToken}`,
                 },
                 params: {
-                    type: ['apbd', 'target-belanja'],
+                    type: ['renja_pagu'],
                 }
             }).then((res) => {
                 if (res.data.status === 'success') {
@@ -376,7 +309,7 @@ const Page = () => {
     return (
         <>
             <div className="text-xl font-semibold mb-5">
-                BPKAD Panel Import SIPD
+                BAPPEDA Panel Unggahan
             </div>
 
             <div className="grid grid-cols-12 gap-5">
@@ -385,20 +318,10 @@ const Page = () => {
 
                     <div className="w-full">
                         <div className="text-lg font-semibold mb-3">
-                            Upload History &nbsp;
+                            Riwayat Unggahan &nbsp;
                             {menu === 1 && (
                                 <>
-                                    Rekap 5 Ke Pagu
-                                </>
-                            )}
-                            {menu === 2 && (
-                                <>
-                                    Target Belanja
-                                </>
-                            )}
-                            {menu === 3 && (
-                                <>
-                                    Rekap 5 ke Program Kegiatan
+                                    Pagu Renja
                                 </>
                             )}
                         </div>
@@ -479,21 +402,7 @@ const Page = () => {
                                                     relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
                                         >
                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                            REKAP 5 Ke Pagu
-                                        </button>
-                                    )}
-                                </Tab>
-                                <Tab as={Fragment}>
-                                    {({ selected }) => (
-                                        <button
-                                            onClick={(e) => {
-                                                setMenu(3)
-                                            }}
-                                            className={`${selected ? 'text-primary !outline-none before:!w-full' : ''} grow
-                                                    relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-primary before:transition-all before:duration-700 hover:text-primary hover:before:w-full justify-center font-bold tracking-wide uppercase`}
-                                        >
-                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                            REKAP 5 ke Master Sub Kegiatan (Referensi)
+                                            Unggah Renja
                                         </button>
                                     )}
                                 </Tab>
@@ -502,72 +411,6 @@ const Page = () => {
 
                                 <Tab.Panel>
                                     <div className="pt-5">
-                                        <div className="flex items-center gap-4">
-                                            <div className="grow w-full sm:w-[45%]">
-                                                <Select
-                                                    placeholder="Pilih Bulan"
-                                                    required={true}
-                                                    value={months.filter((item: any) => item.value === month)[0]}
-                                                    onChange={(e: any) => {
-                                                        setMonth(e.value)
-                                                    }}
-                                                    options={months} />
-                                            </div>
-                                            <div className="">
-                                                <FontAwesomeIcon icon={faLongArrowRight} className='text-slate-500 w-4 h-4' />
-                                            </div>
-                                            <div className="grow w-full sm:w-[45%]">
-                                                <Select
-                                                    placeholder="Sampai Bulan"
-                                                    required={true}
-                                                    value={months.filter((item: any) => item.value === monthTo)[0]}
-                                                    onChange={(e: any) => {
-                                                        setMonthTo(e.value)
-                                                    }}
-                                                    options={months} />
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-wrap items-center gap-4 mt-4">
-                                            <div className="grow w-full sm:w-[45%]">
-                                                <Select
-                                                    required={true}
-                                                    value={typeOptions.filter((item: any) => item.value === type)[0]}
-                                                    onChange={(e: any) => {
-                                                        setType(e.value)
-                                                    }}
-                                                    placeholder="Pilih Jenis Pagu"
-                                                    options={typeOptions} />
-                                            </div>
-                                            <div className="shrink w-4 h-4 hidden sm:block">
-                                            </div>
-                                            <div className="grow w-full sm:w-[45%]">
-                                                <Select
-                                                    required={true}
-                                                    value={years.filter((item: any) => item.value === year)[0]}
-                                                    onChange={(e: any) => {
-                                                        setYear(e.value)
-                                                    }}
-                                                    placeholder="Pilih Tahun"
-                                                    options={years} />
-                                            </div>
-                                        </div>
-
-                                        {type !== 'pagu_induk' && (
-                                            <div className="flex flex-wrap items-center gap-4 mt-4">
-                                                <div className="grow w-full sm:w-[45%]">
-                                                    <input type="date"
-                                                        className="w-full border border-gray-300 dark:border-[#191e3a] rounded-md p-2"
-                                                        value={selectedDate}
-                                                        min={`${year}-${month < 10 ? '0' + month : month}-01`}
-                                                        max={`${year}-${monthTo < 10 ? '0' + monthTo : monthTo}-${new Date(year, monthTo, 0).getDate()}`}
-                                                        placeholder="Tanggal"
-                                                        onChange={(e) => {
-                                                            setSelectedDate(e.target.value)
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
 
                                         <div className="mt-4">
                                             <input
@@ -581,27 +424,6 @@ const Page = () => {
                                             <label htmlFor="fileApbd" className="btn btn-primary cursor-pointer">
                                                 Pilih File
                                             </label>
-
-                                            {fileApbd && (
-                                                <div className="mt-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="">
-                                                            <div className="line-clamp-1 text-md">
-                                                                {fileApbd.name}
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    setFileApbd(null)
-                                                                }}
-                                                                className="btn btn-danger px-0.5 py-0.5 rounded-full btn-xs">
-                                                                <IconX className='w-4 h-4' />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
                                         </div>
 
 
@@ -626,75 +448,11 @@ const Page = () => {
                                                                     showAlertBox('error', 'Tanggal harus diisi jika bukan Pagu Induk', 'Silahkan isi tanggal terlebih dahulu');
                                                                     return;
                                                                 }
-                                                                uploadApbd()
+                                                                uploadPaguRenja()
                                                             }}
                                                             className="btn btn-success">
                                                             <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
                                                             Upload Rekap 5 ke Pagu
-                                                        </button>
-                                                    )}
-                                                    {isUploading == true && (
-                                                        <button className="btn btn-success">
-                                                            <FontAwesomeIcon icon={faSpinner} className='w-5 h-5 mr-2 animate-spin' />
-                                                            Sedang Upload
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            </>
-                                        )}
-                                    </div>
-                                </Tab.Panel>
-
-                                <Tab.Panel>
-                                    <div className="active pt-5">
-
-                                        <div className="mt-4">
-                                            <input
-                                                type="file"
-                                                className="hidden"
-                                                onChange={(e: any) => {
-                                                    setFileRekap5(e.target.files[0])
-                                                }}
-                                                accept='.xls,.xlsx'
-                                                id="fileRekap5" />
-                                            <label htmlFor="fileRekap5" className="btn btn-primary cursor-pointer">
-                                                Pilih Rekap 5
-                                            </label>
-
-                                            {fileRekap5 && (
-                                                <div className="mt-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="">
-                                                            <div className="line-clamp-1 text-md">
-                                                                {fileRekap5.name}
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    setFileRekap5(null)
-                                                                }}
-                                                                className="btn btn-danger px-0.5 py-0.5 rounded-full btn-xs">
-                                                                <IconX className='w-4 h-4' />
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-
-
-                                        {fileRekap5 && (
-                                            <>
-                                                <div className="">
-                                                    {isUploading == false && (
-                                                        <button
-                                                            onClick={(e) => {
-                                                                uploadRekap5()
-                                                            }}
-                                                            className="btn btn-success">
-                                                            <FontAwesomeIcon icon={faCloudUploadAlt} className='w-5 h-5 mr-2' />
-                                                            Upload Rekap 5 ke Program Kegiatan
                                                         </button>
                                                     )}
                                                     {isUploading == true && (

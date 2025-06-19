@@ -802,11 +802,16 @@ export async function fetchRenja(periode: any, instance: any, program: any) {
     try {
         const session = await getSession();
         const CurrentToken = session?.user?.name;
-        const res = await axios.get(baseUri + '/caram/renja?periode=' + periode + '&instance=' + instance + '&program=' + program, {
+        const res = await axios.get(baseUri + '/caram/renja', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${CurrentToken}`,
             },
+            params: {
+                periode: periode,
+                instance: instance,
+                program: program,
+            }
         });
         // console.log(res);
         const data = res.data;

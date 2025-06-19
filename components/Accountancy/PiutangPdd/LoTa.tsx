@@ -59,7 +59,8 @@ const LoTa = (data: any) => {
         setYear(paramData[3]);
     }, [isMounted]);
 
-    const [instance, setInstance] = useState<any>((router.query.instance ?? null) ?? CurrentUser?.instance_id);
+    // const [instance, setInstance] = useState<any>((router.query.instance ?? null) ?? CurrentUser?.instance_id);
+    const [instance, setInstance] = useState<any>(null);
     const [instances, setInstances] = useState<any>([]);
     const [arrKodeRekening, setArrKodeRekening] = useState<any>([])
 
@@ -100,51 +101,65 @@ const LoTa = (data: any) => {
     const [dataInput1, setDataInput1] = useState<any>([]);
     const [dataInputOrigin, setDataInputOrigin] = useState<any>([]);
     const [search, setSearch] = useState<any>('');
+    const [isLoadingLoTa, setIsLoadingLoTa] = useState(false);
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
     const _getDatas = () => {
         if (periode?.id && year) {
-            getLoTa(instance, periode?.id, year).then((res: any) => {
-                if (res.status == 'success') {
-                    if (res.data.length > 0) {
-                        setDataInput1(res.data);
-                        setDataInputOrigin(res.data);
-                        const maxPage = Math.ceil(res.data.length / perPage);
-                        setMaxPage(maxPage);
-                    } else {
-                        setDataInput1([
-                            {
-                                id: '',
-                                instance_id: instance ?? '',
-                                type: 'pendapatan_pajak_daerah',
-                                kode_rekening_id: '',
-                                anggaran_perubahan: 0,
-                                lra: 0,
-                                lra_percent: 0,
-                                piutang_awal: 0,
-                                piutang_akhir: 0,
-                                pdd_awal: 0,
-                                pdd_akhir: 0,
-                                laporan_operasional: 0,
-                                laporan_operasional_percent: 0,
-                                penambahan_pengurangan_lo: 0,
-                                reklas_koreksi_lo: 0,
-                                perbedaan_lo_lra: 0,
-                            }
-                        ])
+            setIsLoadingLoTa(true);
+            getLoTa(instance, periode?.id, year)
+                .then((res: any) => {
+                    if (res.status == 'success') {
+                        if (res.data.length > 0) {
+                            setDataInput1(res.data);
+                            setDataInputOrigin(res.data);
+                            const maxPage = Math.ceil(res.data.length / perPage);
+                            setMaxPage(maxPage);
+                        } else {
+                            setDataInput1([
+                                {
+                                    id: '',
+                                    instance_id: instance ?? '',
+                                    type: 'pendapatan_pajak_daerah',
+                                    kode_rekening_id: '',
+                                    anggaran_perubahan: 0,
+                                    lra: 0,
+                                    lra_percent: 0,
+                                    piutang_awal: 0,
+                                    piutang_akhir: 0,
+                                    pdd_awal: 0,
+                                    pdd_akhir: 0,
+                                    laporan_operasional: 0,
+                                    laporan_operasional_percent: 0,
+                                    penambahan_pengurangan_lo: 0,
+                                    reklas_koreksi_lo: 0,
+                                    perbedaan_lo_lra: 0,
+                                }
+                            ])
+                        }
                     }
-                }
-            });
+                })
+                .catch((err: any) => {
+                    console.error(err);
+                })
+                .finally(() => {
+                    setIsLoadingLoTa(false);
+                });
         }
     }
-
 
     useEffect(() => {
         if (isMounted && periode?.id && year) {
             if ([9].includes(CurrentUser?.role_id)) {
                 setInstance(CurrentUser?.instance_id ?? '');
-            } else {
+            }
+        }
+    }, [isMounted, instance, year])
+
+    useEffect(() => {
+        if (isMounted && periode?.id && year) {
+            if (isLoadingLoTa === false) {
                 _getDatas();
             }
         }

@@ -67,26 +67,29 @@ const Penyisihan = (data: any) => {
     const [arrKodeRekening6, setArrKodeRekening6] = useState<any>([])
 
     useEffect(() => {
-        if (paramData[0]?.length > 0) {
-            setInstances(paramData[0]);
+        if (isMounted && [9].includes(CurrentUser?.role_id) === false) {
+            setInstance(CurrentUser?.instance_id ?? '');
+        } else {
+            setInstance(paramData[4]);
         }
     }, [isMounted, paramData]);
 
     useEffect(() => {
-        if (paramData[1]?.length > 0) {
-            setArrKodeRekening(paramData[1])
-            setArrKodeRekening1(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '01'))
-            setArrKodeRekening2(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '02'))
-            setArrKodeRekening3(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '03'))
-            setArrKodeRekening4(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '04'))
-            setArrKodeRekening5(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '01'))
-            setArrKodeRekening6(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '02'))
-        }
-        if (paramData[4]) {
-            setInstance(paramData[4]);
-        }
-        if ([9].includes(CurrentUser?.role_id)) {
-            setInstance(CurrentUser?.instance_id ?? '');
+        if (isMounted) {
+            if (paramData[1]?.length > 0) {
+                setArrKodeRekening(paramData[1])
+                setArrKodeRekening1(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '01'))
+                setArrKodeRekening2(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '02'))
+                setArrKodeRekening3(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '03'))
+                setArrKodeRekening4(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '04'))
+                setArrKodeRekening5(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '01'))
+                setArrKodeRekening6(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '02'))
+            }
+            if ([9].includes(CurrentUser?.role_id)) {
+                if (paramData[4]) {
+                    setInstance(paramData[4]);
+                }
+            }
         }
     }, [isMounted, paramData]);
 
@@ -211,18 +214,23 @@ const Penyisihan = (data: any) => {
         }
     }
 
-
     useEffect(() => {
         if (isMounted) {
             if ([9].includes(CurrentUser?.role_id)) {
-                _getDatas();
-            } else {
-                if (periode?.id && year) {
-                    _getDatas();
-                }
+                setInstance(CurrentUser?.instance_id ?? '');
             }
         }
     }, [isMounted])
+
+    useEffect(() => {
+        if (isMounted && periode?.id && year) {
+            if ([9].includes(CurrentUser?.role_id) && !instance) {
+                setInstance(CurrentUser?.instance_id ?? '');
+            } else {
+                _getDatas();
+            }
+        }
+    }, [isMounted, instance, year])
 
     const [totalData, setTotalData] = useState<any>({
         piutang_bruto: 0,

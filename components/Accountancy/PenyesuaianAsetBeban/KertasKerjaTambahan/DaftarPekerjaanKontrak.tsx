@@ -70,7 +70,11 @@ const DaftarPekerjaanKontrak = (data: any) => {
 
     useEffect(() => {
         if (paramData[0]?.length > 0) {
-            setInstances(paramData[0]);
+            if (CurrentUser?.role_id == 9) {
+                setInstances(paramData[0].filter((item: any) => item.id == CurrentUser?.instance_id));
+            } else {
+                setInstances(paramData[0]);
+            }
         }
     }, [isMounted, paramData]);
 

@@ -67,23 +67,29 @@ const Beban = (data: any) => {
     const [arrKodeRekening6, setArrKodeRekening6] = useState<any>([])
 
     useEffect(() => {
-        if (paramData[0]?.length > 0) {
-            setInstances(paramData[0]);
+        if (isMounted && [9].includes(CurrentUser?.role_id) === false) {
+            if (paramData[0]?.length > 0) {
+                setInstances(paramData[0]);
+            }
         }
     }, [isMounted, paramData]);
 
     useEffect(() => {
-        if (paramData[1]?.length > 0) {
-            setArrKodeRekening(paramData[1])
-            setArrKodeRekening1(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '01'))
-            setArrKodeRekening2(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '02'))
-            setArrKodeRekening3(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '03'))
-            setArrKodeRekening4(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '04'))
-            setArrKodeRekening5(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '01'))
-            setArrKodeRekening6(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '02'))
-        }
-        if (paramData[4]) {
-            setInstance(paramData[4]);
+        if (isMounted) {
+            if (paramData[1]?.length > 0) {
+                setArrKodeRekening(paramData[1])
+                setArrKodeRekening1(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '01'))
+                setArrKodeRekening2(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '02'))
+                setArrKodeRekening3(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '03'))
+                setArrKodeRekening4(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 1 && item.code_3 == '04'))
+                setArrKodeRekening5(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '01'))
+                setArrKodeRekening6(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '02'))
+            }
+            if ([9].includes(CurrentUser?.role_id)) {
+                if (paramData[4]) {
+                    setInstance(paramData[4]);
+                }
+            }
         }
     }, [isMounted, paramData]);
 
@@ -196,17 +202,21 @@ const Beban = (data: any) => {
         }
     }
 
+    useEffect(() => {
+        if (isMounted) {
+            if ([9].includes(CurrentUser?.role_id)) {
+                setInstance(CurrentUser?.instance_id ?? '');
+            }
+        }
+    }, [isMounted])
 
     useEffect(() => {
-        if (isMounted && periode?.id && year && !instance) {
-            if ([9].includes(CurrentUser?.role_id)) {
+        if (isMounted && periode?.id && year) {
+            if ([9].includes(CurrentUser?.role_id) && !instance) {
                 setInstance(CurrentUser?.instance_id ?? '');
             } else {
                 _getDatas();
             }
-        }
-        else if (isMounted && periode?.id && year && instance) {
-            _getDatas();
         }
     }, [isMounted, instance, year])
 

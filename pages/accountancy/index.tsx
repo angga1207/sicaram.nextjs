@@ -115,23 +115,25 @@ const Page = () => {
             <div className="mt-4">
                 <div className="flex items-center justify-center gap-x-6 gap-y-4 flex-wrap">
 
-                    <Tippy content="Unggah Berkas dari SIPD" placement='bottom'>
-                        <Link
-                            href="/accountancy/import"
-                            className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
+                    {([1, 2, 4, 12].includes(CurrentUser?.role_id)) && (
+                        <Tippy content="Unggah Berkas dari SIPD" placement='bottom'>
+                            <Link
+                                href="/accountancy/import"
+                                className="w-full lg:w-[350px] cursor-pointer group transition-all duration-500">
 
-                            <Player
-                                autoplay
-                                loop
-                                src="/lottie/accountant-8.json"
-                                className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
-                            >
-                            </Player>
-                            <div className="mt-2 text-center text-lg uppercase font-semibold">
-                                Unggah Berkas dari SIPD
-                            </div>
-                        </Link>
-                    </Tippy>
+                                <Player
+                                    autoplay
+                                    loop
+                                    src="/lottie/accountant-8.json"
+                                    className='w-[100%] h-[200px] group-hover:scale-125 transition-all duration-500'
+                                >
+                                </Player>
+                                <div className="mt-2 text-center text-lg uppercase font-semibold">
+                                    Unggah Berkas dari SIPD
+                                </div>
+                            </Link>
+                        </Tippy>
+                    )}
 
                     <Tippy content="Rekonsiliasi Aset" placement='bottom'>
                         <Link

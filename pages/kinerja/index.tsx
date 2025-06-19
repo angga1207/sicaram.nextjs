@@ -145,14 +145,16 @@ const Index = () => {
     const [uploadMessages, setUploadMessages] = useState<any>(null);
 
     useEffect(() => {
-        if ([9].includes(CurrentUser?.role_id)) {
+        if (isMounted && [9].includes(CurrentUser?.role_id)) {
             if (router.query.instance !== CurrentUser?.instance_id) {
                 router.query.instance = CurrentUser?.instance_id;
                 router.push(router);
             }
             setInstance(CurrentUser?.instance_id);
+        } else if (isMounted && CurrentUser?.instance_id) {
+            setInstance(CurrentUser?.instance_id);
         }
-    }, [CurrentUser, router.query]);
+    }, [CurrentUser, router.query, isMounted]);
 
     useEffect(() => {
         setYear(router.query.year);

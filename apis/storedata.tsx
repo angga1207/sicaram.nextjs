@@ -726,6 +726,26 @@ export async function saveRpjmd(periode: any, instance: any, program: any, rpjmd
     }
 }
 
+export async function getListProgramRenstraRenja(periode: any, instance: any) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.get(baseUri + '/caram/renstra-list-programs', {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+            params: {
+                periode: periode,
+                instance: instance,
+            }
+        })
+        const dataRes = await res.data;
+        return dataRes;
+    } catch (error) {
+        return error;
+    }
+}
 
 export async function saveRenstraKegiatan(periode: any, instance: any, program: any, kegiatan: any, year: any, data: any) {
     try {
