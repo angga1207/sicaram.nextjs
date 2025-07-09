@@ -163,7 +163,11 @@ const Index = () => {
                                 <>
                                     {(CurrentUser?.role_id == 1 || CurrentUser?.role_id == 2 || CurrentUser?.role_id == 3 || CurrentUser?.role_id == 4 || CurrentUser?.role_id == 5 || CurrentUser?.role_id == 6 || CurrentUser?.role_id == 7 || CurrentUser?.role_id == 8) && (
                                         <>
-                                            <button type="button" className="btn btn-secondary whitespace-nowrap" onClick={() => backToInstances()} >
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary whitespace-nowrap"
+                                                // onClick={() => backToInstances()}
+                                            >
                                                 <IconArrowBackward className="w-4 h-4" />
                                                 <span className="ltr:ml-2 rtl:mr-2">
                                                     Kembali
