@@ -86,9 +86,10 @@ import Dropdown from '@/components/Dropdown';
 import InputRupiah from '@/components/InputRupiah';
 import RincianBelanja from '@/components/RealisasiProgram/RincianBelanja';
 import Summary from '@/components/RealisasiProgram/Summary';
-import ImportSIPD from '@/components/RealisasiProgram/ImportSIPD';
+import ImportSIPD from '@/components/RealisasiProgram/UnggahRealisasi';
 import BerkasPendukung from '@/components/RealisasiProgram/BerkasPendukung';
 import Kontrak from '@/components/RealisasiProgram/Kontrak';
+import UnggahRealisasi from '@/components/RealisasiProgram/UnggahRealisasi';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -607,6 +608,37 @@ const Index = () => {
                                     }).then((result) => {
                                         if (result.isConfirmed) {
                                             setUnsaveKeteranganStatus(false);
+                                            setTab(6);
+                                        }
+                                    });
+                                } else {
+                                    setTab(6)
+                                }
+                            }
+                        }}
+                        className={`${tab === 6 ? 'text-white !outline-none before:!w-full bg-green-500' : ''} grow text-green-500 !outline-none relative -mb-[1px] flex items-center justify-center gap-2 p-4 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-green-500 before:transition-all before:duration-700 hover:before:w-full`}
+                    >
+                        <FontAwesomeIcon icon={faCloudUploadAlt} className='w-4 h-4' />
+                        <span className='font-semibold whitespace-nowrap uppercase'>
+                            Unggah Realisasi
+                        </span>
+                    </button>
+
+                    <button
+                        onClick={(e) => {
+                            if (isLoading === false) {
+                                if (unsaveKeteranganStatus) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Peringatan',
+                                        text: 'Data Keterangan Belum Disimpan, Apakah Anda Yakin Ingin Melanjutkan?',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            setUnsaveKeteranganStatus(false);
                                             setTab(2);
                                         }
                                     });
@@ -924,6 +956,32 @@ const Index = () => {
                             }}
                         />
                     </div>
+                )}
+
+                {tab === 6 && (
+                    <UnggahRealisasi
+                        params={isMounted && {
+                            periode: periode,
+                            year: year,
+                            month: month,
+                            subKegiatan: subKegiatan,
+                        }}
+                        updateData={() => {
+                            getMasterData(subKegiatanId, year, month).then((data: any) => {
+                                if (data.status == 'success') {
+                                    setDatas(data.data.data);
+                                    setSubKegiatan(data.data.subkegiatan);
+                                    setDataRincian(data.data.dataRincian)
+                                    setDataBackEndError(data.data.data_error);
+                                    setDataBackEndMessage(data.data.error_message);
+                                    setUnsaveStatus(false);
+                                }
+                            });
+                        }}
+                        isUnsave={(status: any) => {
+                            setUnsaveStatus(status);
+                        }}
+                    />
                 )}
 
             </div>

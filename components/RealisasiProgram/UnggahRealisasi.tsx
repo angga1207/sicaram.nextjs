@@ -20,7 +20,7 @@ const showAlert = async (icon: any, text: any) => {
     });
 };
 
-const ImportSIPD = (
+const UnggahRealisasi = (
     { params, updateData, isUnsave }:
         { params: any, updateData: any, isUnsave: any }
 ) => {
@@ -112,18 +112,20 @@ const ImportSIPD = (
                         <label htmlFor="">
                             Berkas Realisasi (Excel)
                         </label>
-                        <input
-                            onChange={() => {
-                                const file = (document.getElementById('addonsRight') as HTMLInputElement)?.files?.[0];
-                                if (file) {
-                                    setFile(file);
-                                    setIsUnsaved(true);
-                                }
-                            }}
-                            id="addonsRight"
-                            type="file"
-                            accept=".xls,.xlsx"
-                            className="form-input" />
+                        {subKegiatan && periode && year && month && instance && (
+                            <input
+                                onChange={() => {
+                                    const file = (document.getElementById('addonsRight') as HTMLInputElement)?.files?.[0];
+                                    if (file) {
+                                        setFile(file);
+                                        setIsUnsaved(true);
+                                    }
+                                }}
+                                id="addonsRight"
+                                type="file"
+                                accept=".xls,.xlsx"
+                                className="form-input" />
+                        )}
                     </div>
 
                     <div className={`self-end ${file ? 'block' : 'hidden'}`}>
@@ -178,4 +180,4 @@ const ImportSIPD = (
     );
 }
 
-export default ImportSIPD;
+export default UnggahRealisasi;
