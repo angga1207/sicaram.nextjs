@@ -197,6 +197,10 @@ const Index = () => {
                     if (data.status === 'success') {
                         setDatas(data.data);
                     }
+
+                    if (data?.status == 'error') {
+                        showAlert('error', data.message)
+                    }
                     setIsLoadingData(false)
                 })
             }
@@ -261,6 +265,9 @@ const Index = () => {
                     realisasiFiles: data?.data?.realisasiFiles,
                 });
                 setSafeToSave(true)
+            }
+            if (data?.status == 'error') {
+                showAlert('error', data.message)
             }
         })
     }

@@ -169,11 +169,14 @@ const Index = () => {
                     setPeriodes(data.data);
                 }
             });
-            fetchInstances(searchInstance).then((data) => {
-                if (data.status == 'success') {
-                    setInstances(data.data);
-                }
-            });
+            if ([9].includes(CurrentUser?.role_id) == false) {
+                fetchInstances(searchInstance).then((data) => {
+                    if (data.status == 'success') {
+                        setInstances(data.data);
+                    }
+                });
+            }
+
             fetchSatuans().then((data) => {
                 if (data.status == 'success') {
                     setSatuans(data.data);
@@ -188,17 +191,19 @@ const Index = () => {
     }, [isMounted, periode?.id]);
 
     useEffect(() => {
-        if (searchInstance == '') {
-            fetchInstances(searchInstance).then((data) => {
-                setInstances(data.data);
-            });
-        } else {
-            const instcs = instances.map((item: any) => {
-                if (item.name.toLowerCase().includes(searchInstance.toLowerCase())) {
-                    return item;
-                }
-            }).filter((item: any) => item != undefined);
-            setInstances(instcs);
+        if ([9].includes(CurrentUser?.role_id) == false) {
+            if (searchInstance == '') {
+                fetchInstances(searchInstance).then((data) => {
+                    setInstances(data.data);
+                });
+            } else {
+                const instcs = instances.map((item: any) => {
+                    if (item.name.toLowerCase().includes(searchInstance.toLowerCase())) {
+                        return item;
+                    }
+                }).filter((item: any) => item != undefined);
+                setInstances(instcs);
+            }
         }
     }, [searchInstance]);
 

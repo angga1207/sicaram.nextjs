@@ -334,6 +334,14 @@ const Content1 = (
                         ))}
 
                     </div>
+
+                    {arrPrograms?.length == 0 && !isLoading2 && (
+                        <div className="panel">
+                            <div className="p-4 text-center">
+                                <p className="text-sm text-gray-500">Tidak ada data program yang tersedia.</p>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
 
@@ -412,15 +420,15 @@ const Content1 = (
                         {arrSubKegiatans?.map((subKegiatan: any, index: number) => (
                             <div
                                 key={`subKegiatan-${subKegiatan.kegiatan_id}`}
-                                onClick={() => {
-                                    if (selectedSubKegiatan?.kegiatan_id != subKegiatan.kegiatan_id) {
-                                        handleSubKegiatanClick(subKegiatan);
-                                    } else {
-                                        setSelectedSubKegiatan(null);
-                                    }
-                                }}
                                 className={`panel select-none cursor-pointer hover:bg-slate-200 ${selectedSubKegiatan?.sub_kegiatan_id === subKegiatan.sub_kegiatan_id ? 'bg-slate-200 lg:col-span-3' : ''} ${selectedSubKegiatan && selectedSubKegiatan.sub_kegiatan_id !== subKegiatan.sub_kegiatan_id ? 'hidden' : ''}`}>
-                                <div className="">
+                                <div className=""
+                                    onClick={() => {
+                                        if (selectedSubKegiatan?.kegiatan_id != subKegiatan.kegiatan_id) {
+                                            handleSubKegiatanClick(subKegiatan);
+                                        } else {
+                                            setSelectedSubKegiatan(null);
+                                        }
+                                    }}>
                                     <div className="text-xs">
                                         {subKegiatan?.sub_kegiatan_fullcode}
                                     </div>
@@ -429,7 +437,14 @@ const Content1 = (
                                     </div>
                                 </div>
 
-                                <div className="flex flex-wrap gap-y-2 items-center justify-between mt-2">
+                                <div className="flex flex-wrap gap-y-2 items-center justify-between mt-2"
+                                    onClick={() => {
+                                        if (selectedSubKegiatan?.kegiatan_id != subKegiatan.kegiatan_id) {
+                                            handleSubKegiatanClick(subKegiatan);
+                                        } else {
+                                            setSelectedSubKegiatan(null);
+                                        }
+                                    }}>
                                     {/* pagu & realisasi */}
                                     <div className="w-full lg:w-1/2 text-sm text-primary">
                                         <div>

@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.6a.1";
+    const APP_VERSION = "2.6a.2";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -252,7 +252,7 @@ const Sidebar = () => {
                                                         </div>
                                                     </Link>
                                                 </li>
-                                                {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) && (
+                                                {([1, 2, 3, 6].includes(CurrentUser?.role_id)) && (
                                                     <li className="nav-item menu">
                                                         <Link href="/realisasi/tujuan-sasaran" className="group">
                                                             <div className="flex items-center">
@@ -271,7 +271,19 @@ const Sidebar = () => {
                                                                 <FontAwesomeIcon icon={faEnvelopeOpenText} className='group-hover:!text-primary shrink-0' />
                                                                 <span className={`text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark ${([1, 2, 3, 6].includes(CurrentUser?.role_id)) ? "text-xs whitespace-normal" : ""}`}>
                                                                     Realisasi Tujuan Sasaran
-                                                                    {([1, 2, 3, 6, 9].includes(CurrentUser?.role_id)) ? " Perangkat Daerah" : ""}
+                                                                    {([1, 2, 3, 6].includes(CurrentUser?.role_id)) ? " Perangkat Daerah" : ""}
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    </li>
+                                                )}
+                                                {([1, 9].includes(CurrentUser?.role_id)) && (
+                                                    <li className="nav-item menu">
+                                                        <Link href="/realisasi/import" className="group">
+                                                            <div className="flex items-center">
+                                                                <FontAwesomeIcon icon={faCloudUploadAlt} className='group-hover:!text-primary shrink-0' />
+                                                                <span className={`text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark ${([1, 2, 3, 6].includes(CurrentUser?.role_id)) ? "text-xs whitespace-normal" : ""}`}>
+                                                                    Unggah Realisasi
                                                                 </span>
                                                             </div>
                                                         </Link>
