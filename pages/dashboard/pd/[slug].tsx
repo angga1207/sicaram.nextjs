@@ -1567,7 +1567,7 @@ const DashboardOPD = () => {
                                                     month: 'long',
                                                     day: 'numeric',
                                                 })}>
-                                                    <div className="cursor-pointer"
+                                                    <div className="cursor-pointer whitespace-nowrap"
                                                         onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
                                                         {themeConfig.showMoney ? (
                                                             <>
@@ -1594,7 +1594,7 @@ const DashboardOPD = () => {
                                                     month: 'long',
                                                     day: 'numeric',
                                                 })}>
-                                                    <div className="cursor-pointer"
+                                                    <div className="cursor-pointer whitespace-nowrap"
                                                         onClick={() => dispatch(toggleShowMoney(!themeConfig.showMoney))}>
                                                         {themeConfig.showMoney ? (
                                                             <>
@@ -2012,13 +2012,13 @@ const DashboardOPD = () => {
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th className="ltr:rounded-l-md rtl:rounded-r-md bg-dark text-white dark:bg-slate-800">
+                                            <th className="ltr:rounded-l-md rtl:rounded-r-md bg-dark text-white dark:bg-slate-800 w-[250px]">
                                                 Pengguna
                                             </th>
                                             <th className='bg-dark text-white dark:bg-slate-800'>
                                                 Email
                                             </th>
-                                            <th className='bg-dark text-white dark:bg-slate-800'>
+                                            <th className='bg-dark text-white dark:bg-slate-800 whitespace-nowrap'>
                                                 Jenis Pengguna
                                             </th>
                                             <th className="ltr:rounded-r-md rtl:rounded-l-md bg-dark text-white dark:bg-slate-800">
@@ -2036,7 +2036,7 @@ const DashboardOPD = () => {
                                                             // src="/assets/images/profile-6.jpeg"
                                                             src={user?.photo}
                                                             alt="avatar" />
-                                                        <span className="whitespace-nowrap font-semibold">
+                                                        <span className="font-semibold">
                                                             {user?.fullname}
                                                         </span>
                                                     </div>
@@ -2047,25 +2047,27 @@ const DashboardOPD = () => {
                                                 <td>
                                                     <div className="flex items-center justify-center">
                                                         {user?.instance_type === 'kepala' && (
-                                                            <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
+                                                            <span className="badge bg-success shadow-md dark:group-hover:bg-transparent whitespace-nowrap">
                                                                 Kepala Dinas
                                                             </span>
                                                         )}
                                                         {user?.instance_type === 'staff' && (
-                                                            <span className="badge bg-info shadow-md dark:group-hover:bg-transparent">
+                                                            <span className="badge bg-info shadow-md dark:group-hover:bg-transparent whitespace-nowrap">
                                                                 Staff
                                                             </span>
                                                         )}
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div className="text-center">
+                                                    <div className="text-center whitespace-nowrap">
                                                         {user?.last_activity ? (
                                                             <>
                                                                 {new Date(user?.last_activity)?.toLocaleDateString('id-ID', {
                                                                     year: 'numeric',
                                                                     month: 'long',
                                                                     day: 'numeric',
+                                                                    hour: '2-digit',
+                                                                    minute: '2-digit',
                                                                 })}
                                                             </>
                                                         ) : (
@@ -2165,7 +2167,7 @@ const DashboardOPD = () => {
                                                         {/* {program?.instance_name} - */}
                                                         {program?.instance_sub_unit?.map((subUnit: any, index: number) => (
                                                             <Tippy content="Bidang / Bagian" placement='top-start'>
-                                                                <div className='uppercase'>
+                                                                <div className='uppercase whitespace-nowrap' key={`subunit-` + subUnit?.id}>
                                                                     - {subUnit?.name}
                                                                 </div>
                                                             </Tippy>
@@ -2179,7 +2181,7 @@ const DashboardOPD = () => {
                                                         <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
                                                             Anggaran
                                                         </div>
-                                                        <div className='self-end text-dark dark:text-slate-400 group-hover:text-white'>
+                                                        <div className='self-end text-dark dark:text-slate-400 group-hover:text-white whitespace-nowrap'>
                                                             {themeConfig.showMoney ? (
                                                                 <>
                                                                     Rp. {new Intl.NumberFormat('id-ID', {}).format(program?.anggaran)}
@@ -2362,7 +2364,7 @@ const DashboardOPD = () => {
                                                                             )}
                                                                         </div>
                                                                     </div>
-                                                                    <p className="ltr:ml-auto rtl:mr-auto">
+                                                                    <p className="ltr:ml-auto rtl:mr-auto whitespace-nowrap">
                                                                         {(selectedProgram?.summary?.realisasi_anggaran ||
                                                                             selectedProgram?.summary?.realisasi_anggaran === 0) ? (
                                                                             <>
@@ -2527,7 +2529,7 @@ const DashboardOPD = () => {
                                                                 <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
                                                                     Anggaran
                                                                 </div>
-                                                                <div className='self-end text-dark dark:text-slate-400 group-hover:text-white'>
+                                                                <div className='self-end text-dark dark:text-slate-400 group-hover:text-white whitespace-nowrap'>
                                                                     {themeConfig.showMoney ? (
                                                                         <>
                                                                             Rp. {new Intl.NumberFormat('id-ID', {}).format(kegiatan?.anggaran)}
@@ -2659,7 +2661,7 @@ const DashboardOPD = () => {
                                                                     <div className="flex-1">
                                                                         <div className="flex font-semibold">
                                                                             <h6>Anggaran</h6>
-                                                                            <p className="ltr:ml-auto rtl:mr-auto">
+                                                                            <p className="ltr:ml-auto rtl:mr-auto whitespace-nowrap">
                                                                                 {(selectedKegiatan?.summary?.target_anggaran ||
                                                                                     selectedKegiatan?.summary?.target_anggaran === 0) ? (
                                                                                     <>
@@ -2706,7 +2708,7 @@ const DashboardOPD = () => {
                                                                                     )}
                                                                                 </div>
                                                                             </div>
-                                                                            <p className="ltr:ml-auto rtl:mr-auto">
+                                                                            <p className="ltr:ml-auto rtl:mr-auto whitespace-nowrap">
                                                                                 {(selectedKegiatan?.summary?.realisasi_anggaran ||
                                                                                     selectedKegiatan?.summary?.realisasi_anggaran === 0) ? (
                                                                                     <>
@@ -2870,7 +2872,7 @@ const DashboardOPD = () => {
                                                                         <div className="text-xs text-center mb-1 text-dark dark:text-slate-400 font-semibold group-hover:text-white">
                                                                             Anggaran
                                                                         </div>
-                                                                        <div className='self-end text-dark dark:text-slate-400 group-hover:text-white'>
+                                                                        <div className='self-end text-dark dark:text-slate-400 group-hover:text-white whitespace-nowrap'>
                                                                             {themeConfig.showMoney ? (
                                                                                 <>
                                                                                     Rp. {new Intl.NumberFormat('id-ID', {}).format(subKegiatan?.anggaran)}
@@ -3003,7 +3005,7 @@ const DashboardOPD = () => {
                                                                             <div className="flex-1">
                                                                                 <div className="flex font-semibold">
                                                                                     <h6>Anggaran</h6>
-                                                                                    <p className="ltr:ml-auto rtl:mr-auto">
+                                                                                    <p className="ltr:ml-auto rtl:mr-auto whitespace-nowrap">
                                                                                         {(selectedSubKegiatan?.summary?.target_anggaran ||
                                                                                             selectedSubKegiatan?.summary?.target_anggaran === 0) ? (
                                                                                             <>
@@ -3050,7 +3052,7 @@ const DashboardOPD = () => {
                                                                                             )}
                                                                                         </div>
                                                                                     </div>
-                                                                                    <p className="ltr:ml-auto rtl:mr-auto">
+                                                                                    <p className="ltr:ml-auto rtl:mr-auto whitespace-nowrap">
                                                                                         {(selectedSubKegiatan?.summary?.realisasi_anggaran ||
                                                                                             selectedSubKegiatan?.summary?.realisasi_anggaran === 0) ? (
                                                                                             <>
@@ -3302,7 +3304,7 @@ const DashboardOPD = () => {
                                                                             </span>
                                                                         )}
                                                                     </td>
-                                                                    <td className='!text-end'>
+                                                                    <td className='!text-end whitespace-nowrap'>
                                                                         {themeConfig.showMoney ? (
                                                                             <>
                                                                                 Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.pagu)}
@@ -3314,7 +3316,7 @@ const DashboardOPD = () => {
                                                                             </div>
                                                                         )}
                                                                     </td>
-                                                                    <td className='!text-end'>
+                                                                    <td className='!text-end whitespace-nowrap'>
                                                                         {themeConfig.showMoney ? (
                                                                             <>
                                                                                 Rp. {new Intl.NumberFormat('id-ID', {}).format(detail?.realisasi_anggaran)}

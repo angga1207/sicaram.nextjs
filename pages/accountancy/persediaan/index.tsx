@@ -108,8 +108,8 @@ const Page = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                // setYear(currentYear);
-                setYear(2024);
+                setYear(currentYear);
+                // setYear(2024);
             } else {
                 setYear(periode?.start_year)
             }
@@ -251,84 +251,81 @@ const Page = () => {
                 </div>
 
                 <div className="panel">
-                    <Tab.Group defaultIndex={0}>
-                        <Tab.List className="mt-3 pb-3 flex flex-nowrap overflow-y-auto border-b border-white-light dark:border-[#191e3a]">
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                    {(isMounted && year) ? (
+                        <Tab.Group
+                            defaultIndex={2}>
+                            <Tab.List className="mt-3 pb-3 flex flex-nowrap overflow-y-auto border-b border-white-light dark:border-[#191e3a]">
+                                <Tab as={Fragment}>
+                                    {({ selected }) => (
+                                        <button
+                                            className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        Rekap
-                                    </button>
-                                )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                            {year === 2024 && (
+                                                <span className="font-bold">A.</span>
+                                            )}
+                                            Barang Habis Pakai
+                                        </button>
+                                    )}
+                                </Tab>
+                                {year === 2024 && (
+                                    <Tab as={Fragment}>
+                                        {({ selected }) => (
+                                            <button
+                                                className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        A. Barang Habis Pakai
-                                    </button>
+                                                B. Belanja Persediaan untuk Dijual/Diserahkan-Persediaan untuk Dijual/Diserahkan kepada Masyarakat/Lainnya
+                                            </button>
+                                        )}
+                                    </Tab>
                                 )}
-                            </Tab>
-                            <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
+                                {year === 2024 && (
+                                    <Tab as={Fragment}>
+                                        {({ selected }) => (
+                                            <button
+                                                className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        B. Belanja Persediaan untuk Dijual/Diserahkan-Persediaan untuk Dijual/Diserahkan kepada Masyarakat/Lainnya
-                                    </button>
+                                                Rekap
+                                            </button>
+                                        )}
+                                    </Tab>
                                 )}
-                            </Tab>
-                            {/* <Tab as={Fragment}>
-                                {({ selected }) => (
-                                    <button
-                                        className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
-                    dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                        C. Nilai Persediaan Neraca
-                                    </button>
-                                )}
-                            </Tab> */}
-                        </Tab.List>
-                        <Tab.Panels>
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <Rekap data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <BarangHabisPakai data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
-                            <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <BelanjaPersediaanUntukDijual data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel>
-                            {/* <Tab.Panel>
-                                <div className="pt-5">
-                                    {(isMounted && instances.length > 0) && (
-                                        <NilaiPersediaanNeraca data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                            key={[year, instance]}
-                                        />
-                                    )}
-                                </div>
-                            </Tab.Panel> */}
-                        </Tab.Panels>
-                    </Tab.Group>
+                            </Tab.List>
+
+                            <Tab.Panels>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <BarangHabisPakai data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <BelanjaPersediaanUntukDijual data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+                                <Tab.Panel>
+                                    <div className="pt-5">
+                                        {(isMounted && instances.length > 0) && (
+                                            <Rekap data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                key={[year, instance]}
+                                            />
+                                        )}
+                                    </div>
+                                </Tab.Panel>
+                            </Tab.Panels>
+                        </Tab.Group>
+                    ) : (
+                        <div className="text-center py-20 w-full h-full">
+                            <LoadingSicaram />
+                        </div>
+                    )}
                 </div>
             </div>
         </>

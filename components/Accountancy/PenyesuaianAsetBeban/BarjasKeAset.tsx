@@ -393,10 +393,10 @@ const BarjasKeAset = (data: any) => {
                                 Beban Perjalanan Dinas
                             </th>
                             <th className='bg-green-200 border text-center whitespace-nowrap'>
-                                Beban Hibah
+                                Beban Uang / Jasa Diberikan
                             </th>
                             <th className='bg-green-200 border text-center whitespace-nowrap'>
-                                Beban Uang / Jasa Diberikan
+                                Beban Hibah
                             </th>
                             <th className='bg-green-200 border text-center whitespace-nowrap'>
                                 Jumlah Penyesuaian
@@ -825,23 +825,6 @@ const BarjasKeAset = (data: any) => {
                                             />
                                         </td>
                                         <td className='bg-green-200 border'>
-                                            {/* Beban Hibah */}
-                                            <InputRupiah
-                                                isDisabled={isSaving == true}
-                                                // readOnly={true}
-                                                dataValue={input.min_beban_hibah}
-                                                onChange={(value: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['min_beban_hibah'] = value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    });
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
-                                        </td>
-                                        <td className='bg-green-200 border'>
                                             {/* Beban Lain-lain */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -851,6 +834,23 @@ const BarjasKeAset = (data: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];
                                                         updated[index]['min_beban_lain_lain'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='bg-green-200 border'>
+                                            {/* Beban Hibah */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.min_beban_hibah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['min_beban_hibah'] = value;
                                                         updatedData(updated, index);
                                                         return updated;
                                                     });
@@ -931,10 +931,10 @@ const BarjasKeAset = (data: any) => {
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_perjalanan_dinas)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_hibah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_lain_lain)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_lain_lain)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_beban_hibah)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.min_jumlah_penyesuaian)}

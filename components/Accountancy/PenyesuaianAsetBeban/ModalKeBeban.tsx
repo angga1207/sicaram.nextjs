@@ -365,10 +365,10 @@ const ModalKeBeban = (data: any) => {
                                 Beban Perjalanan Dinas
                             </th>
                             <th className='bg-yellow-300 border text-center whitespace-nowrap'>
-                                Beban Hibah
+                                Beban Uang / Jasa Diberikan
                             </th>
                             <th className='bg-yellow-300 border text-center whitespace-nowrap'>
-                                Beban Uang / Jasa Diberikan
+                                Beban Hibah
                             </th>
                             <th className='bg-yellow-300 border text-center whitespace-nowrap'>
                                 Jumlah Penyesuaian
@@ -683,23 +683,6 @@ const ModalKeBeban = (data: any) => {
                                             />
                                         </td>
                                         <td className='bg-yellow-300 border'>
-                                            {/* Beban Hibah */}
-                                            <InputRupiah
-                                                isDisabled={isSaving == true}
-                                                // readOnly={true}
-                                                dataValue={input.plus_beban_hibah}
-                                                onChange={(value: any) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['plus_beban_hibah'] = value;
-                                                        updatedData(updated, index);
-                                                        return updated;
-                                                    });
-                                                    setIsUnsaved(true);
-                                                }}
-                                            />
-                                        </td>
-                                        <td className='bg-yellow-300 border'>
                                             {/* Beban Lain-lain */}
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
@@ -709,6 +692,23 @@ const ModalKeBeban = (data: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];
                                                         updated[index]['plus_beban_lain_lain'] = value;
+                                                        updatedData(updated, index);
+                                                        return updated;
+                                                    });
+                                                    setIsUnsaved(true);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className='bg-yellow-300 border'>
+                                            {/* Beban Hibah */}
+                                            <InputRupiah
+                                                isDisabled={isSaving == true}
+                                                // readOnly={true}
+                                                dataValue={input.plus_beban_hibah}
+                                                onChange={(value: any) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['plus_beban_hibah'] = value;
                                                         updatedData(updated, index);
                                                         return updated;
                                                     });
@@ -903,10 +903,10 @@ const ModalKeBeban = (data: any) => {
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_perjalanan_dinas)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_hibah)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_lain_lain)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
-                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_lain_lain)}
+                                Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_beban_hibah)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.plus_jumlah_penyesuaian)}

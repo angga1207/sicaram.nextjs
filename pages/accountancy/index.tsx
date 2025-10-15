@@ -103,12 +103,14 @@ const Page = () => {
             </div> */}
 
             <div className="flex items-center justify-center">
-                {/* <FontAwesomeIcon icon={faList12} className='w-6 h-6 mr-1' /> */}
-                <div className="font-semibold text-xl uppercase">
-                    Menu Akuntansi
-                    <span className='dots-loading'>
-                        ...
-                    </span>
+                <div className="text-center">
+                    <h1 className="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight
+               bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500
+               bg-clip-text text-transparent drop-shadow-sm">
+                        Menu Akuntansi
+                    </h1>
+                    <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-indigo-500 to-emerald-500"></div>
+                    <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">Kelola jurnal, buku besar, dan laporan secara terpadu.</p>
                 </div>
             </div>
 

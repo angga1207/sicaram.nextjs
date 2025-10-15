@@ -496,6 +496,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                                 }
                                                 classNamePrefix={'selectAngga'}
                                                 placeholder='Pilih Perangkat Daerah'
+                                                isDisabled={isSaving == true || [9].includes(CurrentUser?.role_id)}
                                                 onChange={(e: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];

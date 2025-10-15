@@ -191,6 +191,8 @@ const MutasiAset = (data: any) => {
         }
     }, [isMounted, instance, periode?.id, year]);
 
+    console.log(CurrentUser?.instance_id)
+
     const addDataInput = () => {
         setDataInput([
             ...dataInput,
@@ -198,7 +200,7 @@ const MutasiAset = (data: any) => {
                 id: '',
                 instance_id: instance ?? '',
 
-                from_instance_id: '',
+                from_instance_id: instance ?? '',
                 to_instance_id: '',
                 kelompok_aset: '',
                 nama_barang: '',
@@ -484,8 +486,9 @@ const MutasiAset = (data: any) => {
                                                         }
                                                     })
                                                 }
+                                                isDisabled={CurrentUser?.role_id == 9}
                                                 classNamePrefix={'selectAngga'}
-                                                placeholder='Pilih Perangkat Daerah Baru'
+                                                placeholder='Pilih Perangkat Daerah Lama'
                                                 onChange={(e: any) => {
                                                     setDataInput((prev: any) => {
                                                         const updated = [...prev];

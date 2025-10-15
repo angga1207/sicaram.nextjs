@@ -175,6 +175,7 @@ const Atribusi = (data: any) => {
                             {
                                 id: '',
                                 instance_id: instance ?? '',
+                                uraian_pekerjaan: '',
 
                                 bel_peg_kode_rekening_id: '',
                                 bel_peg_nama_rekening: '',
@@ -256,6 +257,7 @@ const Atribusi = (data: any) => {
         const newData = {
             id: '',
             instance_id: instance ?? '',
+            uraian_pekerjaan: '',
 
             bel_peg_kode_rekening_id: '',
             bel_peg_nama_rekening: '',
@@ -385,6 +387,7 @@ const Atribusi = (data: any) => {
             const filteredData = dataInputOrigin.filter((item: any) => {
                 return (
                     item.instance?.name?.toLowerCase().includes(e.toLowerCase()) ||
+                    item.uraian_pekerjaan?.toLowerCase().includes(e.toLowerCase()) ||
                     item.instance?.alias?.toLowerCase().includes(e.toLowerCase()) ||
                     item.instance?.code?.toLowerCase().includes(e.toLowerCase()) ||
                     item.kode_rekening_barjas?.fullcode?.toString().toLowerCase().includes(e.toLowerCase()) ||
@@ -422,11 +425,15 @@ const Atribusi = (data: any) => {
                                     Nama Perangkat Daerah
                                 </th>
                             )}
+                            <th rowSpan={2}
+                                className='border text-center whitespace-nowrap'>
+                                Uraian Pekerjaan
+                            </th>
 
-                            <th colSpan={5}
+                            {/* <th colSpan={5}
                                 className="text-center">
                                 Belanja Pegawai
-                            </th>
+                            </th> */}
                             <th rowSpan={1}
                                 className='border !bg-white !px-2'></th>
                             <th colSpan={5}
@@ -451,13 +458,13 @@ const Atribusi = (data: any) => {
                                 className="bg-yellow-300 text-center !text-slate-900">
                                 Atribusi/ Kapitalisasi ke Kelompok Aset (Rp)
                             </th>
-                            <th rowSpan={2}
+                            {/* <th rowSpan={2}
                                 className='bg-yellow-300 border text-center !text-slate-900 whitespace-nowrap'>
                                 Keterangan - No Kontrak/ No SP2D
-                            </th>
+                            </th> */}
                         </tr>
                         <tr className='!bg-slate-900 !text-white left-0 sticky top-[45px] z-[1]'>
-                            <th className='border text-center whitespace-nowrap'>
+                            {/* <th className='border text-center whitespace-nowrap'>
                                 Kode Rekening
                             </th>
                             <th className='border text-center whitespace-nowrap'>
@@ -471,7 +478,7 @@ const Atribusi = (data: any) => {
                             </th>
                             <th className='border text-center whitespace-nowrap'>
                                 Jumlah (Rp)
-                            </th>
+                            </th> */}
 
                             <th className='border !bg-white !px-2'></th>
 
@@ -590,10 +597,30 @@ const Atribusi = (data: any) => {
                                             </td>
                                         )}
 
+                                        {/* Uraian Pekerjaan */}
+                                        <td className="border">
+                                            <div className="">
+                                                <div className="flex">
+                                                    <textarea
+                                                        disabled={isSaving == true}
+                                                        placeholder="Uraian Pekerjaan"
+                                                        className="form-input min-h-[40px] min-w-[250px] placeholder:font-normal resize-none"
+                                                        value={input.uraian_pekerjaan}
+                                                        onChange={(e: any) => {
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['uraian_pekerjaan'] = e?.target?.value;
+                                                                return updated;
+                                                            })
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </td>
 
                                         {/* BELANJA PEGAWAI */}
-                                        <td className='border'>
-                                            {/* Kode Rekening */}
+                                        {/* Kode Rekening */}
+                                        {/* <td className='border'>
                                             <div className="flex gap-2 items-center">
                                                 <Select placeholder="Pilih Kode Rekening"
                                                     isDisabled={isSaving == true}
@@ -668,10 +695,10 @@ const Atribusi = (data: any) => {
                                                 )}
 
                                             </div>
-                                        </td>
+                                        </td> */}
 
-                                        <td className='border'>
-                                            {/* Nama Barang / Pekerjaan */}
+                                        {/* Nama Barang / Pekerjaan */}
+                                        {/* <td className='border'>
                                             <div className="">
                                                 <div className="flex">
                                                     <input
@@ -690,10 +717,10 @@ const Atribusi = (data: any) => {
                                                     />
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> */}
 
-                                        <td className='border'>
-                                            {/* Belanja Last Year */}
+                                        {/* Belanja Last Year */}
+                                        {/* <td className='border'>
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
                                                 // readOnly={true}
@@ -708,10 +735,10 @@ const Atribusi = (data: any) => {
                                                     setIsUnsaved(true);
                                                 }}
                                             />
-                                        </td>
+                                        </td> */}
 
-                                        <td className='border'>
-                                            {/* Hutang Last Year */}
+                                        {/* Hutang Last Year */}
+                                        {/* <td className='border'>
                                             <InputRupiah
                                                 isDisabled={isSaving == true}
                                                 // readOnly={true}
@@ -726,10 +753,10 @@ const Atribusi = (data: any) => {
                                                     setIsUnsaved(true);
                                                 }}
                                             />
-                                        </td>
+                                        </td> */}
 
-                                        <td className='border'>
-                                            {/* Belanja Pegawai Jumlah */}
+                                        {/* Belanja Pegawai Jumlah */}
+                                        {/* <td className='border'>
                                             <InputRupiah
                                                 // isDisabled={isSaving == true}
                                                 readOnly={true}
@@ -744,7 +771,7 @@ const Atribusi = (data: any) => {
                                                     setIsUnsaved(true);
                                                 }}
                                             />
-                                        </td>
+                                        </td> */}
 
 
                                         <td className='bg-white !px-2'>
@@ -1151,8 +1178,8 @@ const Atribusi = (data: any) => {
                                                 }}
                                             />
                                         </td>
-                                        <td className='border'>
-                                            {/* Keterangan Nomor Kontrak / SP2D */}
+                                        {/* Keterangan Nomor Kontrak / SP2D */}
+                                        {/* <td className='border'>
                                             <div className="">
                                                 <div className="flex">
                                                     <input
@@ -1172,7 +1199,7 @@ const Atribusi = (data: any) => {
                                                     />
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 )}
                             </>
@@ -1181,11 +1208,12 @@ const Atribusi = (data: any) => {
 
                         <tr className='!bg-slate-400'>
                             <td colSpan={([9].includes(CurrentUser?.role_id) == false) ? 2 : 0} className='!bg-slate-300'></td>
+                            <td className='text-end !bg-slate-300'></td>
                             <td className='text-end !bg-slate-300 font-semibold left-0 sticky'>
                                 Jumlah :
                             </td>
 
-                            <td className='text-end !bg-slate-300 font-semibold'>
+                            {/* <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_peg_belanja_last_year)}
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
@@ -1193,9 +1221,9 @@ const Atribusi = (data: any) => {
                             </td>
                             <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_peg_jumlah)}
-                            </td>
+                            </td> */}
 
-                            <td colSpan={3} className='!bg-slate-300'></td>
+                            <td colSpan={0} className='!bg-slate-300'></td>
 
                             <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_barjas_belanja)}
@@ -1242,8 +1270,6 @@ const Atribusi = (data: any) => {
                             <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.atri_aset_lain_lain)}
                             </td>
-
-                            <td className='text-end !bg-slate-300 font-semibold'></td>
 
                         </tr>
 

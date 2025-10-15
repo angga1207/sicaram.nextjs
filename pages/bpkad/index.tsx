@@ -22,32 +22,24 @@ const Page = () => {
     return (
         <div className="relative flex w-full max-w-full flex-col justify-between overflow-hidden rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 lg:min-h-[calc(100vh-200px)] lg:flex-row lg:gap-10 xl:gap-0">
 
-            {/* Left */}
-            <div className="relative hidden w-full items-center justify-center bg-[linear-gradient(225deg,rgba(255,36,36,1)_0%,rgba(255,213,0,1)_100%)] p-5 lg:inline-flex lg:max-w-[835px] xl:-ms-28 ltr:xl:skew-x-[14deg] rtl:xl:skew-x-[-14deg]">
-                <div className="absolute inset-y-0 w-8 from-primary/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"></div>
-                <div className="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
-                    <div className="ms-10 block w-auto text-[50px] font-bold uppercase text-white">
-                        BPKAD SECTION
-                    </div>
-                    <div className="mt-24 hidden w-full max-w-[430px] lg:block">
-                        {/* <img src="/assets/images/auth/login.svg" alt="Cover Image" className="w-full" /> */}
-                        <Player
-                            autoplay
-                            loop
-                            src="/lottie/bpkad-1.json"
-                            className='w-[100%] h-[400px] group-hover:scale-125 transition-all duration-500'
-                        >
-                        </Player>
-                    </div>
-                </div>
-            </div>
-
             {/* Right */}
-            <div className="relative flex w-full flex-col items-center justify-center gap-6 px-4 pb-16 pt-6 sm:px-6 sm:pl-24">
-                <div className="w-full lg:mt-16">
-                    <div className="text-xl font-bold uppercase text-primary text-center mb-12">
-                        pilih menu dibawah ini untuk melanjutkan
+            <div className="relative flex w-full flex-col items-start justify-center gap-6 px-4 pb-16 pt-6 sm:px-6 sm:pl-24">
+                <div className="w-full">
+
+                    <div className="flex items-center justify-center mb-12">
+                        <div className="text-center">
+                            <h1 className="mt-2 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight
+               bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500
+               bg-clip-text text-transparent drop-shadow-sm">
+                                BPKAD Section
+                            </h1>
+                            <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-indigo-500 to-emerald-500"></div>
+                            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                                Menu khusus untuk pengelolaan data BPKAD.
+                            </p>
+                        </div>
                     </div>
+
                     <div className="w-full flex flex-wrap gap-4 justify-center">
 
                         {([1, 2, 4].includes(CurrentUser?.role_id)) && (

@@ -109,8 +109,8 @@ const Page = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                // setYear(currentYear);
-                setYear(2024);
+                setYear(currentYear);
+                // setYear(2024);
             } else {
                 setYear(periode?.start_year)
             }
@@ -886,6 +886,7 @@ const Page = () => {
                                         params={{
                                             type: 'belanja_bayar_dimuka',
                                             category: 'belanja_bayar_dimuka',
+                                            year: year,
                                         }}
                                         afterClick={(e: any) => {
                                             if (e === 'error') {
