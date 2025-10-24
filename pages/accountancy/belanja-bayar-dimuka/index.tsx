@@ -179,6 +179,7 @@ const Page = () => {
 
     const _getData = () => {
         if (periode?.id) {
+            setMaxPage(1);
             getData(instance, periode?.id, year).then((res: any) => {
                 if (res.status === 'success') {
                     if (res.data.length > 0) {
@@ -883,16 +884,19 @@ const Page = () => {
                                     <DownloadButtons
                                         data={dataInput}
                                         endpoint='/accountancy/download/excel'
+                                        uploadEndpoint='/accountancy/upload/excel'
                                         params={{
                                             type: 'belanja_bayar_dimuka',
                                             category: 'belanja_bayar_dimuka',
+                                            instance: instance ?? '',
+                                            periode: periode?.id ?? '',
                                             year: year,
                                         }}
                                         afterClick={(e: any) => {
-                                            if (e === 'error') {
+                                            if (e[0] === 'error') {
                                                 Swal.fire({
-                                                    title: 'Download Gagal!',
-                                                    text: 'Terjadi kesalahan saat mendownload file.',
+                                                    title: 'Gagal!',
+                                                    text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
                                                     icon: 'error',
                                                     showCancelButton: false,
                                                     confirmButtonText: 'Tutup',
@@ -901,13 +905,16 @@ const Page = () => {
                                                 return;
                                             } else {
                                                 Swal.fire({
-                                                    title: 'Download Berhasil!',
-                                                    text: 'File telah berhasil didownload.',
+                                                    title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
+                                                    text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
                                                     icon: 'success',
                                                     showCancelButton: false,
                                                     confirmButtonText: 'Tutup',
                                                     confirmButtonColor: '#00ab55',
                                                 });
+                                                if (e[1] == 'Uploaded') {
+                                                    _getData();
+                                                }
                                                 return;
                                             }
                                         }}

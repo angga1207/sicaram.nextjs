@@ -327,10 +327,10 @@ const PenghapusanAset = (data: any) => {
                                 className='border text-center whitespace-nowrap'>
                                 Berita Acara
                             </th>
-                            <th rowSpan={2}
+                            {/* <th rowSpan={2}
                                 className='border text-center whitespace-nowrap'>
                                 Keterangan
-                            </th>
+                            </th> */}
 
                             <th rowSpan={2} className='border !bg-white !px-2'></th>
 
@@ -582,7 +582,7 @@ const PenghapusanAset = (data: any) => {
                                                     setIsUnsaved(true);
                                                 }} />
                                         </td>
-                                        <td className='border'>
+                                        {/* <td className='border'>
                                             <input type="text"
                                                 placeholder='Keterangan'
                                                 autoComplete='off'
@@ -597,7 +597,7 @@ const PenghapusanAset = (data: any) => {
                                                     setIsUnsaved(true);
                                                 }}
                                                 className='form-input w-[250px] font-normal' />
-                                        </td>
+                                        </td> */}
 
                                         <td className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap'></td>
 
@@ -768,7 +768,7 @@ const PenghapusanAset = (data: any) => {
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(totalData.akumulasi_penyusutan)}
                             </td>
 
-                            <td colSpan={3}></td>
+                            <td colSpan={2}></td>
                             <td className='border text-center w-[1px] !bg-white !p-1 whitespace-nowrap'></td>
 
                             <td className='border p-3 text-end'>
@@ -875,6 +875,7 @@ const PenghapusanAset = (data: any) => {
                             <DownloadButtons
                                 data={dataInput}
                                 endpoint='/accountancy/download/excel'
+                                uploadEndpoint='/accountancy/upload/excel'
                                 params={{
                                     type: 'penghapusan_aset',
                                     category: 'padb',
@@ -883,10 +884,10 @@ const PenghapusanAset = (data: any) => {
                                     year: year,
                                 }}
                                 afterClick={(e: any) => {
-                                    if (e === 'error') {
+                                    if (e[0] === 'error') {
                                         Swal.fire({
-                                            title: 'Download Gagal!',
-                                            text: 'Terjadi kesalahan saat mendownload file.',
+                                            title: 'Gagal!',
+                                            text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
                                             icon: 'error',
                                             showCancelButton: false,
                                             confirmButtonText: 'Tutup',
@@ -895,13 +896,16 @@ const PenghapusanAset = (data: any) => {
                                         return;
                                     } else {
                                         Swal.fire({
-                                            title: 'Download Berhasil!',
-                                            text: 'File telah berhasil didownload.',
+                                            title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
+                                            text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
                                             icon: 'success',
                                             showCancelButton: false,
                                             confirmButtonText: 'Tutup',
                                             confirmButtonColor: '#00ab55',
                                         });
+                                        if (e[1] == 'Uploaded') {
+                                            _getDatas();
+                                        }
                                         return;
                                     }
                                 }}

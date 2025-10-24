@@ -127,6 +127,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                 pelaksana_pekerjaan: '',
                                 no_kontrak: '',
                                 periode_kontrak: '',
+                                tanggal_kontrak: '',
                                 nilai_belanja_kontrak: 0,
 
                                 payment_1_sp2d: '',
@@ -196,6 +197,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                 pelaksana_pekerjaan: '',
                 no_kontrak: '',
                 periode_kontrak: '',
+                tanggal_kontrak: '',
                 nilai_belanja_kontrak: 0,
 
                 payment_1_sp2d: '',
@@ -334,7 +336,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                 Belanja
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
-                                Nama Kegiatan - Paket Pekerjaan
+                                Uraian Paket Pekerjaan
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
                                 Pelaksana Pekerjaan
@@ -344,6 +346,9 @@ const DaftarPekerjaanKontrak = (data: any) => {
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
                                 Periode Kontrak
+                            </th>
+                            <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
+                                Tanggal Kontrak
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
                                 Nilai Belanja / Nilai Kontrak
@@ -366,12 +371,12 @@ const DaftarPekerjaanKontrak = (data: any) => {
                             <th className='border text-center min-w-[250px]' rowSpan={2}>
                                 Kewajiban Tidak Terbayar s/d 31 Desember {year}
                             </th>
-                            <th className='border text-center min-w-[250px]' rowSpan={2}>
+                            {/* <th className='border text-center min-w-[250px]' rowSpan={2}>
                                 Tanggal Berita Acara Serah Terima Barang/ Pekerjaan
-                            </th>
-                            <th className='border text-center min-w-[250px]' rowSpan={2}>
+                            </th> */}
+                            {/* <th className='border text-center min-w-[250px]' rowSpan={2}>
                                 Tanggal Surat Pengakuan Hutang
-                            </th>
+                            </th> */}
                         </tr>
                         <tr className='!bg-slate-900 !text-white'>
                             <th className='border text-center min-w-[300px] whitespace-nowrap'>
@@ -602,6 +607,28 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                                 className='form-input'
                                             />
                                         </td>
+                                        <td className='border'>
+                                            <Flatpickr
+                                                placeholder='Tanggal Kontrak'
+                                                options={{
+                                                    dateFormat: 'Y-m-d',
+                                                    position: 'auto right'
+                                                }}
+                                                className="form-input w-[200px]"
+                                                value={data?.tanggal_kontrak}
+                                                onChange={(date) => {
+                                                    let Ymd = new Date(date[0].toISOString());
+                                                    Ymd.setDate(Ymd.getDate() + 1);
+                                                    const newYmd = Ymd.toISOString().split('T')[0];
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['tanggal_kontrak'] = newYmd;
+                                                        return updated;
+                                                    })
+                                                    setIsUnsaved(true);
+                                                }} />
+                                        </td>
+
                                         <td className='border'>
                                             <div className="flex group">
                                                 <div className="flex bg-[#eee] border border-white-light justify-center dark:bg-[#1b2e4b] dark:border-[#17263c] font-semibold items-center ltr:border-r-0 ltr:rounded-l-md px-3 rtl:border-l-0 rtl:rounded-r-md">
@@ -1078,7 +1105,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className='border'>
+                                        {/* <td className='border'>
                                             <Flatpickr
                                                 placeholder='Tanggal Berita Acara'
                                                 options={{
@@ -1098,8 +1125,8 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                                     })
                                                     setIsUnsaved(true);
                                                 }} />
-                                        </td>
-                                        <td className='border'>
+                                        </td> */}
+                                        {/* <td className='border'>
                                             <Flatpickr
                                                 placeholder='Tanggal Surat Pengakuan Hutang'
                                                 options={{
@@ -1119,7 +1146,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                                     })
                                                     setIsUnsaved(true);
                                                 }} />
-                                        </td>
+                                        </td> */}
 
                                     </tr>
                                 )}
@@ -1128,7 +1155,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan={8} className='border p-4 text-end font-semibold'>
+                            <td colSpan={9} className='border p-4 text-end font-semibold'>
                                 Total
                             </td>
                             <td className='border p-4 text-end font-semibold'>
@@ -1155,7 +1182,6 @@ const DaftarPekerjaanKontrak = (data: any) => {
                             <td className='border p-4 text-end font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData.kewajiban_tidak_terbayar_sd_desember)}
                             </td>
-                            <td colSpan={2} className='border p-4'></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -1233,6 +1259,7 @@ const DaftarPekerjaanKontrak = (data: any) => {
                             <DownloadButtons
                                 data={dataInput}
                                 endpoint='/accountancy/download/excel'
+                                uploadEndpoint='/accountancy/upload/excel'
                                 params={{
                                     type: 'pekerjaan_kontrak',
                                     category: 'padb',
@@ -1241,10 +1268,10 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                     year: year,
                                 }}
                                 afterClick={(e: any) => {
-                                    if (e === 'error') {
+                                    if (e[0] === 'error') {
                                         Swal.fire({
-                                            title: 'Download Gagal!',
-                                            text: 'Terjadi kesalahan saat mendownload file.',
+                                            title: 'Gagal!',
+                                            text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
                                             icon: 'error',
                                             showCancelButton: false,
                                             confirmButtonText: 'Tutup',
@@ -1253,13 +1280,16 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                         return;
                                     } else {
                                         Swal.fire({
-                                            title: 'Download Berhasil!',
-                                            text: 'File telah berhasil didownload.',
+                                            title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
+                                            text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
                                             icon: 'success',
                                             showCancelButton: false,
                                             confirmButtonText: 'Tutup',
                                             confirmButtonColor: '#00ab55',
                                         });
+                                        if (e[1] == 'Uploaded') {
+                                            _getDatas();
+                                        }
                                         return;
                                     }
                                 }}

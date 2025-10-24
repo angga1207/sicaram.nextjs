@@ -618,6 +618,7 @@ const BarangHabisPakai = (data: any) => {
                             <DownloadButtons
                                 data={dataInput}
                                 endpoint='/accountancy/download/excel'
+                                uploadEndpoint={year != 2024 ? '/accountancy/upload/excel' : ''}
                                 params={{
                                     type: 'barang_habis_pakai',
                                     category: 'persediaan',
@@ -626,10 +627,10 @@ const BarangHabisPakai = (data: any) => {
                                     year: year,
                                 }}
                                 afterClick={(e: any) => {
-                                    if (e === 'error') {
+                                    if (e[0] === 'error') {
                                         Swal.fire({
-                                            title: 'Download Gagal!',
-                                            text: 'Terjadi kesalahan saat mendownload file.',
+                                            title: 'Gagal!',
+                                            text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
                                             icon: 'error',
                                             showCancelButton: false,
                                             confirmButtonText: 'Tutup',
@@ -638,13 +639,16 @@ const BarangHabisPakai = (data: any) => {
                                         return;
                                     } else {
                                         Swal.fire({
-                                            title: 'Download Berhasil!',
-                                            text: 'File telah berhasil didownload.',
+                                            title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
+                                            text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
                                             icon: 'success',
                                             showCancelButton: false,
                                             confirmButtonText: 'Tutup',
                                             confirmButtonColor: '#00ab55',
                                         });
+                                        if (e[1] == 'Uploaded') {
+                                            _getDatas();
+                                        }
                                         return;
                                     }
                                 }}

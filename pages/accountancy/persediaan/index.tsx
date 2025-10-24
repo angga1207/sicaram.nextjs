@@ -260,10 +260,16 @@ const Page = () => {
                                         <button
                                             className={`uppercase whitespace-wrap w-[200px] font-semibold p-4 flex-grow ${selected ? '!border-white-light !border-b-white  text-primary bg-primary-light !outline-none dark:!border-[#191e3a] dark:!border-b-black' : ''}
                     dark:hover:border-b-black -mb-[1px] block border border-transparent hover:text-primary`}>
-                                            {year === 2024 && (
-                                                <span className="font-bold">A.</span>
+                                            {year === 2024 ? (
+                                                <>
+                                                    <span className="font-bold">A.</span>
+                                                    Barang Habis Pakai
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Barang Persediaan
+                                                </>
                                             )}
-                                            Barang Habis Pakai
                                         </button>
                                     )}
                                 </Tab>

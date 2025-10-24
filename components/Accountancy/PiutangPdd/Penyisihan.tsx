@@ -554,7 +554,7 @@ const Penyisihan = (data: any) => {
                                 Penyisihan Piutang Per 31 Desember {year}
                             </th>
                             <th rowSpan={2} className="bg-slate-900 border text-center text-white min-w-[200px] whitespace-nowrap">
-                                Jumlah
+                                Jumlah Penyisihan
                             </th>
                         </tr>
                         <tr className='sticky top-[46px] z-[0]'>

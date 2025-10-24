@@ -505,10 +505,10 @@ const PDD = (data: any) => {
                         </tr>
                         <tr className='sticky top-[46px] z-[0]'>
                             <th className="bg-slate-900 border text-center text-white min-w-[200px]">
-                                Bertambah
+                                Tambah
                             </th>
                             <th className="bg-slate-900 border text-center text-white min-w-[200px]">
-                                Berkurang
+                                Kurang
                             </th>
                         </tr>
                     </thead>
