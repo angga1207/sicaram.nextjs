@@ -469,7 +469,7 @@ const MutasiAset = (data: any) => {
                                             <Select
                                                 className='w-[300px]'
                                                 options={
-                                                    instances?.map((data: any, index: number) => {
+                                                    instances?.filter((data: any) => data.id != dataInput[index]?.to_instance_id).map((data: any, index: number) => {
                                                         return {
                                                             value: data.id,
                                                             label: data.name,
@@ -502,7 +502,7 @@ const MutasiAset = (data: any) => {
                                             <Select
                                                 className='w-[300px]'
                                                 options={
-                                                    instances?.map((data: any, index: number) => {
+                                                    instances?.filter((data: any) => data.id != dataInput[index]?.from_instance_id).map((data: any, index: number) => {
                                                         return {
                                                             value: data.id,
                                                             label: data.name,

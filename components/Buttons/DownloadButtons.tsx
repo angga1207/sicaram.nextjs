@@ -34,6 +34,12 @@ const DownloadButtons = ({
                     Authorization: `Bearer ${CurrentToken}`,
                 },
             });
+
+            if (response.data.status !== 'success') {
+                afterClick(['error', response.data.message]);
+                return;
+            }
+
             const url = window.URL.createObjectURL(new Blob([response.data.data.path]));
             const link = document.createElement('a');
             link.href = url;
@@ -44,7 +50,7 @@ const DownloadButtons = ({
             link.parentNode?.removeChild(link);
             afterClick(['success', 'Downloaded']);
         } catch (err) {
-            afterClick(['error']);
+            afterClick(['error', err]);
             console.log(err);
         }
     }

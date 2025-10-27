@@ -31,6 +31,7 @@ const showAlert = async (icon: any, text: any) => {
 
 const Piutang = (data: any) => {
     const paramData = data.data
+    // console.log(paramData);
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +87,10 @@ const Piutang = (data: any) => {
                 setArrKodeRekening6(paramData[1].filter((item: any) => item.code_6 != null && item.code_1 == 4 && item.code_2 == 2 && item.code_3 == '02'))
             }
             if ([9].includes(CurrentUser?.role_id)) {
+                if (paramData[4]) {
+                    setInstance(paramData[4]);
+                }
+            } else {
                 if (paramData[4]) {
                     setInstance(paramData[4]);
                 }
@@ -2845,6 +2850,7 @@ const Piutang = (data: any) => {
                                 dataInput1.concat(dataInput2, dataInput3, dataInput4, dataInput5, dataInput6)
                             }
                             endpoint='/accountancy/download/excel'
+                            uploadEndpoint='/accountancy/upload/excel'
                             params={{
                                 type: 'piutang',
                                 category: 'pendapatan_lo',
@@ -2853,10 +2859,10 @@ const Piutang = (data: any) => {
                                 year: year,
                             }}
                             afterClick={(e: any) => {
-                                if (e === 'error') {
+                                if (e[0] === 'error') {
                                     Swal.fire({
-                                        title: 'Download Gagal!',
-                                        text: 'Terjadi kesalahan saat mendownload file.',
+                                        title: 'Gagal!',
+                                        text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
                                         icon: 'error',
                                         showCancelButton: false,
                                         confirmButtonText: 'Tutup',
@@ -2865,13 +2871,16 @@ const Piutang = (data: any) => {
                                     return;
                                 } else {
                                     Swal.fire({
-                                        title: 'Download Berhasil!',
-                                        text: 'File telah berhasil didownload.',
+                                        title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
+                                        text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
                                         icon: 'success',
                                         showCancelButton: false,
                                         confirmButtonText: 'Tutup',
                                         confirmButtonColor: '#00ab55',
                                     });
+                                    if (e[1] == 'Uploaded') {
+                                        _getDatas();
+                                    }
                                     return;
                                 }
                             }}

@@ -583,7 +583,7 @@ const Page = () => {
                                                                                 })
                                                                                 .then((result) => {
                                                                                     if (result.value) {
-                                                                                        deleteData(input.id);
+                                                                                        _deleteData(input.id);
                                                                                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                                                                                         swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
                                                                                     }
