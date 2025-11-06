@@ -350,7 +350,7 @@ const PenjualanAset = (data: any) => {
                                 className='border text-center whitespace-nowrap'>
                                 Surplus <br />
                                 <span className='text-xs'>
-                                    [H.Jual - (H.Perolehan + A.Penyusutan)]
+                                    [H.Jual - (H.Perolehan - A.Penyusutan)]
                                 </span>
                             </th>
                             <th colSpan={2}
