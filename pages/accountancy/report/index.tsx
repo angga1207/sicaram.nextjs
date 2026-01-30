@@ -98,8 +98,8 @@ const Page = () => {
         if (isMounted && periode?.id) {
             const currentYear = new Date().getFullYear();
             if (periode?.start_year <= currentYear) {
-                setYear(currentYear);
-                // setYear(2024);
+                // setYear(currentYear);
+                setYear(2025);
             } else {
                 setYear(periode?.start_year)
             }

@@ -5,8 +5,8 @@ export function BaseUri() {
     // const uri = 'https://sicaram.oganilirkab.go.id/api';
 
     // const uri = 'http://103.162.35.44/api';
-    const uri = 'http://127.0.0.1:8001/api';
-    // const uri = 'https://sicaramapis.oganilirkab.go.id/api';
+    // const uri = 'http://127.0.0.1:8001/api';
+    const uri = 'https://sicaramapis.oganilirkab.go.id/api';
     return uri;
 }
 

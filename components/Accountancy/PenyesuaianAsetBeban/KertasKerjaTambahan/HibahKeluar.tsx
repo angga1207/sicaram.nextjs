@@ -579,7 +579,7 @@ const HibahKeluar = (data: any) => {
                                                     position: 'auto right'
                                                 }}
                                                 className="form-input w-[200px]"
-                                                value={data?.tanggal_berita_acara}
+                                                value={item?.tanggal_berita_acara}
                                                 onChange={(date) => {
                                                     let Ymd = new Date(date[0].toISOString());
                                                     Ymd.setDate(Ymd.getDate() + 1);

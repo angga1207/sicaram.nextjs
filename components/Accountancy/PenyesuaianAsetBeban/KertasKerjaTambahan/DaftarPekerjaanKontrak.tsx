@@ -345,10 +345,10 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                 No Kontrak
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
-                                Periode Kontrak
+                                Tanggal Kontrak
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
-                                Tanggal Kontrak
+                                Periode Kontrak
                             </th>
                             <th className='border text-center min-w-[200px] whitespace-nowrap' rowSpan={2}>
                                 Nilai Belanja / Nilai Kontrak
@@ -593,21 +593,6 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                             />
                                         </td>
                                         <td className='border'>
-                                            <input
-                                                type="text"
-                                                placeholder='Periode Kontrak'
-                                                value={data.periode_kontrak}
-                                                onChange={(e) => {
-                                                    setDataInput((prev: any) => {
-                                                        const updated = [...prev];
-                                                        updated[index]['periode_kontrak'] = e?.target?.value;
-                                                        return updated;
-                                                    })
-                                                }}
-                                                className='form-input'
-                                            />
-                                        </td>
-                                        <td className='border'>
                                             <Flatpickr
                                                 placeholder='Tanggal Kontrak'
                                                 options={{
@@ -627,6 +612,21 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                                     })
                                                     setIsUnsaved(true);
                                                 }} />
+                                        </td>
+                                        <td className='border'>
+                                            <input
+                                                type="text"
+                                                placeholder='Periode Kontrak'
+                                                value={data.periode_kontrak}
+                                                onChange={(e) => {
+                                                    setDataInput((prev: any) => {
+                                                        const updated = [...prev];
+                                                        updated[index]['periode_kontrak'] = e?.target?.value;
+                                                        return updated;
+                                                    })
+                                                }}
+                                                className='form-input'
+                                            />
                                         </td>
 
                                         <td className='border'>
