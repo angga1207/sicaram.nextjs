@@ -10,6 +10,7 @@ import IconTrash from '@/components/Icon/IconTrash';
 import { deleteAtribusi, getAtribusi, storeAtribusi } from '@/apis/Accountancy/PenyesuaianAsetDanBeban';
 import InputRupiah from '@/components/InputRupiah';
 import DownloadButtons from '@/components/Buttons/DownloadButtons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -370,7 +371,7 @@ const Atribusi = (data: any) => {
         });
     }
 
-    const deleteData = (id: any) => {
+    const _deleteData = (id: any) => {
         deleteAtribusi(id).then((res: any) => {
             if (res.status == 'success') {
                 _getDatas();
@@ -419,6 +420,7 @@ const Atribusi = (data: any) => {
                 <table className="table-striped">
                     <thead>
                         <tr className='!bg-slate-900 !text-white left-0 sticky top-0 z-[1]'>
+                            <th rowSpan={2}></th>
                             {([9].includes(CurrentUser?.role_id) == false) && (
                                 <th rowSpan={2}
                                     className='border text-center whitespace-nowrap'>
@@ -557,42 +559,73 @@ const Atribusi = (data: any) => {
                             <>
                                 {(index >= (page - 1) * perPage && index < (page * perPage)) && (
                                     <tr>
+                                        <td className='border'>
+                                            <div className="flex justify-center gap-2 items-center">
+                                                <Tippy content='Hapus Data' theme='danger'>
+                                                    <button
+                                                        className='text-danger select-none'
+                                                        onClick={(e) => {
+                                                            Swal.fire({
+                                                                title: 'Hapus Data',
+                                                                text: 'Apakah Anda yakin ingin menghapus data ini?',
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#d33',
+                                                                cancelButtonColor: '#3085d6',
+                                                                confirmButtonText: 'Ya',
+                                                                cancelButtonText: 'Tidak',
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    if (input.id) {
+                                                                        _deleteData(input.id);
+                                                                    }
+                                                                }
+                                                            });
+                                                        }}
+                                                    >
+                                                        <IconTrash className='h-5 w-5' />
+                                                    </button>
+                                                </Tippy>
+                                            </div>
+                                        </td>
                                         {([9].includes(CurrentUser?.role_id) == false) && (
                                             <td className='border'>
-                                                {/* Perangkat Daerah */}
-                                                <div className="">
-                                                    <Select placeholder="Pilih Perangkat Daerah"
-                                                        className='min-w-[300px]'
-                                                        onChange={(e: any) => {
-                                                            if ([9].includes(CurrentUser?.role_id)) {
-                                                                showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
-                                                            } else {
-                                                                setDataInput((prev: any) => {
-                                                                    const updated = [...prev];
-                                                                    updated[index]['instance_id'] = e?.value;
-                                                                    return updated;
+                                                <div className="flex items-center gap-2">
+                                                    {/* Perangkat Daerah */}
+                                                    <div className="">
+                                                        <Select placeholder="Pilih Perangkat Daerah"
+                                                            className='min-w-[300px]'
+                                                            onChange={(e: any) => {
+                                                                if ([9].includes(CurrentUser?.role_id)) {
+                                                                    showAlert('error', 'Anda tidak memiliki akses ke Perangkat Daerah ini');
+                                                                } else {
+                                                                    setDataInput((prev: any) => {
+                                                                        const updated = [...prev];
+                                                                        updated[index]['instance_id'] = e?.value;
+                                                                        return updated;
+                                                                    })
+                                                                }
+                                                            }}
+                                                            isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
+                                                            value={
+                                                                instances?.map((data: any, index: number) => {
+                                                                    if (data.id == input.instance_id) {
+                                                                        return {
+                                                                            value: data.id,
+                                                                            label: data.name,
+                                                                        }
+                                                                    }
                                                                 })
                                                             }
-                                                        }}
-                                                        isDisabled={[9].includes(CurrentUser?.role_id) ? true : (isSaving == true)}
-                                                        value={
-                                                            instances?.map((data: any, index: number) => {
-                                                                if (data.id == input.instance_id) {
+                                                            options={
+                                                                instances?.map((data: any, index: number) => {
                                                                     return {
                                                                         value: data.id,
                                                                         label: data.name,
                                                                     }
-                                                                }
-                                                            })
-                                                        }
-                                                        options={
-                                                            instances?.map((data: any, index: number) => {
-                                                                return {
-                                                                    value: data.id,
-                                                                    label: data.name,
-                                                                }
-                                                            })
-                                                        } />
+                                                                })
+                                                            } />
+                                                    </div>
                                                 </div>
                                             </td>
                                         )}
@@ -1207,11 +1240,12 @@ const Atribusi = (data: any) => {
 
 
                         <tr className='!bg-slate-400'>
-                            <td colSpan={([9].includes(CurrentUser?.role_id) == false) ? 2 : 0} className='!bg-slate-300'></td>
-                            <td className='text-end !bg-slate-300'></td>
+                            <td className='text-end !bg-slate-300' colSpan={1}></td>
+                            <td colSpan={([9].includes(CurrentUser?.role_id) == false) ? 1 : 0} className='!bg-slate-300'></td>
                             <td className='text-end !bg-slate-300 font-semibold left-0 sticky'>
                                 Jumlah :
                             </td>
+                            <td className='text-end !bg-slate-300' colSpan={2}></td>
 
                             {/* <td className='text-end !bg-slate-300 font-semibold'>
                                 Rp. {new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(totalData?.bel_peg_belanja_last_year)}

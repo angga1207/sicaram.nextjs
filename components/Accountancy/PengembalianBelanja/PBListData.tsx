@@ -606,7 +606,7 @@ const PBListData = (data: any) => {
                                 <DownloadButtons
                                     data={datas}
                                     endpoint='/accountancy/download/excel'
-                                    // uploadEndpoint='/accountancy/upload/excel'
+                                    uploadEndpoint='/accountancy/upload/excel'
                                     params={{
                                         type: 'pengembalian-belanja',
                                         category: 'pengembalian-belanja',
