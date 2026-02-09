@@ -80,3 +80,26 @@ export async function resetData(instance: any, periode: any, year: any) {
         }
     }
 }
+
+export async function massDeleteData(ids: any, type: any) {
+    try {
+        const session = await getSession();
+        const CurrentToken = session?.user?.name;
+        const res = await axios.post(baseUri + '/accountancy/massDelete', {
+            ids: ids,
+            type: type,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${CurrentToken}`,
+            },
+        });
+        const data = await res.data;
+        return data;
+    } catch (error) {
+        return {
+            status: 'error',
+            message: error
+        }
+    }
+}

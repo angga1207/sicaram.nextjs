@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react';
 import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
-    const APP_VERSION = "2.6b.6";
+    const APP_VERSION = "2.7.1";
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {

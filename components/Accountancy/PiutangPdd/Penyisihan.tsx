@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faSave, faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -14,6 +14,7 @@ import { deletePenyisihan, getPenyisihan, storePenyisihan } from '@/apis/Account
 import InputRupiah from '@/components/InputRupiah';
 import IconX from '@/components/Icon/IconX';
 import DownloadButtons from '@/components/Buttons/DownloadButtons';
+import { massDeleteData } from '@/apis/Accountancy/Accountancy';
 
 const showAlert = async (icon: any, text: any) => {
     const toast = Swal.mixin({
@@ -526,10 +527,26 @@ const Penyisihan = (data: any) => {
         });
     }
 
+    const [selectedMode, setSelectedMode] = useState<boolean>(false);
+    const [selectedData, setSelectedData] = useState<any>([]);
+
     const deleteData = (id: any) => {
         deletePenyisihan(id).then((res: any) => {
             if (res.status == 'success') {
                 _getDatas();
+                showAlert('success', 'Data berhasil dihapus');
+            } else {
+                showAlert('error', 'Data gagal dihapus');
+            }
+        });
+    }
+
+    const deleteSelectedData = () => {
+        massDeleteData(selectedData, 'acc_plo_penyisihan').then((res: any) => {
+            if (res.status == 'success') {
+                _getDatas();
+                setSelectedData([]);
+                setSelectedMode(false);
                 showAlert('success', 'Data berhasil dihapus');
             } else {
                 showAlert('error', 'Data gagal dihapus');
@@ -706,43 +723,60 @@ const Penyisihan = (data: any) => {
 
 
                                                 {data?.id && (
-                                                    <div className="">
-                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
+                                                    <div className="flex gap-2">
+                                                        {selectedMode ? (
+                                                            <label className="w-12 h-6 relative">
+                                                                <input type="checkbox" className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1"
+                                                                    disabled={isSaving == true}
+                                                                    checked={selectedData.includes(data.id)}
+                                                                    onChange={(e: any) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedData((prev: any) => [...prev, data.id])
+                                                                        } else {
+                                                                            setSelectedData((prev: any) => prev.filter((item: any) => item != data.id))
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="outline_checkbox bg-icon border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full before:bg-[url(/assets/images/close.svg)] before:bg-no-repeat before:bg-center peer-checked:before:left-7 peer-checked:before:bg-[url(/assets/images/checked.svg)] peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                                                            </label>
+                                                        ) : (
+                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
 
-                                                                    const swalWithBootstrapButtons = Swal.mixin({
-                                                                        customClass: {
-                                                                            confirmButton: 'btn btn-danger',
-                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                            popup: 'sweet-alerts',
-                                                                        },
-                                                                        buttonsStyling: false,
-                                                                    });
-                                                                    swalWithBootstrapButtons
-                                                                        .fire({
-                                                                            title: 'Hapus Data?',
-                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                            icon: 'question',
-                                                                            showCancelButton: true,
-                                                                            confirmButtonText: 'Ya, Hapus!',
-                                                                            cancelButtonText: 'Tidak!',
-                                                                            reverseButtons: true,
-                                                                            padding: '2em',
-                                                                        })
-                                                                        .then((result) => {
-                                                                            if (result.value) {
-                                                                                deleteData(data.id);
-                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                            }
+                                                                        const swalWithBootstrapButtons = Swal.mixin({
+                                                                            customClass: {
+                                                                                confirmButton: 'btn btn-danger',
+                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                                popup: 'sweet-alerts',
+                                                                            },
+                                                                            buttonsStyling: false,
                                                                         });
-                                                                }}
-                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
-                                                                <IconTrash className='h-4 w-4' />
-                                                            </button>
-                                                        </Tippy>
+                                                                        swalWithBootstrapButtons
+                                                                            .fire({
+                                                                                title: 'Hapus Data?',
+                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                                icon: 'question',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                                cancelButtonText: 'Tidak!',
+                                                                                reverseButtons: true,
+                                                                                padding: '2em',
+                                                                            })
+                                                                            .then((result) => {
+                                                                                if (result.value) {
+                                                                                    deleteData(data.id);
+                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                                }
+                                                                            });
+                                                                    }}
+                                                                    className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                    <IconTrash className='h-4 w-4' />
+                                                                </button>
+                                                            </Tippy>
+                                                        )}
                                                     </div>
                                                 )}
 
@@ -954,45 +988,61 @@ const Penyisihan = (data: any) => {
                                                         })
                                                     } />
 
-
                                                 {data?.id && (
-                                                    <div className="">
-                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
+                                                    <div className="flex gap-2">
+                                                        {selectedMode ? (
+                                                            <label className="w-12 h-6 relative">
+                                                                <input type="checkbox" className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1"
+                                                                    disabled={isSaving == true}
+                                                                    checked={selectedData.includes(data.id)}
+                                                                    onChange={(e: any) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedData((prev: any) => [...prev, data.id])
+                                                                        } else {
+                                                                            setSelectedData((prev: any) => prev.filter((item: any) => item != data.id))
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="outline_checkbox bg-icon border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full before:bg-[url(/assets/images/close.svg)] before:bg-no-repeat before:bg-center peer-checked:before:left-7 peer-checked:before:bg-[url(/assets/images/checked.svg)] peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                                                            </label>
+                                                        ) : (
+                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
 
-                                                                    const swalWithBootstrapButtons = Swal.mixin({
-                                                                        customClass: {
-                                                                            confirmButton: 'btn btn-danger',
-                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                            popup: 'sweet-alerts',
-                                                                        },
-                                                                        buttonsStyling: false,
-                                                                    });
-                                                                    swalWithBootstrapButtons
-                                                                        .fire({
-                                                                            title: 'Hapus Data?',
-                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                            icon: 'question',
-                                                                            showCancelButton: true,
-                                                                            confirmButtonText: 'Ya, Hapus!',
-                                                                            cancelButtonText: 'Tidak!',
-                                                                            reverseButtons: true,
-                                                                            padding: '2em',
-                                                                        })
-                                                                        .then((result) => {
-                                                                            if (result.value) {
-                                                                                deleteData(data.id);
-                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                            }
+                                                                        const swalWithBootstrapButtons = Swal.mixin({
+                                                                            customClass: {
+                                                                                confirmButton: 'btn btn-danger',
+                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                                popup: 'sweet-alerts',
+                                                                            },
+                                                                            buttonsStyling: false,
                                                                         });
-                                                                }}
-                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
-                                                                <IconTrash className='h-4 w-4' />
-                                                            </button>
-                                                        </Tippy>
+                                                                        swalWithBootstrapButtons
+                                                                            .fire({
+                                                                                title: 'Hapus Data?',
+                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                                icon: 'question',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                                cancelButtonText: 'Tidak!',
+                                                                                reverseButtons: true,
+                                                                                padding: '2em',
+                                                                            })
+                                                                            .then((result) => {
+                                                                                if (result.value) {
+                                                                                    deleteData(data.id);
+                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                                }
+                                                                            });
+                                                                    }}
+                                                                    className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                    <IconTrash className='h-4 w-4' />
+                                                                </button>
+                                                            </Tippy>
+                                                        )}
                                                     </div>
                                                 )}
 
@@ -1205,45 +1255,61 @@ const Penyisihan = (data: any) => {
                                                         })
                                                     } />
 
-
                                                 {data?.id && (
-                                                    <div className="">
-                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
+                                                    <div className="flex gap-2">
+                                                        {selectedMode ? (
+                                                            <label className="w-12 h-6 relative">
+                                                                <input type="checkbox" className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1"
+                                                                    disabled={isSaving == true}
+                                                                    checked={selectedData.includes(data.id)}
+                                                                    onChange={(e: any) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedData((prev: any) => [...prev, data.id])
+                                                                        } else {
+                                                                            setSelectedData((prev: any) => prev.filter((item: any) => item != data.id))
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="outline_checkbox bg-icon border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full before:bg-[url(/assets/images/close.svg)] before:bg-no-repeat before:bg-center peer-checked:before:left-7 peer-checked:before:bg-[url(/assets/images/checked.svg)] peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                                                            </label>
+                                                        ) : (
+                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
 
-                                                                    const swalWithBootstrapButtons = Swal.mixin({
-                                                                        customClass: {
-                                                                            confirmButton: 'btn btn-danger',
-                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                            popup: 'sweet-alerts',
-                                                                        },
-                                                                        buttonsStyling: false,
-                                                                    });
-                                                                    swalWithBootstrapButtons
-                                                                        .fire({
-                                                                            title: 'Hapus Data?',
-                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                            icon: 'question',
-                                                                            showCancelButton: true,
-                                                                            confirmButtonText: 'Ya, Hapus!',
-                                                                            cancelButtonText: 'Tidak!',
-                                                                            reverseButtons: true,
-                                                                            padding: '2em',
-                                                                        })
-                                                                        .then((result) => {
-                                                                            if (result.value) {
-                                                                                deleteData(data.id);
-                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                            }
+                                                                        const swalWithBootstrapButtons = Swal.mixin({
+                                                                            customClass: {
+                                                                                confirmButton: 'btn btn-danger',
+                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                                popup: 'sweet-alerts',
+                                                                            },
+                                                                            buttonsStyling: false,
                                                                         });
-                                                                }}
-                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
-                                                                <IconTrash className='h-4 w-4' />
-                                                            </button>
-                                                        </Tippy>
+                                                                        swalWithBootstrapButtons
+                                                                            .fire({
+                                                                                title: 'Hapus Data?',
+                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                                icon: 'question',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                                cancelButtonText: 'Tidak!',
+                                                                                reverseButtons: true,
+                                                                                padding: '2em',
+                                                                            })
+                                                                            .then((result) => {
+                                                                                if (result.value) {
+                                                                                    deleteData(data.id);
+                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                                }
+                                                                            });
+                                                                    }}
+                                                                    className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                    <IconTrash className='h-4 w-4' />
+                                                                </button>
+                                                            </Tippy>
+                                                        )}
                                                     </div>
                                                 )}
 
@@ -1455,45 +1521,61 @@ const Penyisihan = (data: any) => {
                                                         })
                                                     } />
 
-
                                                 {data?.id && (
-                                                    <div className="">
-                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
+                                                    <div className="flex gap-2">
+                                                        {selectedMode ? (
+                                                            <label className="w-12 h-6 relative">
+                                                                <input type="checkbox" className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1"
+                                                                    disabled={isSaving == true}
+                                                                    checked={selectedData.includes(data.id)}
+                                                                    onChange={(e: any) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedData((prev: any) => [...prev, data.id])
+                                                                        } else {
+                                                                            setSelectedData((prev: any) => prev.filter((item: any) => item != data.id))
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="outline_checkbox bg-icon border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full before:bg-[url(/assets/images/close.svg)] before:bg-no-repeat before:bg-center peer-checked:before:left-7 peer-checked:before:bg-[url(/assets/images/checked.svg)] peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                                                            </label>
+                                                        ) : (
+                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
 
-                                                                    const swalWithBootstrapButtons = Swal.mixin({
-                                                                        customClass: {
-                                                                            confirmButton: 'btn btn-danger',
-                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                            popup: 'sweet-alerts',
-                                                                        },
-                                                                        buttonsStyling: false,
-                                                                    });
-                                                                    swalWithBootstrapButtons
-                                                                        .fire({
-                                                                            title: 'Hapus Data?',
-                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                            icon: 'question',
-                                                                            showCancelButton: true,
-                                                                            confirmButtonText: 'Ya, Hapus!',
-                                                                            cancelButtonText: 'Tidak!',
-                                                                            reverseButtons: true,
-                                                                            padding: '2em',
-                                                                        })
-                                                                        .then((result) => {
-                                                                            if (result.value) {
-                                                                                deleteData(data.id);
-                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                            }
+                                                                        const swalWithBootstrapButtons = Swal.mixin({
+                                                                            customClass: {
+                                                                                confirmButton: 'btn btn-danger',
+                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                                popup: 'sweet-alerts',
+                                                                            },
+                                                                            buttonsStyling: false,
                                                                         });
-                                                                }}
-                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
-                                                                <IconTrash className='h-4 w-4' />
-                                                            </button>
-                                                        </Tippy>
+                                                                        swalWithBootstrapButtons
+                                                                            .fire({
+                                                                                title: 'Hapus Data?',
+                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                                icon: 'question',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                                cancelButtonText: 'Tidak!',
+                                                                                reverseButtons: true,
+                                                                                padding: '2em',
+                                                                            })
+                                                                            .then((result) => {
+                                                                                if (result.value) {
+                                                                                    deleteData(data.id);
+                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                                }
+                                                                            });
+                                                                    }}
+                                                                    className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                    <IconTrash className='h-4 w-4' />
+                                                                </button>
+                                                            </Tippy>
+                                                        )}
                                                     </div>
                                                 )}
 
@@ -1707,45 +1789,61 @@ const Penyisihan = (data: any) => {
                                                         })
                                                     } />
 
-
                                                 {data?.id && (
-                                                    <div className="">
-                                                        <Tippy content="Hapus Data" placement='top' theme='danger'>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
+                                                    <div className="flex gap-2">
+                                                        {selectedMode ? (
+                                                            <label className="w-12 h-6 relative">
+                                                                <input type="checkbox" className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1"
+                                                                    disabled={isSaving == true}
+                                                                    checked={selectedData.includes(data.id)}
+                                                                    onChange={(e: any) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedData((prev: any) => [...prev, data.id])
+                                                                        } else {
+                                                                            setSelectedData((prev: any) => prev.filter((item: any) => item != data.id))
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="outline_checkbox bg-icon border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full before:bg-[url(/assets/images/close.svg)] before:bg-no-repeat before:bg-center peer-checked:before:left-7 peer-checked:before:bg-[url(/assets/images/checked.svg)] peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                                                            </label>
+                                                        ) : (
+                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
 
-                                                                    const swalWithBootstrapButtons = Swal.mixin({
-                                                                        customClass: {
-                                                                            confirmButton: 'btn btn-danger',
-                                                                            cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
-                                                                            popup: 'sweet-alerts',
-                                                                        },
-                                                                        buttonsStyling: false,
-                                                                    });
-                                                                    swalWithBootstrapButtons
-                                                                        .fire({
-                                                                            title: 'Hapus Data?',
-                                                                            text: "Apakah Anda yakin untuk menghapus Data Ini!",
-                                                                            icon: 'question',
-                                                                            showCancelButton: true,
-                                                                            confirmButtonText: 'Ya, Hapus!',
-                                                                            cancelButtonText: 'Tidak!',
-                                                                            reverseButtons: true,
-                                                                            padding: '2em',
-                                                                        })
-                                                                        .then((result) => {
-                                                                            if (result.value) {
-                                                                                deleteData(data.id);
-                                                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                                                swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
-                                                                            }
+                                                                        const swalWithBootstrapButtons = Swal.mixin({
+                                                                            customClass: {
+                                                                                confirmButton: 'btn btn-danger',
+                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                                popup: 'sweet-alerts',
+                                                                            },
+                                                                            buttonsStyling: false,
                                                                         });
-                                                                }}
-                                                                className="btn btn-danger h-8 p-0 rounded-full w-8">
-                                                                <IconTrash className='h-4 w-4' />
-                                                            </button>
-                                                        </Tippy>
+                                                                        swalWithBootstrapButtons
+                                                                            .fire({
+                                                                                title: 'Hapus Data?',
+                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                                icon: 'question',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                                cancelButtonText: 'Tidak!',
+                                                                                reverseButtons: true,
+                                                                                padding: '2em',
+                                                                            })
+                                                                            .then((result) => {
+                                                                                if (result.value) {
+                                                                                    deleteData(data.id);
+                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                                }
+                                                                            });
+                                                                    }}
+                                                                    className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                    <IconTrash className='h-4 w-4' />
+                                                                </button>
+                                                            </Tippy>
+                                                        )}
                                                     </div>
                                                 )}
 
@@ -2169,73 +2267,111 @@ const Penyisihan = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex justify-end gap-4 items-center mt-4 px-5">
-                <div className="flex items-center">
-                    {(totalData) && (
-                        <DownloadButtons
-                            data={
-                                dataInput1.concat(dataInput2, dataInput3, dataInput4, dataInput5, dataInput6)
-                            }
-                            endpoint='/accountancy/download/excel'
-                            uploadEndpoint='/accountancy/upload/excel'
-                            params={{
-                                type: 'penyisihan',
-                                category: 'pendapatan_lo',
-                                instance: instance,
-                                periode: periode?.id,
-                                year: year,
-                            }}
-                            afterClick={(e: any) => {
-                                if (e[0] === 'error') {
-                                    Swal.fire({
-                                        title: 'Gagal!',
-                                        text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
-                                        icon: 'error',
-                                        showCancelButton: false,
-                                        confirmButtonText: 'Tutup',
-                                        confirmButtonColor: '#00ab55',
-                                    });
-                                    return;
-                                } else {
-                                    Swal.fire({
-                                        title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
-                                        text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
-                                        icon: 'success',
-                                        showCancelButton: false,
-                                        confirmButtonText: 'Tutup',
-                                        confirmButtonColor: '#00ab55',
-                                    });
-                                    if (e[1] == 'Uploaded') {
-                                        _getDatas();
+            <div className="flex justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex items-center gap-2">
+                    <label className="flex-none flex items-center gap-2 cursor-pointer select-none mb-0">
+                        <div className="w-12 h-6 relative">
+                            <input
+                                type="checkbox"
+                                className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
+                                checked={selectedMode}
+                                onChange={(e: any) => {
+                                    if (e?.target?.checked == false) {
+                                        setSelectedData([]);
                                     }
-                                    return;
+                                    setSelectedMode(e?.target?.checked);
+                                }}
+                            />
+                            <span className="outline_checkbox border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                        </div>
+                        <div className="text-xs">
+                            Hapus Mode {selectedData.length > 0 ? `(${selectedData.length}) Item` : ''}
+                        </div>
+                    </label>
+
+                    {selectedData.length > 0 && (
+                        <button type="button"
+                            disabled={isSaving == true}
+                            onClick={(e) => {
+                                if (isSaving == false) {
+                                    deleteSelectedData()
                                 }
                             }}
-                        />
+                            className='btn btn-danger btn-sm text-xs w-full'>
+                            <FontAwesomeIcon icon={faTrash} className='h-3 w-3 mr-1' />
+                            Hapus
+                        </button>
                     )}
                 </div>
 
-                {instance && (
-                    <>
-                        {isSaving == false ? (
-                            <button type="button"
-                                onClick={(e) => {
-                                    save()
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                        {(totalData) && (
+                            <DownloadButtons
+                                data={
+                                    dataInput1.concat(dataInput2, dataInput3, dataInput4, dataInput5, dataInput6)
+                                }
+                                endpoint='/accountancy/download/excel'
+                                uploadEndpoint='/accountancy/upload/excel'
+                                params={{
+                                    type: 'penyisihan',
+                                    category: 'pendapatan_lo',
+                                    instance: instance,
+                                    periode: periode?.id,
+                                    year: year,
                                 }}
-                                className='btn btn-success text-xs whitespace-nowrap'>
-                                <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
-                                Simpan
-                            </button>
-                        ) : (
-                            <button type="button"
-                                disabled={true}
-                                className='btn btn-success text-xs whitespace-nowrap'>
-                                <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
-                                Menyimpan..
-                            </button>
+                                afterClick={(e: any) => {
+                                    if (e[0] === 'error') {
+                                        Swal.fire({
+                                            title: 'Gagal!',
+                                            text: e[1] ? e[1] : 'Terjadi kesalahan saat proses berlangsung.',
+                                            icon: 'error',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        return;
+                                    } else {
+                                        Swal.fire({
+                                            title: e[1] === 'Downloaded' ? 'Download Berhasil!' : 'Upload Berhasil!',
+                                            text: e[1] === 'Downloaded' ? 'File berhasil diunduh.' : 'File berhasil diunggah.',
+                                            icon: 'success',
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Tutup',
+                                            confirmButtonColor: '#00ab55',
+                                        });
+                                        if (e[1] == 'Uploaded') {
+                                            _getDatas();
+                                        }
+                                        return;
+                                    }
+                                }}
+                            />
                         )}
-                    </>
-                )}
+                    </div>
+
+                    {instance && (
+                        <>
+                            {isSaving == false ? (
+                                <button type="button"
+                                    onClick={(e) => {
+                                        save()
+                                    }}
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSave} className='h-3 w-3 mr-1' />
+                                    Simpan
+                                </button>
+                            ) : (
+                                <button type="button"
+                                    disabled={true}
+                                    className='btn btn-success text-xs whitespace-nowrap'>
+                                    <FontAwesomeIcon icon={faSpinner} className='h-3 w-3 animate-spin mr-1' />
+                                    Menyimpan..
+                                </button>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
         </>
     );

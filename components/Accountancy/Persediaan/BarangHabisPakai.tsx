@@ -83,7 +83,6 @@ const BarangHabisPakai = (data: any) => {
         if (periode?.id) {
             getBarangHabisPakai(instance, periode?.id, year).then((res: any) => {
                 if (res.status == 'success') {
-                    console.log(res.data.length)
                     if (res.data.length > 0) {
                         setDataInput(res.data);
                         setDataInputOrigin(res.data);

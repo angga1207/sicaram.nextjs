@@ -253,7 +253,7 @@ const Page = () => {
                 <div className="panel">
                     {(isMounted && year) ? (
                         <Tab.Group
-                            defaultIndex={2}>
+                            defaultIndex={0}>
                             <Tab.List className="mt-3 pb-3 flex flex-nowrap overflow-y-auto border-b border-white-light dark:border-[#191e3a]">
                                 <Tab as={Fragment}>
                                     {({ selected }) => (
@@ -298,33 +298,50 @@ const Page = () => {
                             </Tab.List>
 
                             <Tab.Panels>
-                                <Tab.Panel>
-                                    <div className="pt-5">
-                                        {(isMounted && instances.length > 0) && (
-                                            <BarangHabisPakai data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                                key={[year, instance]}
-                                            />
-                                        )}
-                                    </div>
-                                </Tab.Panel>
-                                <Tab.Panel>
-                                    <div className="pt-5">
-                                        {(isMounted && instances.length > 0) && (
-                                            <BelanjaPersediaanUntukDijual data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                                key={[year, instance]}
-                                            />
-                                        )}
-                                    </div>
-                                </Tab.Panel>
-                                <Tab.Panel>
-                                    <div className="pt-5">
-                                        {(isMounted && instances.length > 0) && (
-                                            <Rekap data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                                                key={[year, instance]}
-                                            />
-                                        )}
-                                    </div>
-                                </Tab.Panel>
+                                {year === 2024 && (
+                                    <>
+                                        <Tab.Panel>
+                                            <div className="pt-5">
+                                                {(isMounted && instances.length > 0) && (
+                                                    <BarangHabisPakai data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                        key={[year, instance]}
+                                                    />
+                                                )}
+                                            </div>
+                                        </Tab.Panel>
+                                        <Tab.Panel>
+                                            <div className="pt-5">
+                                                {(isMounted && instances.length > 0) && (
+                                                    <BelanjaPersediaanUntukDijual data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                        key={[year, instance]}
+                                                    />
+                                                )}
+                                            </div>
+                                        </Tab.Panel>
+                                        <Tab.Panel>
+                                            <div className="pt-5">
+                                                {(isMounted && instances.length > 0) && (
+                                                    <Rekap data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                        key={[year, instance]}
+                                                    />
+                                                )}
+                                            </div>
+                                        </Tab.Panel>
+                                    </>
+                                )}
+                                {year > 2024 && (
+                                    <>
+                                        <Tab.Panel>
+                                            <div className="pt-5">
+                                                {(isMounted && instances.length > 0) && (
+                                                    <BelanjaPersediaanUntukDijual data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
+                                                        key={[year, instance]}
+                                                    />
+                                                )}
+                                            </div>
+                                        </Tab.Panel>
+                                    </>
+                                )}
                             </Tab.Panels>
                         </Tab.Group>
                     ) : (

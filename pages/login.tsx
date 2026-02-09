@@ -19,9 +19,15 @@ import { setCookie } from 'cookies-next';
 import ReCAPTCHA from "react-google-recaptcha";
 
 import Swal from 'sweetalert2';
-import { Player, Controls } from '@lottiefiles/react-lottie-player';
+import dynamic from 'next/dynamic';
 import LoadingSicaram from '@/components/LoadingSicaram';
 import IconCalendar from '@/components/Icon/IconCalendar';
+
+// Dynamically import Player component to avoid SSR issues
+const Player = dynamic(
+    () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+    { ssr: false }
+);
 
 const showSweetAlert = async (icon: any, title: any, text: any, confirmButtonText: any, cancelButtonText: any, callback: any) => {
     Swal.fire({

@@ -8,18 +8,10 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
     ssr: false,
 });
 import { useDispatch, useSelector } from 'react-redux';
-import Dropdown from '@/components/Dropdown';
-import IconHorizontalDots from '@/components/Icon/IconHorizontalDots';
-import IconCashBanknotes from '@/components/Icon/IconCashBanknotes';
-import IconBolt from '@/components/Icon/IconBolt';
-import IconBox from '@/components/Icon/IconBox';
-import IconPlus from '@/components/Icon/IconPlus';
-import IconCaretDown from '@/components/Icon/IconCaretDown';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import React from "react";
 // import CountUp from 'react-countup';
-import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 import { chartRealisasi, summaryKinerja } from '@/apis/fetchdashboard';
 import Link from 'next/link';
@@ -27,6 +19,12 @@ import LoadingSicaram from '@/components/LoadingSicaram';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import MainMenu from '@/components/MainMenu';
+
+// Dynamically import Player component to avoid SSR issues
+const Player = dynamic(
+    () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+    { ssr: false }
+);
 
 const Index = () => {
     const dispatch = useDispatch();

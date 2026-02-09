@@ -19,14 +19,18 @@ import IconCaretDown from '@/components/Icon/IconCaretDown';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import React from "react";
-// import CountUp from 'react-countup';
-import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 import { chartRealisasi, summaryRealisasi, getRankInstance } from '@/apis/fetchdashboard';
 import Link from 'next/link';
 import LoadingSicaram from '@/components/LoadingSicaram';
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import IconCalendar from '@/components/Icon/IconCalendar';
+
+// Dynamically import Player component to avoid SSR issues
+const Player = dynamic(
+    () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+    { ssr: false }
+);
 
 const Index = () => {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);

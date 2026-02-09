@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { faChevronLeft, faChevronRight, faPlus, faSave, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus, faSave, faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -13,6 +13,7 @@ import { deletePenilaianAset, getPenilaianAset, storePenilaianAset } from '@/api
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import InputRupiah from '@/components/InputRupiah';
 import DownloadButtons from '@/components/Buttons/DownloadButtons';
+import { massDeleteData } from '@/apis/Accountancy/Accountancy';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -100,6 +101,8 @@ const PenilaianAset = (data: any) => {
     const [search, setSearch] = useState<any>('');
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [selectedMode, setSelectedMode] = useState<boolean>(false);
+    const [selectedData, setSelectedData] = useState<any>([]);
 
     const _getDatas = () => {
         if (periode?.id) {
@@ -265,6 +268,19 @@ const PenilaianAset = (data: any) => {
         });
     }
 
+    const deleteSelectedData = () => {
+        massDeleteData(selectedData, 'acc_padb_penilaian_aset').then((res: any) => {
+            if (res.status == 'success') {
+                _getDatas();
+                setSelectedData([]);
+                setSelectedMode(false);
+                showAlert('success', 'Data berhasil dihapus');
+            } else {
+                showAlert('error', 'Data gagal dihapus');
+            }
+        });
+    }
+
     const handleSearch = (e: any) => {
         if (e.length > 0) {
             setSearch(e);
@@ -399,39 +415,63 @@ const PenilaianAset = (data: any) => {
                                                     </button>
                                                 </Tippy>
 
-                                                <Tippy content='Hapus Data'
-                                                    theme='danger'>
-                                                    <button
-                                                        className='text-danger select-none'
-                                                        onClick={(e) => {
-                                                            Swal.fire({
-                                                                title: 'Hapus Data',
-                                                                text: 'Apakah Anda yakin ingin menghapus data ini?',
-                                                                icon: 'warning',
-                                                                showCancelButton: true,
-                                                                confirmButtonColor: '#d33',
-                                                                cancelButtonColor: '#3085d6',
-                                                                confirmButtonText: 'Ya',
-                                                                cancelButtonText: 'Tidak',
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    if (data.id) {
-                                                                        deleteData(data.id);
-                                                                    } else {
-                                                                        // showAlert('info', 'Data ini belum tersimpan');
-                                                                        setDataInput((prev: any) => {
-                                                                            const updated = [...prev];
-                                                                            updated.splice(index, 1);
-                                                                            return updated;
+                                                {data?.id && (
+                                                    <div className="flex gap-2">
+                                                        {selectedMode ? (
+                                                            <label className="w-12 h-6 relative">
+                                                                <input type="checkbox" className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1"
+                                                                    disabled={isSaving == true}
+                                                                    checked={selectedData.includes(data.id)}
+                                                                    onChange={(e: any) => {
+                                                                        if (e.target.checked) {
+                                                                            setSelectedData((prev: any) => [...prev, data.id])
+                                                                        } else {
+                                                                            setSelectedData((prev: any) => prev.filter((item: any) => item != data.id))
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <span className="outline_checkbox bg-icon border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full before:bg-[url(/assets/images/close.svg)] before:bg-no-repeat before:bg-center peer-checked:before:left-7 peer-checked:before:bg-[url(/assets/images/checked.svg)] peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                                                            </label>
+                                                        ) : (
+                                                            <Tippy content="Hapus Data" placement='top' theme='danger'>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+
+                                                                        const swalWithBootstrapButtons = Swal.mixin({
+                                                                            customClass: {
+                                                                                confirmButton: 'btn btn-danger',
+                                                                                cancelButton: 'btn btn-slate-200 ltr:mr-3 rtl:ml-3',
+                                                                                popup: 'sweet-alerts',
+                                                                            },
+                                                                            buttonsStyling: false,
                                                                         });
-                                                                    }
-                                                                }
-                                                            });
-                                                        }}
-                                                    >
-                                                        <IconTrash className='h-5 w-5' />
-                                                    </button>
-                                                </Tippy>
+                                                                        swalWithBootstrapButtons
+                                                                            .fire({
+                                                                                title: 'Hapus Data?',
+                                                                                text: "Apakah Anda yakin untuk menghapus Data Ini!",
+                                                                                icon: 'question',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonText: 'Ya, Hapus!',
+                                                                                cancelButtonText: 'Tidak!',
+                                                                                reverseButtons: true,
+                                                                                padding: '2em',
+                                                                            })
+                                                                            .then((result) => {
+                                                                                if (result.value) {
+                                                                                    deleteData(data.id);
+                                                                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                                                    swalWithBootstrapButtons.fire('Batal', 'Batal menghapus Data', 'info');
+                                                                                }
+                                                                            });
+                                                                    }}
+                                                                    className="btn btn-danger h-8 p-0 rounded-full w-8">
+                                                                    <IconTrash className='h-4 w-4' />
+                                                                </button>
+                                                            </Tippy>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         </td>
                                         {([9].includes(CurrentUser?.role_id) == false) && (
@@ -824,8 +864,8 @@ const PenilaianAset = (data: any) => {
                 </table>
             </div>
 
-            <div className="flex justify-between gap-4 items-center mt-4 px-5">
-                <div className="flex gap-2 items-center">
+            <div className="flex flex-col lg:flex-row lg:justify-between gap-4 items-center mt-4 px-5">
+                <div className="flex gap-2 items-center flex-wrap lg:flex-nowrap">
                     <button type="button"
                         onClick={(e) => {
                             if (page > 1) {
@@ -888,6 +928,41 @@ const PenilaianAset = (data: any) => {
                             onChange={(e: any) => {
                                 handleSearch(e.target.value);
                             }} />
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <label className="flex-none flex items-center gap-2 cursor-pointer select-none mb-0">
+                            <div className="w-12 h-6 relative">
+                                <input
+                                    type="checkbox"
+                                    className="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer"
+                                    checked={selectedMode}
+                                    onChange={(e: any) => {
+                                        if (e?.target?.checked == false) {
+                                            setSelectedData([]);
+                                        }
+                                        setSelectedMode(e?.target?.checked);
+                                    }}
+                                />
+                                <span className="outline_checkbox border-2 border-[#ebedf2] dark:border-white-dark block h-full rounded-full before:absolute before:left-1 before:bg-[#ebedf2] dark:before:bg-white-dark before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:border-primary peer-checked:before:bg-primary before:transition-all before:duration-300"></span>
+                            </div>
+                            <div className="text-xs">
+                                Hapus Mode {selectedData.length > 0 ? `(${selectedData.length}) Item` : ''}
+                            </div>
+                        </label>
+
+                        {selectedData.length > 0 && (
+                            <button type="button"
+                                disabled={isSaving == true}
+                                onClick={(e) => {
+                                    if (isSaving == false) {
+                                        deleteSelectedData()
+                                    }
+                                }}
+                                className='btn btn-danger btn-sm text-xs w-full'>
+                                <FontAwesomeIcon icon={faTrash} className='h-3 w-3 mr-1' />
+                                Hapus
+                            </button>
+                        )}
                     </div>
                 </div>
                 <div className="flex justify-end gap-4 items-center">
