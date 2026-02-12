@@ -95,6 +95,7 @@ const Penyisihan = (data: any) => {
                     setInstance(paramData[4]);
                 }
             }
+            _getDatas(paramData[4], paramData[3]);
         }
     }, [isMounted, paramData]);
 
@@ -107,7 +108,7 @@ const Penyisihan = (data: any) => {
     const [isUnsaved, setIsUnsaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-    const _getDatas = () => {
+    const _getDatas = (instanceId: any, tahun: any) => {
         setDataInput1([]);
         setDataInput2([]);
         setDataInput3([]);
@@ -117,7 +118,7 @@ const Penyisihan = (data: any) => {
 
         setIsLoading(true);
         if (periode?.id) {
-            getPenyisihan(instance, periode?.id, year).then((res: any) => {
+            getPenyisihan(instanceId, periode?.id, tahun).then((res: any) => {
                 if (res.status == 'success') {
                     if (res.data.length > 0) {
                         // setDataInput1(res.data);
@@ -131,7 +132,7 @@ const Penyisihan = (data: any) => {
                         setDataInput1([
                             {
                                 id: '',
-                                instance_id: instance ?? '',
+                                instance_id: instanceId ?? '',
                                 type: 'pendapatan_pajak_daerah',
                                 kode_rekening_id: '',
                                 piutang_bruto: 0,
@@ -145,7 +146,7 @@ const Penyisihan = (data: any) => {
                         setDataInput2([
                             {
                                 id: '',
-                                instance_id: instance ?? '',
+                                instance_id: instanceId ?? '',
                                 type: 'hasil_retribusi_daerah',
                                 kode_rekening_id: '',
                                 piutang_bruto: 0,
@@ -159,7 +160,7 @@ const Penyisihan = (data: any) => {
                         setDataInput3([
                             {
                                 id: '',
-                                instance_id: instance ?? '',
+                                instance_id: instanceId ?? '',
                                 type: 'hasil_pengelolaan_kekayaan_daerah_yang_dipisahkan',
                                 kode_rekening_id: '',
                                 piutang_bruto: 0,
@@ -173,7 +174,7 @@ const Penyisihan = (data: any) => {
                         setDataInput4([
                             {
                                 id: '',
-                                instance_id: instance ?? '',
+                                instance_id: instanceId ?? '',
                                 type: 'lain_lain_pad_yang_sah',
                                 kode_rekening_id: '',
                                 piutang_bruto: 0,
@@ -187,7 +188,7 @@ const Penyisihan = (data: any) => {
                         setDataInput5([
                             {
                                 id: '',
-                                instance_id: instance ?? '',
+                                instance_id: instanceId ?? '',
                                 type: 'transfer_pemerintah_pusat',
                                 kode_rekening_id: '',
                                 piutang_bruto: 0,
@@ -201,7 +202,7 @@ const Penyisihan = (data: any) => {
                         setDataInput6([
                             {
                                 id: '',
-                                instance_id: instance ?? '',
+                                instance_id: instanceId ?? '',
                                 type: 'transfer_antar_daerah',
                                 kode_rekening_id: '',
                                 piutang_bruto: 0,
@@ -231,8 +232,6 @@ const Penyisihan = (data: any) => {
         if (isMounted && periode?.id && year) {
             if ([9].includes(CurrentUser?.role_id) && !instance) {
                 setInstance(CurrentUser?.instance_id ?? '');
-            } else {
-                _getDatas();
             }
         }
     }, [isMounted, instance, year])
@@ -523,7 +522,7 @@ const Penyisihan = (data: any) => {
                 showAlert('error', 'Data gagal disimpan');
                 setIsSaving(false);
             }
-            _getDatas();
+            _getDatas(instance, year);
         });
     }
 
@@ -533,7 +532,7 @@ const Penyisihan = (data: any) => {
     const deleteData = (id: any) => {
         deletePenyisihan(id).then((res: any) => {
             if (res.status == 'success') {
-                _getDatas();
+                _getDatas(instance, year);
                 showAlert('success', 'Data berhasil dihapus');
             } else {
                 showAlert('error', 'Data gagal dihapus');
@@ -544,7 +543,7 @@ const Penyisihan = (data: any) => {
     const deleteSelectedData = () => {
         massDeleteData(selectedData, 'acc_plo_penyisihan').then((res: any) => {
             if (res.status == 'success') {
-                _getDatas();
+                _getDatas(instance, year);
                 setSelectedData([]);
                 setSelectedMode(false);
                 showAlert('success', 'Data berhasil dihapus');
@@ -2341,7 +2340,7 @@ const Penyisihan = (data: any) => {
                                             confirmButtonColor: '#00ab55',
                                         });
                                         if (e[1] == 'Uploaded') {
-                                            _getDatas();
+                                            _getDatas(instance, year);
                                         }
                                         return;
                                     }

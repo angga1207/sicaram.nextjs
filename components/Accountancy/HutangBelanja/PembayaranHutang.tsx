@@ -16,6 +16,7 @@ import { deletePembayaranHutang, getPembayaranHutang, storePembayaranHutang } fr
 import LoadingSicaram from '@/components/LoadingSicaram';
 import DownloadButtons from '@/components/Buttons/DownloadButtons';
 import { massDeleteData } from '@/apis/Accountancy/Accountancy';
+import InputTextExpanded from '@/components/InputTextExpanded';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -605,7 +606,7 @@ const PembayaranHutang = (param: any) => {
                                                 </td>
                                                 <td className='bg-slate-50 border left-0 sticky z-[1]'>
                                                     <div className="flex gap-2 items-center">
-                                                        <input type="text"
+                                                        {/* <input type="text"
                                                             placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
                                                             autoComplete='off'
                                                             value={data.nama_kegiatan}
@@ -616,7 +617,21 @@ const PembayaranHutang = (param: any) => {
                                                                     return updated;
                                                                 });
                                                             }}
-                                                            className='form-input font-normal min-w-[250px]' />
+                                                            className='form-input font-normal min-w-[250px]' /> */}
+                                                        <InputTextExpanded
+                                                            placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
+                                                            value={data.nama_kegiatan}
+                                                            data={data}
+                                                            index={index}
+                                                            onChange={(e: any) => {
+                                                                setDataInput((prev: any) => {
+                                                                    const updated = [...prev];
+                                                                    updated[index]['nama_kegiatan'] = e;
+                                                                    return updated;
+                                                                });
+                                                            }}
+                                                            isDisabled={isSaving == true}
+                                                        />
 
                                                         {data?.id && (
                                                             <div className="flex gap-2">

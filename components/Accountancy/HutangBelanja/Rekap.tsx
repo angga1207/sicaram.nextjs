@@ -15,6 +15,7 @@ import IconX from '@/components/Icon/IconX';
 import { deleteData, getData, storeData } from '@/apis/Accountancy/HutangBelanja';
 import LoadingSicaram from '@/components/LoadingSicaram';
 import DownloadButtons from '@/components/Buttons/DownloadButtons';
+import InputTextExpanded from '@/components/InputTextExpanded';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -495,7 +496,7 @@ const Rekap = (param: any) => {
                                                 </td>
                                                 <td className='bg-slate-50 border left-0 sticky z-[1]'>
                                                     <Tippy content={data.type === 'pembayaran' ? 'Pembayaran Utang' : 'Utang Baru'} theme={data.type === 'pembayaran' ? 'success' : 'warning'}>
-                                                        <input type="text"
+                                                        {/* <input type="text"
                                                             placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
                                                             autoComplete='off'
                                                             value={data.nama_kegiatan}
@@ -507,7 +508,19 @@ const Rekap = (param: any) => {
                                                                     return updated;
                                                                 });
                                                             }}
-                                                            className='form-input cursor-pointer font-normal min-w-[250px]' />
+                                                            className='form-input cursor-pointer font-normal min-w-[250px]' /> */}
+                                                        <InputTextExpanded
+                                                            placeholder='Nama Kegiatan - Uraian Paket Pekerjaan'
+                                                            value={data.nama_kegiatan}
+                                                            data={data}
+                                                            index={index}
+                                                            isDisabled={false}
+                                                            isReadOnly={true}
+                                                            onChange={(e: any, data: any, index: number) => {
+                                                            }}
+                                                            onBlur={(e: any) => {
+                                                            }}
+                                                        />
                                                     </Tippy>
                                                 </td>
                                                 <td className='border'>
