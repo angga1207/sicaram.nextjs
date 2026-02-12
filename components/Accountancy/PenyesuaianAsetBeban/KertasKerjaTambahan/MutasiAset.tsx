@@ -70,7 +70,8 @@ const MutasiAset = (data: any) => {
             setYears([]);
             if (periode?.id) {
                 if (year >= periode?.start_year && year <= periode?.end_year) {
-                    for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                    // for (let i = periode?.start_year; i <= periode?.end_year; i++) {
+                    for (let i = 2004; i <= periode?.end_year; i++) {
                         setYears((years: any) => [
                             ...years,
                             {
