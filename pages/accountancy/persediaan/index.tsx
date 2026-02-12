@@ -165,7 +165,7 @@ const Page = () => {
             GlobalEndPoint('kode_rekening', ['where|code_6|!=|null', 'where|code_1|=|5', 'whereIn|code_2|1,2', 'where|code_3|=|02']).then((res: any) => {
                 if (res.status === 'success') {
                     setArrKodeRekening(res.data);
-                    console.log(res.data)
+                    // console.log(res.data)
                 }
             });
         }

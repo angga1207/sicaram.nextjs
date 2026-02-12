@@ -244,11 +244,6 @@ const Index = () => {
                 <div className="mt-4">
 
                     {(isMounted && instances.length > 0) && (
-                        // <PenyesuaianAset
-                        //     data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
-                        //     key={[year, instance]}
-                        // />
-
                         <PBListData
                             data={isMounted && [instances, arrKodeRekening, periode, year, instance]}
                             key={[year, instance]}

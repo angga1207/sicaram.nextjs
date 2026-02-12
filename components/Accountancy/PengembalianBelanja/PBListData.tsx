@@ -107,6 +107,18 @@ const PBListData = (data: any) => {
 
     // console.log('paramData', paramData);
 
+    // useEffect(() => {
+    //     if (isMounted && paramData) {
+    //         setPeriode(paramData[2] ? paramData[2] : {});
+    //         setYear(paramData[3] ? paramData[3] : null);
+    //         setInstanceId(paramData[4] ? paramData[4] : null);
+    //         setArrKodeRekening(paramData[1] ? paramData[1] : []);
+    //         if (paramData[0]?.length > 0) {
+    //             setArrInstance(paramData[0]);
+    //         }
+    //     }
+    // }, [isMounted]);
+
     useEffect(() => {
         if (isMounted && paramData) {
             setPeriode(paramData[2] ? paramData[2] : {});
@@ -116,15 +128,16 @@ const PBListData = (data: any) => {
             if (paramData[0]?.length > 0) {
                 setArrInstance(paramData[0]);
             }
+            _getDatas(paramData[4], paramData[3]);
         }
-    }, [isMounted, paramData]);
+    }, [isMounted && paramData]);
 
     const [datas, setDatas] = useState<any>([]);
     const [datasOrigin, setDatasOrigin] = useState<any>([]);
 
-    const _getDatas = () => {
+    const _getDatas = (instance: any, tahun: any) => {
         setIsLoading(true);
-        getPengembalianBelanja(instanceId, periode.id, year, search, page)
+        getPengembalianBelanja(instance, periode.id, tahun ? tahun : year, search, null)
             .then((res: any) => {
                 if (res.status === 'success') {
                     if (res.data.datas.length > 0) {
@@ -190,12 +203,6 @@ const PBListData = (data: any) => {
         }
     }
 
-    useEffect(() => {
-        if (isMounted && periode && year) {
-            _getDatas();
-        }
-    }, [isMounted, periode, year, instanceId, page]);
-
     const addDataInput = () => {
         const newData = {
             id: '',
@@ -223,7 +230,7 @@ const PBListData = (data: any) => {
                     showAlert('success', 'Data berhasil disimpan');
                     setIsUnsaved(false);
                     setIsSaving(false);
-                    _getDatas();
+                    _getDatas(instanceId, year);
                 } else {
                     showAlert('error', 'Data gagal disimpan');
                     setIsSaving(false);
@@ -235,7 +242,7 @@ const PBListData = (data: any) => {
         if (id) {
             deletePengembalianBelanja(id).then((res: any) => {
                 if (res.status == 'success') {
-                    _getDatas();
+                    _getDatas(instanceId, year);
                     showAlert('success', 'Data berhasil dihapus');
                 } else {
                     showAlert('error', 'Data gagal dihapus');
@@ -249,7 +256,7 @@ const PBListData = (data: any) => {
     const deleteSelectedData = () => {
         massDeleteData(selectedData, 'acc_pengembalian_belanja').then((res: any) => {
             if (res.status == 'success') {
-                _getDatas();
+                _getDatas(instanceId, year);
                 setSelectedData([]);
                 setSelectedMode(false);
                 showAlert('success', 'Data berhasil dihapus');
@@ -333,7 +340,7 @@ const PBListData = (data: any) => {
                                                             updated[index]['instance_id'] = e?.value;
                                                             return updated;
                                                         })
-                                                        console.log('datas', datas);
+                                                        // console.log('datas', datas);
                                                         setIsUnsaved(true);
                                                     }
                                                 }}
@@ -341,7 +348,7 @@ const PBListData = (data: any) => {
                                                 required={true}
                                                 value={
                                                     arrInstance?.map((item: any, index: number) => {
-                                                        if (item.id == data.instance_id) {
+                                                        if (item.id == data.instance_id || item.id == instanceId) {
                                                             return {
                                                                 value: item.id,
                                                                 label: item.name,
@@ -357,7 +364,6 @@ const PBListData = (data: any) => {
                                                         }
                                                     })
                                                 } />
-
 
                                             <div className="">
                                                 {data?.id && (
@@ -697,7 +703,7 @@ const PBListData = (data: any) => {
                                                 confirmButtonColor: '#00ab55',
                                             });
                                             if (e[1] == 'Uploaded') {
-                                                _getDatas();
+                                                _getDatas(instanceId, year);
                                             }
                                             return;
                                         }

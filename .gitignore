@@ -16,6 +16,7 @@
 /build
 
 # env
+.env.local
 .env
 
 # misc
@@ -43,3 +44,4 @@ next-env.d.ts
 .env
 
 certificates
+.env
