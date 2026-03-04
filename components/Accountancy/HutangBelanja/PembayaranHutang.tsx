@@ -626,7 +626,7 @@ const PembayaranHutang = (param: any) => {
                                                             onChange={(e: any) => {
                                                                 setDataInput((prev: any) => {
                                                                     const updated = [...prev];
-                                                                    updated[index]['nama_kegiatan'] = e;
+                                                                    updated[index]['nama_kegiatan'] = e.target.value;
                                                                     return updated;
                                                                 });
                                                             }}
