@@ -592,14 +592,14 @@ const AsetTakBerwujud = (data: any) => {
                                                 <div className="flex justify-between gap-2 items-center">
                                                     <InputRupiah
                                                         dataValue={row.plus_reklasifikasi_kib_b}
-                                                        readOnly={true}
+                                                        // readOnly={true}
                                                         onChange={(value: any) => {
-                                                            // setDataInput((prev: any) => {
-                                                            //     const updated = [...prev];
-                                                            //     updated[index]['plus_reklasifikasi_kib_b'] = isNaN(value) ? 0 : value;
-                                                            //     _calculateData(index)
-                                                            //     return updated;
-                                                            // });
+                                                            setDataInput((prev: any) => {
+                                                                const updated = [...prev];
+                                                                updated[index]['plus_reklasifikasi_kib_b'] = isNaN(value) ? 0 : value;
+                                                                _calculateData(index)
+                                                                return updated;
+                                                            });
                                                         }} />
                                                     <Tippy
                                                         content='Dari Penyesuaian Aset di Penyesuaian Aset dan Beban (Aset Tetap Peralatan dan Mesin)'
