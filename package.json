@@ -15,6 +15,11 @@
     "dependencies": {
         "@develoka/angka-terbilang-js": "^1.4.2",
         "@emotion/memoize": "^0.8.1",
+        "@fontsource/comfortaa": "^5.2.8",
+        "@fontsource/kanit": "^5.2.8",
+        "@fontsource/nunito": "^5.2.7",
+        "@fontsource/poppins": "^5.2.7",
+        "@fontsource/salsa": "^5.2.7",
         "@fortawesome/fontawesome-svg-core": "^6.5.1",
         "@fortawesome/free-brands-svg-icons": "^6.5.1",
         "@fortawesome/free-regular-svg-icons": "^6.5.1",
