@@ -486,6 +486,18 @@ const PDD = (data: any) => {
         });
     }
 
+    const selectAll = () => {
+        // Jika sudah semua dipilih, maka hapus semua pilihan
+        const datas = dataInput1.concat(dataInput2, dataInput3, dataInput4, dataInput5, dataInput6);
+        if (selectedData.length === datas.length) {
+            setSelectedData([]);
+        } else {
+            // Jika belum semua dipilih, maka pilih semua
+            const allIds = datas.map((data: any) => data.id);
+            setSelectedData(allIds);
+        }
+    }
+
     const deleteSelectedData = () => {
         massDeleteData(selectedData, 'acc_plo_pdd').then((res: any) => {
             if (res.status == 'success') {
@@ -1988,18 +2000,46 @@ const PDD = (data: any) => {
                         </div>
                     </label>
 
-                    {selectedData.length > 0 && (
+                    {selectedMode && (
                         <button type="button"
                             disabled={isSaving == true}
                             onClick={(e) => {
                                 if (isSaving == false) {
-                                    deleteSelectedData()
+                                    selectAll()
                                 }
                             }}
-                            className='btn btn-danger btn-sm text-xs w-full'>
-                            <FontAwesomeIcon icon={faTrash} className='h-3 w-3 mr-1' />
-                            Hapus
+                            className='btn btn-primary btn-sm text-xs w-full whitespace-nowrap'>
+                            Pilih Semua
                         </button>
+                    )}
+
+                    {selectedData.length > 0 && (
+                        <>
+                            <button type="button"
+                                disabled={isSaving == true}
+                                onClick={(e) => {
+                                    if (isSaving == false) {
+                                        Swal.fire({
+                                            title: 'Apakah Anda yakin?',
+                                            text: `Anda akan menghapus ${selectedData.length} item yang dipilih. Tindakan ini tidak dapat dibatalkan!`,
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Ya, hapus!',
+                                            cancelButtonText: 'Batal',
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                deleteSelectedData();
+                                            }
+                                        });
+                                    }
+                                }}
+                                className='btn btn-danger btn-sm text-xs w-full'>
+                                <FontAwesomeIcon icon={faTrash} className='h-3 w-3 mr-1' />
+                                Hapus
+                            </button>
+                        </>
                     )}
                 </div>
 

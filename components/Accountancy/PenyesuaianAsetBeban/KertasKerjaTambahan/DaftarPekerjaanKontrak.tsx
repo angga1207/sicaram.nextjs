@@ -1342,7 +1342,20 @@ const DaftarPekerjaanKontrak = (data: any) => {
                                     disabled={isSaving == true}
                                     onClick={(e) => {
                                         if (isSaving == false) {
-                                            deleteSelectedData()
+                                            Swal.fire({
+                                                title: 'Apakah Anda yakin?',
+                                                text: `Anda akan menghapus ${selectedData.length} item yang dipilih. Tindakan ini tidak dapat dibatalkan!`,
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Ya, hapus!',
+                                                cancelButtonText: 'Batal',
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    deleteSelectedData();
+                                                }
+                                            });
                                         }
                                     }}
                                     className='btn btn-danger btn-sm text-xs w-full'>
