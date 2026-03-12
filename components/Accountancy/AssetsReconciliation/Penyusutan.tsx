@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { getPenyusutan, savePenyusutan } from '@/apis/Accountancy/RekonsiliasiAset';
 import InputRupiah from '@/components/InputRupiah';
+import DownloadButtons from '@/components/Buttons/DownloadButtons';
 
 
 const showAlert = async (icon: any, text: any) => {
@@ -181,6 +182,8 @@ const Penyusutan = (data: any) => {
         }
     }, [grandTotal])
 
+    console.log(dataInput)
+
     return (
         <div>
             <div className="">
@@ -337,6 +340,42 @@ const Penyusutan = (data: any) => {
                         </div>
                     </div>
                 </div>
+                {dataInput.length > 0 && (
+                    <DownloadButtons
+                        data={dataInput}
+                        endpoint='/accountancy/download/excel'
+                        params={{
+                            type: 'rekon_aset_penyusutan',
+                            category: 'kibs',
+                            instance: instance,
+                            periode: periode?.id,
+                            year: year,
+                        }}
+                        afterClick={(e: any) => {
+                            if (e === 'error') {
+                                Swal.fire({
+                                    title: 'Download Gagal!',
+                                    text: 'Terjadi kesalahan saat mendownload file.',
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Tutup',
+                                    confirmButtonColor: '#00ab55',
+                                });
+                                return;
+                            } else {
+                                Swal.fire({
+                                    title: 'Download Berhasil!',
+                                    text: 'File telah berhasil didownload.',
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Tutup',
+                                    confirmButtonColor: '#00ab55',
+                                });
+                                return;
+                            }
+                        }}
+                    />
+                )}
                 {instance && (
                     <button
                         onClick={(e) => {
